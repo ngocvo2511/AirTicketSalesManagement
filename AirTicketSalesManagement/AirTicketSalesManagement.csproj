@@ -10,7 +10,10 @@
 
   <ItemGroup>
     <Folder Include="Model\" />
-    <Folder Include="View\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
   </ItemGroup>
 
 </Project>

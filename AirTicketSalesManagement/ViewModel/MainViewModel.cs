@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AirTicketSalesManagement.View.Login;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,11 @@ namespace AirTicketSalesManagement.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
+        private bool isLoaded = false;
         public MainViewModel()
         {
             // Initialize the view model
-            MessageBox.Show("MainViewModel initialized");
+            
         }
     }
 }
