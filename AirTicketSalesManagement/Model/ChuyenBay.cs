@@ -8,11 +8,11 @@ namespace AirTicketSalesManagement.Model
 {
     public class ChuyenBay
     {
-        private string _maChuyenBay;
-        public string MaChuyenBay
+        private string _soHieuCB;
+        public string SoHieuCB
         {
-            get { return _maChuyenBay; }
-            set { _maChuyenBay = value; }
+            get { return _soHieuCB; }
+            set { _soHieuCB = value; }
         }
         private string _sanBayDi;
         public string SanBayDi

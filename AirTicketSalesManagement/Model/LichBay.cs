@@ -14,11 +14,11 @@ namespace AirTicketSalesManagement.Model
             get { return _maLichBay; }
             set { _maLichBay = value; }
         }
-        private string _soHieuChuyenBay;
-        public string SoHieuChuyenBay
+        private string _soHieuCB;
+        public string SoHieuCB
         {
-            get { return _soHieuChuyenBay; }
-            set { _soHieuChuyenBay = value; }
+            get { return _soHieuCB; }
+            set { _soHieuCB = value; }
         }
         private DateTime _gioDi;
         public DateTime GioDi
@@ -43,6 +43,12 @@ namespace AirTicketSalesManagement.Model
         {
             get { return _soLuongVeKhaiThac; }
             set { _soLuongVeKhaiThac = value; }
+        }
+        private int _giaVe;
+        public int GiaVe
+        {
+            get{ return _giaVe; }
+            set { _giaVe = value; }
         }
         private string _tinhTrangLichBay;
         public string TinhTrangLichBay

@@ -27,17 +27,23 @@ namespace AirTicketSalesManagement.Model
             get { return _hangGhe; }
             set { _hangGhe = value; }
         }
-        private int _giaVe;
-        public int GiaVe
+        private float _heSoGia;
+        public float HeSoGia
         {
-            get { return _giaVe; }
-            set { _giaVe = value; }
+            get { return _heSoGia; }
+            set { _heSoGia = value; }
         }
         private int _soLuongVeToiDa;
         public int SoLuongVeToiDa
         {
             get { return _soLuongVeToiDa; }
             set { _soLuongVeToiDa = value; }
+        }
+        private int _soLuongVeConLai;
+        public int SoLuongVeConLai
+        {
+            get { return _soLuongVeConLai; }
+            set { _soLuongVeConLai = value; }
         }
     }
 }

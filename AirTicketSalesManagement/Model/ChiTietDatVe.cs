@@ -38,17 +38,23 @@ namespace AirTicketSalesManagement.Model
             get { return _ngaySinh; }
             set { _ngaySinh = value; }
         }
-        private string _canCuocCongDan;
-        public string CanCuocCongDan
+        private string _CCCD;
+        public string CCCD
         {
-            get { return _canCuocCongDan; }
-            set { _canCuocCongDan = value; }
+            get { return _CCCD; }
+            set { _CCCD = value; }
         }
-        private string _maNguoiGiamHo;
-        public string MaNguoiGiamHo
+        private string _hoTenNguoiGiamHo;
+        public string HoTenNguoiGiamHo
         {
-            get { return _maNguoiGiamHo; }
-            set { _maNguoiGiamHo = value; }
+            get { return _hoTenNguoiGiamHo; }
+            set { _hoTenNguoiGiamHo = value; }
+        }
+        private string _CCCDNguoiGiamHo;
+        public string CCCDNguoiGiamHo
+        {
+            get { return _CCCDNguoiGiamHo; }
+            set { _CCCDNguoiGiamHo = value; }
         }
         private string _maLoaiVe;
         public string MaLoaiVe

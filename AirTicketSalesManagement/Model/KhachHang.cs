@@ -14,11 +14,11 @@ namespace AirTicketSalesManagement.Model
             get { return _maKhachHang; }
             set { _maKhachHang = value; }
         }
-        private string _tenKhachHang;
-        public string TenKhachHang
+        private string _hoTenKhachHang;
+        public string HoTenKhachHang
         {
-            get { return _tenKhachHang; }
-            set { _tenKhachHang = value; }
+            get { return _hoTenKhachHang; }
+            set { _hoTenKhachHang = value; }
         }
         private string _gioiTinh;
         public string GioiTinh
@@ -43,6 +43,12 @@ namespace AirTicketSalesManagement.Model
         {
             get { return _email; }
             set { _email = value; }
+        }
+        private string _giayToTuyThan;
+        public string GiayToTuyThan
+        {
+            get { return _giayToTuyThan; }
+            set { _giayToTuyThan = value; }
         }
     }
 }
