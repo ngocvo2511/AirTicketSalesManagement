@@ -1,0 +1,173 @@
+﻿<Window x:Class="AirTicketSalesManagement.View.MainWindows.Customer.CustomerHomePage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:uc="clr-namespace:AirTicketSalesManagement.Resources.User_Controls"
+        xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Trang chủ" Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="White">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <uc:CustomerMenuBar Grid.Column="0"/>
+
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="300"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Hàng 1 -->
+            <DockPanel Grid.Row="0" 
+                       LastChildFill="False">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                    <Image Source="/Resources/Images/logoxoanen.png" 
+                           Height="80" Width="80"
+                           Margin="0 10 0 0"
+                           VerticalAlignment="Center" />
+                    <TextBlock Text="FLY TOGETHER" 
+                               FontSize="20"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Foreground="#388FF4"
+                               Margin="10,0,0,0"/>
+                </StackPanel>
+            </DockPanel>
+
+            <!-- Hàng 2 -->
+            <Grid Grid.Row="1" Margin="0 10 0 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Xin chào, user!" 
+                           FontSize="30" FontWeight="Bold"
+                           Margin="30 0 0 0"
+                           Foreground="#2C3E50"
+                           VerticalAlignment="Center" />
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ToggleButton x:Name="ProfileToggle"
+                                  Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                  Width="60" Height="60"
+                                  Background="#388FF4"
+                                  BorderBrush="Transparent"
+                                  Margin="0 0 40 0"
+                                  ToolTip="Hồ sơ cá nhân">
+                        <materialDesign:PackIcon Kind="AccountCircleOutline"
+                                                 Width="35" Height="35"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"/>
+                    </ToggleButton>
+
+                    <Popup PlacementTarget="{Binding ElementName=ProfileToggle}"
+                           Placement="Bottom"
+                           IsOpen="{Binding IsChecked, ElementName=ProfileToggle}"
+                           StaysOpen="False"
+                           AllowsTransparency="True"
+                           PopupAnimation="Fade">
+                        <Border Background="White" 
+                                CornerRadius="8" 
+                                Padding="10" 
+                                Width="200" 
+                                BorderBrush="#388FF4" 
+                                BorderThickness="1"
+                                Effect="{DynamicResource MaterialDesignElevation3}">
+                            <StackPanel>
+                                <TextBlock Text="Xin chào, User!" FontWeight="Bold" Margin="0 0 0 5"/>
+                                <Separator/>
+                                <Button Content="Thông tin cá nhân" Style="{StaticResource MaterialDesignFlatButton}" />
+                                <Button Content="Đăng xuất" Style="{StaticResource MaterialDesignFlatButton}" />
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </StackPanel>
+            </Grid>
+
+
+            <!-- Hàng 3: Tra cứu chuyến bay -->
+            <Border Grid.Row="2" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+                <StackPanel>
+                    <TextBlock Text="Tìm chuyến bay nhanh" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center"/>
+
+                    <UniformGrid Columns="2" Rows="3" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <!-- Điểm khởi hành -->
+                        <ComboBox materialDesign:HintAssist.Hint="Điểm khởi hành"
+                                  IsEditable="True"
+                                  Width="200"
+                                  Margin="0 0 20 20"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
+                            <ComboBoxItem>Hà Nội</ComboBoxItem>
+                            <ComboBoxItem>Huế</ComboBoxItem>
+                            <ComboBoxItem>Đà Nẵng</ComboBoxItem>
+                        </ComboBox>
+
+                        <!-- Điểm đến -->
+                        <ComboBox materialDesign:HintAssist.Hint="Điểm đến"
+                                  Margin="0 0 20 20"
+                                  IsEditable="True"
+                                  Width="200"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
+                            <ComboBoxItem>Hà Nội</ComboBoxItem>
+                            <ComboBoxItem>Huế</ComboBoxItem>
+                            <ComboBoxItem>Đà Nẵng</ComboBoxItem>
+                        </ComboBox>
+
+                        <!-- Ngày khởi hành -->
+                        <DatePicker Width="200"
+                                    Margin="0 0 20 0"
+                                    VerticalAlignment="Center"
+                                    materialDesign:HintAssist.Hint="Ngày khởi hành"
+                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+
+                        <!-- Số lượng ghế -->
+                        <ComboBox materialDesign:HintAssist.Hint="Số lượng ghế"
+                                  Margin="0 0 20 0"
+                                  IsEditable="True"
+                                  Width="200"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem>1</ComboBoxItem>
+                            <ComboBoxItem>2</ComboBoxItem>
+                            <ComboBoxItem>3</ComboBoxItem>
+                            <ComboBoxItem>4</ComboBoxItem>
+                        </ComboBox>
+
+                        <Border />
+
+                        <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                Background="#388FF4"
+                                BorderBrush="Transparent"
+                                Width="40" Height="40"
+                                HorizontalAlignment="Right"
+                                Margin="0 0 20 0"
+                                ToolTip="MaterialDesignFloatingActionButton">
+                            <materialDesign:PackIcon Kind="Magnify"
+                                                     Height="24"
+                                                     Width="24" />
+                        </Button>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- Hàng 4: Trống -->
+            <Grid Grid.Row="3">
+
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
