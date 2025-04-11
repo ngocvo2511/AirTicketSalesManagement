@@ -1,58 +1,97 @@
 ﻿<Window x:Class="AirTicketSalesManagement.View.Login.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AirTicketSalesManagement.View.Login" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d"
-        Style="{StaticResource MaterialDesignWindow}"
-        Title="LoginWindow" Height="300" Width="400">
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Đăng nhập" Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="White">
+
     <Grid>
-        <materialDesign:Card Width="330" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid>
-                <Grid.Resources>
-                    <Style TargetType="Grid">
-                        <Setter Property="Margin" Value="15 0 15 0"/>
-                    </Style>
-                </Grid.Resources>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <TextBox
-  VerticalAlignment="Center"
-  materialDesign:HintAssist.Hint="Tên đăng nhập"
-  Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                </Grid>
-                <Grid Grid.Row="1">
-                    <PasswordBox
-  x:Name="PasswordBox"
-  materialDesign:HintAssist.Hint="Mật khẩu"
-  materialDesign:TextFieldAssist.HasClearButton="True" />
-                </Grid>
-                <Grid Grid.Row="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="360" />
+            <ColumnDefinition Width="640" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#E0F7FA" Offset="0.0"/>
+                    <GradientStop Color="#B2EBF2" Offset="0.5"/>
+                    <GradientStop Color="#80DEEA" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="280">
+                <TextBlock Text="Đăng nhập" FontSize="26" FontWeight="Bold" 
+                           HorizontalAlignment="Center" Margin="0 0 0 30"
+                           Foreground="#2C3E50" />
+
+                <TextBlock Text="Tên đăng nhập" Margin="0 0 0 5" Foreground="#34495E"/>
+                <TextBox Margin="0 0 0 15" Height="35" Padding="8"
+                         Background="White" BorderThickness="1"
+                         BorderBrush="#0078D7"/>
+
+                <TextBlock Text="Mật khẩu" Margin="0 0 0 5" Foreground="#34495E"/>
+                <PasswordBox Margin="0 0 0 10" Height="35" Padding="8"
+                             Background="White" BorderThickness="1"
+                             BorderBrush="#0078D7"/>
+
+                <Grid Margin="0 0 0 20">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0"
-                            Width="120"
-  Content="ĐĂNG NHẬP"
-  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-  Style="{StaticResource MaterialDesignRaisedDarkButton}"
-  ToolTip="Resource name: MaterialDesignRaisedLightDarkButton" />
-                    <Button Grid.Column="1"
-Width="120"
-Content="THOÁT"
-IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-Style="{StaticResource MaterialDesignRaisedDarkButton}"
-ToolTip="Resource name: MaterialDesignRaisedLightDarkButton" />
+
+                    <CheckBox Content="Lưu tài khoản" VerticalAlignment="Center"
+                              Foreground="#2C3E50"/>
+
+                    <TextBlock Grid.Column="1"
+                               Text="Quên mật khẩu?"
+                               Foreground="#0078D7"
+                               Cursor="Hand"
+                               VerticalAlignment="Center"
+                               Margin="10 0 0 0"
+                               TextDecorations="Underline"
+                               FontSize="12"/>
                 </Grid>
-            </Grid>
-            
-            
-        </materialDesign:Card>
+
+                <!-- Nút đăng nhập -->
+                <Button Content="Đăng nhập"
+                        Width="200" Height="40"
+                        Background="#0078D7"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        Cursor="Hand"
+                        BorderBrush="Transparent">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#005CB2"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+            </StackPanel>
+        </Grid>
+
+        <!-- Right panel with blurred image -->
+        <Border CornerRadius="20"
+                BorderThickness="0.1"
+                BorderBrush="Transparent"
+                HorizontalAlignment="Center"
+                Width="500"
+                Grid.Column="1"
+                Height="500"
+                VerticalAlignment="Center">
+            <Border.Background>
+                <ImageBrush ImageSource="/Resources/Images/logoxoanen.png" Stretch="UniformToFill"/>
+            </Border.Background>
+            <Border.Effect>
+                <BlurEffect Radius="2"/>
+            </Border.Effect>
+        </Border>
     </Grid>
 </Window>
