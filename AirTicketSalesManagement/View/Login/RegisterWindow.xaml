@@ -1,0 +1,70 @@
+﻿<Window x:Class="AirTicketSalesManagement.View.Register.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Đăng Ký Tài Khoản" Height="700" Width="400"
+        WindowStartupLocation="CenterScreen" Background="White">
+
+	<Grid>
+		<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+			<TextBlock Text="Đăng ký tài khoản" FontSize="24" FontWeight="Bold"
+                       HorizontalAlignment="Center" Margin="0 0 0 30" Foreground="#333" />
+
+			<!-- Username -->
+			<TextBlock Text="Tên đăng nhập" Margin="0 0 0 5" Foreground="#555" />
+			<TextBox x:Name="UsernameTextBox" Margin="0 0 0 15" Height="35" Padding="8"
+                     Background="White" BorderBrush="#0078D7" />
+
+			<!-- Password -->
+			<TextBlock Text="Mật khẩu" Margin="0 0 0 5" Foreground="#555" />
+			<PasswordBox x:Name="PasswordBox" Margin="0 0 0 15" Height="35" Padding="8"
+                         Background="White" BorderBrush="#0078D7" />
+
+			<!-- Confirm Password -->
+			<TextBlock Text="Xác nhận mật khẩu" Margin="0 0 0 5" Foreground="#555" />
+			<PasswordBox x:Name="ConfirmPasswordBox" Margin="0 0 0 15" Height="35" Padding="8"
+                         Background="White" BorderBrush="#0078D7" />
+
+			<!-- Email -->
+			<TextBlock Text="Email" Margin="0 0 0 5" Foreground="#555" />
+			<TextBox x:Name="EmailTextBox" Margin="0 0 0 15" Height="35" Padding="8"
+                     Background="White" BorderBrush="#0078D7" />
+
+			<!-- Phone Number -->
+			<TextBlock Text="Số điện thoại" Margin="0 0 0 5" Foreground="#555" />
+			<Grid Margin="0 0 0 15" HorizontalAlignment="Stretch">
+				<!-- ComboBox for Country Code with Scrollable List -->
+				<ComboBox x:Name="CountryCodeComboBox" Width="100" VerticalAlignment="Center"
+                          HorizontalAlignment="Left" Margin="0 0 10 0"
+                          Background="White" BorderBrush="#0078D7"
+                          IsEditable="True" MaxDropDownHeight="150" SelectionChanged="CountryCodeComboBox_SelectionChanged">
+					<ComboBoxItem Content="🇻🇳 Việt Nam (+84)" IsSelected="True" />
+					<ComboBoxItem Content="🇺🇸 Hoa Kỳ (+1)" />
+					<ComboBoxItem Content="🇬🇧 Anh (+44)" />
+					<ComboBoxItem Content="🇯🇵 Nhật Bản (+81)" />
+					<ComboBoxItem Content="🇮🇳 Ấn Độ (+91)" />
+					<ComboBoxItem Content="🇰🇷 Hàn Quốc (+82)" />
+					<ComboBoxItem Content="🇨🇦 Canada (+1)" />
+					<ComboBoxItem Content="🇩🇪 Đức (+49)" />
+					<ComboBoxItem Content="🇫🇷 Pháp (+33)" />
+					<ComboBoxItem Content="🇨🇳 Trung Quốc (+86)" />
+					<ComboBoxItem Content="🇹🇭 Thái Lan (+66)" />
+					<ComboBoxItem Content="🇦🇺 Úc (+61)" />
+					<ComboBoxItem Content="🇷🇺 Nga (+7)" />
+					<ComboBoxItem Content="🇧🇷 Brazil (+55)" />
+					<!-- ... bạn có thể thêm nhiều hơn nữa nếu muốn -->
+				</ComboBox>
+
+				<!-- TextBox for Phone Number -->
+				<TextBox x:Name="PhoneNumberTextBox" Height="35" Padding="8"
+                         Background="White" BorderBrush="#0078D7"
+                         HorizontalAlignment="Stretch" Margin="110 0 0 0" />
+			</Grid>
+
+			<!-- Register Button -->
+			<Button Content="Đăng ký" Width="200" Height="40"
+                    Background="#0078D7" Foreground="White" FontWeight="Bold"
+                    HorizontalAlignment="Center" Cursor="Hand" BorderBrush="Transparent"
+                    Click="Register_Click" />
+		</StackPanel>
+	</Grid>
+</Window>
