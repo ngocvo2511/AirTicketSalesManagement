@@ -22,10 +22,10 @@ namespace AirTicketSalesManagement.ViewModel
 
         public ICommand ToggleExpandCommand { get; }
 
-        public MenuBarViewModel()
-        {
-            ToggleExpandCommand = new RelayCommand(_ => IsExpanded = !IsExpanded);
-        }
+        //public MenuBarViewModel()
+        //{
+        //    ToggleExpandCommand = new RelayCommand(_ => IsExpanded = !IsExpanded);
+        //}
     }
 
 }

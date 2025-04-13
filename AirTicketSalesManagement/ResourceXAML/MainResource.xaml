@@ -1,6 +1,27 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:viewmodel="clr-namespace:AirTicketSalesManagement.ViewModel">
+                    xmlns:viewmodel="clr-namespace:AirTicketSalesManagement.ViewModel"
+                    xmlns:viewmodelLG="clr-namespace:AirTicketSalesManagement.ViewModel.Login"
+                    xmlns:viewsLG="clr-namespace:AirTicketSalesManagement.View.Login">
 
+    <viewmodelLG:AuthViewModel x:Key="AuthVM"/>
+    <viewmodelLG:LoginViewModel x:Key="LoginVM"/>
+    <viewmodelLG:RegisterViewModel x:Key="RegisterVM"/>
+    <viewmodelLG:ForgotPasswordViewModel x:Key="ForgotPasswordVM"/>
     <viewmodel:MainViewModel x:Key="MainVM"/>
+
+
+    <!-- DataTemplates -->
+    <DataTemplate DataType="{x:Type viewmodelLG:LoginViewModel}">
+        <viewsLG:LoginView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelLG:RegisterViewModel}">
+        <viewsLG:RegisterView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelLG:ForgotPasswordViewModel}">
+        <viewsLG:ForgotPasswordView />
+    </DataTemplate>
+
 </ResourceDictionary>

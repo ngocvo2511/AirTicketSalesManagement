@@ -1,0 +1,185 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Login.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AirTicketSalesManagement.View.Login"
+             xmlns:helper="clr-namespace:AirTicketSalesManagement.Helper"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="540"
+             DataContext="{StaticResource AuthVM}">
+    <UserControl.Resources>
+        <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#0099cc"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#007A9E"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CustomTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="10,0,0,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#0099cc"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CustomPasswordBoxStyle" TargetType="{x:Type PasswordBox}">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="10,0,0,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type PasswordBox}">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#0099cc"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CustomLabelStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="Margin" Value="0,15,0,8"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+
+        <Style x:Key="CustomCheckBoxStyle" TargetType="{x:Type CheckBox}">
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#555555"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="White" Padding="50,20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Phần đầu -->
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="Chào mừng trở lại" 
+                           FontSize="28" 
+                           FontWeight="SemiBold" 
+                           Foreground="#333333" 
+                           HorizontalAlignment="Center"
+                           Margin="0,20,0,10"/>
+                <TextBlock Text="Vui lòng đăng nhập tài khoản của bạn" 
+                           FontSize="14" 
+                           Foreground="#777777" 
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,30"/>
+            </StackPanel>
+
+            <!-- Phần form đăng nhập -->
+            <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                <TextBlock Text="Email:" Style="{StaticResource CustomLabelStyle}"/>
+                <TextBox x:Name="txtEmail" 
+                         Style="{StaticResource CustomTextBoxStyle}"
+                         Margin="0,0,0,15"/>
+
+                <TextBlock Text="Mật khẩu:" Style="{StaticResource CustomLabelStyle}"/>
+                <!-- Mật khẩu - chỉ 1 trong 2 cái được hiển thị -->
+                <!-- Khi hiện mật khẩu -->
+                <TextBox Text="{Binding Password, Mode=TwoWay}"
+         Style="{StaticResource CustomTextBoxStyle}"
+         Margin="0,0,0,10"
+         Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                <!-- Khi ẩn mật khẩu -->
+                <PasswordBox Style="{StaticResource CustomPasswordBoxStyle}" 
+             Margin="0,0,0,10"
+             Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+             helper:PasswordHelper.Attach="True"
+             helper:PasswordHelper.BoundPassword="{Binding Password, Mode=TwoWay}" />
+
+                <Grid Margin="0,5,0,20">
+                    <CheckBox x:Name="chkShowPassword"           
+                              Content="Hiện mật khẩu"                        
+                              Style="{StaticResource CustomCheckBoxStyle}"          
+                              IsChecked="{Binding IsPasswordVisible}"          
+                              HorizontalAlignment="Left"/>
+                    <TextBlock HorizontalAlignment="Right">
+                        <Hyperlink x:Name="lnkForgot" 
+                                  TextDecorations="None" 
+                                  Foreground="#0099cc" 
+                                  Command="{Binding ShowForgotPasswordCommand}">
+                            <TextBlock Text="Quên mật khẩu?" FontSize="13"/>
+                        </Hyperlink>
+                    </TextBlock>
+                </Grid>
+
+                <Button x:Name="btnSignIn" 
+                        Content="ĐĂNG NHẬP" 
+                        Style="{StaticResource RoundedButtonStyle}"
+                        Margin="0,10,0,20"
+                        />
+            </StackPanel>
+
+            <!-- Phần footer -->
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <TextBlock HorizontalAlignment="Center">
+                    <Run Text="Chưa có tài khoản? " Foreground="#777777"/>
+                    <Hyperlink x:Name="lnkSignUp" 
+                             TextDecorations="None" 
+                             Foreground="#0099cc" 
+                             Command="{Binding ShowRegisterCommand}">
+                        <TextBlock Text="Đăng ký" FontWeight="SemiBold"/>
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
