@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace AirTicketSalesManagement.View.MainWindows.Customer
 {
     /// <summary>
-    /// Interaction logic for BookingHistory.xaml
+    /// Interaction logic for BookingHistoryUC.xaml
     /// </summary>
-    public partial class BookingHistory : Window
+    public partial class BookingHistoryUC : UserControl
     {
-        public BookingHistory()
+        public BookingHistoryUC()
         {
             InitializeComponent();
         }

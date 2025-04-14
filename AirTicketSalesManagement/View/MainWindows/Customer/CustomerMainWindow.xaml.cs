@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace AirTicketSalesManagement.View.MainWindows.Customer
 {
     /// <summary>
-    /// Interaction logic for CustomerHomePage.xaml
+    /// Interaction logic for CustomerMainWindow.xaml
     /// </summary>
-    public partial class CustomerHomePage : Window
+    public partial class CustomerMainWindow : Window
     {
-        public CustomerHomePage()
+        public CustomerMainWindow()
         {
             InitializeComponent();
         }
