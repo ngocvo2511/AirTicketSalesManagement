@@ -16,7 +16,9 @@
 
 				<ResourceDictionary Source="ResourceXAML/MainResource.xaml"/>
 
-				<ResourceDictionary Source="Resources/Styles/Buttons/MenuBar_Button.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Buttons/ProfileButton.xaml" />
+
+                <ResourceDictionary Source="Resources/Styles/Buttons/MenuBar_Button.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
