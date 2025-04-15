@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace AirTicketSalesManagement.View.Customer
 {
     /// <summary>
-    /// Interaction logic for CustomerProfileUC.xaml
+    /// Interaction logic for BookingHistoryView.xaml
     /// </summary>
-    public partial class CustomerProfileUC : UserControl
+    public partial class BookingHistoryView : UserControl
     {
-        public CustomerProfileUC()
+        public BookingHistoryView()
         {
             InitializeComponent();
         }

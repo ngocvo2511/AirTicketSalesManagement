@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace AirTicketSalesManagement.View.Customer
 {
     /// <summary>
-    /// Interaction logic for HomePageUC.xaml
+    /// Interaction logic for HomePageView.xaml
     /// </summary>
-    public partial class HomePageUC : UserControl
+    public partial class HomePageView : UserControl
     {
-        public HomePageUC()
+        public HomePageView()
         {
             InitializeComponent();
         }

@@ -22,6 +22,10 @@ namespace AirTicketSalesManagement.ViewModel.Login
         [ObservableProperty]
         private bool isPasswordVisible;
 
+        public LoginViewModel()
+        {
+            // Default constructor
+        }
         public LoginViewModel(AuthViewModel auth)
         {
             _auth = auth;

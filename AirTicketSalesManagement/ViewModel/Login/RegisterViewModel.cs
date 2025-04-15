@@ -22,6 +22,11 @@ namespace AirTicketSalesManagement.ViewModel.Login
         [ObservableProperty]
         private string name;
 
+        public RegisterViewModel()
+        {
+            // Default constructor
+        }
+
         public RegisterViewModel(AuthViewModel auth)
         {
             _auth = auth;

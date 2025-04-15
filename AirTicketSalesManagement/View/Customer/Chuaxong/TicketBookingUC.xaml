@@ -46,7 +46,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <uc:FlightSearchUC Grid.Row="0"/>
+
 
                 <uc:CustomerInfoFillUC Grid.Row="1"/>
 

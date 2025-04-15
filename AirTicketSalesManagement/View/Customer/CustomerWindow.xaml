@@ -108,7 +108,8 @@
                             </Expander.Header>
 
                             <StackPanel Margin="10,5,0,5">
-                                <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5">
+                                <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5"
+                                        Command="{Binding NavigateToFlightTicketBookingCommand}">
                                     <StackPanel Orientation="Horizontal">
                                         <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
                                        Height="24" Margin="0,0,10,0"/>
@@ -116,7 +117,8 @@
                                     </StackPanel>
                                 </Button>
 
-                                <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5">
+                                <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5"
+                                        Command="{Binding NavigateToBookingHistoryCommand}">
                                     <StackPanel Orientation="Horizontal">
                                         <Icon:PackIconMaterial Kind="History" Width="24" 
                                        Height="24" Margin="0,0,10,0"/>
@@ -135,7 +137,8 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Style="{StaticResource SidebarButton}">
+                        <Button Style="{StaticResource SidebarButton}"
+                                Command="{Binding NavigateToFlightScheduleSearchCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Icon:PackIconMaterial Kind="Magnify" Width="24" 
                                Height="24" Margin="0,0,10,0" />

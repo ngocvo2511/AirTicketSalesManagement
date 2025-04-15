@@ -1,0 +1,323 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Customer.FlightScheduleSearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="980"
+             DataContext="{StaticResource FlightScheduleSearchVM}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Panel tìm kiếm -->
+        <Border Grid.Row="0" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Nhập thông tin chuyến bay cần tìm" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Margin="8,0,0,15"
+                               VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <RadioButton x:Name="OneWayRadio" 
+                                     Content="Một chiều" 
+                                     Margin="0 0 15 0"
+                                     GroupName="TripType"
+                                     IsChecked="True"/>
+                        <RadioButton x:Name="RoundTripRadio" 
+                                     Content="Khứ hồi" 
+                                     GroupName="TripType"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Điểm khởi hành -->
+                    <Grid Grid.Column="0" Grid.Row="0" Margin="0 0 20 20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Kind="FlightTakeoff" 
+                                                 Grid.Column="0"
+                                                 Foreground="#388FF4"
+                                                 Width="24" Height="24" 
+                                                 VerticalAlignment="Bottom" 
+                                                 Margin="0,0,8,5"/>
+
+                        <ComboBox Grid.Column="1"
+                                  materialDesign:HintAssist.Hint="Điểm khởi hành"
+                                  IsEditable="True"
+                                  Width="200"
+                                  HorizontalAlignment="Left"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
+                            <ComboBoxItem>Hà Nội</ComboBoxItem>
+                            <ComboBoxItem>Huế</ComboBoxItem>
+                            <ComboBoxItem>Đà Nẵng</ComboBoxItem>
+                            <ComboBoxItem>Nha Trang</ComboBoxItem>
+                            <ComboBoxItem>Phú Quốc</ComboBoxItem>
+                            <ComboBoxItem>Đà Lạt</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+
+                    <!-- Điểm đến -->
+                    <Grid Grid.Column="1" Grid.Row="0" Margin="0 0 0 20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Kind="FlightLand" 
+                                                 Grid.Column="0"
+                                                 Foreground="#388FF4"
+                                                 Width="24" Height="24" 
+                                                 VerticalAlignment="Bottom" 
+                                                 Margin="0,0,8,5"/>
+
+                        <ComboBox Grid.Column="1"
+                                  materialDesign:HintAssist.Hint="Điểm đến"
+                                  IsEditable="True"
+                                  Width="200"
+                                  HorizontalAlignment="Left"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
+                            <ComboBoxItem>Hà Nội</ComboBoxItem>
+                            <ComboBoxItem>Huế</ComboBoxItem>
+                            <ComboBoxItem>Đà Nẵng</ComboBoxItem>
+                            <ComboBoxItem>Nha Trang</ComboBoxItem>
+                            <ComboBoxItem>Phú Quốc</ComboBoxItem>
+                            <ComboBoxItem>Đà Lạt</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+
+                    <!-- Ngày khởi hành -->
+                    <Grid Grid.Column="0" Grid.Row="1" Margin="0 0 20 20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Kind="CalendarMonth" 
+                                                 Grid.Column="0"
+                                                 Foreground="#388FF4"
+                                                 Width="24" Height="24" 
+                                                 VerticalAlignment="Bottom" 
+                                                 Margin="0,0,8,5"/>
+
+                        <DatePicker Grid.Column="1"
+                                    Width="200"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    materialDesign:HintAssist.Hint="Ngày đi"
+                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                    </Grid>
+
+                    <!-- Ngày về (chỉ hiển thị khi chọn khứ hồi) -->
+                    <Grid Grid.Column="1" Grid.Row="1" Margin="0 0 0 20">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=RoundTripRadio, Path=IsChecked}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=RoundTripRadio, Path=IsChecked}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Kind="CalendarClock" 
+                            Grid.Column="0"
+                            Foreground="#388FF4"
+                            Width="24" Height="24" 
+                            VerticalAlignment="Bottom" 
+                            Margin="0,0,8,5"/>
+
+                        <DatePicker Grid.Column="1"
+                x:Name="ReturnDatePicker"
+                Width="200"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                materialDesign:HintAssist.Hint="Ngày về"
+                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                    </Grid>
+
+                    <!-- Số lượng ghế -->
+                    <Grid Grid.Column="0" Grid.Row="2" Margin="0 0 20 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Kind="AirlineSeatReclineNormal" 
+                                                 Grid.Column="0"
+                                                 Foreground="#388FF4"
+                                                 Width="24" Height="24" 
+                                                 VerticalAlignment="Bottom" 
+                                                 Margin="0,0,8,5"/>
+
+                        <ComboBox Grid.Column="1"
+                                  materialDesign:HintAssist.Hint="Số lượng ghế"
+                                  IsEditable="True"
+                                  Width="200"
+                                  HorizontalAlignment="Left"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem>1</ComboBoxItem>
+                            <ComboBoxItem>2</ComboBoxItem>
+                            <ComboBoxItem>3</ComboBoxItem>
+                            <ComboBoxItem>4</ComboBoxItem>
+                            <ComboBoxItem>5</ComboBoxItem>
+                            <ComboBoxItem>6</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+
+                    <!-- Button tìm kiếm -->
+                    <Button Grid.Column="1" Grid.Row="2"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#388FF4"
+                            BorderBrush="Transparent"
+                            Foreground="White"
+                            Height="45"
+                            Width="200"
+                            HorizontalAlignment="Left"
+                            Content="TÌM CHUYẾN BAY"
+                            materialDesign:ButtonAssist.CornerRadius="8">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3"/>
+                        </Button.Effect>
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Phần hiển thị kết quả -->
+        <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Tiêu đề kết quả tìm kiếm -->
+                <TextBlock Grid.Row="0" 
+                           Text="Kết quả tìm kiếm" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           Margin="8,0,0,15"
+                           Foreground="#333333"/>
+
+                <!-- Đề xuất phần hiển thị danh sách chuyến bay -->
+                <ListView Grid.Row="1" 
+                          x:Name="FlightResultsListView" 
+                          Visibility="Collapsed">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White" CornerRadius="8" Margin="0,8" Padding="15">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Logo hãng bay -->
+                                    <Image Grid.Column="0" Width="60" Height="60" Margin="0,0,15,0"/>
+
+                                    <!-- Thông tin chuyến bay -->
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                            <TextBlock Text="SGN" FontWeight="Bold" FontSize="16"/>
+                                            <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="HAN" FontWeight="Bold" FontSize="16"/>
+                                            <TextBlock Text=" | " Margin="5,0" FontSize="16"/>
+                                            <TextBlock Text="Vietnam Airlines" FontSize="14"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
+                                            <TextBlock Text="08:00" FontWeight="SemiBold"/>
+                                            <TextBlock Text=" - " Margin="5,0"/>
+                                            <TextBlock Text="10:10" FontWeight="SemiBold"/>
+                                            <TextBlock Text=" | " Margin="5,0"/>
+                                            <TextBlock Text="2h 10m" Foreground="#666666"/>
+                                            <TextBlock Text=" | " Margin="5,0"/>
+                                            <TextBlock Text="Bay thẳng" Foreground="#29A329"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+                                            <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Airbus A321" Foreground="#666666"/>
+                                            <TextBlock Text=" | " Margin="5,0"/>
+                                            <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="15kg hành lý" Foreground="#666666"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Giá và nút đặt vé -->
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <TextBlock Text="1.290.000 VND" FontWeight="Bold" FontSize="18" Foreground="#FF6600" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="/khách" Foreground="#666666" HorizontalAlignment="Right" Margin="0,0,0,10"/>
+                                        <Button Content="CHỌN" 
+                                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Foreground="#388FF4"
+                                                BorderBrush="#388FF4"
+                                                Width="100"
+                                                materialDesign:ButtonAssist.CornerRadius="5"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- Nội dung hiển thị khi chưa có kết quả tìm kiếm -->
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="AirplaneTakeoff" Width="80" Height="80" Foreground="#C0C0C0" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Hãy tìm kiếm chuyến bay phù hợp với bạn" 
+                               FontSize="18" 
+                               Foreground="#999999" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,15,0,5"/>
+                    <TextBlock Text="Nhập thông tin chuyến bay bạn muốn tìm kiếm ở phía trên" 
+                               FontSize="14" 
+                               Foreground="#AAAAAA" 
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

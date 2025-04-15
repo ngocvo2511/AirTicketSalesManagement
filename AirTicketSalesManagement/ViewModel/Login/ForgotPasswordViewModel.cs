@@ -15,6 +15,11 @@ namespace AirTicketSalesManagement.ViewModel.Login
         [ObservableProperty]
         private string email;
 
+        public ForgotPasswordViewModel()
+        {
+            // Default constructor
+        }
+
         public ForgotPasswordViewModel(AuthViewModel auth)
         {
             _auth = auth;

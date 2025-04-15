@@ -35,6 +35,24 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         }
 
         [RelayCommand]
+        private void NavigateToBookingHistory()
+        {
+            CurrentViewModel = new BookingHistoryViewModel();
+        }
+
+        [RelayCommand]
+        private void NavigateToFlightScheduleSearch()
+        {
+            CurrentViewModel = new FlightScheduleSearchViewModel();
+        }
+
+        [RelayCommand]
+        private void NavigateToFlightTicketBooking()
+        {
+            CurrentViewModel = new FlightScheduleSearchViewModel();
+        }
+
+        [RelayCommand]
         private void Logout()
         {
             var currentWindow = Application.Current.MainWindow;
