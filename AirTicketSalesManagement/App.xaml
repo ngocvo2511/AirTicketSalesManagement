@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:converters="clr-namespace:AirTicketSalesManagement.Converters"
-             StartupUri="/View/MainWindows/Customer/CustomerMainWindow.xaml">
+             StartupUri="/View/Login/AuthWindow.xaml">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

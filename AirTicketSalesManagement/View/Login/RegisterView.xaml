@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Login"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="540"
-             DataContext="{StaticResource AuthVM}">
+             >
     <UserControl.Resources>
         <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#0099cc"/>
@@ -142,7 +142,7 @@
                         Content="ĐĂNG KÝ" 
                         Style="{StaticResource RoundedButtonStyle}"
                         Margin="0,10,0,20"
-                        />
+                        Command="{Binding RegisterCommand}"/>
             </StackPanel>
 
             <!-- Phần footer -->

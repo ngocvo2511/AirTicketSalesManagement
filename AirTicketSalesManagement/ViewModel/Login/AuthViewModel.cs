@@ -14,37 +14,31 @@ namespace AirTicketSalesManagement.ViewModel.Login
         [ObservableProperty]
         private BaseViewModel currentViewModel;
 
-        [ObservableProperty]
-        private bool isPasswordVisible;
-
-        [ObservableProperty]
-        private string password;
-
         public AuthViewModel()
         {
-            CurrentViewModel = new LoginViewModel();
+            CurrentViewModel = new LoginViewModel(this);
         }
 
-        [RelayCommand]
-        private void ShowRegister() => NavigateTo(new RegisterViewModel());
-
-        [RelayCommand]
-        private void ShowLogin() => NavigateTo(new LoginViewModel());
-
-        [RelayCommand]
-        private void ShowForgotPassword() => NavigateTo(new ForgotPasswordViewModel());
-
+        
         [RelayCommand]
         private void CloseWindow()
         {
             Application.Current.Shutdown();
         }
 
-        private void NavigateTo(BaseViewModel viewModel)
+        public void NavigateToRegister()
         {
-            IsPasswordVisible = false;
-            Password = string.Empty;
-            CurrentViewModel = viewModel;
+            CurrentViewModel = new RegisterViewModel(this);
+        }
+
+        public void NavigateToLogin()
+        {
+            CurrentViewModel = new LoginViewModel(this);
+        }
+
+        public void NavigateToForgotPassword()
+        {
+            CurrentViewModel = new ForgotPasswordViewModel(this);
         }
     }
 }
