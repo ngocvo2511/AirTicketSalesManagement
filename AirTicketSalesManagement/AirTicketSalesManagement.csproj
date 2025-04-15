@@ -9,12 +9,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Resources\Images\homebg.png" />
 		<None Remove="Resources\Images\logo.png" />
 		<None Remove="Resources\Images\logoxoanen.png" />
 		<None Remove="Resources\Images\removebg.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Resources\Images\homebg.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	  <Resource Include="Resources\Images\logoxoanen.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
