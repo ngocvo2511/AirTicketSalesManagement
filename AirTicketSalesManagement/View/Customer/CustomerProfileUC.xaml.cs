@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AirTicketSalesManagement.View.MainWindows.Customer
+namespace AirTicketSalesManagement.View.Customer
 {
     /// <summary>
-    /// Interaction logic for CustomerMainWindow.xaml
+    /// Interaction logic for CustomerProfileUC.xaml
     /// </summary>
-    public partial class CustomerMainWindow : Window
+    public partial class CustomerProfileUC : UserControl
     {
-        public CustomerMainWindow()
+        public CustomerProfileUC()
         {
             InitializeComponent();
         }

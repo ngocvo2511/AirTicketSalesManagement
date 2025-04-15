@@ -2,13 +2,24 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewmodel="clr-namespace:AirTicketSalesManagement.ViewModel"
                     xmlns:viewmodelLG="clr-namespace:AirTicketSalesManagement.ViewModel.Login"
-                    xmlns:viewsLG="clr-namespace:AirTicketSalesManagement.View.Login">
+                    xmlns:viewsLG="clr-namespace:AirTicketSalesManagement.View.Login"
+                    xmlns:viewmodelCUST="clr-namespace:AirTicketSalesManagement.ViewModel.Customer"
+                    xmlns:viewsCUST="clr-namespace:AirTicketSalesManagement.View.Customer">
+    
 
     <viewmodelLG:AuthViewModel x:Key="AuthVM"/>
     <viewmodelLG:LoginViewModel x:Key="LoginVM"/>
     <viewmodelLG:RegisterViewModel x:Key="RegisterVM"/>
     <viewmodelLG:ForgotPasswordViewModel x:Key="ForgotPasswordVM"/>
     <viewmodel:MainViewModel x:Key="MainVM"/>
+    
+    
+    <viewmodelCUST:CustomerViewModel x:Key="CustomerVM"/>
+    <viewmodelCUST:HomePageViewModel x:Key="HomePageVM"/>
+    <viewmodelCUST:CustomerProfileViewModel x:Key="CustomerProfileVM"/>
+    
+    
+    
 
 
     <!-- DataTemplates -->
@@ -22,6 +33,14 @@
 
     <DataTemplate DataType="{x:Type viewmodelLG:ForgotPasswordViewModel}">
         <viewsLG:ForgotPasswordView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelCUST:HomePageViewModel}">
+        <viewsCUST:HomePageUC />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type viewmodelCUST:CustomerProfileViewModel}">
+        <viewsCUST:CustomerProfileUC />
     </DataTemplate>
 
 </ResourceDictionary>
