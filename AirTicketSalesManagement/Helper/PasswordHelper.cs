@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace AirTicketSalesManagement.Helper
 {
@@ -12,7 +13,7 @@ namespace AirTicketSalesManagement.Helper
     {
         public static readonly DependencyProperty BoundPassword =
             DependencyProperty.RegisterAttached("BoundPassword", typeof(string), typeof(PasswordHelper), new PropertyMetadata(string.Empty, OnBoundPasswordChanged));
-
+       
         public static string GetBoundPassword(DependencyObject obj)
             => (string)obj.GetValue(BoundPassword);
 

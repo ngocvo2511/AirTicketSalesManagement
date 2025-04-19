@@ -53,9 +53,23 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <Border BorderThickness="1" CornerRadius="5">
+                                <AdornedElementPlaceholder/>
+                            </Border>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsFocused" Value="True">
                     <Setter Property="BorderBrush" Value="#0099cc"/>
+                </Trigger>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="BorderBrush" Value="Red" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -82,6 +96,18 @@
             <Style.Triggers>
                 <Trigger Property="IsFocused" Value="True">
                     <Setter Property="BorderBrush" Value="#0099cc"/>
+                </Trigger>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="Validation.ErrorTemplate">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Border BorderThickness="1" CornerRadius="5">
+                                    <AdornedElementPlaceholder/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderBrush" Value="Red" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -128,22 +154,37 @@
                 <TextBlock Text="Email:" Style="{StaticResource CustomLabelStyle}"/>
                 <TextBox x:Name="txtEmail" 
                          Style="{StaticResource CustomTextBoxStyle}"
-                         Margin="0,0,0,15"/>
+                         Margin="0,0,0,0"
+                         Text="{Binding Email, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                <TextBlock Foreground="Red"
+                         FontSize="12"
+                         Margin="5,2,0,10"
+                         Text="{Binding ElementName=txtEmail, Path=(Validation.Errors)[0].ErrorContent}"
+                         Visibility="Visible"/>
+
 
                 <TextBlock Text="Mật khẩu:" Style="{StaticResource CustomLabelStyle}"/>
                 <!-- Mật khẩu - chỉ 1 trong 2 cái được hiển thị -->
                 <!-- Khi hiện mật khẩu -->
-                <TextBox Text="{Binding Password, Mode=TwoWay}"
-         Style="{StaticResource CustomTextBoxStyle}"
-         Margin="0,0,0,10"
-         Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <TextBox x:Name="txtPassword"
+                 Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                 Style="{StaticResource CustomTextBoxStyle}"
+                 Margin="0,0,0,0"
+                 Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                 <!-- Khi ẩn mật khẩu -->
-                <PasswordBox Style="{StaticResource CustomPasswordBoxStyle}" 
-             Margin="0,0,0,10"
-             Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-             helper:PasswordHelper.Attach="True"
-             helper:PasswordHelper.BoundPassword="{Binding Password, Mode=TwoWay}" />
+                <PasswordBox x:Name="txtPasswordBox"
+                 Style="{StaticResource CustomPasswordBoxStyle}" 
+                 Margin="0,0,0,0"
+                 Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                 helper:PasswordHelper.Attach="True"
+                 helper:PasswordHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                <TextBlock Foreground="Red"
+                FontSize="12"
+                Margin="5,2,0,10"
+                Text="{Binding ElementName=txtPassword, Path=(Validation.Errors)[0].ErrorContent}"
+                Visibility="Visible"/>
+
 
                 <Grid Margin="0,5,0,20">
                     <CheckBox x:Name="chkShowPassword"           
