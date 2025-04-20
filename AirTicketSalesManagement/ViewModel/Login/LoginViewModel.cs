@@ -28,7 +28,6 @@ namespace AirTicketSalesManagement.ViewModel.Login
 
         [ObservableProperty]
         private bool isPasswordVisible;
-        private bool hasLogin = false;
 
 
         public void Validate()
@@ -36,13 +35,8 @@ namespace AirTicketSalesManagement.ViewModel.Login
             ClearErrors(nameof(Email));
             ClearErrors(nameof(Password));
 
-            if (string.IsNullOrWhiteSpace(Email))
-                AddError(nameof(Email), "Email không được để trống.");
-            else if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-                AddError(nameof(Email), "Email không hợp lệ.");
-
-            if (string.IsNullOrWhiteSpace(Password))
-                AddError(nameof(Password), "Mật khẩu không được để trống.");
+            if (string.IsNullOrWhiteSpace(Email) || !Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$") || string.IsNullOrWhiteSpace(Password))
+                AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
         }
         public bool HasErrors => _errors.Any();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -77,30 +71,6 @@ namespace AirTicketSalesManagement.ViewModel.Login
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-
-        //public string this[string columnName]
-        //{
-        //    get
-        //    {
-        //        if (!hasLogin) return null;
-
-        //        if (columnName == nameof(Email))
-        //        {
-        //            if (string.IsNullOrWhiteSpace(Email))
-        //                return "Email không được để trống.";
-        //            if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-        //                return "Email không hợp lệ.";
-        //        }
-        //        if (columnName == nameof(Password) && string.IsNullOrWhiteSpace(Password))
-        //        {
-        //            return "Mật khẩu không được để trống.";
-        //        }                
-        //        return null;
-        //    }
-        //}
-
-
 
         public LoginViewModel()
         {

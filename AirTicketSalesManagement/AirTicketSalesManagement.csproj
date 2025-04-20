@@ -9,10 +9,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="appsettings.json" />
 		<None Remove="Resources\Images\homebg.png" />
 		<None Remove="Resources\Images\logo.png" />
 		<None Remove="Resources\Images\logoxoanen.png" />
 		<None Remove="Resources\Images\removebg.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,6 +41,8 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -81,31 +81,6 @@ namespace AirTicketSalesManagement.ViewModel.Login
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        //public string this[string columnName]
-        //{
-        //    get
-        //    {
-        //        if (columnName == nameof(Name) && string.IsNullOrWhiteSpace(Name))
-        //            return "Tên không được để trống.";
-
-        //        if (columnName == nameof(Email))
-        //        {
-        //            if (string.IsNullOrWhiteSpace(Email))
-        //                return "Email không được để trống.";
-        //            if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-        //                return "Email không hợp lệ.";
-        //        }
-        //        if (columnName == nameof(Password) && string.IsNullOrWhiteSpace(Password))
-        //        {
-        //            return "Mật khẩu không được để trống.";
-        //        }
-        //        if (columnName == nameof(ConfirmPassword) && ConfirmPassword!=Password)
-        //        {
-        //            return "Xác nhận mật khẩu không khớp với mật khẩu.";
-        //        }
-        //        return null;
-        //    }
-        //}
         
         public RegisterViewModel()
         {
