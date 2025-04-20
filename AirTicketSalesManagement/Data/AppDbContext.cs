@@ -29,7 +29,7 @@ namespace AirTicketSalesManagement.Data
         {
             // Khóa chính kết hợp cho bảng SANBAYTRUNGGIAN
             modelBuilder.Entity<SanBayTrungGian>()
-                .HasKey(sbtg => new { sbtg.MaSBTG, sbtg.SoHieuCB });
+                .HasKey(sbtg => new { sbtg.STT, sbtg.SoHieuCB });
 
             base.OnModelCreating(modelBuilder);
         }

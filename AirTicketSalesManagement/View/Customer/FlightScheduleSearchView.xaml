@@ -35,10 +35,11 @@
                                      Content="Một chiều" 
                                      Margin="0 0 15 0"
                                      GroupName="TripType"
-                                     IsChecked="True"/>
+                                     IsChecked="{Binding IsRoundTrip, Converter={StaticResource InverseBooleanConverter}}"/>
                         <RadioButton x:Name="RoundTripRadio" 
                                      Content="Khứ hồi" 
-                                     GroupName="TripType"/>
+                                     GroupName="TripType"
+                                     IsChecked="{Binding IsRoundTrip}"/>
                     </StackPanel>
                 </Grid>
 
@@ -72,7 +73,8 @@
                                   IsEditable="True"
                                   Width="200"
                                   HorizontalAlignment="Left"
-                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
                             <ComboBoxItem>Hà Nội</ComboBoxItem>
                             <ComboBoxItem>Huế</ComboBoxItem>
@@ -102,7 +104,8 @@
                                   IsEditable="True"
                                   Width="200"
                                   HorizontalAlignment="Left"
-                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"  
+                                  Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
                             <ComboBoxItem>Hà Nội</ComboBoxItem>
                             <ComboBoxItem>Huế</ComboBoxItem>
@@ -132,7 +135,8 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     materialDesign:HintAssist.Hint="Ngày đi"
-                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                    SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
                     </Grid>
 
                     <!-- Ngày về (chỉ hiển thị khi chọn khứ hồi) -->
@@ -168,7 +172,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.Hint="Ngày về"
-                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+                Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                SelectedDate="{Binding NgayVe, Mode=TwoWay}"/>
                     </Grid>
 
                     <!-- Số lượng ghế -->
@@ -190,7 +195,8 @@
                                   IsEditable="True"
                                   Width="200"
                                   HorizontalAlignment="Left"
-                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  SelectedIndex="{Binding SoLuongGhe, Mode=TwoWay}">
                             <ComboBoxItem>1</ComboBoxItem>
                             <ComboBoxItem>2</ComboBoxItem>
                             <ComboBoxItem>3</ComboBoxItem>
@@ -210,7 +216,8 @@
                             Width="200"
                             HorizontalAlignment="Left"
                             Content="TÌM CHUYẾN BAY"
-                            materialDesign:ButtonAssist.CornerRadius="8">
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            Command="{Binding SearchFlightCommand}">
                         <Button.Effect>
                             <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3"/>
                         </Button.Effect>
@@ -238,7 +245,8 @@
                 <!-- Đề xuất phần hiển thị danh sách chuyến bay -->
                 <ListView Grid.Row="1" 
                           x:Name="FlightResultsListView" 
-                          Visibility="Collapsed">
+                          ItemsSource="{Binding FlightResults}"
+                          Visibility="{Binding ResultVisibility}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border Background="White" CornerRadius="8" Margin="0,8" Padding="15">
@@ -261,26 +269,26 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                            <TextBlock Text="SGN" FontWeight="Bold" FontSize="16"/>
+                                            <TextBlock Text="{Binding MaSBDi}" FontWeight="Bold" FontSize="16"/>
                                             <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="HAN" FontWeight="Bold" FontSize="16"/>
+                                            <TextBlock Text="{Binding MaSBDen}" FontWeight="Bold" FontSize="16"/>
                                             <TextBlock Text=" | " Margin="5,0" FontSize="16"/>
-                                            <TextBlock Text="Vietnam Airlines" FontSize="14"/>
+                                            <TextBlock Text="{Binding HangHangKhong}" FontSize="14"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
-                                            <TextBlock Text="08:00" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding GioDi}" FontWeight="SemiBold"/>
                                             <TextBlock Text=" - " Margin="5,0"/>
-                                            <TextBlock Text="10:10" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding GioDen}" FontWeight="SemiBold"/>
                                             <TextBlock Text=" | " Margin="5,0"/>
-                                            <TextBlock Text="2h 10m" Foreground="#666666"/>
+                                            <TextBlock Text="{Binding ThoiGianBay}" Foreground="#666666"/>
                                             <TextBlock Text=" | " Margin="5,0"/>
                                             <TextBlock Text="Bay thẳng" Foreground="#29A329"/>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
                                             <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Airbus A321" Foreground="#666666"/>
+                                            <TextBlock Text="{Binding MayBay}" Foreground="#666666"/>
                                             <TextBlock Text=" | " Margin="5,0"/>
                                             <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                             <TextBlock Text="15kg hành lý" Foreground="#666666"/>
@@ -289,14 +297,14 @@
 
                                     <!-- Giá và nút đặt vé -->
                                     <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                                        <TextBlock Text="1.290.000 VND" FontWeight="Bold" FontSize="18" Foreground="#FF6600" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0} VND}" FontWeight="Bold" FontSize="18" Foreground="#FF6600" HorizontalAlignment="Right"/>
                                         <TextBlock Text="/khách" Foreground="#666666" HorizontalAlignment="Right" Margin="0,0,0,10"/>
                                         <Button Content="CHỌN" 
-                                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                                Foreground="#388FF4"
-                                                BorderBrush="#388FF4"
-                                                Width="100"
-                                                materialDesign:ButtonAssist.CornerRadius="5"/>
+            Style="{StaticResource MaterialDesignOutlinedButton}"
+            Foreground="#388FF4"
+            BorderBrush="#388FF4"
+            Width="100"
+            materialDesign:ButtonAssist.CornerRadius="5"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>

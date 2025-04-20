@@ -8,6 +8,12 @@ namespace AirTicketSalesManagement.Model
 {
     public class SanBayTrungGian
     {
+        private int _sTT;
+        public int STT
+        {
+            get { return _sTT; }
+            set { _sTT = value; }
+        }
         private string _maSBTG;
         public string MaSBTG
         {

@@ -26,6 +26,12 @@ namespace AirTicketSalesManagement.Model
             get { return _sanBayDen; }
             set { _sanBayDen = value; }
         }
+        private string _hangHangKhong;
+        public string HangHangKhong
+        {
+            get { return _hangHangKhong; }
+            set { _hangHangKhong = value; }
+        }
         private float _soGioBay;
         public float SoGioBay
         {
