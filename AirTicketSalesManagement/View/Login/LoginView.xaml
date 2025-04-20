@@ -97,18 +97,6 @@
                 <Trigger Property="IsFocused" Value="True">
                     <Setter Property="BorderBrush" Value="#0099cc"/>
                 </Trigger>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="Validation.ErrorTemplate">
-                        <Setter.Value>
-                            <ControlTemplate>
-                                <Border BorderThickness="1" CornerRadius="5">
-                                    <AdornedElementPlaceholder/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="BorderBrush" Value="Red" />
-                </Trigger>
             </Style.Triggers>
         </Style>
 
@@ -175,15 +163,10 @@
                 <!-- Khi ẩn mật khẩu -->
                 <PasswordBox x:Name="txtPasswordBox"
                  Style="{StaticResource CustomPasswordBoxStyle}" 
-                 Margin="0,0,0,0"
+                 Margin="0,0,0,10"
                  Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                  helper:PasswordHelper.Attach="True"
                  helper:PasswordHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
-                <TextBlock Foreground="Red"
-                FontSize="12"
-                Margin="5,2,0,10"
-                Text="{Binding ElementName=txtPassword, Path=(Validation.Errors)[0].ErrorContent}"
-                Visibility="Visible"/>
 
 
                 <Grid Margin="0,5,0,20">

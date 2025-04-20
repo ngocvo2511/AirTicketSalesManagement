@@ -1,7 +1,9 @@
 ﻿using AirTicketSalesManagement.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +22,20 @@ namespace AirTicketSalesManagement.Data
         public DbSet<ChiTietDatVe> ChiTietDatVes { get; set; }
         public DbSet<QuyDinh> QuyDinhs { get; set; }
 
+        public string GetConnectionString(string name = "DefaultConnection")
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            var config = builder.Build();
+
+            return config.GetConnectionString(name);
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=LAPTOP-9JTTD1R2;Database=QLVMB;User Id=sa;Password=123;");
+            var connectionString = GetConnectionString();
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
