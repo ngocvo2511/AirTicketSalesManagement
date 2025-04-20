@@ -74,5 +74,8 @@ namespace AirTicketSalesManagement.Model
             get { return _giaVeThucTe; }
             set { _giaVeThucTe = value; }
         }
+
+        public DatVe DatVe { get; set; }
+        public LoaiVe LoaiVe { get; set; }
     }
 }

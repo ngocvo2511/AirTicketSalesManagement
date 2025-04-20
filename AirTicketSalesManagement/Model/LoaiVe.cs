@@ -45,5 +45,8 @@ namespace AirTicketSalesManagement.Model
             get { return _soLuongVeConLai; }
             set { _soLuongVeConLai = value; }
         }
+
+        public LichBay LichBay { get; set; }
+
     }
 }

@@ -56,5 +56,8 @@ namespace AirTicketSalesManagement.Model
             get { return _tinhTrangLichBay; }
             set { _tinhTrangLichBay = value; }
         }
+
+        public ChuyenBay ChuyenBay { get; set; }
+
     }
 }

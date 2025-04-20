@@ -38,5 +38,8 @@ namespace AirTicketSalesManagement.Model
             get { return _tinhTrangKhaiThac; }
             set { _tinhTrangKhaiThac = value; }
         }
+        // Quan hệ với SanBay
+        public SanBay SBDi { get; set; }
+        public SanBay SBDen { get; set; }
     }
 }

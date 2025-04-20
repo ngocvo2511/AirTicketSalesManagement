@@ -26,11 +26,11 @@ namespace AirTicketSalesManagement.Model
             get { return _maKhachHang; }
             set { _maKhachHang = value; }
         }
-        private string _ngayDat;
-        public string NgayDat
+        private DateTime _thoiGianDV;
+        public DateTime ThoiGianDV
         {
-            get { return _ngayDat; }
-            set { _ngayDat = value; }
+            get { return _thoiGianDV; }
+            set { _thoiGianDV = value; }
         }
         private string _soLuongVe;
         public string SoLuongVe
@@ -50,5 +50,8 @@ namespace AirTicketSalesManagement.Model
             get { return _tinhTrangDatVe; }
             set { _tinhTrangDatVe = value; }
         }
+
+        public LichBay LichBay { get; set; }
+        public KhachHang KhachHang { get; set; }
     }
 }
