@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using AirTicketSalesManagement.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace AirTicketSalesManagement.Data;
 
@@ -37,11 +39,21 @@ public partial class AirTicketDbContext : DbContext
     public virtual DbSet<Sanbaytrunggian> Sanbaytrunggians { get; set; }
 
     public virtual DbSet<Taikhoan> Taikhoans { get; set; }
+    public string GetConnectionString(string name = "DefaultConnection")
+    {
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+        var config = builder.Build();
+        return config.GetConnectionString(name);
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("workstation id=AirTicketDB.mssql.somee.com;packet size=4096;user id=NghiaHoang2005;pwd=Chun2005@@;data source=AirTicketDB.mssql.somee.com;persist security info=False;initial catalog=AirTicketDB;TrustServerCertificate=True;");
-
+    {
+        var connectionString = GetConnectionString();
+        optionsBuilder.UseSqlServer(connectionString);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Chuyenbay>(entity =>
