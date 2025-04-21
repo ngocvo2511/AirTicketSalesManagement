@@ -54,9 +54,4 @@
 		</Resource>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="ViewModel\Staff\" />
-	  <Folder Include="View\Staff\" />
-	</ItemGroup>
-
 </Project>
