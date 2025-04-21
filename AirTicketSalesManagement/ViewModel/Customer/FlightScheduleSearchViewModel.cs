@@ -1,4 +1,4 @@
-﻿using AirTicketSalesManagement.Model;
+﻿using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
