@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
-    public partial class RegisterViewModel : BaseViewModel, INotifyDataErrorInfo, INotifyPropertyChanged
+    public partial class RegisterViewModel : BaseViewModel, INotifyDataErrorInfo
     {
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
@@ -98,9 +98,6 @@ namespace AirTicketSalesManagement.ViewModel.Login
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         #endregion
 
         #region add account

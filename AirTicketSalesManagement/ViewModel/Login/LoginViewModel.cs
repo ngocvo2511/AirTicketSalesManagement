@@ -13,7 +13,7 @@ using System.Windows.Media.Animation;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
-    public partial class LoginViewModel : BaseViewModel, INotifyDataErrorInfo, INotifyPropertyChanged
+    public partial class LoginViewModel : BaseViewModel, INotifyDataErrorInfo
     {
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
@@ -26,7 +26,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
 
         [ObservableProperty]
         private bool isPasswordVisible;
-        private string idLogin;
+
 
         #region Error
         public void Validate()
@@ -70,9 +70,6 @@ namespace AirTicketSalesManagement.ViewModel.Login
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         #endregion
 
         public LoginViewModel()
@@ -101,7 +98,6 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     }
                     else
                     {
-                        idLogin = (user.VaiTro == "Khach hang") ? user.MaKh : user.MaNv;
                         if (user.VaiTro == "Khach hang")
                         {
                             var currentWindow = Application.Current.MainWindow;
