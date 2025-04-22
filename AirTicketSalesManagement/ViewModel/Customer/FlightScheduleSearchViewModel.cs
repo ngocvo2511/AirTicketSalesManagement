@@ -1,4 +1,5 @@
-﻿using AirTicketSalesManagement.Models;
+﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -15,6 +16,15 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 {
     public partial class FlightScheduleSearchViewModel : BaseViewModel
     {
+
+        public FlightScheduleSearchViewModel()
+        {
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                LoadSanBay();
+            }
+        }
+
         [ObservableProperty]
         private string diemDi;
 
@@ -34,6 +44,41 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private Visibility resultVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
+        private ObservableCollection<string> sanBayList = new();
+
+
+        // Danh sách dùng để binding cho điểm đi (lọc bỏ điểm đến)
+        public ObservableCollection<string> DiemDiList =>
+            new(SanBayList.Where(s => s != DiemDen));
+
+        // Danh sách dùng để binding cho điểm đến (lọc bỏ điểm đi)
+        public ObservableCollection<string> DiemDenList =>
+            new(SanBayList.Where(s => s != DiemDi));
+
+        partial void OnDiemDiChanged(string value)
+        {
+            OnPropertyChanged(nameof(DiemDenList));
+        }
+
+        partial void OnDiemDenChanged(string value)
+        {
+            OnPropertyChanged(nameof(DiemDiList));
+        }
+
+        public void LoadSanBay()
+        {
+            using (var context = new AirTicketDbContext()) // Hoặc dùng SqlConnection nếu ADO.NET
+            {
+                var danhSach = context.Sanbays
+                            .AsEnumerable() // chuyển sang LINQ to Objects
+                            .Select(sb => $"{sb.ThanhPho} ({sb.MaSb}), {sb.QuocGia}")
+                            .OrderBy(display => display)
+                            .ToList();
+                SanBayList = new ObservableCollection<string>(danhSach);
+            }
+        }
+
+        [ObservableProperty]
         private ObservableCollection<KQTraCuuChuyenBay> flightResults = new();
 
         // Hành khách properties
@@ -49,11 +94,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private bool isPassengerSelectorOpen = false;
 
-        //// Lưu giá trị tạm thời khi đang chọn
-        //private int tempAdultCount;
-        //private int tempChildCount;
-        //private int tempInfantCount;
-
         // Tổng số hành khách
         public int TotalPassengers => AdultCount + ChildCount + InfantCount;
 
@@ -62,12 +102,13 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         {
             get
             {
-                string summary = $"{AdultCount} người lớn";
-                if (ChildCount > 0)
-                    summary += $", {ChildCount} trẻ em";
-                if (InfantCount > 0)
-                    summary += $", {InfantCount} em bé";
+                string summary = $"{TotalPassengers} hành khách";
                 return summary;
+            }
+
+            set
+            {
+                // Không cần thiết phải làm gì ở đây
             }
         }
 
@@ -75,10 +116,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void OpenPassengerSelector()
         {
-            //// Lưu giá trị tạm thời để người dùng có thể hủy việc thay đổi
-            //tempAdultCount = AdultCount;
-            //tempChildCount = ChildCount;
-            //tempInfantCount = InfantCount;
 
             IsPassengerSelectorOpen = true;
         }
@@ -87,11 +124,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void ApplyPassengerSelection()
         {
-            // Áp dụng các giá trị đã chọn
-            //AdultCount = tempAdultCount;
-            //ChildCount = tempChildCount;
-            //InfantCount = tempInfantCount;
-
             // Đóng popup
             IsPassengerSelectorOpen = false;
 
@@ -194,10 +226,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         {
             // TODO: Thay bằng truy vấn DB thực tế
             FlightResults.Clear();
-
             if (string.IsNullOrWhiteSpace(DiemDi) || string.IsNullOrWhiteSpace(DiemDen) || NgayDi == null)
                 return;
 
+            // Thêm chuyến bay thẳng
             FlightResults.Add(new KQTraCuuChuyenBay
             {
                 MaSBDi = "SGN",
@@ -207,7 +239,36 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 GioDen = new TimeSpan(9, 30, 0), // 09:30 AM
                 ThoiGianBay = new TimeSpan(1, 30, 0), // 1 hour 30 minutes
                 MayBay = "Airbus A321",
-                GiaVe = 1290000
+                GiaVe = 1290000,
+                SoSanBayTrungGian = 0 // Bay thẳng
+            });
+
+            // Thêm chuyến bay có 1 điểm dừng
+            FlightResults.Add(new KQTraCuuChuyenBay
+            {
+                MaSBDi = "SGN",
+                MaSBDen = "HAN",
+                HangHangKhong = "VietJet Air",
+                GioDi = new TimeSpan(9, 0, 0),
+                GioDen = new TimeSpan(12, 30, 0),
+                ThoiGianBay = new TimeSpan(3, 30, 0),
+                MayBay = "Airbus A320",
+                GiaVe = 950000,
+                SoSanBayTrungGian = 1 // 1 điểm dừng
+            });
+
+            // Thêm chuyến bay có 2 điểm dừng
+            FlightResults.Add(new KQTraCuuChuyenBay
+            {
+                MaSBDi = "SGN",
+                MaSBDen = "HAN",
+                HangHangKhong = "Bamboo Airways",
+                GioDi = new TimeSpan(7, 30, 0),
+                GioDen = new TimeSpan(13, 0, 0),
+                ThoiGianBay = new TimeSpan(5, 30, 0),
+                MayBay = "Boeing 787",
+                GiaVe = 890000,
+                SoSanBayTrungGian = 2 // 2 điểm dừng
             });
 
             ResultVisibility = Visibility.Visible;

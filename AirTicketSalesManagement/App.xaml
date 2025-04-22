@@ -25,6 +25,8 @@
             <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <converters:InverseVisibilityConverter x:Key="InverseVisibilityConverter"/>
+            <converters:ZeroToVisibleConverter x:Key="ZeroToVisibleConverter"/>
+            <converters:NonZeroToVisibleConverter x:Key="NonZeroToVisibleConverter"/>
 
             <vmCust:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
 

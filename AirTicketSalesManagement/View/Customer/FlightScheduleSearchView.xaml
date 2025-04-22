@@ -33,14 +33,14 @@
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <RadioButton x:Name="OneWayRadio" 
-                                     Content="Một chiều" 
-                                     Margin="0 0 15 0"
-                                     GroupName="TripType"
-                                     IsChecked="{Binding IsRoundTrip, Converter={StaticResource InverseBooleanConverter}}"/>
+             Content="Một chiều" 
+             Margin="0 0 15 0"
+             GroupName="TripType"
+             IsChecked="{Binding IsRoundTrip, Converter={StaticResource InverseBooleanConverter}, Mode=OneWayToSource}"/>
                         <RadioButton x:Name="RoundTripRadio" 
-                                     Content="Khứ hồi" 
-                                     GroupName="TripType"
-                                     IsChecked="{Binding IsRoundTrip}"/>
+             Content="Khứ hồi" 
+             GroupName="TripType"
+             IsChecked="{Binding IsRoundTrip, Mode=TwoWay}"/>
                     </StackPanel>
                 </Grid>
 
@@ -65,25 +65,20 @@
                         <materialDesign:PackIcon Kind="FlightTakeoff" 
                                                  Grid.Column="0"
                                                  Foreground="#388FF4"
-                                                 Width="24" Height="24" 
+                                                 Width="30" Height="30" 
                                                  VerticalAlignment="Bottom" 
-                                                 Margin="0,0,8,5"/>
+                                                 Margin="0,0,10,5"/>
 
                         <ComboBox Grid.Column="1"
-                                  materialDesign:HintAssist.Hint="Điểm khởi hành"
-                                  IsEditable="True"
-                                  Width="200"
-                                  HorizontalAlignment="Left"
-                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                                  Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
-                            <ComboBoxItem>Hà Nội</ComboBoxItem>
-                            <ComboBoxItem>Huế</ComboBoxItem>
-                            <ComboBoxItem>Đà Nẵng</ComboBoxItem>
-                            <ComboBoxItem>Nha Trang</ComboBoxItem>
-                            <ComboBoxItem>Phú Quốc</ComboBoxItem>
-                            <ComboBoxItem>Đà Lạt</ComboBoxItem>
-                        </ComboBox>
+          materialDesign:HintAssist.Hint="Điểm khởi hành"
+          IsEditable="True"
+          Width="260"
+          Height="50"
+          FontSize="14"
+          HorizontalAlignment="Left"
+          ItemsSource="{Binding DiemDiList}"
+          Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </Grid>
 
                     <!-- Điểm đến -->
@@ -96,25 +91,21 @@
                         <materialDesign:PackIcon Kind="FlightLand" 
                                                  Grid.Column="0"
                                                  Foreground="#388FF4"
-                                                 Width="24" Height="24" 
+                                                 Width="30" Height="30" 
                                                  VerticalAlignment="Bottom" 
-                                                 Margin="0,0,8,5"/>
+                                                 Margin="0,0,10,5"/>
 
+                        <!-- Điểm đến -->
                         <ComboBox Grid.Column="1"
-                                  materialDesign:HintAssist.Hint="Điểm đến"
-                                  IsEditable="True"
-                                  Width="200"
-                                  HorizontalAlignment="Left"
-                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"  
-                                  Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
-                            <ComboBoxItem>Hà Nội</ComboBoxItem>
-                            <ComboBoxItem>Huế</ComboBoxItem>
-                            <ComboBoxItem>Đà Nẵng</ComboBoxItem>
-                            <ComboBoxItem>Nha Trang</ComboBoxItem>
-                            <ComboBoxItem>Phú Quốc</ComboBoxItem>
-                            <ComboBoxItem>Đà Lạt</ComboBoxItem>
-                        </ComboBox>
+          materialDesign:HintAssist.Hint="Điểm đến"
+          IsEditable="True"
+          Width="260"
+          Height="50"
+          FontSize="14"
+          HorizontalAlignment="Left"
+          ItemsSource="{Binding DiemDenList}"
+          Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </Grid>
 
                     <!-- Ngày khởi hành -->
@@ -127,12 +118,14 @@
                         <materialDesign:PackIcon Kind="CalendarMonth" 
                                                  Grid.Column="0"
                                                  Foreground="#388FF4"
-                                                 Width="24" Height="24" 
+                                                 Width="30" Height="30" 
                                                  VerticalAlignment="Bottom" 
-                                                 Margin="0,0,8,5"/>
+                                                 Margin="0,0,10,5"/>
 
                         <DatePicker Grid.Column="1"
-                                    Width="200"
+                                    Width="260"
+                                    Height="50"
+                                    FontSize="14"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     materialDesign:HintAssist.Hint="Ngày đi"
@@ -163,13 +156,15 @@
                         <materialDesign:PackIcon Kind="CalendarClock" 
                             Grid.Column="0"
                             Foreground="#388FF4"
-                            Width="24" Height="24" 
+                            Width="30" Height="30" 
                             VerticalAlignment="Bottom" 
-                            Margin="0,0,8,5"/>
+                            Margin="0,0,10,5"/>
 
                         <DatePicker Grid.Column="1"
                 x:Name="ReturnDatePicker"
-                Width="200"
+                Width="260"
+                Height="50"
+                FontSize="14"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 materialDesign:HintAssist.Hint="Ngày về"
@@ -187,9 +182,9 @@
                         <materialDesign:PackIcon Kind="AccountGroup" 
                                                  Grid.Column="0"
                                                  Foreground="#388FF4"
-                                                 Width="24" Height="24" 
+                                                 Width="30" Height="30" 
                                                  VerticalAlignment="Bottom" 
-                                                 Margin="0,0,8,5"/>
+                                                 Margin="0,0,10,5"/>
 
                         <Grid Grid.Column="1">
                             <Grid.ColumnDefinitions>
@@ -199,19 +194,20 @@
 
                             <TextBox Grid.Column="0"
                                      materialDesign:HintAssist.Hint="Hành khách"
-                                     Width="200"
+                                     Width="220"
+                                     FontSize="14"
                                      HorizontalAlignment="Left"
                                      IsReadOnly="True"
                                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                     Text="{Binding PassengerSummary, Mode=OneWay}"/>
+                                     Text="{Binding PassengerSummary}" Margin="0,5,0,5"/>
 
                             <Button Grid.Column="1" 
                                     Style="{StaticResource MaterialDesignFlatLightButton}"
-                                    Width="30" Height="30"
+                                    Width="40" Height="40"
                                     Padding="0"
                                     Margin="5,0,0,0"
                                     Command="{Binding OpenPassengerSelectorCommand}">
-                                <materialDesign:PackIcon Kind="MenuDown" Width="24" Height="24"/>
+                                <materialDesign:PackIcon Kind="MenuDown" Width="30" Height="30"/>
                             </Button>
                         </Grid>
                     </Grid>
@@ -222,20 +218,21 @@
                            StaysOpen="False"
                            PlacementTarget="{Binding ElementName=PassengerSelectorButton}"
                            Placement="Bottom" 
-                           Width="350"
+                           Width="380"
                            AllowsTransparency="True">
                         <Border Background="White" 
                                 BorderBrush="#DDDDDD" 
                                 BorderThickness="1" 
                                 CornerRadius="8"
-                                Padding="15">
+                                Padding="20">
                             <StackPanel>
                                 <TextBlock Text="Hành khách" 
-                                           FontWeight="SemiBold" 
-                                           Margin="0,0,0,10"/>
+                                           FontWeight="SemiBold"
+                                           FontSize="16"
+                                           Margin="0,0,0,15"/>
 
                                 <!-- Người lớn -->
-                                <Grid Margin="0,0,0,15">
+                                <Grid Margin="0,0,0,20">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
@@ -247,44 +244,47 @@
 
                                     <TextBlock Grid.Column="0" Grid.Row="0" 
                                                Text="Người lớn" 
+                                               FontSize="14"
                                                FontWeight="Medium"/>
                                     <TextBlock Grid.Column="0" Grid.Row="1" 
                                                Text="Người lớn (từ 12 tuổi)" 
                                                Foreground="#666666"
-                                               FontSize="12"/>
+                                               FontSize="13"/>
 
                                     <StackPanel Grid.Column="1" Grid.RowSpan="2" 
                                                 Orientation="Horizontal" 
                                                 VerticalAlignment="Center">
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="36" Height="36"
+                                                Width="40" Height="40"
                                                 BorderBrush="#DDDDDD"
                                                 BorderThickness="1"
                                                 Background="Transparent"
                                                 Command="{Binding DecreaseAdultCommand}">
-                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333"/>
+                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333" Width="20" Height="20"/>
                                         </Button>
 
                                         <TextBlock Text="{Binding AdultCount, Mode=TwoWay}" 
                                                    VerticalAlignment="Center" 
                                                    HorizontalAlignment="Center" 
                                                    FontWeight="Medium"
-                                                   FontSize="16"
-                                                   Margin="15,0"/>
+                                                   FontSize="18"
+                                                   Width="40"
+                                                   TextAlignment="Center"
+                                                   Margin="10,0"/>
 
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="36" Height="36"
+                                                Width="40" Height="40"
                                                 BorderBrush="#DDDDDD"
                                                 BorderThickness="1"
                                                 Background="Transparent"
                                                 Command="{Binding IncreaseAdultCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623"/>
+                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623" Width="20" Height="20"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
 
                                 <!-- Trẻ em (2-12 tuổi) -->
-                                <Grid Margin="0,0,0,15">
+                                <Grid Margin="0,0,0,20">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
@@ -296,44 +296,47 @@
 
                                     <TextBlock Grid.Column="0" Grid.Row="0" 
                                                Text="Trẻ em" 
+                                               FontSize="14"
                                                FontWeight="Medium"/>
                                     <TextBlock Grid.Column="0" Grid.Row="1" 
                                                Text="Trẻ em (2-12 tuổi)" 
                                                Foreground="#666666"
-                                               FontSize="12"/>
+                                               FontSize="13"/>
 
                                     <StackPanel Grid.Column="1" Grid.RowSpan="2" 
                                                 Orientation="Horizontal" 
                                                 VerticalAlignment="Center">
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="36" Height="36"
+                                                Width="40" Height="40"
                                                 BorderBrush="#DDDDDD"
                                                 BorderThickness="1"
                                                 Background="Transparent"
                                                 Command="{Binding DecreaseChildCommand}">
-                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333"/>
+                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333" Width="20" Height="20"/>
                                         </Button>
 
                                         <TextBlock Text="{Binding ChildCount}" 
                                                    VerticalAlignment="Center" 
                                                    HorizontalAlignment="Center" 
                                                    FontWeight="Medium"
-                                                   FontSize="16"
-                                                   Margin="15,0"/>
+                                                   FontSize="18"
+                                                   Width="40"
+                                                   TextAlignment="Center"
+                                                   Margin="10,0"/>
 
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="36" Height="36"
+                                                Width="40" Height="40"
                                                 BorderBrush="#DDDDDD"
                                                 BorderThickness="1"
                                                 Background="Transparent"
                                                 Command="{Binding IncreaseChildCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623"/>
+                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623" Width="20" Height="20"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
 
                                 <!-- Trẻ sơ sinh (dưới 2 tuổi) -->
-                                <Grid Margin="0,0,0,15">
+                                <Grid Margin="0,0,0,20">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
@@ -345,38 +348,41 @@
 
                                     <TextBlock Grid.Column="0" Grid.Row="0" 
                                                Text="Trẻ em" 
+                                               FontSize="14"
                                                FontWeight="Medium"/>
                                     <TextBlock Grid.Column="0" Grid.Row="1" 
                                                Text="Trẻ em (dưới 2 tuổi)" 
                                                Foreground="#666666"
-                                               FontSize="12"/>
+                                               FontSize="13"/>
 
                                     <StackPanel Grid.Column="1" Grid.RowSpan="2" 
                                                 Orientation="Horizontal" 
                                                 VerticalAlignment="Center">
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="36" Height="36"
+                                                Width="40" Height="40"
                                                 BorderBrush="#DDDDDD"
                                                 BorderThickness="1"
                                                 Background="Transparent"
                                                 Command="{Binding DecreaseInfantCommand}">
-                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333"/>
+                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333" Width="20" Height="20"/>
                                         </Button>
 
                                         <TextBlock Text="{Binding InfantCount}" 
                                                    VerticalAlignment="Center" 
                                                    HorizontalAlignment="Center" 
                                                    FontWeight="Medium"
-                                                   FontSize="16"
-                                                   Margin="15,0"/>
+                                                   FontSize="18"
+                                                   Width="40"
+                                                   TextAlignment="Center"
+                                                   Margin="10,0"/>
 
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="36" Height="36"
+                                                Width="40" Height="40"
                                                 BorderBrush="#DDDDDD"
                                                 BorderThickness="1"
                                                 Background="Transparent"
                                                 Command="{Binding IncreaseInfantCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623"/>
+                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623" Width="20" Height="20"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -386,6 +392,9 @@
                                         Style="{StaticResource MaterialDesignRaisedButton}"
                                         Background="#388FF4"
                                         Foreground="White"
+                                        FontSize="14"
+                                        FontWeight="Medium"
+                                        Height="45"
                                         Margin="0,10,0,0"
                                         HorizontalAlignment="Stretch"
                                         Command="{Binding ApplyPassengerSelectionCommand}"/>
@@ -399,8 +408,10 @@
                             Background="#388FF4"
                             BorderBrush="Transparent"
                             Foreground="White"
-                            Height="45"
-                            Width="200"
+                            Height="50"
+                            Width="260"
+                            FontSize="15"
+                            FontWeight="Medium"
                             HorizontalAlignment="Left"
                             Content="TÌM CHUYẾN BAY"
                             materialDesign:ButtonAssist.CornerRadius="8"
@@ -414,7 +425,8 @@
         </Border>
 
         <!-- Phần hiển thị kết quả -->
-        <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20">
+        <!-- Phần hiển thị kết quả -->
+        <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20" HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -423,17 +435,25 @@
 
                 <!-- Tiêu đề kết quả tìm kiếm -->
                 <TextBlock Grid.Row="0" 
-                           Text="Kết quả tìm kiếm" 
-                           FontSize="16" 
-                           FontWeight="SemiBold" 
-                           Margin="8,0,0,15"
-                           Foreground="#333333"/>
+                   Text="Kết quả tìm kiếm" 
+                   FontSize="16" 
+                   FontWeight="SemiBold" 
+                   Margin="8,0,0,15"
+                   Foreground="#333333"/>
 
                 <!-- Đề xuất phần hiển thị danh sách chuyến bay -->
                 <ListView Grid.Row="1" 
-                          x:Name="FlightResultsListView" 
-                          ItemsSource="{Binding FlightResults}"
-                          Visibility="{Binding ResultVisibility}">
+                  x:Name="FlightResultsListView" 
+                  ItemsSource="{Binding FlightResults}"
+                  Visibility="{Binding ResultVisibility}"
+                  HorizontalContentAlignment="Stretch"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="Padding" Value="0" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border Background="White" CornerRadius="8" Margin="0,8" Padding="15">
@@ -464,13 +484,24 @@
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
-                                            <TextBlock Text="{Binding GioDi}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
                                             <TextBlock Text=" - " Margin="5,0"/>
-                                            <TextBlock Text="{Binding GioDen}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
                                             <TextBlock Text=" | " Margin="5,0"/>
-                                            <TextBlock Text="{Binding ThoiGianBay}" Foreground="#666666"/>
+                                            <TextBlock Text="{Binding ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666"/>
                                             <TextBlock Text=" | " Margin="5,0"/>
-                                            <TextBlock Text="Bay thẳng" Foreground="#29A329"/>
+
+                                            <!-- Hiển thị loại chuyến bay (thẳng hoặc có điểm dừng) -->
+                                            <Grid>
+                                                <TextBlock Text="Bay thẳng" 
+                                                  Foreground="#29A329" 
+                                                  Visibility="{Binding SoSanBayTrungGian, Converter={StaticResource ZeroToVisibleConverter}}"/>
+                                                <StackPanel Orientation="Horizontal" 
+                                                   Visibility="{Binding SoSanBayTrungGian, Converter={StaticResource NonZeroToVisibleConverter}}">
+                                                    <TextBlock Text="{Binding SoSanBayTrungGian}" Foreground="#FF6600"/>
+                                                    <TextBlock Text=" điểm dừng" Foreground="#FF6600" Margin="3,0,0,0"/>
+                                                </StackPanel>
+                                            </Grid>
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
@@ -487,11 +518,11 @@
                                         <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0} VND}" FontWeight="Bold" FontSize="18" Foreground="#FF6600" HorizontalAlignment="Right"/>
                                         <TextBlock Text="/khách" Foreground="#666666" HorizontalAlignment="Right" Margin="0,0,0,10"/>
                                         <Button Content="CHỌN" 
-                                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                                Foreground="#388FF4"
-                                                BorderBrush="#388FF4"
-                                                Width="100"
-                                                materialDesign:ButtonAssist.CornerRadius="5"/>
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Foreground="#388FF4"
+                                        BorderBrush="#388FF4"
+                                        Width="100"
+                                        materialDesign:ButtonAssist.CornerRadius="5"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -501,17 +532,17 @@
 
                 <!-- Nội dung hiển thị khi chưa có kết quả tìm kiếm -->
                 <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-                            Visibility="{Binding ResultVisibility, Converter={StaticResource InverseVisibilityConverter}}">
+                    Visibility="{Binding ResultVisibility, Converter={StaticResource InverseVisibilityConverter}}">
                     <materialDesign:PackIcon Kind="AirplaneTakeoff" Width="80" Height="80" Foreground="#C0C0C0" HorizontalAlignment="Center"/>
                     <TextBlock Text="Hãy tìm kiếm chuyến bay phù hợp với bạn" 
-                               FontSize="18" 
-                               Foreground="#999999" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,15,0,5"/>
+                       FontSize="18" 
+                       Foreground="#999999" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,15,0,5"/>
                     <TextBlock Text="Nhập thông tin chuyến bay bạn muốn tìm kiếm ở phía trên" 
-                               FontSize="14" 
-                               Foreground="#AAAAAA" 
-                               HorizontalAlignment="Center"/>
+                       FontSize="14" 
+                       Foreground="#AAAAAA" 
+                       HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </Border>
