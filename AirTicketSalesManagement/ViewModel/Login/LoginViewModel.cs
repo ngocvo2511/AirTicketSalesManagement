@@ -1,9 +1,15 @@
 ﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.View.Customer;
+using AirTicketSalesManagement.View.Login;
+using AirTicketSalesManagement.ViewModel.Customer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Media.Animation;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
@@ -20,8 +26,9 @@ namespace AirTicketSalesManagement.ViewModel.Login
 
         [ObservableProperty]
         private bool isPasswordVisible;
+        private string idLogin;
 
-
+        #region Error
         public void Validate()
         {
             ClearErrors(nameof(Email));
@@ -30,26 +37,9 @@ namespace AirTicketSalesManagement.ViewModel.Login
             {
                 AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
                 return;
-            }
-            using (var context = new AirTicketDbContext())
-            {
-                var user = context.Taikhoans.FirstOrDefault(x => x.Email == Email);
-                if (user == null)
-                {
-                    AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
-                    return;
-                }
-                else
-                {
-                    if(!BCrypt.Net.BCrypt.Verify(Password, user.MatKhau))
-                    {
-                        AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
-                        return;
-                    }
-                }
-            }
-            
+            }            
         }
+
         public bool HasErrors => _errors.Any();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         public IEnumerable GetErrors(string propertyName)
@@ -83,6 +73,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        #endregion
 
         public LoginViewModel()
         {
@@ -98,7 +89,49 @@ namespace AirTicketSalesManagement.ViewModel.Login
         {
             Validate();
             if (HasErrors) return;
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    var user = context.Taikhoans.FirstOrDefault(x => x.Email == Email);
+                    if (user == null || !BCrypt.Net.BCrypt.Verify(Password, user.MatKhau))
+                    {
+                        AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
+                        return;
+                    }
+                    else
+                    {
+                        idLogin = (user.VaiTro == "Khach hang") ? user.MaKh : user.MaNv;
+                        if (user.VaiTro == "Khach hang")
+                        {
+                            var currentWindow = Application.Current.MainWindow;
+                            var customerWindow = new CustomerWindow();
+                            var vm = customerWindow.DataContext as Customer.CustomerViewModel;
+                            vm.idCustomer = user.MaKh;
+                            Application.Current.MainWindow = currentWindow;
+                            currentWindow?.Close();
+                            customerWindow.Opacity = 0;
+                            customerWindow.Show();
+                            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
+                            customerWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
+                        }
+                        else if (user.VaiTro == "Nhan vien")
+                        {
 
+                        }
+                        else if (user.VaiTro == "Admin")
+                        {
+
+                        }
+                        else return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // add notify disconnect to database
+                return;
+            }
         }
         
 

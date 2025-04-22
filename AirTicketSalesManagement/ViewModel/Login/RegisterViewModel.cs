@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
@@ -18,6 +19,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
     {
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
+        private bool isFailed;
 
         [ObservableProperty]
         private string email;
@@ -37,16 +39,20 @@ namespace AirTicketSalesManagement.ViewModel.Login
             ClearErrors(nameof(ConfirmPassword));
             ClearErrors(nameof(Name));
             if (string.IsNullOrWhiteSpace(Name))
-                AddError(nameof(Name),"Tên không được để trống.");
+                AddError(nameof(Name), "Tên không được để trống.");
+            else if (Name.Length > 30)
+                AddError(nameof(Name), "Tên vượt quá giới hạn cho phép");
             if (string.IsNullOrWhiteSpace(Email))
-                AddError(nameof(Email),"Email không được để trống.");
+                AddError(nameof(Email), "Email không được để trống.");
+            else if (Email.Length > 254)
+                AddError(nameof(Name), "Email vượt quá giới hạn cho phép");
             else if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-                AddError(nameof(Email),"Email không hợp lệ.");
+                AddError(nameof(Email), "Email không hợp lệ.");
             
             if (string.IsNullOrWhiteSpace(Password))
-            {
                 AddError(nameof(Password), "Mật khẩu không được để trống.");
-            }
+            else if (Password.Length > 100)
+                AddError(nameof(Name), "Mật khẩu vượt quá giới hạn cho phép");
             if (ConfirmPassword != Password)
             {
                 AddError(nameof(ConfirmPassword), "Xác nhận mật khẩu không khớp với mật khẩu.");
@@ -97,52 +103,74 @@ namespace AirTicketSalesManagement.ViewModel.Login
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         #endregion
 
+        #region add account
         public string GenerateCustomerID()
         {
             string prefix = "KH";
             int ?maxLength;
-            
-            using(var context=new AirTicketDbContext())
+            isFailed = false;
+            try
             {
-                maxLength = context.Model.FindEntityType(nameof(Khachhang)).GetProperty("MaKh").GetMaxLength()-2;
-                var lastID = context.Khachhangs.OrderByDescending(c=>c.MaKh).Select(c=>c.MaKh).FirstOrDefault();
-                int nextNumber = 1;
-                if (lastID!= null)
+                using (var context = new AirTicketDbContext())
                 {
-                    var numberPart = lastID.Substring(prefix.Length);
-                    if (int.TryParse(numberPart, out int parsed))
+                    maxLength = context.Model.FindEntityType(nameof(Khachhang)).GetProperty("MaKh").GetMaxLength() - 2;
+                    var lastID = context.Khachhangs.OrderByDescending(c => c.MaKh).Select(c => c.MaKh).FirstOrDefault();
+                    int nextNumber = 1;
+                    if (lastID != null)
                     {
-                        nextNumber = parsed + 1;
+                        var numberPart = lastID.Substring(prefix.Length);
+                        if (int.TryParse(numberPart, out int parsed))
+                        {
+                            nextNumber = parsed + 1;
+                        }
                     }
+                    string formattedNumber = nextNumber.ToString(new string('0', (int)maxLength));
+                    return prefix + formattedNumber;
                 }
-                string formattedNumber = nextNumber.ToString(new string('0', (int)maxLength));
-                return prefix + formattedNumber;
+            }
+            catch(Exception ex)
+            {
+                isFailed = true;
+                // add notify disconnect to database
+                return string.Empty;
             }
         }
         public void AddCustomer()
         {
-            using (var context = new AirTicketDbContext())
+            if (isFailed) return;
+            try
             {
-                string ID=GenerateCustomerID();
-                string hashPass = BCrypt.Net.BCrypt.HashPassword(Password);
-                var customer = new Khachhang
+                using (var context = new AirTicketDbContext())
                 {
-                    MaKh = ID,
-                    Email = Email,
-                    HoTenKh = Name
-                };
-                var customerAccount = new Taikhoan
-                {
-                    Email = Email,
-                    VaiTro = "Khach hang",
-                    MatKhau = hashPass,
-                    MaKhNavigation = customer
-                };
-                context.Khachhangs.Add(customer);
-                context.Taikhoans.Add(customerAccount);
-                context.SaveChanges();
+                    string ID = GenerateCustomerID();
+                    string hashPass = BCrypt.Net.BCrypt.HashPassword(Password);
+                    var customer = new Khachhang
+                    {
+                        MaKh = ID,
+                        Email = Email,
+                        HoTenKh = Name
+                    };
+                    var customerAccount = new Taikhoan
+                    {
+                        Email = Email,
+                        VaiTro = "Khach hang",
+                        MatKhau = hashPass,
+                        MaKhNavigation = customer
+                    };
+                    context.Khachhangs.Add(customer);
+                    context.Taikhoans.Add(customerAccount);
+                    context.SaveChanges();
+                }
             }
+            catch (Exception ex)
+            {
+                //add notify disconnect to database
+                isFailed = true;
+                return;
+            }
+           
         }
+        #endregion
         public RegisterViewModel()
         {
             // Default constructor
@@ -159,7 +187,8 @@ namespace AirTicketSalesManagement.ViewModel.Login
             Validate();
             if (HasErrors) return;
             AddCustomer();
-            
+            if (!isFailed) { // notify add success
+                           }
         }
 
         [RelayCommand]
