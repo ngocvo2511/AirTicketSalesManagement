@@ -1,0 +1,113 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Staff.StaffFlightScheduleLookUp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:AirTicketSalesManagement.Converters"
+             xmlns:vm="clr-namespace:AirTicketSalesManagement.ViewModel.Staff"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="1000">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search Panel -->
+        <Border Grid.Row="0"
+                Background="#F5F7FA"
+                CornerRadius="8"
+                Padding="16"
+                Margin="0,0,0,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Điểm khởi hành -->
+                <ComboBox Grid.Column="0"
+                          materialDesign:HintAssist.Hint="Điểm khởi hành"
+                          IsEditable="True"
+                          Text="{Binding FromAirport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                          Margin="0,0,12,0"/>
+
+                <!-- Điểm đến -->
+                <ComboBox Grid.Column="1"
+                          materialDesign:HintAssist.Hint="Điểm đến"
+                          IsEditable="True"
+                          Text="{Binding ToAirport, Mode=TwoWay}"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                          Margin="0,0,12,0"/>
+
+                <!-- Ngày khởi hành -->
+                <DatePicker Grid.Column="2"
+                            materialDesign:HintAssist.Hint="Ngày khởi hành"
+                            SelectedDate="{Binding DepartureDate, Mode=TwoWay}"
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                            Margin="0,0,12,0"/>
+
+                <!-- Nút tìm kiếm -->
+                <Button Grid.Column="3"
+                        Content="TÌM"
+                        Width="100"
+                        Command="{Binding SearchCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#388FF4"
+                        Foreground="White"/>
+            </Grid>
+        </Border>
+
+        <!-- Results DataGrid -->
+        <Border Grid.Row="1"
+                Background="White"
+                CornerRadius="8"
+                Padding="8">
+            <DataGrid ItemsSource="{Binding FlightSchedules}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      RowHeight="40"
+                      FontSize="14">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mã chuyến"
+                                        Binding="{Binding FlightCode}"
+                                        Width="*"/>
+                    <DataGridTextColumn Header="Giờ đi"
+                                        Binding="{Binding DepartureTime}"
+                                        Width="*"/>
+                    <DataGridTextColumn Header="Giờ đến"
+                                        Binding="{Binding ArrivalTime}"
+                                        Width="*"/>
+                    <DataGridTextColumn Header="Còn trống"
+                                        Binding="{Binding SeatsAvailable}"
+                                        Width="*"/>
+                    <DataGridTemplateColumn Header="Hành động"
+                                            Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    <Button Content="Sửa"
+                                            Margin="0,0,4,0"
+                                            Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"/>
+                                    <Button Content="Xóa"
+                                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Foreground="Red"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>
