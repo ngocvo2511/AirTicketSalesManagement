@@ -1,30 +1,40 @@
 ﻿<Application x:Class="AirTicketSalesManagement.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:converters="clr-namespace:AirTicketSalesManagement.Converters"
-             StartupUri="/View/Staff/Staff_HomePageUC.xaml">
-	<Application.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
 
-				<materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
-				<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
-
-				<ResourceDictionary Source="ResourceXAML/MainResource.xaml"/>
-
-                <ResourceDictionary Source="Resources/Styles/Buttons/ProfileButton.xaml" />
-
-                <ResourceDictionary Source="Resources/Styles/Buttons/MenuBar_Button.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-
+             xmlns:vmCust="clr-namespace:AirTicketSalesManagement.ViewModel.Customer"
+             xmlns:vmStaff="clr-namespace:AirTicketSalesManagement.ViewModel.Staff"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             StartupUri="/View/Customer/CustomerWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml"/>
+                <materialDesign:BundledTheme BaseTheme="Light"
+                                            PrimaryColor="DeepPurple"
+                                            SecondaryColor="Lime"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml"/>
+                <ResourceDictionary Source="ResourceXAML/MainResource.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/Buttons/ProfileButton.xaml"/>
+                <ResourceDictionary Source="Resources/Styles/Buttons/MenuBar_Button.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
-            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:InverseVisibilityConverter x:Key="InverseVisibilityConverter"/>
+            <converters:ZeroToVisibleConverter x:Key="ZeroToVisibleConverter"/>
+            <converters:NonZeroToVisibleConverter x:Key="NonZeroToVisibleConverter"/>
+
+            <vmCust:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
+
+            <vmStaff:StaffFlightScheduleLookUpVM x:Key="StaffFlightScheduleLookUpVM"/>
+            <vmStaff:StaffCustomerInfoFillVM x:Key="StaffCustomerInfoFillVM"/>
+            <vmStaff:StaffFlightMakesPaymentMethodsVM x:Key="StaffFlightMakesPaymentMethodsVM"/>
+            <vmStaff:StaffFlightSelectingTicketsVM x:Key="StaffFlightSelectingTicketsVM"/>
 
         </ResourceDictionary>
-	</Application.Resources>
+    </Application.Resources>
 </Application>

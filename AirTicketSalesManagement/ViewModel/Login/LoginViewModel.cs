@@ -1,21 +1,19 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.View.Customer;
+using AirTicketSalesManagement.View.Login;
+using AirTicketSalesManagement.ViewModel.Customer;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Xml.Linq;
+using System.Windows.Media.Animation;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
-    public partial class LoginViewModel : BaseViewModel, INotifyDataErrorInfo, INotifyPropertyChanged
+    public partial class LoginViewModel : BaseViewModel, INotifyDataErrorInfo
     {
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
@@ -30,14 +28,18 @@ namespace AirTicketSalesManagement.ViewModel.Login
         private bool isPasswordVisible;
 
 
+        #region Error
         public void Validate()
         {
             ClearErrors(nameof(Email));
-            ClearErrors(nameof(Password));
 
             if (string.IsNullOrWhiteSpace(Email) || !Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$") || string.IsNullOrWhiteSpace(Password))
+            {
                 AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
+                return;
+            }            
         }
+
         public bool HasErrors => _errors.Any();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         public IEnumerable GetErrors(string propertyName)
@@ -68,9 +70,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        #endregion
 
         public LoginViewModel()
         {
@@ -86,6 +86,48 @@ namespace AirTicketSalesManagement.ViewModel.Login
         {
             Validate();
             if (HasErrors) return;
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    var user = context.Taikhoans.FirstOrDefault(x => x.Email == Email);
+                    if (user == null || !BCrypt.Net.BCrypt.Verify(Password, user.MatKhau))
+                    {
+                        AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
+                        return;
+                    }
+                    else
+                    {
+                        if (user.VaiTro == "Khach hang")
+                        {
+                            var currentWindow = Application.Current.MainWindow;
+                            var customerWindow = new CustomerWindow();
+                            var vm = customerWindow.DataContext as Customer.CustomerViewModel;
+                            vm.idCustomer = user.MaKh;
+                            Application.Current.MainWindow = currentWindow;
+                            currentWindow?.Close();
+                            customerWindow.Opacity = 0;
+                            customerWindow.Show();
+                            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
+                            customerWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
+                        }
+                        else if (user.VaiTro == "Nhan vien")
+                        {
+
+                        }
+                        else if (user.VaiTro == "Admin")
+                        {
+
+                        }
+                        else return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // add notify disconnect to database
+                return;
+            }
         }
         
 

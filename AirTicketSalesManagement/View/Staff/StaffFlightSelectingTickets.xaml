@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Staff.StaffFlightSelectingTickets"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="980">
+    
+    <Grid Margin="20">
+        <Border Background="#F5F7FA" CornerRadius="10" Padding="20">
+            <StackPanel>
+                <TextBlock Text="Chọn vé" FontSize="16" FontWeight="SemiBold" Margin="0 0 0 10"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding AvailableSeats}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ToggleButton Content="{Binding SeatNumber}"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                              Width="50" Height="50" Margin="5"
+                                              Style="{StaticResource MaterialDesignRaisedButton}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <Button Content="Xác nhận vé"
+                        Command="{Binding ConfirmSelectionCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#388FF4" Foreground="White"
+                        Width="150" Height="36" Margin="0,10,0,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

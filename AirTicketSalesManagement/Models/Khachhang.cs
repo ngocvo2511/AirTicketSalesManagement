@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace AirTicketSalesManagement.Models;
+
+public partial class Khachhang
+{
+    public string MaKh { get; set; } = null!;
+
+    public string? HoTenKh { get; set; }
+
+    public string? GioiTinh { get; set; }
+
+    public DateOnly? NgaySinh { get; set; }
+
+    public string? Email { get; set; }
+
+    public string? SoDt { get; set; }
+
+    public string? GiayToTt { get; set; }
+
+    public virtual ICollection<Datve> Datves { get; set; } = new List<Datve>();
+
+    public virtual ICollection<Taikhoan> Taikhoans { get; set; } = new List<Taikhoan>();
+}
