@@ -1,17 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AirTicketSalesManagement.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Xml.Linq;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
@@ -33,10 +25,30 @@ namespace AirTicketSalesManagement.ViewModel.Login
         public void Validate()
         {
             ClearErrors(nameof(Email));
-            ClearErrors(nameof(Password));
 
             if (string.IsNullOrWhiteSpace(Email) || !Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$") || string.IsNullOrWhiteSpace(Password))
+            {
                 AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
+                return;
+            }
+            using (var context = new AirTicketDbContext())
+            {
+                var user = context.Taikhoans.FirstOrDefault(x => x.Email == Email);
+                if (user == null)
+                {
+                    AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
+                    return;
+                }
+                else
+                {
+                    if(!BCrypt.Net.BCrypt.Verify(Password, user.MatKhau))
+                    {
+                        AddError(nameof(Email), "Tài khoản hoặc mật khẩu không hợp lệ");
+                        return;
+                    }
+                }
+            }
+            
         }
         public bool HasErrors => _errors.Any();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -86,6 +98,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         {
             Validate();
             if (HasErrors) return;
+
         }
         
 

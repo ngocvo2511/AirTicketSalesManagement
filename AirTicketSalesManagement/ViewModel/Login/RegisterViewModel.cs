@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using BCrypt.Net;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
@@ -26,6 +29,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         [ObservableProperty]
         private string name;
 
+        #region Error
         public void Validate()
         {
             ClearErrors(nameof(Email));
@@ -46,7 +50,17 @@ namespace AirTicketSalesManagement.ViewModel.Login
             if (ConfirmPassword != Password)
             {
                 AddError(nameof(ConfirmPassword), "Xác nhận mật khẩu không khớp với mật khẩu.");
-            }            
+            }
+            if (HasErrors) return;
+            using (var context = new AirTicketDbContext())
+            {
+                var user = context.Taikhoans.FirstOrDefault(x => x.Email == Email);
+                if (user != null)
+                {
+                    AddError(nameof(Email), "Email đã được đăng kí");
+                    return;
+                }
+            }
         }
         public bool HasErrors => _errors.Any();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -81,7 +95,54 @@ namespace AirTicketSalesManagement.ViewModel.Login
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        
+        #endregion
+
+        public string GenerateCustomerID()
+        {
+            string prefix = "KH";
+            int ?maxLength;
+            
+            using(var context=new AirTicketDbContext())
+            {
+                maxLength = context.Model.FindEntityType(nameof(Khachhang)).GetProperty("MaKh").GetMaxLength()-2;
+                var lastID = context.Khachhangs.OrderByDescending(c=>c.MaKh).Select(c=>c.MaKh).FirstOrDefault();
+                int nextNumber = 1;
+                if (lastID!= null)
+                {
+                    var numberPart = lastID.Substring(prefix.Length);
+                    if (int.TryParse(numberPart, out int parsed))
+                    {
+                        nextNumber = parsed + 1;
+                    }
+                }
+                string formattedNumber = nextNumber.ToString(new string('0', (int)maxLength));
+                return prefix + formattedNumber;
+            }
+        }
+        public void AddCustomer()
+        {
+            using (var context = new AirTicketDbContext())
+            {
+                string ID=GenerateCustomerID();
+                string hashPass = BCrypt.Net.BCrypt.HashPassword(Password);
+                var customer = new Khachhang
+                {
+                    MaKh = ID,
+                    Email = Email,
+                    HoTenKh = Name
+                };
+                var customerAccount = new Taikhoan
+                {
+                    Email = Email,
+                    VaiTro = "Khach hang",
+                    MatKhau = hashPass,
+                    MaKhNavigation = customer
+                };
+                context.Khachhangs.Add(customer);
+                context.Taikhoans.Add(customerAccount);
+                context.SaveChanges();
+            }
+        }
         public RegisterViewModel()
         {
             // Default constructor
@@ -97,6 +158,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         {
             Validate();
             if (HasErrors) return;
+            AddCustomer();
             
         }
 
