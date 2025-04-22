@@ -17,12 +17,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="appsettings.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Resource Include="Resources\Images\homebg.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
@@ -33,6 +27,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
 		<PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
 		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
@@ -56,7 +51,6 @@
 
 	<ItemGroup>
 	  <Folder Include="ViewModel\Staff\" />
-	  <Folder Include="View\Staff\" />
 	</ItemGroup>
 
 </Project>
