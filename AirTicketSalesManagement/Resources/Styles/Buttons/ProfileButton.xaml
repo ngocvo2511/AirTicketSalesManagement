@@ -54,7 +54,7 @@
                         <Separator Margin="0 10"/>
 
                         <!-- Các nút -->
-                        <Button Content="Hồ sơ khách hàng"
+                        <Button Content="Hồ sơ"
                                 Style="{StaticResource MaterialDesignFlatButton}" 
                                 HorizontalAlignment="Stretch"/>
 
