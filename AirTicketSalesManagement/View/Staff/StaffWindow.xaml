@@ -1,14 +1,13 @@
-﻿<Window x:Class="AirTicketSalesManagement.View.Customer.CustomerWindow"
+﻿<Window x:Class="AirTicketSalesManagement.View.Staff.StaffWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:uc="clr-namespace:AirTicketSalesManagement.Resources.User_Controls"
-        xmlns:body="clr-namespace:AirTicketSalesManagement.View.MainWindows.Customer"
+        xmlns:body="clr-namespace:AirTicketSalesManagement.View.Staff"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="FlyTogether" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
-        Background="White"
-        DataContext="{StaticResource CustomerVM}">
+        Background="White">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -77,72 +76,61 @@
                                           Margin="5" />
                         </Grid>
 
-                        <TextBlock Text="Khách hàng" FontWeight="Bold" 
+                        <TextBlock Text="Nhân viên" FontWeight="Bold" 
                                    FontSize="16" Foreground="White" 
                                    Margin="0,20,0,10"/>
 
-                        <!-- Menu Items -->
-                        <Button Style="{StaticResource SidebarButton}"
-                                Command="{Binding NavigateToHomePageCommand}">
+                        <!-- Trang chủ -->
+                        <Button Style="{StaticResource SidebarButton}">
                             <StackPanel Orientation="Horizontal">
                                 <Icon:PackIconMaterial Kind="Home" Width="24" 
-                               Height="24" Margin="0,0,10,0" />
+                                   Height="24" Margin="0,0,10,0" />
                                 <TextBlock Text="Trang chủ" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Expander Background="Transparent"
-                                  Foreground="White"
-                                  FontSize="14"
-                                  Margin="0,0,10,10"
-                                  ExpandDirection="Down">
-
-                            <Expander.Header>
-                                <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
-                                   Height="24" Margin="0,0,10,0"/>
-                                    <TextBlock Text="Đặt vé" 
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Expander.Header>
-
-                            <StackPanel Margin="10,5,0,5">
-                                <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5"
-                                        Command="{Binding NavigateToFlightTicketBookingCommand}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
-                                       Height="24" Margin="0,0,10,0"/>
-                                        <TextBlock Text="Đặt vé" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-
-                                <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5"
-                                        Command="{Binding NavigateToBookingHistoryCommand}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Icon:PackIconMaterial Kind="History" Width="24" 
-                                       Height="24" Margin="0,0,10,0"/>
-                                        <TextBlock Text="Lịch sử đặt vé" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
-                        </Expander>
-
-                        <Button Style="{StaticResource SidebarButton}"
-                                Command="{Binding NavigateToCustomerProfileCommand}">
+                        <!-- Tra cứu lịch bay -->
+                        <Button Style="{StaticResource SidebarButton}">
                             <StackPanel Orientation="Horizontal">
-                                <Icon:PackIconMaterial Kind="AccountCircleOutline" Width="24" 
-                               Height="24" Margin="0,0,10,0" />
-                                <TextBlock Text="Thông tin cá nhân" VerticalAlignment="Center"/>
+                                <Icon:PackIconMaterial Kind="Magnify" Width="24" 
+                                   Height="24" Margin="0,0,10,0" />
+                                <TextBlock Text="Tra cứu lịch bay" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Button Style="{StaticResource SidebarButton}"
-                                Command="{Binding NavigateToFlightScheduleSearchCommand}">
+                        <!-- Bán vé -->
+                        <Button Style="{StaticResource SidebarButton}">
                             <StackPanel Orientation="Horizontal">
-                                <Icon:PackIconMaterial Kind="Magnify" Width="24" 
-                               Height="24" Margin="0,0,10,0" />
-                                <TextBlock Text="Tra cứu lịch bay" VerticalAlignment="Center"/>
+                                <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
+                                   Height="24" Margin="0,0,10,0"/>
+                                <TextBlock Text="Bán vé" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Tra cứu lịch sử đặt vé -->
+                        <Button Style="{StaticResource SidebarButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="History" Width="24" 
+                                   Height="24" Margin="0,0,10,0"/>
+                                <TextBlock Text="Tra cứu lịch sử đặt vé" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Quản lý thông tin khách hàng -->
+                        <Button Style="{StaticResource SidebarButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="AccountMultiple" Width="24" 
+                                   Height="24" Margin="0,0,10,0" />
+                                <TextBlock Text="Quản lý thông tin khách hàng" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Hồ sơ cá nhân -->
+                        <Button Style="{StaticResource SidebarButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="AccountCircleOutline" Width="24" 
+                                   Height="24" Margin="0,0,10,0" />
+                                <TextBlock Text="Hồ sơ cá nhân" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
