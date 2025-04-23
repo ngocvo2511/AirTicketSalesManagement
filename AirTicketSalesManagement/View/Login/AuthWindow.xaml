@@ -24,7 +24,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
-
             <!-- Phần bên trái với gradient và logo -->
             <Border CornerRadius="10 0 0 10">
                 <Border.Background>

@@ -4,7 +4,8 @@
                     xmlns:viewmodelLG="clr-namespace:AirTicketSalesManagement.ViewModel.Login"
                     xmlns:viewsLG="clr-namespace:AirTicketSalesManagement.View.Login"
                     xmlns:viewmodelCUST="clr-namespace:AirTicketSalesManagement.ViewModel.Customer"
-                    xmlns:viewsCUST="clr-namespace:AirTicketSalesManagement.View.Customer">
+                    xmlns:viewsCUST="clr-namespace:AirTicketSalesManagement.View.Customer"
+                    xmlns:viewsNotify="clr-namespace:AirTicketSalesManagement.View.Notification">
     
 
     <viewmodelLG:AuthViewModel x:Key="AuthVM"/>
@@ -20,7 +21,7 @@
     <viewmodelCUST:BookingHistoryViewModel x:Key="BookingHistoryVM"/>
     <viewmodelCUST:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
 
-
+    <viewmodel:ToastViewModel x:Key="ToastVM"/>
 
 
 
@@ -51,6 +52,9 @@
     <DataTemplate DataType="{x:Type viewmodelCUST:FlightScheduleSearchViewModel}">
         <viewsCUST:FlightScheduleSearchView />
     </DataTemplate>
-
+    
+    <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">
+        <viewsNotify:ToastView/>
+    </DataTemplate>
 
 </ResourceDictionary>

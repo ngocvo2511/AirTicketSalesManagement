@@ -9,6 +9,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace AirTicketSalesManagement.ViewModel.Login
@@ -17,6 +18,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
     {
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
+        public ToastViewModel Toast { get; } = new ToastViewModel();
 
         [ObservableProperty]
         private string email;
@@ -82,7 +84,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         }
 
         [RelayCommand]
-        private void Login()
+        private async Task Login()
         {
             Validate();
             if (HasErrors) return;
@@ -125,8 +127,8 @@ namespace AirTicketSalesManagement.ViewModel.Login
             }
             catch (Exception ex)
             {
-                // add notify disconnect to database
-                return;
+                Console.WriteLine("EXCEPTION: " + ex.Message);
+                await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
             }
         }
         

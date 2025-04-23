@@ -8,8 +8,7 @@
              xmlns:uc ="clr-namespace:AirTicketSalesManagement.View.Customer"
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
              mc:Ignorable="d" 
-             d:DesignHeight="650" d:DesignWidth="980"
-             DataContext="{StaticResource BookingHistoryVM}">
+             d:DesignHeight="650" d:DesignWidth="980">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -50,34 +49,75 @@
         </StackPanel>
 
         <!-- Content -->
-        <ScrollViewer Grid.Row="2" 
-                      VerticalScrollBarVisibility="Auto" 
-                      HorizontalScrollBarVisibility="Auto">
-            <DataGrid AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False" Margin="10">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Mã đặt vé" Binding="{Binding MaDatVe}" Width="100"/>
-                    <DataGridTextColumn Header="Ngày đặt" Binding="{Binding NgayDat}" Width="100"/>
-                    <DataGridTextColumn Header="Loại vé" Binding="{Binding LoaiVe}" Width="100"/>
-                    <DataGridTextColumn Header="Số lượng" Binding="{Binding SoLuongVe}" Width="100"/>
-                    <DataGridTextColumn Header="Họ tên hành khách" Binding="{Binding HoTenHanhKhac}" Width="150"/>
-                    <DataGridTextColumn Header="Điểm khởi hành" Binding="{Binding DiemDi}" Width="150"/>
-                    <DataGridTextColumn Header="Điểm đến" Binding="{Binding DiemDen}" Width="150"/>
-                    <DataGridTextColumn Header="Ngày đi" Binding="{Binding GioDi}" Width="120"/>
-                    <DataGridTextColumn Header="Ngày về" Binding="{Binding GioDen}" Width="120"/>
-                    <DataGridTextColumn Header="Hạng vé" Binding="{Binding HangVe}" Width="120"/>
-                    <DataGridTextColumn Header="Trạng thái" Binding="{Binding TinhTrangDatVe}" Width="120"/>
-                    <DataGridTextColumn Header="Giá vé" Binding="{Binding TongTienThanhToan}" Width="100"/>
 
-                    <!-- Nút Xem hóa đơn -->
-                    <DataGridTemplateColumn Header="Hóa đơn" Width="100">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Xem hóa đơn" Command="{Binding ViewInvoiceCommand}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Grid.Row="2">
+            <StackPanel>
+                <TextBlock Text="Không có chuyến bay nào" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center" 
+            FontSize="16" 
+            FontWeight="Bold"
+            Foreground="Gray" 
+            Visibility="{Binding BookingHistory.Count, Converter={StaticResource ZeroToVisibleConverter}}"/>
+                <ItemsControl ItemsSource="{Binding BookingHistory}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White" CornerRadius="10" Padding="15" Margin="0,0,0,20"
+                 BorderBrush="#DDD" BorderThickness="1" Effect="{DynamicResource ShadowEffect}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Row 1: Thông tin chuyến bay và trạng thái -->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="{Binding FlightNumber}" FontSize="16" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding Route}" FontSize="14"/>
+                                            <TextBlock Text="{Binding DepartureTime, StringFormat='Khởi hành: {0:dd/MM/yyyy HH:mm}'}" FontSize="13"/>
+                                        </StackPanel>
+
+                                        <TextBlock Text="{Binding Status}" Grid.Column="1"
+                                Foreground="{Binding StatusColor}"
+                                FontWeight="Bold" VerticalAlignment="Top" FontSize="14"/>
+                                    </Grid>
+
+                                    <!-- Row 2: Thông tin đặt vé -->
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,10,0,0">
+                                        <TextBlock Text="{Binding BookingCode, StringFormat='Mã đặt vé: {0}'}" Margin="0,10,20,0"/>
+                                        <TextBlock Text="{Binding PassengerCount, StringFormat='Số hành khách: {0}'}" Margin="0,10,20,0"/>
+                                        <TextBlock Text="{Binding TotalPrice, StringFormat='Tổng tiền: {0:N0} đ'}" Margin="0,10,20,0"/>
+                                    </StackPanel>
+
+                                    <!-- Row 3: Nút -->
+                                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,15,0,0">
+                                        <Button Content="Chi tiết"
+                             Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                             CommandParameter="{Binding}"
+                             Padding="10,5" Margin="0,0,10,0"/>
+
+                                        <Button Content="Huỷ vé"
+                             Background="Red" Foreground="White"
+                             Command="{Binding DataContext.CancelBookingCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                             CommandParameter="{Binding}"
+                             Visibility="{Binding CanCancel, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Padding="10,5"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
         </ScrollViewer>
+
     </Grid>
 </UserControl>

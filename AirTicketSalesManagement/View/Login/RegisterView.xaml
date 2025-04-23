@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Login"
-             xmlns:helper="clr-namespace:AirTicketSalesManagement.Helper"
+             xmlns:helper="clr-namespace:AirTicketSalesManagement.Helper" xmlns:views="clr-namespace:AirTicketSalesManagement.View.Notification"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="540"
              >
@@ -130,7 +130,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
+            <views:ToastView x:Name="ToastControl"
+                         DataContext="{Binding Toast}" 
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Top"
+                         Margin="0,20,20,0"/>
             <!-- Phần đầu -->
             <StackPanel Grid.Row="0">
                 <TextBlock Text="Tạo tài khoản mới" 

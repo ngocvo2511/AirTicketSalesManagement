@@ -64,7 +64,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             authWindow.Show();
             var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
             authWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
-
         }
 
     }

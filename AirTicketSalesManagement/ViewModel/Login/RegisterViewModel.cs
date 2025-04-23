@@ -19,6 +19,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
     {
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
+        private ToastViewModel _toast = new ToastViewModel();
         private bool isFailed;
 
         [ObservableProperty]
