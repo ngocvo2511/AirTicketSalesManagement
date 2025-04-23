@@ -124,7 +124,7 @@
 
                         <DatePicker Grid.Column="1"
                                     Width="260"
-                                    Height="50"
+                                    Height="40"
                                     FontSize="14"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
@@ -163,7 +163,7 @@
                         <DatePicker Grid.Column="1"
                 x:Name="ReturnDatePicker"
                 Width="260"
-                Height="50"
+                Height="40"
                 FontSize="14"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
@@ -458,72 +458,167 @@
                         <DataTemplate>
                             <Border Background="White" CornerRadius="8" Margin="0,8" Padding="15">
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                    <!-- Logo hãng bay -->
-                                    <Image Grid.Column="0" Width="60" Height="60" Margin="0,0,15,0"/>
+                                    <!-- Flight Info Section -->
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <!-- Thông tin chuyến bay -->
-                                    <Grid Grid.Column="1">
+                                        <!-- Logo hãng bay -->
+                                        <Image Grid.Column="0" Width="60" Height="60" Margin="0,0,15,0" Source="{Binding LogoUrl}"/>
+
+                                        <!-- Thông tin chuyến bay -->
+                                        <Grid Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                                <TextBlock Text="{Binding MaSBDi}" FontWeight="Bold" FontSize="16"/>
+                                                <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding MaSBDen}" FontWeight="Bold" FontSize="16"/>
+                                                <TextBlock Text=" | " Margin="5,0" FontSize="16"/>
+                                                <TextBlock Text="{Binding HangHangKhong}" FontSize="14"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
+                                                <TextBlock Text="{Binding GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
+                                                <TextBlock Text=" - " Margin="5,0"/>
+                                                <TextBlock Text="{Binding GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
+                                                <TextBlock Text=" | " Margin="5,0"/>
+                                                <TextBlock Text="{Binding ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666"/>
+                                                <TextBlock Text=" | " Margin="5,0"/>
+
+                                                <!-- Hiển thị loại chuyến bay (thẳng hoặc có điểm dừng) -->
+                                                <Grid>
+                                                    <TextBlock Text="Bay thẳng" 
+                                Foreground="#29A329" 
+                                Visibility="{Binding SoSanBayTrungGian, Converter={StaticResource ZeroToVisibleConverter}}"/>
+                                                    <StackPanel Orientation="Horizontal" 
+                                Visibility="{Binding SoSanBayTrungGian, Converter={StaticResource NonZeroToVisibleConverter}}">
+                                                        <TextBlock Text="{Binding SoSanBayTrungGian}" Foreground="#FF6600"/>
+                                                        <TextBlock Text=" điểm dừng" Foreground="#FF6600" Margin="3,0,0,0"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+                                                <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding MayBay}" Foreground="#666666"/>
+                                                <TextBlock Text=" | " Margin="5,0"/>
+                                                <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="15kg hành lý" Foreground="#666666"/>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <!-- Giá cơ bản -->
+                                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                            <TextBlock Text="Giá từ:" FontSize="12" Foreground="#666666" HorizontalAlignment="Right"/>
+                                            <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0} VND}" 
+                              FontWeight="Bold" FontSize="18" 
+                              Foreground="#FF6600" HorizontalAlignment="Right"/>
+                                            <TextBlock Text="/khách" Foreground="#666666" HorizontalAlignment="Right"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Ticket Classes Section -->
+                                    <Grid Grid.Row="1" Margin="0,15,0,0">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                            <TextBlock Text="{Binding MaSBDi}" FontWeight="Bold" FontSize="16"/>
-                                            <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding MaSBDen}" FontWeight="Bold" FontSize="16"/>
-                                            <TextBlock Text=" | " Margin="5,0" FontSize="16"/>
-                                            <TextBlock Text="{Binding HangHangKhong}" FontSize="14"/>
-                                        </StackPanel>
+                                        <!-- Toggle Button to Show/Hide Ticket Classes -->
+                                        <Button Grid.Row="0" 
+                    Content="XEM CÁC HẠNG VÉ" 
+                    Command="{Binding DataContext.ToggleTicketClassesCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                    CommandParameter="{Binding}"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Foreground="#388FF4"
+                    FontWeight="Medium"
+                    HorizontalAlignment="Center"/>
 
-                                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
-                                            <TextBlock Text="{Binding GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
-                                            <TextBlock Text=" - " Margin="5,0"/>
-                                            <TextBlock Text="{Binding GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
-                                            <TextBlock Text=" | " Margin="5,0"/>
-                                            <TextBlock Text="{Binding ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666"/>
-                                            <TextBlock Text=" | " Margin="5,0"/>
+                                        <!-- Ticket Classes Container - Shown only when expanded -->
+                                        <ScrollViewer Grid.Row="1" 
+                           HorizontalScrollBarVisibility="Auto" 
+                           VerticalScrollBarVisibility="Disabled"
+                           Visibility="{Binding IsTicketClassesExpanded, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Margin="0,10,0,0">
+                                            <ItemsControl ItemsSource="{Binding TicketClasses}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Width="180" Height="130" 
+                                    Background="{Binding BackgroundColor}" 
+                                    CornerRadius="8" 
+                                    Margin="5,0">
+                                                            <Grid Margin="10">
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                    <RowDefinition Height="Auto"/>
+                                                                </Grid.RowDefinitions>
 
-                                            <!-- Hiển thị loại chuyến bay (thẳng hoặc có điểm dừng) -->
-                                            <Grid>
-                                                <TextBlock Text="Bay thẳng" 
-                                                  Foreground="#29A329" 
-                                                  Visibility="{Binding SoSanBayTrungGian, Converter={StaticResource ZeroToVisibleConverter}}"/>
-                                                <StackPanel Orientation="Horizontal" 
-                                                   Visibility="{Binding SoSanBayTrungGian, Converter={StaticResource NonZeroToVisibleConverter}}">
-                                                    <TextBlock Text="{Binding SoSanBayTrungGian}" Foreground="#FF6600"/>
-                                                    <TextBlock Text=" điểm dừng" Foreground="#FF6600" Margin="3,0,0,0"/>
-                                                </StackPanel>
-                                            </Grid>
-                                        </StackPanel>
+                                                                <!-- Tên hạng vé -->
+                                                                <TextBlock Grid.Row="0" 
+                                               Text="{Binding TenHangVe}" 
+                                               FontWeight="Bold" 
+                                               FontSize="14" 
+                                               Foreground="{Binding HeaderColor}"/>
 
-                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
-                                            <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding MayBay}" Foreground="#666666"/>
-                                            <TextBlock Text=" | " Margin="5,0"/>
-                                            <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="15kg hành lý" Foreground="#666666"/>
-                                        </StackPanel>
+                                                                <!-- Số ghế còn lại -->
+                                                                <Border Grid.Row="1" 
+                                            Background="#80000000" 
+                                            CornerRadius="4" 
+                                            Margin="0,5,0,0" 
+                                            Padding="5,2"
+                                            HorizontalAlignment="Left">
+                                                                    <TextBlock Text="{Binding SoGheConLai, StringFormat={}{0} ghế còn lại}" 
+                                                   FontSize="11" 
+                                                   Foreground="White"/>
+                                                                </Border>
+
+                                                                <!-- Giá vé -->
+                                                                <StackPanel Grid.Row="2" VerticalAlignment="Center">
+                                                                    <TextBlock Text="từ" FontSize="11" Foreground="#333"/>
+                                                                    <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0}}" 
+                                                   FontWeight="Bold" 
+                                                   FontSize="16"/>
+                                                                    <TextBlock Text="VND" FontSize="11"/>
+                                                                </StackPanel>
+
+                                                                <!-- Nút chọn -->
+                                                                <Button Grid.Row="3" 
+                                            Content="CHỌN" 
+                                            Style="{StaticResource MaterialDesignRaisedButton}"
+                                            Background="White" 
+                                            Foreground="{Binding ButtonColor}"
+                                            Height="25" 
+                                            FontSize="11"
+                                            FontWeight="Medium"
+                                            materialDesign:ButtonAssist.CornerRadius="5"
+                                            HorizontalAlignment="Stretch"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
                                     </Grid>
-
-                                    <!-- Giá và nút đặt vé -->
-                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0} VND}" FontWeight="Bold" FontSize="18" Foreground="#FF6600" HorizontalAlignment="Right"/>
-                                        <TextBlock Text="/khách" Foreground="#666666" HorizontalAlignment="Right" Margin="0,0,0,10"/>
-                                        <Button Content="CHỌN" 
-                                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                                        Foreground="#388FF4"
-                                        BorderBrush="#388FF4"
-                                        Width="100"
-                                        materialDesign:ButtonAssist.CornerRadius="5"/>
-                                    </StackPanel>
                                 </Grid>
                             </Border>
                         </DataTemplate>
