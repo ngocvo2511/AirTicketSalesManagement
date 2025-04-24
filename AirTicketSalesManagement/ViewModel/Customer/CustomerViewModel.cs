@@ -20,7 +20,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         public string idCustomer {  get; set; }
         public CustomerViewModel()
         {
-            CurrentViewModel = new HomePageViewModel();
+            CurrentViewModel = new PassengerInformationViewModel();
         }
 
         [RelayCommand]
