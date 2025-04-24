@@ -44,6 +44,13 @@
                                    FontSize="14" 
                                    FontWeight="SemiBold" 
                                    Foreground="White"/>
+                        <TextBlock Text=" | Hạng vé: " 
+           FontSize="14" 
+           Foreground="White"/>
+                        <TextBlock Text="{Binding SelectedTicketClass.TenHangVe}" 
+           FontSize="14" 
+           FontWeight="SemiBold" 
+           Foreground="White"/>
                     </StackPanel>
                 </Grid>
             </Border>

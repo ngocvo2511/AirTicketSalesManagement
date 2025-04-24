@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AirTicketSalesManagement.Models;
+using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,10 +9,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using AirTicketSalesManagement.Services;
 
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
-    public class PassengerInformationViewModel : BaseViewModel
+    public partial class PassengerInformationViewModel : BaseViewModel
     {
         #region Properties
 
@@ -52,11 +55,12 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             }
         }
 
+        public HangVe SelectedTicketClass { get; set; }
+
         #endregion
 
         #region Commands
 
-        public ICommand BackCommand { get; private set; }
         public ICommand ContinueCommand { get; private set; }
 
         #endregion
@@ -64,12 +68,23 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         public PassengerInformationViewModel()
         {
             // Initialize commands
-            BackCommand = new RelayCommand(ExecuteBackCommand);
             ContinueCommand = new RelayCommand(ExecuteContinueCommand, CanExecuteContinueCommand);
 
             // Initialize with test data (should be replaced with actual data from previous screen)
             FlightCode = "VN123 (SGN-HAN)";
             InitializePassengerList(2, 1, 1); // Example: 2 adults, 1 child, 1 infant
+        }
+
+        public PassengerInformationViewModel(ThongTinChuyenBayDuocChon selectedFlightInfo)
+        {
+            if (selectedFlightInfo == null)
+                throw new ArgumentNullException(nameof(selectedFlightInfo));
+
+            // Lưu thông tin chuyến bay và hạng vé
+            FlightCode = $"{selectedFlightInfo.Flight.MaSBDi} - {selectedFlightInfo.Flight.MaSBDen} ({selectedFlightInfo.Flight.HangHangKhong})";
+            SelectedTicketClass = selectedFlightInfo.TicketClass;
+            // Khởi tạo danh sách hành khách dựa trên số lượng người lớn, trẻ em, em bé
+            InitializePassengerList(2, 1, 1); // Thay bằng dữ liệu thực tế nếu cần
         }
 
         private void InitializePassengerList(int adultCount, int childCount, int infantCount)
@@ -115,10 +130,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             }
         }
 
-        private void ExecuteBackCommand(object parameter)
+        [RelayCommand]
+        private void Back()
         {
-            // Navigate back to flight search/selection page
-            // Implementation depends on your navigation framework
+            NavigationService.NavigateBack();
         }
 
         private bool CanExecuteContinueCommand(object parameter)

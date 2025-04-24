@@ -1,5 +1,6 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
+ 
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
     public partial class FlightScheduleSearchViewModel : BaseViewModel
@@ -111,6 +112,23 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             {
                 // Không cần thiết phải làm gì ở đây
             }
+        }
+
+        [RelayCommand]
+        private void SelectTicketClass(SelectedFlightAndTicketClass selection)
+        {
+            if (selection == null || selection.SelectedTicketClass == null || selection.SelectedFlight == null)
+                return;
+
+            // Tạo đối tượng chứa thông tin chuyến bay và hạng vé đã chọn
+            var selectedFlightInfo = new ThongTinChuyenBayDuocChon
+            {
+                Flight = selection.SelectedFlight,
+                TicketClass = selection.SelectedTicketClass
+            };
+
+            // Chuyển sang PassengerInformationView và truyền thông tin chuyến bay
+            NavigationService.NavigateTo<PassengerInformationViewModel>(selectedFlightInfo);
         }
 
         // Mở popup chọn hành khách
@@ -235,159 +253,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void SearchFlight()
         {
-            //        // TODO: Thay bằng truy vấn DB thực tế
-            //        FlightResults.Clear();
-            //        if (string.IsNullOrWhiteSpace(DiemDi) || string.IsNullOrWhiteSpace(DiemDen) || NgayDi == null)
-            //            return;
-
-            //        // Sample ticket classes for Vietnam Airlines flight
-            //        var vnaTicketClasses = new ObservableCollection<HangVe>
-            //        {
-
-            //            new HangVe {
-            //                TenHangVe = "PHỔ THÔNG",
-            //                GiaVe = 1290000,
-            //                SoGheConLai = 8,
-            //                BackgroundColor = "#E0E0E0",
-            //                HeaderColor = "#333333",
-            //                ButtonColor = "#388FF4"
-            //            },
-            //            new HangVe {
-            //                TenHangVe = "PHỔ THÔNG ĐẶC BIỆT",
-            //                GiaVe = 2607000,
-            //                SoGheConLai = 5,
-            //                BackgroundColor = "#C8E6C9",
-            //                HeaderColor = "#2E7D32",
-            //                ButtonColor = "#2E7D32"
-            //            },
-            //            new HangVe {
-            //                TenHangVe = "THƯƠNG GIA",
-            //                GiaVe = 3592000,
-            //                SoGheConLai = 3,
-            //                BackgroundColor = "#FFD700",
-            //                HeaderColor = "#B8860B",
-            //                ButtonColor = "#B8860B"
-            //            }
-            //        };
-
-            //        // Add Vietnam Airlines flight
-            //        FlightResults.Add(new KQTraCuuChuyenBayMoRong
-            //        {
-            //            MaSBDi = "SGN",
-            //            MaSBDen = "HAN",
-            //            HangHangKhong = "Vietnam Airlines",
-            //            GioDi = new TimeSpan(8, 0, 0), // 08:00 AM
-            //            GioDen = new TimeSpan(9, 30, 0), // 09:30 AM
-            //            ThoiGianBay = new TimeSpan(1, 30, 0), // 1 hour 30 minutes
-            //            MayBay = "Airbus A321",
-            //            GiaVe = 1290000,
-            //            SoSanBayTrungGian = 0, // Bay thẳng
-            //            LogoUrl = "/Images/VietnamAirlines.png",
-            //            TicketClasses = vnaTicketClasses
-            //        });
-
-            //        // Sample ticket classes for VietJet Air
-            //        var vietjetTicketClasses = new ObservableCollection<HangVe>
-            //{
-            //    new HangVe {
-            //        TenHangVe = "ECO",
-            //        GiaVe = 950000,
-            //        SoGheConLai = 12,
-            //        BackgroundColor = "#E0E0E0",
-            //        HeaderColor = "#333333",
-            //        ButtonColor = "#F44336"
-            //    },
-            //    new HangVe {
-            //        TenHangVe = "ECO PLUS",
-            //        GiaVe = 1450000,
-            //        SoGheConLai = 7,
-            //        BackgroundColor = "#FFCDD2",
-            //        HeaderColor = "#C62828",
-            //        ButtonColor = "#C62828"
-            //    }
-            //};
-
-            //        // Add VietJet Air flight
-            //        FlightResults.Add(new KQTraCuuChuyenBayMoRong
-            //        {
-            //            MaSBDi = "SGN",
-            //            MaSBDen = "HAN",
-            //            HangHangKhong = "VietJet Air",
-            //            GioDi = new TimeSpan(9, 0, 0),
-            //            GioDen = new TimeSpan(12, 30, 0),
-            //            ThoiGianBay = new TimeSpan(3, 30, 0),
-            //            MayBay = "Airbus A320",
-            //            GiaVe = 950000,
-            //            SoSanBayTrungGian = 1, // 1 điểm dừng
-            //            LogoUrl = "/Images/VietjetAir.png",
-            //            TicketClasses = vietjetTicketClasses
-            //        });
-
-            //        // Sample ticket classes for Bamboo Airways with 5 classes example
-            //        var bambooTicketClasses = new ObservableCollection<HangVe>
-            //{
-            //    new HangVe {
-            //        TenHangVe = "BAMBOO ECO",
-            //        GiaVe = 890000,
-            //        SoGheConLai = 15,
-            //        BackgroundColor = "#E0E0E0",
-            //        HeaderColor = "#333333",
-            //        ButtonColor = "#4CAF50"
-            //    },
-            //    new HangVe {
-            //        TenHangVe = "BAMBOO PLUS",
-            //        GiaVe = 1290000,
-            //        SoGheConLai = 10,
-            //        BackgroundColor = "#C8E6C9",
-            //        HeaderColor = "#2E7D32",
-            //        ButtonColor = "#2E7D32"
-            //    },
-            //    new HangVe {
-            //        TenHangVe = "BAMBOO BUSINESS",
-            //        GiaVe = 2600000,
-            //        SoGheConLai = 5,
-            //        BackgroundColor = "#B2DFDB",
-            //        HeaderColor = "#00796B",
-            //        ButtonColor = "#00796B"
-            //    },
-            //    new HangVe {
-            //        TenHangVe = "BAMBOO PREMIUM",
-            //        GiaVe = 3100000,
-            //        SoGheConLai = 3,
-            //        BackgroundColor = "#BBDEFB",
-            //        HeaderColor = "#1565C0",
-            //        ButtonColor = "#1565C0"
-            //    },
-            //    new HangVe {
-            //        TenHangVe = "BAMBOO FIRST",
-            //        GiaVe = 4300000,
-            //        SoGheConLai = 2,
-            //        BackgroundColor = "#FFD700",
-            //        HeaderColor = "#B8860B",
-            //        ButtonColor = "#B8860B"
-            //    }
-            //};
-
-            //        // Add Bamboo Airways flight
-            //        FlightResults.Add(new KQTraCuuChuyenBayMoRong
-            //        {
-            //            MaSBDi = "SGN",
-            //            MaSBDen = "HAN",
-            //            HangHangKhong = "Bamboo Airways",
-            //            GioDi = new TimeSpan(7, 30, 0),
-            //            GioDen = new TimeSpan(13, 0, 0),
-            //            ThoiGianBay = new TimeSpan(5, 30, 0),
-            //            MayBay = "Boeing 787",
-            //            GiaVe = 890000,
-            //            SoSanBayTrungGian = 2, // 2 điểm dừng
-            //            LogoUrl = "/Images/BambooAirways.png",
-            //            TicketClasses = bambooTicketClasses
-            //        });
-
-            //        ResultVisibility = Visibility.Visible;
-            //    }
-
-            // Xóa kết quả cũ
             FlightResults.Clear();
 
             // Kiểm tra điều kiện đầu vào
@@ -512,6 +377,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 _ => "#388FF4" // Màu mặc định nếu không khớp
             };
         }
+
+
     }
 
     public static class ObservableCollectionExtensions
