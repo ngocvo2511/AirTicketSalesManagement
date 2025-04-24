@@ -115,16 +115,19 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         }
 
         [RelayCommand]
-        private void SelectTicketClass(SelectedFlightAndTicketClass selection)
+        private void SelectTicketClass(ThongTinChuyenBayDuocChon selection)
         {
-            if (selection == null || selection.SelectedTicketClass == null || selection.SelectedFlight == null)
+            if (selection == null || selection.TicketClass == null || selection.Flight == null)
                 return;
 
             // Tạo đối tượng chứa thông tin chuyến bay và hạng vé đã chọn
             var selectedFlightInfo = new ThongTinChuyenBayDuocChon
             {
-                Flight = selection.SelectedFlight,
-                TicketClass = selection.SelectedTicketClass
+                Flight = selection.Flight,
+                TicketClass = selection.TicketClass,
+                NumberAdults = AdultCount,
+                NumberChildren = ChildCount,
+                NumberInfants = InfantCount
             };
 
             // Chuyển sang PassengerInformationView và truyền thông tin chuyến bay

@@ -17,10 +17,10 @@ namespace AirTicketSalesManagement.Converters
                 values[0] is HangVe ticketClass &&
                 values[1] is KQTraCuuChuyenBayMoRong flight)
             {
-                return new SelectedFlightAndTicketClass
+                return new ThongTinChuyenBayDuocChon
                 {
-                    SelectedTicketClass = ticketClass,
-                    SelectedFlight = flight
+                    TicketClass = ticketClass,
+                    Flight = flight
                 };
             }
 

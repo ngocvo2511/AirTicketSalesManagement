@@ -10,5 +10,8 @@ namespace AirTicketSalesManagement.Models
     {
         public KQTraCuuChuyenBayMoRong Flight { get; set; }
         public HangVe TicketClass { get; set; }
+        public int NumberAdults { get; set; }
+        public int NumberChildren { get; set; }
+        public int NumberInfants { get; set; }
     }
 }

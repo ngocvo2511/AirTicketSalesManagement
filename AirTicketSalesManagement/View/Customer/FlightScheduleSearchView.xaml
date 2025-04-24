@@ -618,6 +618,12 @@
                                                                             <Binding/>
                                                                             <!-- Chuyến bay từ ListViewItem cha -->
                                                                             <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ListViewItem}"/>
+                                                                            <!-- 3. Số người lớn -->
+                                                                            <Binding Path="DataContext.AdultCount" RelativeSource="{RelativeSource AncestorType=ListView}"/>
+                                                                            <!-- 4. Số trẻ em -->
+                                                                            <Binding Path="DataContext.ChildCount" RelativeSource="{RelativeSource AncestorType=ListView}"/>
+                                                                            <!-- 5. Số em bé -->
+                                                                            <Binding Path="DataContext.InfantCount" RelativeSource="{RelativeSource AncestorType=ListView}"/>
                                                                         </MultiBinding>
                                                                     </Button.CommandParameter>
                                                                 </Button>

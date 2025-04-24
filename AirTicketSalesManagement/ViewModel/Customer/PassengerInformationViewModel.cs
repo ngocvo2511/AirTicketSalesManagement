@@ -84,7 +84,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             FlightCode = $"{selectedFlightInfo.Flight.MaSBDi} - {selectedFlightInfo.Flight.MaSBDen} ({selectedFlightInfo.Flight.HangHangKhong})";
             SelectedTicketClass = selectedFlightInfo.TicketClass;
             // Khởi tạo danh sách hành khách dựa trên số lượng người lớn, trẻ em, em bé
-            InitializePassengerList(2, 1, 1); // Thay bằng dữ liệu thực tế nếu cần
+            InitializePassengerList(selectedFlightInfo.NumberAdults, selectedFlightInfo.NumberChildren, selectedFlightInfo.NumberInfants); // Thay bằng dữ liệu thực tế nếu cần
         }
 
         private void InitializePassengerList(int adultCount, int childCount, int infantCount)

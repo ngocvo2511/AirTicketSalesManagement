@@ -15,12 +15,18 @@ namespace AirTicketSalesManagement.Converters
         {
             if (values.Length >= 2 &&
                 values[0] is HangVe hangVe &&
-                values[1] is KQTraCuuChuyenBayMoRong flight)
+                values[1] is KQTraCuuChuyenBayMoRong flight &&
+                values[2] is int numberAdults &&
+                values[3] is int numberChildren &&
+                values[4] is int numberInfant )
             {
-                return new SelectedFlightAndTicketClass
+                return new ThongTinChuyenBayDuocChon
                 {
-                    SelectedTicketClass = hangVe,
-                    SelectedFlight = flight
+                    TicketClass = hangVe,
+                    Flight = flight,
+                    NumberAdults = numberAdults,
+                    NumberChildren = numberChildren,
+                    NumberInfants = numberInfant
                 };
             }
 
