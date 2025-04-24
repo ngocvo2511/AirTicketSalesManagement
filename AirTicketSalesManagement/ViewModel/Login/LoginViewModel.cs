@@ -127,7 +127,6 @@ namespace AirTicketSalesManagement.ViewModel.Login
             }
             catch (Exception ex)
             {
-                Console.WriteLine("EXCEPTION: " + ex.Message);
                 await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
             }
         }

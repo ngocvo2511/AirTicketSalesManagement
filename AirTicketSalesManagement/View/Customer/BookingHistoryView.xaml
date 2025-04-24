@@ -59,60 +59,96 @@
             FontSize="16" 
             FontWeight="Bold"
             Foreground="Gray" 
-            Visibility="{Binding BookingHistory.Count, Converter={StaticResource ZeroToVisibleConverter}}"/>
-                <ItemsControl ItemsSource="{Binding BookingHistory}">
+            Visibility="{Binding IsEmpty, Converter={StaticResource ZeroToVisibleConverter}}"/>
+                <ItemsControl ItemsSource="{Binding HistoryBooking}"
+                          Visibility="{Binding IsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="White" CornerRadius="10" Padding="15" Margin="0,0,0,20"
-                 BorderBrush="#DDD" BorderThickness="1" Effect="{DynamicResource ShadowEffect}">
+                            <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="8" Padding="10" Margin="10,10,10,10">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
+                                        <!-- Nội dung chính -->
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
+                                        <!-- Ngày đặt -->
                                     </Grid.RowDefinitions>
 
-                                    <!-- Row 1: Thông tin chuyến bay và trạng thái -->
-                                    <Grid>
+                                    <Grid Grid.Row="0">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="3*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="{Binding FlightNumber}" FontSize="16" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding Route}" FontSize="14"/>
-                                            <TextBlock Text="{Binding DepartureTime, StringFormat='Khởi hành: {0:dd/MM/yyyy HH:mm}'}" FontSize="13"/>
+                                        <!-- Cột 1: Điểm đi -> Điểm đến -->
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DiemDi}" FontSize="22" FontWeight="Bold"/>
+                                            <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding DiemDen}" FontSize="22" FontWeight="Bold"/>
                                         </StackPanel>
 
-                                        <TextBlock Text="{Binding Status}" Grid.Column="1"
-                                Foreground="{Binding StatusColor}"
-                                FontWeight="Bold" VerticalAlignment="Top" FontSize="14"/>
+                                        <!-- Cột 2: Hãng, thời gian, máy bay -->
+                                        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="20,0,0,0">
+                                            <TextBlock Text="{Binding HangHangKhong}"
+                                                FontSize="18"
+                                                FontWeight="SemiBold"
+                                                Foreground="#007ACC"
+                                                Margin="0,5"/>
+                                            <TextBlock Text="{Binding GioDi, StringFormat='🕒 Giờ đi: {0:HH:mm dd/MM/yyyy}'}"
+                                                FontSize="16"
+                                                Margin="0,5"
+                                                />
+                                            <TextBlock Text="{Binding GioDen, StringFormat='🕒 Giờ đến: {0:HH:mm dd/MM/yyyy}'}"
+                                                FontSize="16"
+                                                Margin="0,5"/>
+                                            <TextBlock FontSize="16" Margin="0,5">
+                                            <Run Text="🛩 Loại máy bay: "/>
+                                            <Run Text="{Binding LoaiMayBay}" />
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <!-- Cột 3: Số lượng khách -->
+                                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="15,0,0,0">
+                                            <TextBlock>
+                                              <Run Text="👥 Số lượng khách: " FontSize="16"/>
+                                              <Run Text="{Binding SoLuongKhach}" FontSize="16"/>
+                                            </TextBlock>
+                                           
+                                        </StackPanel>
+
+                                        <!-- Cột 4: Nút Chi tiết -->
+                                        <Button Grid.Column="3"
+                    Content="Chi tiết"
+                    Padding="10,4"
+                    Margin="15,0,0,0"
+                    Command="{Binding DataContext.ShowDetailHistoryCommand}"
+                    CommandParameter="{Binding}"
+                    Background="#007ACC"
+                    Foreground="White"
+                    FontWeight="SemiBold"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    VerticalAlignment="Center"/>
                                     </Grid>
 
-                                    <!-- Row 2: Thông tin đặt vé -->
-                                    <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,10,0,0">
-                                        <TextBlock Text="{Binding BookingCode, StringFormat='Mã đặt vé: {0}'}" Margin="0,10,20,0"/>
-                                        <TextBlock Text="{Binding PassengerCount, StringFormat='Số hành khách: {0}'}" Margin="0,10,20,0"/>
-                                        <TextBlock Text="{Binding TotalPrice, StringFormat='Tổng tiền: {0:N0} đ'}" Margin="0,10,20,0"/>
-                                    </StackPanel>
-
-                                    <!-- Row 3: Nút -->
-                                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,15,0,0">
-                                        <Button Content="Chi tiết"
-                             Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                             CommandParameter="{Binding}"
-                             Padding="10,5" Margin="0,0,10,0"/>
-
-                                        <Button Content="Huỷ vé"
-                             Background="Red" Foreground="White"
-                             Command="{Binding DataContext.CancelBookingCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                             CommandParameter="{Binding}"
-                             Visibility="{Binding CanCancel, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Padding="10,5"/>
-                                    </StackPanel>
+                                    <!-- Ngày đặt - góc dưới trái -->
+                                    <TextBlock Grid.Row="1"
+                   Text="{Binding NgayDat, StringFormat='Ngày đặt: {0:dd/MM/yyyy}'}"
+                   FontStyle="Italic"
+                   FontSize="12"
+                   Foreground="Gray"
+                   Margin="0,5,0,0"
+                   HorizontalAlignment="Left"/>
                                 </Grid>
                             </Border>
+
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

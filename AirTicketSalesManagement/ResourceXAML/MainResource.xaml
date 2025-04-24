@@ -52,6 +52,9 @@
     <DataTemplate DataType="{x:Type viewmodelCUST:FlightScheduleSearchViewModel}">
         <viewsCUST:FlightScheduleSearchView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodelCUST:BookingHistoryDetailViewModel}">
+        <viewsCUST:BookingHistoryDetailView/>
+    </DataTemplate>
     
     <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">
         <viewsNotify:ToastView/>

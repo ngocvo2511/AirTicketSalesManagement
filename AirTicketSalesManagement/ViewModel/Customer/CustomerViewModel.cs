@@ -38,7 +38,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void NavigateToBookingHistory()
         {
-            CurrentViewModel = new BookingHistoryViewModel();
+            CurrentViewModel = new BookingHistoryViewModel(idCustomer, this);
         }
 
         [RelayCommand]

@@ -9,7 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="appsettings.json" />
 		<None Remove="Resources\Images\homebg.png" />
 		<None Remove="Resources\Images\logo.png" />
 		<None Remove="Resources\Images\logoxoanen.png" />
@@ -52,5 +51,11 @@
 
 	<ItemGroup>
 	  <Folder Include="ViewModel\Staff\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>

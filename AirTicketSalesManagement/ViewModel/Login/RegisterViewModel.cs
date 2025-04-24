@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
+using System.Windows.Media;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
@@ -19,7 +20,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
     {
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
-        private ToastViewModel _toast = new ToastViewModel();
+        public ToastViewModel Toast { get; } = new ToastViewModel();
         private bool isFailed;
 
         [ObservableProperty]
@@ -33,7 +34,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         private string name;
 
         #region Error
-        public void Validate()
+        public async Task Validate()
         {
             ClearErrors(nameof(Email));
             ClearErrors(nameof(Password));
@@ -59,15 +60,23 @@ namespace AirTicketSalesManagement.ViewModel.Login
                 AddError(nameof(ConfirmPassword), "Xác nhận mật khẩu không khớp với mật khẩu.");
             }
             if (HasErrors) return;
-            using (var context = new AirTicketDbContext())
+            try
             {
-                var user = context.Taikhoans.FirstOrDefault(x => x.Email == Email);
-                if (user != null)
+                using (var context = new AirTicketDbContext())
                 {
-                    AddError(nameof(Email), "Email đã được đăng kí");
-                    return;
+                    var user = context.Taikhoans.FirstOrDefault(x => x.Email == Email);
+                    if (user != null)
+                    {
+                        AddError(nameof(Email), "Email đã được đăng kí");
+                        return;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
+            }
+            
         }
         public bool HasErrors => _errors.Any();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -129,13 +138,16 @@ namespace AirTicketSalesManagement.ViewModel.Login
             catch(Exception ex)
             {
                 isFailed = true;
-                // add notify disconnect to database
                 return string.Empty;
             }
         }
-        public void AddCustomer()
+        public async Task AddCustomer()
         {
-            if (isFailed) return;
+            if (isFailed)
+            {
+                await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
+                return;
+            }
             try
             {
                 using (var context = new AirTicketDbContext())
@@ -162,8 +174,8 @@ namespace AirTicketSalesManagement.ViewModel.Login
             }
             catch (Exception ex)
             {
-                //add notify disconnect to database
                 isFailed = true;
+                await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
                 return;
             }
            
@@ -180,13 +192,15 @@ namespace AirTicketSalesManagement.ViewModel.Login
         }
 
         [RelayCommand]
-        private void Register()
+        private async Task Register()
         {
-            Validate();
+            await Validate();
             if (HasErrors) return;
-            AddCustomer();
-            if (!isFailed) { // notify add success
-                           }
+            await AddCustomer();
+            if (!isFailed) 
+            {
+                await Toast.ShowToastAsync("Đăng kí tài khoản thành công");
+            }
         }
 
         [RelayCommand]
