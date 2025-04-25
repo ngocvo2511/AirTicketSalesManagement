@@ -7,10 +7,12 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:uc ="clr-namespace:AirTicketSalesManagement.View.Customer"
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
+             xmlns:behaviors="clr-namespace:AirTicketSalesManagement.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -28,30 +30,64 @@
                    Margin="30 0 0 0"
                    Foreground="#2C3E50"
                    VerticalAlignment="Center" />
-
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <ToggleButton Template="{StaticResource ProfilePopupTemplate}" 
-                          Width="60"
-                          Height="60"
-                          Margin="0 0 40 0"/>
+              Width="60"
+              Height="60"
+              Margin="0 0 40 0"/>
             </StackPanel>
+
         </Grid>
         <!-- Search Bar -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" 
-            Margin="20 0 20 20" HorizontalAlignment="Left">
-            <TextBox x:Name="SearchTextBox" Width="300" Height="35" 
-             Margin="0 0 10 0" 
-             materialDesign:HintAssist.Hint="Tra cứu lịch sử đặt vé" />
-            <Button Width="40" Height="35" Background="#3498DB" 
-            Foreground="White" Padding="5">
-                <materialDesign:PackIcon Kind="Magnify" Width="20" Height="20"/>
-            </Button>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <!-- ComboBox nơi đi -->
+            <ComboBox Width="250" Margin="20"
+              FontSize="16"
+              IsEditable="True"
+              ItemsSource="{Binding DanhSachNoiDi}"
+              SelectedItem="{Binding NoiDiFilter, Mode=TwoWay}"
+              materialDesign:HintAssist.Hint="Nơi đi"/>
+
+            <!-- ComboBox nơi đến -->
+            <ComboBox Width="250" Margin="20"
+              IsEditable="True"
+              FontSize="16"
+              ItemsSource="{Binding DanhSachNoiDen}"
+              SelectedItem="{Binding NoiDenFilter, Mode=TwoWay}"
+              materialDesign:HintAssist.Hint="Nơi đến"/>
         </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <!-- ComboBox hãng hàng không -->
+            <ComboBox Width="250" Margin="20"
+              FontSize="16"
+              IsEditable="True"
+              ItemsSource="{Binding DanhSachHangHangKhong}"
+              SelectedItem="{Binding HangHangKhongFilter, Mode=TwoWay}"
+              materialDesign:HintAssist.Hint="Hãng hàng không"/>
+
+            <!-- DatePicker ngày đặt -->
+            <DatePicker Width="250" Margin="20"
+            FontSize="16"           
+            SelectedDate="{Binding NgayDatFilter, Mode=TwoWay}"
+            materialDesign:HintAssist.Hint="Ngày đặt"
+            behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
+
+            <!-- Nút tìm kiếm -->
+            <Button Content="Tìm kiếm"
+            FontSize="16"
+Command="{Binding TimKiemCommand}"
+Padding="10,4"
+Background="#007ACC"
+Foreground="White"
+FontWeight="SemiBold"
+Cursor="Hand"/>
+        </StackPanel>
+
 
         <!-- Content -->
 
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Grid.Row="2">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Grid.Row="3">
             <StackPanel>
                 <TextBlock Text="Không có chuyến bay nào" 
             HorizontalAlignment="Center" 
@@ -128,8 +164,8 @@
                     Content="Chi tiết"
                     Padding="10,4"
                     Margin="15,0,0,0"
-                    Command="{Binding DataContext.ShowDetailHistoryCommand}"
-                    CommandParameter="{Binding}"
+                    Command="{Binding DataContext.ShowDetailHistoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                    CommandParameter="{Binding MaVe}"
                     Background="#007ACC"
                     Foreground="White"
                     FontWeight="SemiBold"

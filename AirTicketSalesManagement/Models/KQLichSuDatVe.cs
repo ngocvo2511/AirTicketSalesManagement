@@ -9,6 +9,7 @@ namespace AirTicketSalesManagement.Models
 {
     public class KQLichSuDatVe : ObservableObject
     {
+        public string? MaVe {  get; set; }
         public string? DiemDi { get; set; }
         public string? DiemDen { get; set; }
         public string? HangHangKhong { get; set; }

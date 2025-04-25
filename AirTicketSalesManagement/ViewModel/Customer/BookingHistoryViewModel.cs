@@ -14,21 +14,26 @@ using System.Windows.Controls;
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
     public partial class BookingHistoryViewModel : BaseViewModel
-    {
-        private CustomerViewModel parent;
+    {       
+        private readonly CustomerViewModel parent;
+        [ObservableProperty]
+        private DateTime? ngayDatFilter;
+        [ObservableProperty]
+        private string info;
         [ObservableProperty]
         private ObservableCollection<KQLichSuDatVe>? historyBooking;
         [ObservableProperty]
         private bool isEmpty;
         public BookingHistoryViewModel() { }
         public BookingHistoryViewModel(string idCustomer, CustomerViewModel parent)
-        {     
+        {
             this.parent = parent;
             //LoadData(idCustomer);
             HistoryBooking = new ObservableCollection<KQLichSuDatVe>
         {
             new KQLichSuDatVe
             {
+                MaVe = "MV01",
                 DiemDi = "HAN",
         DiemDen = "SGN",
         HangHangKhong = "Vietnam Airlines",
@@ -41,6 +46,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             },
             new KQLichSuDatVe
             {
+                MaVe = "MV02",
                 DiemDi = "DAT",
         DiemDen = "HAN",
         HangHangKhong = "Bamboo Airways",
@@ -53,6 +59,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             },
             new KQLichSuDatVe
     {
+        MaVe = "MV03",
         DiemDi = "CAN",
         DiemDen = "DAL",
         HangHangKhong = "VietJet Air",
@@ -78,6 +85,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                               join ctdv in context.Ctdvs on datve.MaDv equals ctdv.MaDv
                               select new KQLichSuDatVe
                               {
+                                  MaVe = datve.MaDv,
                                   DiemDi = chuyenbay.Sbdi,
                                   DiemDen = chuyenbay.Sbden,
                                   HangHangKhong = chuyenbay.HangHangKhong,
@@ -94,9 +102,9 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             }
         }
         [RelayCommand]
-        private void ShowDetailHistory()
+        private void ShowDetailHistory(string MaVe)
         {
-            parent.CurrentViewModel = new BookingHistoryDetailViewModel();
+            parent.CurrentViewModel = new BookingHistoryDetailViewModel(MaVe,parent);
         } 
         
     }

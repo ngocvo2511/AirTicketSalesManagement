@@ -105,7 +105,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                             var currentWindow = Application.Current.MainWindow;
                             var customerWindow = new CustomerWindow();
                             var vm = customerWindow.DataContext as Customer.CustomerViewModel;
-                            vm.idCustomer = user.MaKh;
+                            vm.IdCustomer = user.MaKh;
                             Application.Current.MainWindow = currentWindow;
                             currentWindow?.Close();
                             customerWindow.Opacity = 0;

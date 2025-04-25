@@ -16,8 +16,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
     {
         [ObservableProperty]
         private BaseViewModel currentViewModel;
-        
-        public string idCustomer {  get; set; }
+
+        public string IdCustomer { get; set; }
         public CustomerViewModel()
         {
             CurrentViewModel = new HomePageViewModel();
@@ -38,7 +38,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void NavigateToBookingHistory()
         {
-            CurrentViewModel = new BookingHistoryViewModel(idCustomer, this);
+            CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
         }
 
         [RelayCommand]
