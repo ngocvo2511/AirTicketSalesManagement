@@ -1,4 +1,6 @@
-﻿using AirTicketSalesManagement.View.Login;
+﻿using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.View.Login;
 using AirTicketSalesManagement.ViewModel.Login;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -21,6 +23,27 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         public CustomerViewModel()
         {
             CurrentViewModel = new HomePageViewModel();
+
+            NavigationService.NavigateToAction = (viewModelType, parameter) =>
+            {
+                if (viewModelType == typeof(PassengerInformationViewModel))
+                {
+                    CurrentViewModel = new PassengerInformationViewModel((ThongTinChuyenBayDuocChon)parameter);
+                }
+                else if (viewModelType == typeof(FlightScheduleSearchViewModel))
+                {
+                    CurrentViewModel = new FlightScheduleSearchViewModel();
+                }
+            };
+
+            NavigationService.NavigateBackAction = () =>
+            {
+                var parameter = NavigationService.GetCurrentParameter();
+                if (parameter is ThongTinChuyenBayDuocChon)
+                {
+                    CurrentViewModel = new FlightScheduleSearchViewModel();
+                }
+            };
         }
 
         [RelayCommand]

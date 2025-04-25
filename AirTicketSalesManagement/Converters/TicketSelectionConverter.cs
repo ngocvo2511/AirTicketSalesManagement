@@ -20,13 +20,13 @@ namespace AirTicketSalesManagement.Converters
                 values[3] is int numberChildren &&
                 values[4] is int numberInfant )
             {
+                flight.NumberAdults = numberAdults;
+                flight.NumberChildren = numberChildren;
+                flight.NumberInfants = numberInfant;
                 return new ThongTinChuyenBayDuocChon
                 {
                     TicketClass = hangVe,
                     Flight = flight,
-                    NumberAdults = numberAdults,
-                    NumberChildren = numberChildren,
-                    NumberInfants = numberInfant
                 };
             }
 

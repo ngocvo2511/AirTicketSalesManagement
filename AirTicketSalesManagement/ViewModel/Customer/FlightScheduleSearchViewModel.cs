@@ -93,6 +93,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private int infantCount = 0;
 
+        public int SearchedAdultCount { get; private set; }
+        public int SearchedChildCount { get; private set; }
+        public int SearchedInfantCount { get; private set; }
+
         [ObservableProperty]
         private bool isPassengerSelectorOpen = false;
 
@@ -125,9 +129,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             {
                 Flight = selection.Flight,
                 TicketClass = selection.TicketClass,
-                NumberAdults = AdultCount,
-                NumberChildren = ChildCount,
-                NumberInfants = InfantCount
             };
 
             // Chuyển sang PassengerInformationView và truyền thông tin chuyến bay
@@ -256,6 +257,9 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void SearchFlight()
         {
+            SearchedAdultCount = AdultCount;
+            SearchedChildCount = ChildCount;
+            SearchedInfantCount = InfantCount;
             FlightResults.Clear();
 
             // Kiểm tra điều kiện đầu vào

@@ -21,15 +21,12 @@ namespace AirTicketSalesManagement.Services
 
         public static void NavigateBack()
         {
-            if (NavigationStack.Count > 0)
-                NavigationStack.Pop();
-
             NavigateBackAction?.Invoke();
         }
 
         public static object GetCurrentParameter()
         {
-            return NavigationStack.Count > 0 ? NavigationStack.Peek() : null;
+            return NavigationStack.Count > 0 ? NavigationStack.Pop() : null;
         }
     }
 }
