@@ -67,12 +67,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
         public PassengerInformationViewModel()
         {
-            // Initialize commands
-            ContinueCommand = new RelayCommand(ExecuteContinueCommand, CanExecuteContinueCommand);
-
-            // Initialize with test data (should be replaced with actual data from previous screen)
-            FlightCode = "VN123 (SGN-HAN)";
-            InitializePassengerList(2, 1, 1); // Example: 2 adults, 1 child, 1 infant
         }
 
         public PassengerInformationViewModel(ThongTinChuyenBayDuocChon selectedFlightInfo)
@@ -84,7 +78,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             FlightCode = $"{selectedFlightInfo.Flight.MaSBDi} - {selectedFlightInfo.Flight.MaSBDen} ({selectedFlightInfo.Flight.HangHangKhong})";
             SelectedTicketClass = selectedFlightInfo.TicketClass;
             // Khởi tạo danh sách hành khách dựa trên số lượng người lớn, trẻ em, em bé
-            InitializePassengerList(selectedFlightInfo.NumberAdults, selectedFlightInfo.NumberChildren, selectedFlightInfo.NumberInfants); // Thay bằng dữ liệu thực tế nếu cần
+            InitializePassengerList(selectedFlightInfo.Flight.NumberAdults, selectedFlightInfo.Flight.NumberChildren, selectedFlightInfo.Flight.NumberInfants); // Thay bằng dữ liệu thực tế nếu cần
         }
 
         private void InitializePassengerList(int adultCount, int childCount, int infantCount)

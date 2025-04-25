@@ -18,5 +18,9 @@ namespace AirTicketSalesManagement.Models
 
         [ObservableProperty]
         private ObservableCollection<HangVe> ticketClasses = new();
+
+        public int NumberAdults { get; set; }
+        public int NumberChildren { get; set; }
+        public int NumberInfants { get; set; }
     }
 }
