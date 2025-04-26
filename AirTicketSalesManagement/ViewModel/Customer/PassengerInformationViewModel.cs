@@ -32,6 +32,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
         public ThongTinChuyenBayDuocChon ThongTinChuyenBayDuocChon { get; set; }
 
+
         public PassengerInformationViewModel()
         {
         }

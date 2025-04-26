@@ -18,6 +18,17 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         public HangVe SelectedTicketClass { get; set; }
 
         public KQTraCuuChuyenBayMoRong Flight { get; set; }
+
+        public string AdultSummary { get; set; }
+        public string ChildSummary { get; set; }
+        public string InfantSummary { get; set; }
+        public bool HasChildren { get; set; }
+        public bool HasInfants { get; set; }
+        public decimal AdultTotalPrice { get; set; }
+        public decimal ChildTotalPrice { get; set; }
+        public decimal InfantTotalPrice { get; set; }
+        public decimal TaxAndFees { get; set; }
+        public decimal TotalPrice { get; set; }
         public PaymentConfirmationViewModel()
         {
         }
@@ -27,6 +38,16 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             FlightCode = $"{thongTinChuyenBayDuocChon.Flight.MaSBDi} - {thongTinChuyenBayDuocChon.Flight.MaSBDen} ({thongTinChuyenBayDuocChon.Flight.HangHangKhong})";
             SelectedTicketClass = thongTinChuyenBayDuocChon.TicketClass;
             Flight = thongTinChuyenBayDuocChon.Flight;
+            AdultSummary = $"{Flight.NumberAdults} Người lớn";
+            ChildSummary = $"{Flight.NumberChildren} Trẻ em";
+            InfantSummary = $"{Flight.NumberInfants} Em bé";
+            HasChildren = Flight.NumberChildren > 0;
+            HasInfants = Flight.NumberInfants > 0;
+            AdultTotalPrice = Flight.NumberAdults * SelectedTicketClass.GiaVe;
+            ChildTotalPrice = Flight.NumberChildren * SelectedTicketClass.GiaVe;
+            InfantTotalPrice = Flight.NumberInfants * SelectedTicketClass.GiaVe;
+            TaxAndFees = 0;
+            TotalPrice = (Flight.NumberAdults + Flight.NumberChildren + Flight.NumberInfants) * SelectedTicketClass.GiaVe + TaxAndFees;
         }
 
         [RelayCommand]

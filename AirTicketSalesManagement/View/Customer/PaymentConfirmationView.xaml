@@ -209,7 +209,7 @@
                                    FontWeight="Bold" 
                                    FontSize="16"/>
                         <TextBlock Grid.Column="1" 
-                                   Text="{Binding TotalAmount, StringFormat={}{0:N0} VND}" 
+                                   Text="{Binding TotalPrice, StringFormat={}{0:N0} VND}" 
                                    FontWeight="Bold" 
                                    FontSize="18" 
                                    Foreground="#FF6600" 
