@@ -10,60 +10,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using AirTicketSalesManagement.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
     public partial class PassengerInformationViewModel : BaseViewModel
     {
-        #region Properties
 
-        // Flight details
         public string FlightCode { get; set; }
 
-        // Passenger list
-        private ObservableCollection<PassengerInfoModel> _passengerList;
-        public ObservableCollection<PassengerInfoModel> PassengerList
-        {
-            get { return _passengerList; }
-            set
-            {
-                _passengerList = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private ObservableCollection<PassengerInfoModel> passengerList;
 
-        // Contact information
-        private string _contactEmail;
-        public string ContactEmail
-        {
-            get { return _contactEmail; }
-            set
-            {
-                _contactEmail = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private string contactEmail;
 
-        private string _contactPhone;
-        public string ContactPhone
-        {
-            get { return _contactPhone; }
-            set
-            {
-                _contactPhone = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private string contactPhone;
 
         public HangVe SelectedTicketClass { get; set; }
-
-        #endregion
-
-        #region Commands
-
-        public ICommand ContinueCommand { get; private set; }
-
-        #endregion
 
         public PassengerInformationViewModel()
         {
@@ -130,51 +95,33 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             NavigationService.NavigateBack();
         }
 
-        private bool CanExecuteContinueCommand(object parameter)
+        [RelayCommand]
+        private void Continue()
         {
             // Validate all required fields are filled
             if (string.IsNullOrWhiteSpace(ContactEmail) || string.IsNullOrWhiteSpace(ContactPhone))
-                return false;
+                return;
 
             foreach (var passenger in PassengerList)
             {
                 if (string.IsNullOrWhiteSpace(passenger.FullName) || passenger.Gender == null ||
                     passenger.DateOfBirth == null)
-                    return false;
+                    return;
 
                 // Additional validation for adults
                 if (passenger.PassengerType == PassengerType.Adult &&
                     string.IsNullOrWhiteSpace(passenger.IdentityNumber))
-                    return false;
+                    return;
 
                 // Additional validation for infants
                 if (passenger.PassengerType == PassengerType.Infant &&
                     passenger.AccompanyingAdult == null)
-                    return false;
+                    return;
             }
-
-            return true;
         }
-
-        private void ExecuteContinueCommand(object parameter)
-        {
-            // Process passenger information and continue to next step (payment or confirmation)
-            // Implementation depends on your application flow
-        }
-
-        #region INotifyPropertyChanged Implementation
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
     }
 
-    public class PassengerInfoModel : INotifyPropertyChanged
+    public partial class PassengerInfoModel : ObservableObject
     {
         public int Index { get; set; }
         public PassengerType PassengerType { get; set; }
@@ -211,76 +158,26 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             }
         }
 
-        private string _fullName;
-        public string FullName
-        {
-            get { return _fullName; }
-            set
-            {
-                _fullName = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private string fullName;
 
-        private string _gender;
-        public string Gender
-        {
-            get { return _gender; }
-            set
-            {
-                _gender = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private string gender;
 
         public List<string> GenderOptions { get; set; }
 
-        private DateTime? _dateOfBirth;
-        public DateTime? DateOfBirth
-        {
-            get { return _dateOfBirth; }
-            set
-            {
-                _dateOfBirth = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private DateTime? dateOfBirth;
 
-        private string _identityNumber;
-        public string IdentityNumber
-        {
-            get { return _identityNumber; }
-            set
-            {
-                _identityNumber = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private string identityNumber;
+
 
         // For infants only
         public List<PassengerInfoModel> AdultPassengers { get; set; }
 
-        private PassengerInfoModel _accompanyingAdult;
-        public PassengerInfoModel AccompanyingAdult
-        {
-            get { return _accompanyingAdult; }
-            set
-            {
-                _accompanyingAdult = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #region INotifyPropertyChanged Implementation
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
+        [ObservableProperty]
+        private PassengerInfoModel accompanyingAdult;
     }
 
     public enum PassengerType
@@ -288,35 +185,5 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         Adult,
         Child,
         Infant
-    }
-
-    // Simple relay command implementation
-    public class RelayCommand : ICommand
-    {
-        private readonly Action<object> _execute;
-        private readonly Func<object, bool> _canExecute;
-
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
-        {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute(parameter);
-        }
-
-        public void Execute(object parameter)
-        {
-            _execute(parameter);
-        }
-
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-
     }
 }

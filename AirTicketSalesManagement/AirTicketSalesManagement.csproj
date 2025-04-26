@@ -13,6 +13,7 @@
 		<None Remove="Resources\Images\logo.png" />
 		<None Remove="Resources\Images\logoxoanen.png" />
 		<None Remove="Resources\Images\removebg.png" />
+		<None Remove="Resources\Images\vnpay_logo.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -45,6 +46,9 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
 		<Resource Include="Resources\Images\removebg.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Images\vnpay_logo.png">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
 	</ItemGroup>
