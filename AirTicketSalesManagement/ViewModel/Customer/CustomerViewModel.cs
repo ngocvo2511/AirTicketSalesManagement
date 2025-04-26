@@ -68,12 +68,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         }
 
         [RelayCommand]
-        private void NavigateToFlightScheduleSearch()
-        {
-            CurrentViewModel = new FlightScheduleSearchViewModel();
-        }
-
-        [RelayCommand]
         private void NavigateToFlightTicketBooking()
         {
             CurrentViewModel = new FlightScheduleSearchViewModel();
