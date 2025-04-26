@@ -7,7 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="980"
-             DataContext="{StaticResource PaymentConfirmationVM}">
+             >
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
@@ -91,26 +91,26 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                <TextBlock Text="{Binding MaSBDi}" FontWeight="Bold" FontSize="16"/>
+                                <TextBlock Text="{Binding Flight.MaSBDi}" FontWeight="Bold" FontSize="16"/>
                                 <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding MaSBDen}" FontWeight="Bold" FontSize="16"/>
+                                <TextBlock Text="{Binding Flight.MaSBDen}" FontWeight="Bold" FontSize="16"/>
                                 <TextBlock Text=" | " Margin="5,0" FontSize="16"/>
-                                <TextBlock Text="{Binding HangHangKhong}" FontSize="14"/>
+                                <TextBlock Text="{Binding Flight.HangHangKhong}" FontSize="14"/>
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
-                                <TextBlock Text="{Binding NgayDi, StringFormat=dd/MM/yyyy}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding Flight.NgayDi, StringFormat=dd/MM/yyyy}" FontWeight="SemiBold"/>
                                 <TextBlock Text=" | " Margin="5,0"/>
-                                <TextBlock Text="{Binding GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding Flight.GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
                                 <TextBlock Text=" - " Margin="5,0"/>
-                                <TextBlock Text="{Binding GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding Flight.GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
                                 <TextBlock Text=" | " Margin="5,0"/>
-                                <TextBlock Text="{Binding ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666"/>
+                                <TextBlock Text="{Binding Flight.ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666"/>
                             </StackPanel>
 
                             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
                                 <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding MayBay}" Foreground="#666666"/>
+                                <TextBlock Text="{Binding Flight.MayBay}" Foreground="#666666"/>
                                 <TextBlock Text=" | " Margin="5,0"/>
                                 <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                 <TextBlock Text="Hạng: " Foreground="#666666"/>

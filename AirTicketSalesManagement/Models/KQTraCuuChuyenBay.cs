@@ -19,6 +19,9 @@ namespace AirTicketSalesManagement.Models
         private string hangHangKhong;
 
         [ObservableProperty]
+        private DateTime ngayDi;
+
+        [ObservableProperty]
         private TimeSpan gioDi;
 
         [ObservableProperty]

@@ -30,6 +30,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
         public HangVe SelectedTicketClass { get; set; }
 
+        public ThongTinChuyenBayDuocChon ThongTinChuyenBayDuocChon { get; set; }
+
         public PassengerInformationViewModel()
         {
         }
@@ -39,6 +41,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             if (selectedFlightInfo == null)
                 throw new ArgumentNullException(nameof(selectedFlightInfo));
 
+            ThongTinChuyenBayDuocChon = selectedFlightInfo;
             // Lưu thông tin chuyến bay và hạng vé
             FlightCode = $"{selectedFlightInfo.Flight.MaSBDi} - {selectedFlightInfo.Flight.MaSBDen} ({selectedFlightInfo.Flight.HangHangKhong})";
             SelectedTicketClass = selectedFlightInfo.TicketClass;
@@ -118,6 +121,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                     passenger.AccompanyingAdult == null)
                     return;
             }
+
+            NavigationService.NavigateTo<PaymentConfirmationViewModel>(ThongTinChuyenBayDuocChon);
         }
     }
 

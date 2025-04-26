@@ -30,18 +30,21 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 {
                     CurrentViewModel = new PassengerInformationViewModel((ThongTinChuyenBayDuocChon)parameter);
                 }
-                else if (viewModelType == typeof(FlightScheduleSearchViewModel))
+                else if (viewModelType == typeof(PaymentConfirmationViewModel))
                 {
-                    CurrentViewModel = new FlightScheduleSearchViewModel();
+                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinChuyenBayDuocChon)parameter);
                 }
             };
 
-            NavigationService.NavigateBackAction = () =>
+            NavigationService.NavigateBackAction = (previousViewModelType, previousParameter) =>
             {
-                var parameter = NavigationService.GetCurrentParameter();
-                if (parameter is ThongTinChuyenBayDuocChon)
+                if (previousViewModelType == typeof(PassengerInformationViewModel))
                 {
                     CurrentViewModel = new FlightScheduleSearchViewModel();
+                }
+                else if (previousViewModelType == typeof(PaymentConfirmationViewModel))
+                {
+                    CurrentViewModel = new PassengerInformationViewModel((ThongTinChuyenBayDuocChon)previousParameter);
                 }
             };
         }

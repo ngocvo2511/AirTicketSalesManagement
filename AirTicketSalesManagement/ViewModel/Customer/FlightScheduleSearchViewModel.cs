@@ -302,6 +302,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         MaSBDi = flight.SoHieuCbNavigation.SbdiNavigation.MaSb,
                         MaSBDen = flight.SoHieuCbNavigation.SbdenNavigation.MaSb,
                         HangHangKhong = flight.SoHieuCbNavigation.HangHangKhong,
+                        NgayDi = flight.GioDi.Value.Date,
                         GioDi = flight.GioDi.Value.TimeOfDay,
                         GioDen = flight.GioDen.Value.TimeOfDay,
                         ThoiGianBay = flight.GioDen.Value - flight.GioDi.Value,
