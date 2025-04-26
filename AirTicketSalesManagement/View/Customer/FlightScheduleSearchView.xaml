@@ -561,11 +561,11 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Border Width="180" Height="130" 
-                                                            Background="{Binding BackgroundColor}" 
-                                                            CornerRadius="8" 
-                                                            Margin="5,0">
-                                                            <Grid Margin="10">
+                                                        <Border Width="180" Height="150" 
+            Background="{Binding BackgroundColor}" 
+            CornerRadius="8" 
+            Margin="5,0">
+                                                            <Grid Margin="12">
                                                                 <Grid.RowDefinitions>
                                                                     <RowDefinition Height="Auto"/>
                                                                     <RowDefinition Height="Auto"/>
@@ -575,43 +575,47 @@
 
                                                                 <!-- Tên hạng vé -->
                                                                 <TextBlock Grid.Row="0" 
-                                                                   Text="{Binding TenHangVe}" 
-                                                                   FontWeight="Bold" 
-                                                                   FontSize="14" 
-                                                                   Foreground="{Binding HeaderColor}"/>
+                       Text="{Binding TenHangVe}" 
+                       FontWeight="Bold" 
+                       FontSize="15" 
+                       Margin="0,0,0,5"
+                       Foreground="{Binding HeaderColor}"/>
 
                                                                 <!-- Số ghế còn lại -->
                                                                 <Border Grid.Row="1" 
-                                                                    Background="#80000000" 
-                                                                    CornerRadius="4" 
-                                                                    Margin="0,5,0,0" 
-                                                                    Padding="5,2"
-                                                                    HorizontalAlignment="Left">
+                    Background="#80000000" 
+                    CornerRadius="4" 
+                    Margin="0,0,0,10" 
+                    Padding="6,3"
+                    HorizontalAlignment="Left">
                                                                     <TextBlock Text="{Binding SoGheConLai, StringFormat={}{0} ghế còn lại}" 
-                                                                       FontSize="11" 
-                                                                       Foreground="White"/>
+                           FontSize="11" 
+                           Foreground="White"/>
                                                                 </Border>
 
                                                                 <!-- Giá vé -->
-                                                                <StackPanel Grid.Row="2" VerticalAlignment="Center">
-                                                                    <TextBlock Text="từ" FontSize="11" Foreground="#333"/>
+                                                                <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="0,5,0,10">
+                                                                    <TextBlock Text="từ" FontSize="11" Foreground="#333" Margin="0,0,0,3"/>
                                                                     <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0}}" 
-                                                                       FontWeight="Bold" 
-                                                                       FontSize="16"/>
-                                                                    <TextBlock Text="VND" FontSize="11"/>
+                           FontWeight="Bold" 
+                           FontSize="18"
+                           Margin="0,0,0,3"/>
+                                                                    <TextBlock Text="VND" FontSize="12"/>
                                                                 </StackPanel>
 
                                                                 <!-- Nút chọn -->
-                                                                <Button Content="CHỌN"
-                                                                        Command="{Binding DataContext.SelectTicketClassCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                                        Style="{StaticResource MaterialDesignRaisedButton}"
-                                                                        Background="White"
-                                                                        Foreground="{Binding ButtonColor}"
-                                                                        Height="25"
-                                                                        FontSize="11"
-                                                                        FontWeight="Medium"
-                                                                        materialDesign:ButtonAssist.CornerRadius="5"
-                                                                        HorizontalAlignment="Stretch">
+                                                                <Button Grid.Row="3"
+                    Content="CHỌN"
+                    Command="{Binding DataContext.SelectTicketClassCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Background="White"
+                    Foreground="{Binding ButtonColor}"
+                    Height="30"
+                    FontSize="12"
+                    FontWeight="Medium"
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom">
                                                                     <Button.CommandParameter>
                                                                         <MultiBinding Converter="{StaticResource TicketSelectionConverter}">
                                                                             <!-- HangVe (hạng vé) từ chính item hiện tại -->
@@ -627,8 +631,6 @@
                                                                         </MultiBinding>
                                                                     </Button.CommandParameter>
                                                                 </Button>
-
-
                                                             </Grid>
                                                         </Border>
                                                     </DataTemplate>
