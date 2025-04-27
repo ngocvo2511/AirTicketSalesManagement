@@ -8,7 +8,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="980"
-             DataContext="{StaticResource FlightScheduleSearchVM}">
+            >
 
     <Grid>
         <Grid.RowDefinitions>
@@ -36,7 +36,7 @@
              Content="Một chiều" 
              Margin="0 0 15 0"
              GroupName="TripType"
-             IsChecked="{Binding IsRoundTrip, Converter={StaticResource InverseBooleanConverter}, Mode=OneWayToSource}"/>
+             IsChecked="{Binding IsRoundTrip, Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}"/>
                         <RadioButton x:Name="RoundTripRadio" 
              Content="Khứ hồi" 
              GroupName="TripType"

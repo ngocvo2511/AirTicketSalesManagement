@@ -32,7 +32,11 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 }
                 else if (viewModelType == typeof(PaymentConfirmationViewModel))
                 {
-                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinChuyenBayDuocChon)parameter);
+                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinHanhKhachVaChuyenBay)parameter);
+                }
+                else if (viewModelType == typeof(HomePageViewModel))
+                {
+                    CurrentViewModel = new HomePageViewModel();
                 }
             };
 

@@ -105,6 +105,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             // Validate all required fields are filled
             if (string.IsNullOrWhiteSpace(ContactEmail) || string.IsNullOrWhiteSpace(ContactPhone))
                 return;
+            List<HanhKhach> passengerList = new List<HanhKhach>();
 
             foreach (var passenger in PassengerList)
             {
@@ -121,9 +122,18 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 if (passenger.PassengerType == PassengerType.Infant &&
                     passenger.AccompanyingAdult == null)
                     return;
+                passengerList.Add(new HanhKhach(passenger.FullName, passenger.DateOfBirth.Value, passenger.Gender, passenger.IdentityNumber, passenger.AccompanyingAdult?.FullName));
             }
 
-            NavigationService.NavigateTo<PaymentConfirmationViewModel>(ThongTinChuyenBayDuocChon);
+            ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay = new ThongTinHanhKhachVaChuyenBay
+            {
+                FlightInfo = ThongTinChuyenBayDuocChon,
+                PassengerList = passengerList,
+                ContactEmail = ContactEmail,
+                ContactPhone = ContactPhone
+            };
+
+            NavigationService.NavigateTo<PaymentConfirmationViewModel>(thongTinHanhKhachVaChuyenBay);
         }
     }
 

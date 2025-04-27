@@ -287,6 +287,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         .Where(lv => lv.MaLb == flight.MaLb)
                         .Select(lv => new HangVe
                         {
+                            MaHangVe = lv.MaLv,
                             TenHangVe = lv.HangGhe,
                             GiaVe = flight.GiaVe.Value * (decimal)lv.HeSoGia,
                             SoGheConLai = lv.SlveConLai ?? 0,
@@ -301,6 +302,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                     {
                         MaSBDi = flight.SoHieuCbNavigation.SbdiNavigation.MaSb,
                         MaSBDen = flight.SoHieuCbNavigation.SbdenNavigation.MaSb,
+                        MaLichBay = flight.MaLb,
                         HangHangKhong = flight.SoHieuCbNavigation.HangHangKhong,
                         NgayDi = flight.GioDi.Value.Date,
                         GioDi = flight.GioDi.Value.TimeOfDay,
