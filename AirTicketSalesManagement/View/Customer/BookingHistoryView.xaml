@@ -75,7 +75,7 @@
             <!-- Nút tìm kiếm -->
             <Button Content="Tìm kiếm"
             FontSize="16"
-Command="{Binding TimKiemCommand}"
+Command="{Binding SearchHistoryCommand}"
 Padding="10,4"
 Background="#007ACC"
 Foreground="White"
@@ -95,7 +95,7 @@ Cursor="Hand"/>
             FontSize="16" 
             FontWeight="Bold"
             Foreground="Gray" 
-            Visibility="{Binding IsEmpty, Converter={StaticResource ZeroToVisibleConverter}}"/>
+            Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <ItemsControl ItemsSource="{Binding HistoryBooking}"
                           Visibility="{Binding IsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                     <ItemsControl.ItemsPanel>
