@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Manager.Manager_RegulationsChange"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:AirTicketSalesManagement.View.Manager"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="980">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Thay đổi quy định hệ thống"
+               FontSize="26" FontWeight="Bold"
+               Margin="30 0 0 0"
+               Foreground="#2C3E50"
+               VerticalAlignment="Center" />
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <ToggleButton Template="{StaticResource ProfilePopupTemplate}" 
+                      Width="60"
+                      Height="60"
+                      Margin="0 0 40 0"/>
+            </StackPanel>
+        </Grid>
+
+
+        <!-- Form thay đổi -->
+        <ScrollViewer Grid.Row="1">
+            <Border BorderBrush="#3498DB" BorderThickness="1.5" CornerRadius="6" Padding="20" Margin="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="7*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Số sân bay:" FontWeight="Bold" Margin="0,10" FontSize="14" Grid.Row="0" Grid.Column="0"/>
+                    <TextBox Text="{Binding Quydinh.SoSanBay, Mode=TwoWay}" Margin="10,10" FontSize="14" Grid.Row="0" Grid.Column="1"/>
+
+                    <TextBlock Text="Thời gian bay tối thiểu (phút):" FontWeight="Bold" Margin="0,10" FontSize="14" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox Text="{Binding Quydinh.ThoiGianBayToiThieu, Mode=TwoWay}" Margin="10,10" FontSize="14" Grid.Row="1" Grid.Column="1"/>
+
+                    <TextBlock Text="Số sân bay trung gian tối đa:" FontWeight="Bold" Margin="0,10" FontSize="14" Grid.Row="2" Grid.Column="0"/>
+                    <TextBox Text="{Binding Quydinh.SoSanBayTgtoiDa, Mode=TwoWay}" Margin="10,10" FontSize="14" Grid.Row="2" Grid.Column="1"/>
+
+                    <TextBlock Text="Thời gian dừng tối thiểu (phút):" FontWeight="Bold" Margin="0,10" FontSize="14" Grid.Row="3" Grid.Column="0"/>
+                    <TextBox Text="{Binding Quydinh.TgdungMin, Mode=TwoWay}" Margin="10,10" FontSize="14" Grid.Row="3" Grid.Column="1"/>
+
+                    <TextBlock Text="Thời gian dừng tối đa (phút):" FontWeight="Bold" Margin="0,10" FontSize="14" Grid.Row="4" Grid.Column="0"/>
+                    <TextBox Text="{Binding Quydinh.TgdungMax, Mode=TwoWay}" Margin="10,10" FontSize="14" Grid.Row="4" Grid.Column="1"/>
+
+                    <TextBlock Text="Số hạng vé:" FontWeight="Bold" Margin="0,10" FontSize="14" Grid.Row="5" Grid.Column="0"/>
+                    <TextBox Text="{Binding Quydinh.SoHangVe, Mode=TwoWay}" Margin="10,10" FontSize="14" Grid.Row="5" Grid.Column="1"/>
+
+                    <TextBlock Text="Thời gian đặt vé chậm nhất (giờ):" FontWeight="Bold" Margin="0,10" FontSize="14" Grid.Row="6" Grid.Column="0"/>
+                    <TextBox Text="{Binding Quydinh.TgdatVeChamNhat, Mode=TwoWay}" Margin="10,10" FontSize="14" Grid.Row="6" Grid.Column="1"/>
+
+                    <TextBlock Text="Thời gian hủy đặt vé (giờ):" FontWeight="Bold" Margin="0,10" FontSize="14" Grid.Row="7" Grid.Column="0"/>
+                    <TextBox Text="{Binding Quydinh.TghuyDatVe, Mode=TwoWay}" Margin="10,10" FontSize="14" Grid.Row="7" Grid.Column="1"/>
+                </Grid>
+            </Border>
+        </ScrollViewer>
+        <Button Grid.Row="2"
+            Content="Lưu thay đổi"
+            Command="{Binding SaveRegulationsCommand}"
+            Width="150"
+            Height="40"
+            Background="#3498DB"
+            Foreground="White"
+            FontWeight="Bold"
+            HorizontalAlignment="Right"
+            Margin="0,20,30,0"/>
+    </Grid>
+</UserControl>
