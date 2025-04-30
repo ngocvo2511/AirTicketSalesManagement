@@ -12,6 +12,8 @@ namespace AirTicketSalesManagement.Models
         public string? MaVe {  get; set; }
         public string? DiemDi { get; set; }
         public string? DiemDen { get; set; }
+        public string? MaDiemDi { get; set;}
+        public string? MaDiemDen { get; set; }
         public string? HangHangKhong { get; set; }
         public DateTime? GioDi { get; set; }
         public DateTime? GioDen { get; set; }

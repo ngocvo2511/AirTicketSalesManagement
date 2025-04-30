@@ -125,9 +125,9 @@ Cursor="Hand"/>
 
                                         <!-- Cột 1: Điểm đi -> Điểm đến -->
                                         <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding DiemDi}" FontSize="22" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding MaDiemDi}" FontSize="22" FontWeight="Bold"/>
                                             <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding DiemDen}" FontSize="22" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding MaDiemDen}" FontSize="22" FontWeight="Bold"/>
                                         </StackPanel>
 
                                         <!-- Cột 2: Hãng, thời gian, máy bay -->
@@ -165,7 +165,7 @@ Cursor="Hand"/>
                     Padding="10,4"
                     Margin="15,0,0,0"
                     Command="{Binding DataContext.ShowDetailHistoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                    CommandParameter="{Binding MaVe}"
+                    CommandParameter="{Binding}"
                     Background="#007ACC"
                     Foreground="White"
                     FontWeight="SemiBold"

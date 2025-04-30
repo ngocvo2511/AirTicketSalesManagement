@@ -6,61 +6,158 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980">
-    <Border Padding="20" Background="White" CornerRadius="10" BorderBrush="#DDD" BorderThickness="1">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <!-- Tiêu đề -->
-            <TextBlock Text="Chi tiết đặt vé" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
 
-            <!-- Thông tin chuyến bay -->
-            <StackPanel Orientation="Vertical" Margin="0,0,0,15">
-                <TextBlock Text="{Binding FlightInfo}" FontSize="14" FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding FlightDate}" FontSize="14"/>
-                <TextBlock Text="{Binding DepartureTime}" FontSize="14"/>
-            </StackPanel>
+            <!-- Flight Information -->
+            <Border Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" Opacity="0.2" ShadowDepth="2"/>
+                </Border.Effect>
 
-            <!-- Danh sách hành khách -->
-            <GroupBox Header="Danh sách hành khách" Margin="0,0,0,15">
-                <ItemsControl ItemsSource="{Binding Passengers}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Padding="10" Margin="0,5,0,5" Background="#F9F9F9" CornerRadius="5">
-                                <DockPanel>
-                                    <StackPanel DockPanel.Dock="Left">
-                                        <TextBlock Text="{Binding FullName}" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding TicketType}" FontStyle="Italic"/>
-                                        <TextBlock Text="{Binding Price, StringFormat='Giá vé: {0:N0} đ'}"/>
-                                        <TextBlock Text="{Binding Status}"/>
-                                    </StackPanel>
-                                    <Button Content="Huỷ hành khách"
-                                            Command="{Binding DataContext.CancelPassengerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"
-                                            Visibility="{Binding CanCancel, Converter={StaticResource BoolToVisibilityConverter}}"
-                                            Background="Red" Foreground="White"
-                                            Margin="10,0,0,0" Padding="10,5"
-                                            HorizontalAlignment="Right"/>
-                                </DockPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </GroupBox>
+                <StackPanel>
+                    <TextBlock Text="Thông tin chuyến bay" FontSize="24" FontWeight="Bold" Margin="0 0 0 15"/>
 
-            <!-- Tổng tiền -->
-            <StackPanel Orientation="Vertical" Margin="0,0,0,20">
-                <TextBlock Text="{Binding TotalPriceInfo}" FontSize="14" FontWeight="SemiBold"/>
-            </StackPanel>
+                    <Grid Margin="0 0 0 10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-            <!-- Nút -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Quay lại"
-                        Command="{Binding GoBackCommand}"
-                        Padding="10,5" Margin="0,0,10,0"/>
-                <Button Content="Huỷ toàn bộ vé"
-                        Command="{Binding CancelEntireBookingCommand}"
-                        Background="Red" Foreground="White"
-                        Padding="10,5"
-                        Visibility="{Binding CanCancelAll, Converter={StaticResource BoolToVisibilityConverter}}"/>
-            </StackPanel>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Điểm đi -->
+                        <TextBlock Text="Điểm đi:" FontWeight="Bold" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.MaDiemDi}" Grid.Column="1" Margin="0 5" FontSize="16"/>
+
+                        <!-- Điểm đến -->
+                        <TextBlock Text="Điểm đến:" Grid.Row="1" FontWeight="Bold" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.MaDiemDen}" Grid.Column="1" Grid.Row="1" Margin="0 5" FontSize="16"/>
+
+                        <!-- Giờ đi -->
+                        <TextBlock Text="Giờ đi:" Grid.Row="2" FontWeight="Bold" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.GioDi}" Grid.Column="1" Grid.Row="2" Margin="0 5" FontSize="16"/>
+
+                        <!-- Giờ đến -->
+                        <TextBlock Text="Giờ đến:" Grid.Row="3" FontWeight="Bold" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.GioDen}" Grid.Column="1" Grid.Row="3" Margin="0 5" FontSize="16"/>
+
+                        <!-- Hãng hàng không -->
+                        <TextBlock Text="Hãng hàng không:" Grid.Row="4" FontWeight="Bold" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.HangHangKhong}" Grid.Column="1" Grid.Row="4" Margin="0 5" FontSize="16"/>
+
+                        <!-- Ngày đặt -->
+                        <TextBlock Text="Ngày đặt:" Grid.Row="5" FontWeight="Bold" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.NgayDat}" Grid.Column="1" Grid.Row="5" Margin="0 5" FontSize="16"/>
+
+                        <!-- Loại máy bay -->
+                        <TextBlock Text="Loại máy bay: " FontWeight="Bold" Grid.Row="6" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.LoaiMayBay}" Grid.Column="1" Grid.Row="7" Margin="0 5" FontSize="16"/>
+
+                        <!-- Trạng thái -->
+                        <TextBlock Text="Trạng thái:" Grid.Row="7" FontWeight="Bold" Margin="0 5" FontSize="18"/>
+                        <TextBlock Text="{Binding LichSuDatVe.TrangThai}" Grid.Column="1" Grid.Row="6" Margin="0 5" FontSize="16"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Passenger List -->
+            <Border Background="#F5F7FA" CornerRadius="10" Padding="20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" Opacity="0.2" ShadowDepth="2"/>
+                </Border.Effect>
+
+                <StackPanel>
+                    <TextBlock Text="Danh sách hành khách" FontSize="24" FontWeight="Bold" Margin="0 0 0 15"/>
+
+                    <ItemsControl ItemsSource="{Binding CtdvList}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="White" CornerRadius="8" BorderBrush="#CCC" BorderThickness="1" Padding="10" Margin="0 0 0 10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding HoTenHk}" FontSize="20" FontWeight="SemiBold" Margin="0 0 0 5"/>
+
+                                            <Grid Margin="0 0 0 5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="Giới tính:" FontWeight="Bold" Foreground="Gray" FontSize="16"/>
+                                                <TextBlock Text="{Binding GioiTinh}" Grid.Column="1" FontSize="16"/>
+                                            </Grid>
+
+                                            <Grid Margin="0 0 0 5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="Ngày sinh:" FontWeight="Bold" Foreground="Gray" FontSize="16"/>
+                                                <TextBlock Text="{Binding NgaySinh}" Grid.Column="1" FontSize="16"/>
+                                            </Grid>
+
+                                            <Grid Margin="0 0 0 5"
+                                            Visibility="{Binding GiayToTuyThan, Converter={StaticResource NonNullToVisibilityConverter}}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="Giấy tờ tuỳ thân:" FontWeight="Bold" Foreground="Gray" FontSize="16"/>
+                                                <TextBlock Text="{Binding GiayToTuyThan}" Grid.Column="1" FontSize="16"/>
+                                            </Grid>
+
+                                            <Grid Margin="0 0 0 5"
+                                            Visibility="{Binding HoTenNguoiGiamHo, Converter={StaticResource NonNullToVisibilityConverter}}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="Người giám hộ:" FontWeight="Bold" Foreground="Gray" FontSize="16"/>
+                                                <TextBlock Text="{Binding HoTenNguoiGiamHo}" Grid.Column="1" FontSize="16"/>
+                                            </Grid>
+                                        </StackPanel>
+
+
+                                        <!-- Cancel button -->
+                                        <Button Content="Huỷ"
+                                        Background="Red"
+                                        Foreground="White"
+                                        Width="70"
+                                        Height="30"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0 10 0 0"
+                                        Command="{Binding DataContext.CancelPassengerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Visibility="{Binding CanCancel, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </StackPanel>
+            </Border>
+
         </StackPanel>
-    </Border>
+    </ScrollViewer>
 </UserControl>
