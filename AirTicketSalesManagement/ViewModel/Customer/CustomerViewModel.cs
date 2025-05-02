@@ -19,7 +19,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private BaseViewModel currentViewModel;
 
-        public string IdCustomer { get; set; }
+        public string IdCustomer { get; set; } = "KHDM";
         public CustomerViewModel()
         {
             CurrentViewModel = new HomePageViewModel();
@@ -68,7 +68,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void NavigateToBookingHistory()
         {
-            CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
+            CurrentViewModel = new BookingHistoryViewModel("KHDM", this);
         }
 
         [RelayCommand]

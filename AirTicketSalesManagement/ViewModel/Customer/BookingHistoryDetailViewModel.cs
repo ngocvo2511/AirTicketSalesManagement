@@ -2,6 +2,7 @@
 using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,59 +32,59 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             this.parent = parent;
             LoadData();
         }
-        private void LoadData()
+        private async Task LoadData()
         {
             CanCancle = true;
-            CtdvList = new ObservableCollection<Ctdv>
-            {
-                new Ctdv
-                {
-                    HoTenHk = "Nguyễn Văn A",
-                    GiayToTuyThan = "012345678",
-                    NgaySinh = new DateOnly(1995, 5, 20),
-                    GioiTinh = "Nam",
-                },
-                new Ctdv
-                {
-                    HoTenHk = "Trần Thị B",
-                    GiayToTuyThan = "987654321",
-                    NgaySinh = new DateOnly(2000, 10, 15),
-                    GioiTinh = "Nữ",
-                },
-                new Ctdv
-                {
-                    HoTenHk = "Lê Minh C",
-                    GiayToTuyThan = null, // Không có giấy tờ
-                    NgaySinh = new DateOnly(2015, 8, 12),
-                    GioiTinh = "Nam",
-                    HoTenNguoiGiamHo = "Nguyễn Thị D",
-                }
-            };
-            //try
+            //CtdvList = new ObservableCollection<Ctdv>
             //{
-            //    using (var context = new AirTicketDbContext())
+            //    new Ctdv
             //    {
-            //        var result = (from ctdv in context.Ctdvs
-            //                      where ctdv.MaDv == LichSuDatVe.MaVe
-            //                      select new Ctdv
-            //                      {
-            //                          MaDv = ctdv.MaDv,
-            //                          MaCtdv = ctdv.MaCtdv,
-            //                          HoTenHk = ctdv.HoTenHk,
-            //                          GioiTinh = ctdv.GioiTinh,
-            //                          NgaySinh = ctdv.NgaySinh,
-            //                          GiayToTuyThan = ctdv.GiayToTuyThan,
-            //                          HoTenNguoiGiamHo = ctdv.HoTenNguoiGiamHo,
-            //                          MaLv = ctdv.MaLv,
-            //                          GiaVeTt = ctdv.GiaVeTt
-            //                      }).ToList();
-            //        CtdvList = new ObservableCollection<Ctdv>(result);
+            //        HoTenHk = "Nguyễn Văn A",
+            //        GiayToTuyThan = "012345678",
+            //        NgaySinh = new DateOnly(1995, 5, 20),
+            //        GioiTinh = "Nam",
+            //    },
+            //    new Ctdv
+            //    {
+            //        HoTenHk = "Trần Thị B",
+            //        GiayToTuyThan = "987654321",
+            //        NgaySinh = new DateOnly(2000, 10, 15),
+            //        GioiTinh = "Nữ",
+            //    },
+            //    new Ctdv
+            //    {
+            //        HoTenHk = "Lê Minh C",
+            //        GiayToTuyThan = null, // Không có giấy tờ
+            //        NgaySinh = new DateOnly(2015, 8, 12),
+            //        GioiTinh = "Nam",
+            //        HoTenNguoiGiamHo = "Nguyễn Thị D",
             //    }
-            //}
-            //catch (Exception e)
-            //{
+            //};
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    var result = (from ctdv in context.Ctdvs
+                                  where ctdv.MaDv == LichSuDatVe.MaVe
+                                  select new Ctdv
+                                  {
+                                      MaDv = ctdv.MaDv,
+                                      MaCtdv = ctdv.MaCtdv,
+                                      HoTenHk = ctdv.HoTenHk,
+                                      GioiTinh = ctdv.GioiTinh,
+                                      NgaySinh = ctdv.NgaySinh,
+                                      GiayToTuyThan = ctdv.GiayToTuyThan,
+                                      HoTenNguoiGiamHo = ctdv.HoTenNguoiGiamHo,
+                                      MaLv = ctdv.MaLv,
+                                      GiaVeTt = ctdv.GiaVeTt
+                                  }).ToList();
+                    CtdvList = new ObservableCollection<Ctdv>(result);
+                }
+            }
+            catch (Exception e)
+            {
 
-            //}
+            }
         }
             [RelayCommand]
         private void GoBack()
@@ -134,21 +135,26 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             }
         }
         [RelayCommand]
-        private void CancelAllPassenger()
+        private async Task CancelAllPassenger()
         {
             var result = MessageBox.Show("Bạn có chắc chắn muốn huỷ tất cả hành khách?", "Xác nhận huỷ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
-                RemoveAllPassenger();
+                await RemoveAllPassenger();
             }
         }
-        private void RemoveAllPassenger()
+        private async Task RemoveAllPassenger()
         {
             try
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    
+                    var Ve = context.Datves.FirstOrDefault(v=> v.MaDv == LichSuDatVe.MaVe);
+                    if (Ve != null)
+                    {
+                        context.Datves.Remove(Ve);
+                        await context.SaveChangesAsync();
+                    }
                     GoBack();
                 }
             }

@@ -87,8 +87,6 @@ public partial class AirTicketDbContext : DbContext
 
             entity.ToTable("CTDV");
 
-            entity.HasIndex(e => e.GiayToTuyThan, "UQ__CTDV__F31066F2BCC7DCBE").IsUnique();
-
             entity.Property(e => e.MaCtdv)
                 .HasMaxLength(10)
                 .IsUnicode(false)
