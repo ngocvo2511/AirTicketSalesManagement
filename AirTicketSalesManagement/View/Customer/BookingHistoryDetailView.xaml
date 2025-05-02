@@ -37,11 +37,11 @@
 
                         <!-- Điểm đi -->
                         <TextBlock Text="Điểm đi:" FontWeight="Bold" Margin="0 5" FontSize="16"/>
-                        <TextBlock Text="{Binding LichSuDatVe.MaDiemDi}" Grid.Column="1" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.DiemDi}" Grid.Column="1" Margin="0 5" FontSize="16"/>
 
                         <!-- Điểm đến -->
                         <TextBlock Text="Điểm đến:" Grid.Row="1" FontWeight="Bold" Margin="0 5" FontSize="16"/>
-                        <TextBlock Text="{Binding LichSuDatVe.MaDiemDen}" Grid.Column="1" Grid.Row="1" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.DiemDen}" Grid.Column="1" Grid.Row="1" Margin="0 5" FontSize="16"/>
 
                         <!-- Giờ đi -->
                         <TextBlock Text="Giờ đi:" Grid.Row="2" FontWeight="Bold" Margin="0 5" FontSize="16"/>
@@ -90,7 +90,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel>
-                                            <TextBlock Text="{Binding HoTenHk}" FontSize="20" FontWeight="SemiBold" Margin="0 0 0 5"/>
+                                            <TextBlock Text="{Binding HoTenHk}" FontSize="20" FontWeight="Bold" Margin="0 0 0 5"/>
 
                                             <Grid Margin="0 0 0 5">
                                                 <Grid.ColumnDefinitions>
@@ -109,7 +109,7 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <TextBlock Text="Ngày sinh:" FontWeight="Bold" Foreground="Gray" FontSize="16"/>
-                                                <TextBlock Text="{Binding NgaySinh}" Grid.Column="1" FontSize="16"/>
+                                                <TextBlock Text="{Binding NgaySinh, StringFormat='{}{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="16"/>
                                             </Grid>
 
                                             <Grid Margin="0 0 0 5"
@@ -138,6 +138,7 @@
 
                                         <!-- Cancel button -->
                                         <Button Content="Huỷ"
+                                        BorderThickness="0"
                                         Background="Red"
                                         Foreground="White"
                                         Width="70"
@@ -154,7 +155,34 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    <Grid Margin="0 20 0 0" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="20"/>
+                            <!-- spacing -->
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
 
+                        <!-- Quay lại -->
+                        <Button Content="Quay lại"
+                        BorderThickness="0"
+                        Grid.Column="0"
+                        Height="40"
+                        Background="#007ACC"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Command="{Binding GoBackCommand}"/>
+
+                        <!-- Huỷ toàn bộ -->
+                        <Button Content="Huỷ toàn bộ"
+                        BorderThickness="0"       
+                        Grid.Column="2"
+                        Height="40"
+                        Background="Red"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Command="{Binding CancelAllPassengerCommand}"/>
+                    </Grid>
                 </StackPanel>
             </Border>
 

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +19,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
     public partial class BookingHistoryViewModel : BaseViewModel
     {       
         private readonly CustomerViewModel parent;
+        private ObservableCollection<KQLichSuDatVe> rootHistoryBooking; 
         [ObservableProperty]
         private DateTime? ngayDatFilter;
         [ObservableProperty]
@@ -47,7 +49,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         {
             this.parent = parent;
             //LoadData(idCustomer);
-            HistoryBooking = new ObservableCollection<KQLichSuDatVe>
+            rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
                 {
                     new KQLichSuDatVe
                     {
@@ -67,6 +69,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         MaVe = "MV02",
                         MaDiemDi = "DAT",
                 MaDiemDen = "HAN",
+                DiemDi = "Đà Nẵng(DAT), Việt Nam",
+                DiemDen = "Hà Nội(HAN), Việt Nam",
                 HangHangKhong = "Bamboo Airways",
                 GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
                 GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
@@ -89,45 +93,56 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 SoLuongKhach = 3
             },
                 };
-
+            HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
             IsEmpty = HistoryBooking.Count == 0;
         }
         public async Task LoadData(string idCustomer)
         {
-            using(var context = new AirTicketDbContext())
+            try
             {
-                var result = (from datve in context.Datves
-                              where datve.MaKh == idCustomer
-                              join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
-                              join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
-                              join ctdv in context.Ctdvs on datve.MaDv equals ctdv.MaDv
-                              select new KQLichSuDatVe
-                              {
-                                  MaVe = datve.MaDv,
-                                  MaDiemDi = chuyenbay.Sbdi,
-                                  MaDiemDen = chuyenbay.Sbden,                                
-                                  HangHangKhong = chuyenbay.HangHangKhong,
-                                  GioDi = lichbay.GioDi,
-                                  GioDen = lichbay.GioDen,
-                                  LoaiMayBay = chuyenbay.MayBay,
-                                  NgayDat = datve.ThoiGianDv,
-                                  TrangThai = datve.TtdatVe,
-                                  SoLuongKhach = datve.Ctdvs.Count
-                              }).ToList();             
-                HistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
-                IsEmpty = HistoryBooking.Count == 0;
-                //var airlineName = await context.Datves
-                //                .Where(datv => datv.MaKh == idCustomer)
-                //                .Select(v => v.MaLbNavigation.SoHieuCbNavigation.HangHangKhong)
-                //                .Distinct()
-                //                .ToListAsync();
-                //HangHangKhongList = new ObservableCollection<string>([.. airlineName]);
-                //var danhSach = context.Sanbays
-                //            .AsEnumerable()
-                //            .Select(sb => $"{sb.ThanhPho} ({sb.MaSb}), {sb.QuocGia}")
-                //            .OrderBy(display => display)
-                //            .ToList();
-                //SanBayList = new ObservableCollection<string>(danhSach);
+                using (var context = new AirTicketDbContext())
+                {
+                    var result = await (from datve in context.Datves
+                                  where datve.MaKh == idCustomer
+                                  join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
+                                  join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
+                                  join ctdv in context.Ctdvs on datve.MaDv equals ctdv.MaDv
+                                  join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
+                                  join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
+                                  select new KQLichSuDatVe
+                                  {
+                                      MaVe = datve.MaDv,
+                                      MaDiemDi = chuyenbay.Sbdi,
+                                      MaDiemDen = chuyenbay.Sbden,
+                                      DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
+                                      DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
+                                      HangHangKhong = chuyenbay.HangHangKhong,
+                                      GioDi = lichbay.GioDi,
+                                      GioDen = lichbay.GioDen,
+                                      LoaiMayBay = chuyenbay.MayBay,
+                                      NgayDat = datve.ThoiGianDv,
+                                      TrangThai = datve.TtdatVe,
+                                      SoLuongKhach = datve.Ctdvs.Count
+                                  }).ToListAsync();
+                    rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
+                    HistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
+                    IsEmpty = HistoryBooking.Count == 0;
+                    var airlineName = await context.Chuyenbays
+                                    .Select(v => v.HangHangKhong)
+                                    .Distinct()
+                                    .ToListAsync();
+                    HangHangKhongList = new ObservableCollection<string>([.. airlineName]);
+                    var danhSach = context.Sanbays
+                    .AsEnumerable()
+                    .Select(sb => $"{sb.ThanhPho} ({sb.MaSb}), {sb.QuocGia}")
+                    .OrderBy(display => display)
+                    .ToList();
+                    SanBayList = new ObservableCollection<string>(danhSach);
+                }                
+            }
+            catch(Exception e)
+            {
+
             }
         }
         [RelayCommand]
@@ -138,10 +153,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void SearchHistory()
         {
-            if (HistoryBooking == null) return;
-            if (HistoryBooking.Count != 0)
+            if (rootHistoryBooking == null) return;
+            if (rootHistoryBooking.Count != 0)
             {
-                var filter = HistoryBooking.AsEnumerable();
+                var filter = rootHistoryBooking.AsEnumerable();
                 if (!string.IsNullOrWhiteSpace(NoiDiFilter))
                 {
                     filter = filter.Where(v => v.DiemDi == NoiDiFilter);
@@ -161,6 +176,11 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 HistoryBooking = new ObservableCollection<KQLichSuDatVe>(filter);
                 IsEmpty = HistoryBooking.Count == 0;
             }
+        }
+        [RelayCommand]
+        private void DeleteDate()
+        {
+            NgayDatFilter = null;
         }
     }
 }

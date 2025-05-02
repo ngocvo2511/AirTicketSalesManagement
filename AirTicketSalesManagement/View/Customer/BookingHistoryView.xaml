@@ -44,16 +44,16 @@
             <ComboBox Width="250" Margin="20"
               FontSize="16"
               IsEditable="True"
-              ItemsSource="{Binding DanhSachNoiDi}"
-              SelectedItem="{Binding NoiDiFilter, Mode=TwoWay}"
+              ItemsSource="{Binding SanBayList}"
+              Text="{Binding NoiDiFilter, Mode=TwoWay}"
               materialDesign:HintAssist.Hint="Nơi đi"/>
 
             <!-- ComboBox nơi đến -->
             <ComboBox Width="250" Margin="20"
               IsEditable="True"
               FontSize="16"
-              ItemsSource="{Binding DanhSachNoiDen}"
-              SelectedItem="{Binding NoiDenFilter, Mode=TwoWay}"
+              ItemsSource="{Binding DiemDenList}"
+              Text="{Binding NoiDenFilter, Mode=TwoWay}"
               materialDesign:HintAssist.Hint="Nơi đến"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center" HorizontalAlignment="Left">
@@ -61,26 +61,42 @@
             <ComboBox Width="250" Margin="20"
               FontSize="16"
               IsEditable="True"
-              ItemsSource="{Binding DanhSachHangHangKhong}"
-              SelectedItem="{Binding HangHangKhongFilter, Mode=TwoWay}"
+              ItemsSource="{Binding HangHangKhongList}"
+              Text="{Binding HangHangKhongFilter, Mode=TwoWay}"
               materialDesign:HintAssist.Hint="Hãng hàng không"/>
 
             <!-- DatePicker ngày đặt -->
-            <DatePicker Width="250" Margin="20"
+            <DatePicker Width="250" Margin="20,20,0,20"
             FontSize="16"           
             SelectedDate="{Binding NgayDatFilter, Mode=TwoWay}"
             materialDesign:HintAssist.Hint="Ngày đặt"
             behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
+            <Button
+            Margin="0,20,20,20"
+            BorderThickness="0"
+            Width="41"
+            FontSize="16"
+            ToolTip="Xóa ngày"
+            Background="Red"
+            Command="{Binding DeleteDateCommand}" Height="28">
+                <materialDesign:PackIcon Kind="Delete" 
+                                         Width="16"
+                                         Height="16"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Center"/>
+            </Button>
+
 
             <!-- Nút tìm kiếm -->
             <Button Content="Tìm kiếm"
             FontSize="16"
-Command="{Binding SearchHistoryCommand}"
-Padding="10,4"
-Background="#007ACC"
-Foreground="White"
-FontWeight="SemiBold"
-Cursor="Hand"/>
+            BorderThickness="0"   
+            Command="{Binding SearchHistoryCommand}"
+            Padding="10,4"
+            Background="#007ACC"
+            Foreground="White"
+            FontWeight="SemiBold"
+            Cursor="Hand"/>
         </StackPanel>
 
 
@@ -156,7 +172,7 @@ Cursor="Hand"/>
                                               <Run Text="👥 Số lượng khách: " FontSize="16"/>
                                               <Run Text="{Binding SoLuongKhach}" FontSize="16"/>
                                             </TextBlock>
-                                           
+
                                         </StackPanel>
 
                                         <!-- Cột 4: Nút Chi tiết -->

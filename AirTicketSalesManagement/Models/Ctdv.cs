@@ -17,7 +17,11 @@ public partial class Ctdv
 
     public string? GiayToTuyThan { get; set; }
 
+    public string? SoDtlienLac { get; set; }
+
     public string? HoTenNguoiGiamHo { get; set; }
+
+    public string? CccdnguoiGiamHo { get; set; }
 
     public string? MaLv { get; set; }
 

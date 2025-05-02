@@ -1,12 +1,15 @@
-﻿using AirTicketSalesManagement.Models;
+﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
@@ -18,7 +21,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private int tongTien;
         [ObservableProperty]
-        private ObservableCollection<Ctdv> ctdvList;
+        private ObservableCollection<Ctdv>? ctdvList;
         [ObservableProperty]
         private bool canCancle;
         public BookingHistoryDetailViewModel() { }
@@ -56,16 +59,103 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                     HoTenNguoiGiamHo = "Nguyễn Thị D",
                 }
             };
+            //try
+            //{
+            //    using (var context = new AirTicketDbContext())
+            //    {
+            //        var result = (from ctdv in context.Ctdvs
+            //                      where ctdv.MaDv == LichSuDatVe.MaVe
+            //                      select new Ctdv
+            //                      {
+            //                          MaDv = ctdv.MaDv,
+            //                          MaCtdv = ctdv.MaCtdv,
+            //                          HoTenHk = ctdv.HoTenHk,
+            //                          GioiTinh = ctdv.GioiTinh,
+            //                          NgaySinh = ctdv.NgaySinh,
+            //                          GiayToTuyThan = ctdv.GiayToTuyThan,
+            //                          HoTenNguoiGiamHo = ctdv.HoTenNguoiGiamHo,
+            //                          MaLv = ctdv.MaLv,
+            //                          GiaVeTt = ctdv.GiaVeTt
+            //                      }).ToList();
+            //        CtdvList = new ObservableCollection<Ctdv>(result);
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+
+            //}
         }
-        [RelayCommand]
+            [RelayCommand]
         private void GoBack()
         {
             parent.CurrentViewModel = new BookingHistoryViewModel(parent.IdCustomer, parent);
         }
         [RelayCommand]
-        private void CancelEntireBooking()
+        private async Task CancelPassenger(Ctdv ctdv)
         {
+            var result = MessageBox.Show("Bạn có chắc chắn muốn huỷ hành khách này?", "Xác nhận huỷ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                await RemovePassenger(ctdv);
+            }
+        }
+        private async Task RemovePassenger(Ctdv ctdv)
+        {
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    var khachHang = context.Ctdvs.FirstOrDefault(v => v.MaCtdv == ctdv.MaCtdv);
+                    if (khachHang != null)
+                    {
+                        context.Ctdvs.Remove(khachHang);
+                        await context.SaveChangesAsync();
+                        if (CtdvList != null)
+                        {
+                            CtdvList.Remove(ctdv);
+                        }
+                        if (CtdvList == null || CtdvList.Count == 0)
+                        {
+                            var datVe = context.Datves.FirstOrDefault(v => v.MaDv == ctdv.MaDv);
+                            if (datVe != null)
+                            {
+                                context.Datves.Remove(datVe);
+                                await context.SaveChangesAsync();
+                            }
+                            GoBack();
+                        }
+                    }
+                }
 
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        [RelayCommand]
+        private void CancelAllPassenger()
+        {
+            var result = MessageBox.Show("Bạn có chắc chắn muốn huỷ tất cả hành khách?", "Xác nhận huỷ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                RemoveAllPassenger();
+            }
+        }
+        private void RemoveAllPassenger()
+        {
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    
+                    GoBack();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }

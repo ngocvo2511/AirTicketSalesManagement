@@ -15,13 +15,13 @@ public partial class Datve
 
     public int? Slve { get; set; }
 
-    public string? SoDtlienLac { get; set; }
-
-    public string? Email { get; set; }
-
     public decimal? TongTienTt { get; set; }
 
     public string? TtdatVe { get; set; }
+
+    public string? Email { get; set; }
+
+    public string? SoDtlienLac { get; set; }
 
     public virtual ICollection<Ctdv> Ctdvs { get; set; } = new List<Ctdv>();
 
