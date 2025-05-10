@@ -19,7 +19,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private BaseViewModel currentViewModel;
 
-        public string IdCustomer { get; set; } = "KHDM";
+        public string IdCustomer { get; set; }
         public CustomerViewModel()
         {
             CurrentViewModel = new HomePageViewModel();
@@ -81,7 +81,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private void Logout()
         {
             var currentWindow = Application.Current.MainWindow;
-            var authWindow = new AuthWindow();
+            var authWindow = new AuthWindow()
+            {
+                DataContext = new AuthViewModel()
+            };
             Application.Current.MainWindow = authWindow;
             currentWindow?.Close();
             authWindow.Opacity = 0;

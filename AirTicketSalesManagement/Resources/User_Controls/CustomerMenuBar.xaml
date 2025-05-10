@@ -19,7 +19,7 @@
                 xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
     <Grid>
-        <Border Width="230" CornerRadius="0 15 15 0">
+        <Border Width="230">
             <Border.Background>
                 <LinearGradientBrush>
                     <GradientStop Color="#84BCF4" Offset="0.1" />

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Media;
+using System.Diagnostics;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
@@ -80,7 +81,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         }
         public bool HasErrors => _errors.Any();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-        public IEnumerable GetErrors(string propertyName)
+        public IEnumerable? GetErrors(string propertyName)
         {
             if (!string.IsNullOrWhiteSpace(propertyName) && _errors.ContainsKey(propertyName))
                 return _errors[propertyName];
@@ -120,7 +121,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    maxLength = context.Model.FindEntityType(nameof(Khachhang)).GetProperty("MaKh").GetMaxLength() - 2;
+                    maxLength = context.Model.FindEntityType(typeof(Khachhang)).FindProperty(nameof(Khachhang.MaKh)).GetMaxLength() - 2;
                     var lastID = context.Khachhangs.OrderByDescending(c => c.MaKh).Select(c => c.MaKh).FirstOrDefault();
                     int nextNumber = 1;
                     if (lastID != null)
@@ -135,7 +136,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     return prefix + formattedNumber;
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 isFailed = true;
                 return string.Empty;
@@ -163,7 +164,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     var customerAccount = new Taikhoan
                     {
                         Email = Email,
-                        VaiTro = "Khach hang",
+                        VaiTro = "KhachHang",
                         MatKhau = hashPass,
                         MaKhNavigation = customer
                     };
@@ -174,6 +175,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex);
                 isFailed = true;
                 await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
                 return;

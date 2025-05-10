@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
@@ -100,20 +101,24 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     }
                     else
                     {
-                        if (user.VaiTro == "Khach hang")
+                        if (user.VaiTro == "KhachHang")
                         {
                             var currentWindow = Application.Current.MainWindow;
-                            var customerWindow = new CustomerWindow();
-                            var vm = customerWindow.DataContext as Customer.CustomerViewModel;
+                            var vm = new Customer.CustomerViewModel();
                             vm.IdCustomer = user.MaKh;
-                            Application.Current.MainWindow = currentWindow;
+
+                            var customerWindow = new CustomerWindow
+                            {
+                                DataContext = vm
+                            };
+                            Application.Current.MainWindow = customerWindow;
                             currentWindow?.Close();
                             customerWindow.Opacity = 0;
                             customerWindow.Show();
                             var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
                             customerWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
                         }
-                        else if (user.VaiTro == "Nhan vien")
+                        else if (user.VaiTro == "NhanVien")
                         {
 
                         }
