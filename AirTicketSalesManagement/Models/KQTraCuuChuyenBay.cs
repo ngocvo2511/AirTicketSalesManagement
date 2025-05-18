@@ -16,7 +16,13 @@ namespace AirTicketSalesManagement.Models
         private string maSBDen;
 
         [ObservableProperty]
+        private string maLichBay;
+
+        [ObservableProperty]
         private string hangHangKhong;
+
+        [ObservableProperty]
+        private DateTime ngayDi;
 
         [ObservableProperty]
         private TimeSpan gioDi;

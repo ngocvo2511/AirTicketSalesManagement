@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Staff.Staff_ManageSchedules"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:AirTicketSalesManagement.ViewModel.Staff"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="1000">
+
+    <UserControl.DataContext>
+        <vm:StaffManageSchedulesVM />
+    </UserControl.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Bộ lọc lịch bay -->
+        <Border Grid.Row="0" Background="#F5F7FA" CornerRadius="8" Padding="16" Margin="0,0,0,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         materialDesign:HintAssist.Hint="Mã chuyến bay"
+                         Text="{Binding FlightCode, Mode=TwoWay}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Margin="0,0,12,0"/>
+
+                <DatePicker Grid.Column="1"
+                            materialDesign:HintAssist.Hint="Ngày bay"
+                            SelectedDate="{Binding ScheduleDate, Mode=TwoWay}"
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                            Margin="0,0,12,0"/>
+
+                <TextBox Grid.Column="2"
+                         materialDesign:HintAssist.Hint="Trạng thái"
+                         Text="{Binding Status, Mode=TwoWay}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Margin="0,0,12,0"/>
+
+                <Button Grid.Column="3"
+                        Content="THÊM"
+                        Width="100"
+                        Command="{Binding AddCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#388FF4"
+                        Foreground="White"/>
+            </Grid>
+        </Border>
+
+        <!-- Danh sách lịch bay -->
+        <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="8">
+            <DataGrid ItemsSource="{Binding Schedules}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      RowHeight="40"
+                      FontSize="14">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Mã chuyến"
+                                        Binding="{Binding FlightCode}"
+                                        Width="*"/>
+                    <DataGridTextColumn Header="Ngày bay"
+                                        Binding="{Binding Date, StringFormat=dd/MM/yyyy}"
+                                        Width="*"/>
+                    <DataGridTextColumn Header="Trạng thái"
+                                        Binding="{Binding Status}"
+                                        Width="*"/>
+                    <DataGridTemplateColumn Header="Hành động" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="Sửa"
+                                            Margin="0,0,4,0"
+                                            Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"/>
+                                    <Button Content="Xóa"
+                                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Foreground="Red"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

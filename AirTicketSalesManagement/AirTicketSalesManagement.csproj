@@ -9,11 +9,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="appsettings.json" />
 		<None Remove="Resources\Images\homebg.png" />
 		<None Remove="Resources\Images\logo.png" />
 		<None Remove="Resources\Images\logoxoanen.png" />
 		<None Remove="Resources\Images\removebg.png" />
+		<None Remove="Resources\Images\vnpay_logo.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,9 +48,14 @@
 		<Resource Include="Resources\Images\removebg.png">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Resource>
+		<Resource Include="Resources\Images\vnpay_logo.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModel\Staff\" />
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 ﻿<Window x:Class="AirTicketSalesManagement.View.Login.AuthWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         Title="Đăng nhập" Height="600" Width="900"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -24,7 +25,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
-
             <!-- Phần bên trái với gradient và logo -->
             <Border CornerRadius="10 0 0 10">
                 <Border.Background>
@@ -66,7 +66,7 @@
             <!-- Nút đóng ứng dụng - đã chuyển ra ngoài, nằm ở góc trên bên phải -->
             <Button x:Name="btnClose" 
                     Grid.Column="1"
-                    Content="✕" 
+                    
                     HorizontalAlignment="Right" 
                     VerticalAlignment="Top"
                     Width="30" Height="30"
@@ -96,6 +96,7 @@
                         </Setter>
                     </Style>
                 </Button.Style>
+                <Icon:PackIconMaterial Kind="WindowClose" Width="16" Height="16" />
             </Button>
         </Grid>
     </Border>

@@ -1,4 +1,6 @@
-﻿using AirTicketSalesManagement.View.Login;
+﻿using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.View.Login;
 using AirTicketSalesManagement.ViewModel.Login;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,11 +18,39 @@ namespace AirTicketSalesManagement.ViewModel.Customer
     {
         [ObservableProperty]
         private BaseViewModel currentViewModel;
-        
-        public string idCustomer {  get; set; }
+
+        public string IdCustomer { get; set; }
         public CustomerViewModel()
         {
             CurrentViewModel = new HomePageViewModel();
+
+            NavigationService.NavigateToAction = (viewModelType, parameter) =>
+            {
+                if (viewModelType == typeof(PassengerInformationViewModel))
+                {
+                    CurrentViewModel = new PassengerInformationViewModel((ThongTinChuyenBayDuocChon)parameter);
+                }
+                else if (viewModelType == typeof(PaymentConfirmationViewModel))
+                {
+                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinHanhKhachVaChuyenBay)parameter);
+                }
+                else if (viewModelType == typeof(HomePageViewModel))
+                {
+                    CurrentViewModel = new HomePageViewModel();
+                }
+            };
+
+            NavigationService.NavigateBackAction = (previousViewModelType, previousParameter) =>
+            {
+                if (previousViewModelType == typeof(PassengerInformationViewModel))
+                {
+                    CurrentViewModel = new FlightScheduleSearchViewModel();
+                }
+                else if (previousViewModelType == typeof(PaymentConfirmationViewModel))
+                {
+                    CurrentViewModel = new PassengerInformationViewModel((ThongTinChuyenBayDuocChon)previousParameter);
+                }
+            };
         }
 
         [RelayCommand]
@@ -38,13 +68,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void NavigateToBookingHistory()
         {
-            CurrentViewModel = new BookingHistoryViewModel();
-        }
-
-        [RelayCommand]
-        private void NavigateToFlightScheduleSearch()
-        {
-            CurrentViewModel = new FlightScheduleSearchViewModel();
+            CurrentViewModel = new BookingHistoryViewModel("KHDM", this);
         }
 
         [RelayCommand]
@@ -57,14 +81,16 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private void Logout()
         {
             var currentWindow = Application.Current.MainWindow;
-            var authWindow = new AuthWindow();
+            var authWindow = new AuthWindow()
+            {
+                DataContext = new AuthViewModel()
+            };
             Application.Current.MainWindow = authWindow;
             currentWindow?.Close();
             authWindow.Opacity = 0;
             authWindow.Show();
             var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
             authWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
-
         }
 
     }

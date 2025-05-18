@@ -9,7 +9,7 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980"
-             DataContext="{StaticResource HomePageVM}">
+             >
     <Grid>
 
         <Image Source="/Resources/Images/homebg.png" 
@@ -62,7 +62,8 @@
                               IsEditable="True"
                               Width="400"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                              Margin="0 0 0 20">
+                              Margin="0 0 0 20"
+                              Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem>TP.Hồ Chí Minh</ComboBoxItem>
                         <ComboBoxItem>Hà Nội</ComboBoxItem>
                         <ComboBoxItem>Huế</ComboBoxItem>

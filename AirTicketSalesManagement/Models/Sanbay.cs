@@ -18,6 +18,4 @@ public partial class Sanbay
     public virtual ICollection<Chuyenbay> ChuyenbaySbdiNavigations { get; set; } = new List<Chuyenbay>();
 
     public virtual ICollection<Sanbaytrunggian> Sanbaytrunggians { get; set; } = new List<Sanbaytrunggian>();
-
-    public string DisplayName => $"{ThanhPho} ({MaSb}), {QuocGia}";
 }

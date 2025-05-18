@@ -1,0 +1,315 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Customer.PassengerInformationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="980"
+             >
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Tiêu đề -->
+            <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Thông tin hành khách" 
+                                   FontSize="22" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"/>
+                        <TextBlock Text="Vui lòng điền đầy đủ thông tin hành khách theo đúng giấy tờ tùy thân" 
+                                   FontSize="14" 
+                                   Foreground="White" 
+                                   Opacity="0.9" 
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Chuyến bay: " 
+                                   FontSize="14" 
+                                   Foreground="White"/>
+                        <TextBlock Text="{Binding FlightCode}" 
+                                   FontSize="14" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="White"/>
+                        <TextBlock Text=" | Hạng vé: " 
+           FontSize="14" 
+           Foreground="White"/>
+                        <TextBlock Text="{Binding SelectedTicketClass.TenHangVe}" 
+           FontSize="14" 
+           FontWeight="SemiBold" 
+           Foreground="White"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Danh sách hành khách -->
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding PassengerList}" Margin="0,0,0,20">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#F5F7FA" 
+                                CornerRadius="10" 
+                                Padding="20" 
+                                Margin="0,0,0,15">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Tiêu đề hành khách -->
+                                <Grid Grid.Row="0" Margin="0,0,0,15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                        <TextBlock Text="{Binding PassengerTypeText}" 
+                                                   FontSize="16" 
+                                                   FontWeight="SemiBold" 
+                                                   Foreground="#388FF4"/>
+                                        <TextBlock Text=" #" 
+                                                   FontSize="16" 
+                                                   FontWeight="SemiBold" 
+                                                   Foreground="#388FF4"/>
+                                        <TextBlock Text="{Binding Index}" 
+                                                   FontSize="16" 
+                                                   FontWeight="SemiBold" 
+                                                   Foreground="#388FF4"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="1" 
+                                               Text="{Binding PassengerTypeDescription}" 
+                                               Foreground="#666666"/>
+                                </Grid>
+
+                                <!-- Thông tin hành khách -->
+                                <Grid Grid.Row="1">
+                                    <!-- Template cho Người lớn -->
+                                    <Grid Visibility="{Binding IsAdult, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Họ tên -->
+                                        <TextBox Grid.Column="0" Grid.Row="0"
+                                                 Margin="0,0,10,15"
+                                                 materialDesign:HintAssist.Hint="Họ và tên (theo CCCD/Hộ chiếu)"
+                                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                 Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                        <!-- Giới tính -->
+                                        <ComboBox Grid.Column="1" Grid.Row="0"
+                                                  Margin="10,0,0,15"
+                                                  materialDesign:HintAssist.Hint="Giới tính"
+                                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                                  ItemsSource="{Binding GenderOptions}"
+                                                  SelectedItem="{Binding Gender}"/>
+
+                                        <!-- Ngày sinh -->
+                                        <DatePicker Grid.Column="0" Grid.Row="1"
+                                                    Margin="0,0,10,15"
+                                                    materialDesign:HintAssist.Hint="Ngày sinh"
+                                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                                    SelectedDate="{Binding DateOfBirth}"/>
+
+                                        <!-- CCCD/Hộ chiếu -->
+                                        <TextBox Grid.Column="1" Grid.Row="1"
+                                                 Margin="10,0,0,15"
+                                                 materialDesign:HintAssist.Hint="Số CCCD/Hộ chiếu"
+                                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                 Text="{Binding IdentityNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+
+                                    <!-- Template cho Trẻ em -->
+                                    <Grid Visibility="{Binding IsChild, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Họ tên -->
+                                        <TextBox Grid.Column="0" Grid.Row="0"
+                                                 Margin="0,0,10,15"
+                                                 materialDesign:HintAssist.Hint="Họ và tên"
+                                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                 Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                        <!-- Giới tính -->
+                                        <ComboBox Grid.Column="1" Grid.Row="0"
+                                                  Margin="10,0,0,15"
+                                                  materialDesign:HintAssist.Hint="Giới tính"
+                                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                                  ItemsSource="{Binding GenderOptions}"
+                                                  SelectedItem="{Binding Gender}"/>
+
+                                        <!-- Ngày sinh -->
+                                        <DatePicker Grid.Column="0" Grid.Row="1"
+                                                    Margin="0,0,10,15"
+                                                    materialDesign:HintAssist.Hint="Ngày sinh"
+                                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                                    SelectedDate="{Binding DateOfBirth}"/>
+                                    </Grid>
+
+                                    <!-- Template cho Em bé -->
+                                    <Grid Visibility="{Binding IsInfant, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Họ tên -->
+                                        <TextBox Grid.Column="0" Grid.Row="0"
+                                                 Margin="0,0,10,15"
+                                                 materialDesign:HintAssist.Hint="Họ và tên"
+                                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                 Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                        <!-- Giới tính -->
+                                        <ComboBox Grid.Column="1" Grid.Row="0"
+                                                  Margin="10,0,0,15"
+                                                  materialDesign:HintAssist.Hint="Giới tính"
+                                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                                  ItemsSource="{Binding GenderOptions}"
+                                                  SelectedItem="{Binding Gender}"/>
+
+                                        <!-- Ngày sinh -->
+                                        <DatePicker Grid.Column="0" Grid.Row="1"
+                                                    Margin="0,0,10,15"
+                                                    materialDesign:HintAssist.Hint="Ngày sinh"
+                                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                                    SelectedDate="{Binding DateOfBirth}"/>
+
+                                        <!-- Bay cùng -->
+                                        <Grid Grid.Column="1" Grid.Row="1" Margin="10,0,0,15">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0" 
+                                                       Text="Bay cùng: " 
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,10,0"/>
+
+                                            <ComboBox Grid.Column="1"
+                                                      materialDesign:HintAssist.Hint="Chọn người lớn đi cùng"
+                                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                                      ItemsSource="{Binding AdultPassengers}"
+                                                      DisplayMemberPath="FullName"
+                                                      SelectedItem="{Binding AccompanyingAdult}"/>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Thông tin liên hệ -->
+            <Border Grid.Row="2" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Tiêu đề -->
+                    <TextBlock Grid.Row="0" 
+                               Text="Thông tin liên hệ" 
+                               FontSize="16" 
+                               FontWeight="SemiBold" 
+                               Foreground="#388FF4"
+                               Margin="0,0,0,15"/>
+
+                    <!-- Form thông tin liên hệ -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Email -->
+                        <TextBox Grid.Column="0"
+                                 Margin="0,0,10,0"
+                                 materialDesign:HintAssist.Hint="Email"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Text="{Binding ContactEmail, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Số điện thoại -->
+                        <TextBox Grid.Column="1"
+                                 Margin="10,0,0,0"
+                                 materialDesign:HintAssist.Hint="Số điện thoại"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Text="{Binding ContactPhone, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Nút điều hướng -->
+            <Grid Grid.Row="3" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Quay lại -->
+                <Button Grid.Column="0"
+                        Content="QUAY LẠI"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Foreground="#388FF4"
+                        Height="50"
+                        Width="150"
+                        FontSize="14"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Left"
+                        Command="{Binding BackCommand}"/>
+
+                <!-- Tiếp tục -->
+                <Button Grid.Column="1"
+                        Content="TIẾP TỤC"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#388FF4"
+                        Foreground="White"
+                        Height="50"
+                        Width="150"
+                        FontSize="14"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Right"
+                        Command="{Binding ContinueCommand}">
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3"/>
+                    </Button.Effect>
+                </Button>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,7 +1,4 @@
-﻿using AirTicketSalesManagement.Models;
-using AirTicketSalesManagement.Services;
-using AirTicketSalesManagement.ViewModel.Customer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AirTicketSalesManagement.View.Customer
+namespace AirTicketSalesManagement.View.Staff
 {
     /// <summary>
-    /// Interaction logic for CustomerWindow.xaml
+    /// Interaction logic for Staff_ManageSchedules.xaml
     /// </summary>
-    public partial class CustomerWindow : Window
+    public partial class Staff_ManageSchedules : UserControl
     {
-        public CustomerWindow()
+        public Staff_ManageSchedules()
         {
             InitializeComponent();
         }

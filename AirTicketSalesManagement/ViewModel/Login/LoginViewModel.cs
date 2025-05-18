@@ -9,7 +9,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
@@ -17,6 +19,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
     {
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
+        public ToastViewModel Toast { get; } = new ToastViewModel();
 
         [ObservableProperty]
         private string email;
@@ -82,7 +85,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         }
 
         [RelayCommand]
-        private void Login()
+        private async Task Login()
         {
             Validate();
             if (HasErrors) return;
@@ -98,20 +101,24 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     }
                     else
                     {
-                        if (user.VaiTro == "Khach hang")
+                        if (user.VaiTro == "KhachHang")
                         {
                             var currentWindow = Application.Current.MainWindow;
-                            var customerWindow = new CustomerWindow();
-                            var vm = customerWindow.DataContext as Customer.CustomerViewModel;
-                            vm.idCustomer = user.MaKh;
-                            Application.Current.MainWindow = currentWindow;
+                            var vm = new Customer.CustomerViewModel();
+                            vm.IdCustomer = user.MaKh;
+
+                            var customerWindow = new CustomerWindow
+                            {
+                                DataContext = vm
+                            };
+                            Application.Current.MainWindow = customerWindow;
                             currentWindow?.Close();
                             customerWindow.Opacity = 0;
                             customerWindow.Show();
                             var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
                             customerWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
                         }
-                        else if (user.VaiTro == "Nhan vien")
+                        else if (user.VaiTro == "NhanVien")
                         {
 
                         }
@@ -125,8 +132,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
             }
             catch (Exception ex)
             {
-                // add notify disconnect to database
-                return;
+                await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
             }
         }
         

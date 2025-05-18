@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AirTicketSalesManagement.View.MainWindows.Customer
+namespace AirTicketSalesManagement.View.Notification
 {
     /// <summary>
-    /// Interaction logic for TicketInfoFillUC.xaml
+    /// Interaction logic for ToastView.xaml
     /// </summary>
-    public partial class TicketInfoFillUC : UserControl
+    public partial class ToastView : UserControl
     {
-        public TicketInfoFillUC()
+        public ToastView()
         {
             InitializeComponent();
         }

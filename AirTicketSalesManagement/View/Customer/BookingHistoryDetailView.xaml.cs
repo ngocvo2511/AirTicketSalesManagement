@@ -1,6 +1,4 @@
-﻿using AirTicketSalesManagement.Models;
-using AirTicketSalesManagement.Services;
-using AirTicketSalesManagement.ViewModel.Customer;
+﻿using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +11,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace AirTicketSalesManagement.View.Customer
 {
     /// <summary>
-    /// Interaction logic for CustomerWindow.xaml
+    /// Interaction logic for BookingHistoryDetailView.xaml
     /// </summary>
-    public partial class CustomerWindow : Window
+    public partial class BookingHistoryDetailView : UserControl
     {
-        public CustomerWindow()
+        public BookingHistoryDetailView()
         {
             InitializeComponent();
         }

@@ -1,0 +1,338 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Customer.PaymentConfirmationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="980"
+             >
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Tiêu đề -->
+            <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Xác nhận thanh toán" 
+                                   FontSize="22" 
+                                   FontWeight="Bold" 
+                                   Foreground="White"/>
+                        <TextBlock Text="Vui lòng xác nhận thông tin và chọn phương thức thanh toán" 
+                                   FontSize="14" 
+                                   Foreground="White" 
+                                   Opacity="0.9" 
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Chuyến bay: " 
+                                   FontSize="14" 
+                                   Foreground="White"/>
+                        <TextBlock Text="{Binding FlightCode}" 
+                                   FontSize="14" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="White"/>
+                        <TextBlock Text=" | Hạng vé: " 
+                                   FontSize="14" 
+                                   Foreground="White"/>
+                        <TextBlock Text="{Binding SelectedTicketClass.TenHangVe}" 
+                                   FontSize="14" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="White"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Thông tin chuyến bay -->
+            <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Tiêu đề -->
+                    <TextBlock Grid.Row="0" 
+                               Text="Thông tin chuyến bay" 
+                               FontSize="16" 
+                               FontWeight="SemiBold" 
+                               Foreground="#388FF4"
+                               Margin="0,0,0,15"/>
+
+                    <!-- Chi tiết chuyến bay -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Logo hãng bay -->
+                        <Image Grid.Column="0" Width="60" Height="60" Margin="0,0,15,0" Source="{Binding LogoUrl}"/>
+
+                        <!-- Thông tin chuyến bay -->
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <TextBlock Text="{Binding Flight.MaSBDi}" FontWeight="Bold" FontSize="16"/>
+                                <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Flight.MaSBDen}" FontWeight="Bold" FontSize="16"/>
+                                <TextBlock Text=" | " Margin="5,0" FontSize="16"/>
+                                <TextBlock Text="{Binding Flight.HangHangKhong}" FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
+                                <TextBlock Text="{Binding Flight.NgayDi, StringFormat=dd/MM/yyyy}" FontWeight="SemiBold"/>
+                                <TextBlock Text=" | " Margin="5,0"/>
+                                <TextBlock Text="{Binding Flight.GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
+                                <TextBlock Text=" - " Margin="5,0"/>
+                                <TextBlock Text="{Binding Flight.GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
+                                <TextBlock Text=" | " Margin="5,0"/>
+                                <TextBlock Text="{Binding Flight.ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+                                <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Flight.MayBay}" Foreground="#666666"/>
+                                <TextBlock Text=" | " Margin="5,0"/>
+                                <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Hạng: " Foreground="#666666"/>
+                                <TextBlock Text="{Binding SelectedTicketClass.TenHangVe}" Foreground="#666666" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Chi tiết hóa đơn -->
+            <Border Grid.Row="2" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Tiêu đề -->
+                    <TextBlock Grid.Row="0" 
+                               Text="Chi tiết hóa đơn" 
+                               FontSize="16" 
+                               FontWeight="SemiBold" 
+                               Foreground="#388FF4"
+                               Margin="0,0,0,15"/>
+
+                    <!-- Danh sách chi tiết -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Người lớn -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" 
+                                   Text="{Binding AdultSummary}" 
+                                   Margin="0,0,0,8"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" 
+                                   Text="{Binding AdultTotalPrice, StringFormat={}{0:N0} VND}" 
+                                   TextAlignment="Right" 
+                                   Margin="0,0,0,8"/>
+
+                        <!-- Trẻ em -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" 
+                                   Text="{Binding ChildSummary}" 
+                                   Margin="0,0,0,8"
+                                   Visibility="{Binding HasChildren, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" 
+                                   Text="{Binding ChildTotalPrice, StringFormat={}{0:N0} VND}" 
+                                   TextAlignment="Right" 
+                                   Margin="0,0,0,8"
+                                   Visibility="{Binding HasChildren, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <!-- Em bé -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" 
+                                   Text="{Binding InfantSummary}" 
+                                   Margin="0,0,0,8"
+                                   Visibility="{Binding HasInfants, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" 
+                                   Text="{Binding InfantTotalPrice, StringFormat={}{0:N0} VND}" 
+                                   TextAlignment="Right" 
+                                   Margin="0,0,0,8"
+                                   Visibility="{Binding HasInfants, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <!-- Phí và thuế -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" 
+                                   Text="Thuế và phí dịch vụ" 
+                                   Margin="0,0,0,8"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" 
+                                   Text="{Binding TaxAndFees, StringFormat={}{0:N0} VND}" 
+                                   TextAlignment="Right" 
+                                   Margin="0,0,0,8"/>
+
+                        <!-- Đường kẻ chia -->
+                        <Separator Grid.Row="4" Grid.ColumnSpan="2" 
+                                   Margin="0,5,0,10"/>
+                    </Grid>
+
+                    <!-- Tổng tiền -->
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   Text="Tổng tiền thanh toán" 
+                                   FontWeight="Bold" 
+                                   FontSize="16"/>
+                        <TextBlock Grid.Column="1" 
+                                   Text="{Binding TotalPrice, StringFormat={}{0:N0} VND}" 
+                                   FontWeight="Bold" 
+                                   FontSize="18" 
+                                   Foreground="#FF6600" 
+                                   TextAlignment="Right"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Phương thức thanh toán -->
+            <Border Grid.Row="3" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Tiêu đề -->
+                    <TextBlock Grid.Row="0" 
+                               Text="Phương thức thanh toán" 
+                               FontSize="16" 
+                               FontWeight="SemiBold" 
+                               Foreground="#388FF4"
+                               Margin="0,0,0,15"/>
+
+                    <!-- Các lựa chọn thanh toán -->
+                    <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,0">
+                        <!-- VNPay -->
+                        <RadioButton GroupName="PaymentMethod" 
+                                     IsChecked="{Binding IsVNPaySelected}"
+                                     Margin="0,0,0,15"
+                                     Style="{StaticResource MaterialDesignRadioButton}">
+                            <Grid Width="800">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Image Grid.Column="0" 
+                                       Source="/Resources/Images/vnpay_logo.png" 
+                                       Width="40" 
+                                       Height="40" 
+                                       Margin="0,0,15,0"/>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Thanh toán online qua VNPay" 
+                                               FontWeight="Medium" 
+                                               FontSize="14"/>
+                                    <TextBlock Text="Thanh toán bằng QR code hoặc thẻ ATM/Visa/MasterCard qua cổng VNPay" 
+                                               Foreground="#666666" 
+                                               FontSize="12" 
+                                               Margin="0,3,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </RadioButton>
+
+                        <!-- Tiền mặt -->
+                        <RadioButton GroupName="PaymentMethod" 
+                                     IsChecked="{Binding IsCashSelected}"
+                                     Style="{StaticResource MaterialDesignRadioButton}">
+                            <Grid Width="800">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <materialDesign:PackIcon Grid.Column="0" 
+                                                         Kind="Cash" 
+                                                         Width="40" 
+                                                         Height="40" 
+                                                         Foreground="#00A859" 
+                                                         Margin="0,0,15,0"/>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Thanh toán tiền mặt tại quầy" 
+                                               FontWeight="Medium" 
+                                               FontSize="14"/>
+                                    <TextBlock Text="Quý khách vui lòng thanh toán trực tiếp tại quầy vé trong vòng 24 giờ sau khi đặt vé" 
+                                               Foreground="#666666" 
+                                               FontSize="12" 
+                                               Margin="0,3,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </RadioButton>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Nút điều hướng -->
+            <Grid Grid.Row="4" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Quay lại -->
+                <Button Grid.Column="0"
+                        Content="QUAY LẠI"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Foreground="#388FF4"
+                        Height="50"
+                        Width="150"
+                        FontSize="14"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Left"
+                        Command="{Binding BackCommand}"/>
+
+                <!-- Thanh toán -->
+                <Button Grid.Column="1"
+                        Content="THANH TOÁN"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#388FF4"
+                        Foreground="White"
+                        Height="50"
+                        Width="150"
+                        FontSize="14"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Right"
+                        Command="{Binding ProcessPaymentCommand}">
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3"/>
+                    </Button.Effect>
+                </Button>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
