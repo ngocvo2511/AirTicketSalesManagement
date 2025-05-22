@@ -1,0 +1,120 @@
+﻿<Window x:Class="AirTicketSalesManagement.View.Admin.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:uc="clr-namespace:AirTicketSalesManagement.Resources.User_Controls"
+        xmlns:body="clr-namespace:AirTicketSalesManagement.View.Admin"
+        xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="FlyTogether" Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="White">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ResourceXAML/MainResource.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0"
+              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+              TextElement.FontWeight="Regular"
+              TextElement.FontSize="13"
+              TextOptions.TextFormattingMode="Ideal"
+              TextOptions.TextRenderingMode="Auto"
+              TextElement.FontFamily="{DynamicResource MaterialDesignFont}">
+            <Border Width="230" CornerRadius="0 15 15 0">
+                <Border.Background>
+                    <LinearGradientBrush>
+                        <GradientStop Color="#84BCF4" Offset="0.1" />
+                        <GradientStop Color="#388FF4" Offset="0.4" />
+                        <GradientStop Color="#5371FF" Offset="0.95" />
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <DockPanel Margin="10" LastChildFill="True">
+
+                    <!-- Đăng xuất dock bottom -->
+                    <Button DockPanel.Dock="Bottom"
+                            Style="{StaticResource SidebarButton}"                      
+                            Margin="0 40 10 40"
+                            Command="{Binding LogoutCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="Logout" Width="24" Height="24" 
+                                                    Margin="0,0,10,0" />
+                            <TextBlock Text="Đăng xuất" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Nội dung còn lại -->
+                    <!-- Sidebar -->
+                    <StackPanel>
+                        <!-- Logo -->
+                        <Grid Margin="0,10,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Image Source="pack://application:,,,/Resources/Images/logo.png"
+                                   Height="60" Width="60"
+                                   Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left" />
+
+                            <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}"
+                                          Command="{Binding ToggleExpandCommand}"
+                                          Grid.Column="1"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          Margin="5" />
+                        </Grid>
+
+                        <TextBlock Text="Quản trị viên" FontWeight="Bold" 
+                                   FontSize="16" Foreground="White" 
+                                   Margin="0,20,0,10"/>
+
+                        <!-- Trang chủ -->
+                        <Button Style="{StaticResource SidebarButton}"
+                                Command="{Binding NavigateToHomeCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="Home" Width="24" Height="24" Margin="0,0,10,0" />
+                                <TextBlock Text="Trang chủ" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Thông tin cá nhân -->
+                        <Button Style="{StaticResource SidebarButton}"
+                                Command="{Binding NavigateToProfileCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="AccountCircleOutline" Width="24" Height="24" Margin="0,0,10,0" />
+                                <TextBlock Text="Thông tin cá nhân" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Quản lý tài khoản -->
+                        <Button Style="{StaticResource SidebarButton}"
+                                Command="{Binding NavigateToAccountManagementCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="AccountMultiple" Width="24" Height="24" Margin="0,0,10,0" />
+                                <TextBlock Text="Quản lý tài khoản" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <ContentControl x:Name="MainContent" Grid.Row="1" 
+                            Content="{Binding CurrentViewModel}"/>
+        </Grid>
+    </Grid>
+</Window>

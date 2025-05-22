@@ -108,7 +108,23 @@
                                   Margin="0,0,10,10"
                                   ExpandDirection="Down">
 
+<<<<<<< HEAD
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
+                                   Height="24" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Đặt vé" 
+                                               FontWeight="Bold"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Expander.Header>
+
+                            <StackPanel Margin="10,5,0,5">
+                                <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5"
+                                        Command="{Binding NavigateToFlightTicketBookingCommand}">
+=======
                                 <Expander.Header>
+>>>>>>> master
                                     <StackPanel Orientation="Horizontal">
                                         <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
                                    Height="24" Margin="0,0,10,0"/>
