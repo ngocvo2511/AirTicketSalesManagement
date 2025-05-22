@@ -133,6 +133,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
             // Chuyển sang PassengerInformationView và truyền thông tin chuyến bay
             NavigationService.NavigateTo<PassengerInformationViewModel>(selectedFlightInfo);
+
         }
 
         // Mở popup chọn hành khách

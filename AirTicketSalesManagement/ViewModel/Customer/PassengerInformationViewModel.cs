@@ -50,6 +50,40 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             InitializePassengerList(selectedFlightInfo.Flight.NumberAdults, selectedFlightInfo.Flight.NumberChildren, selectedFlightInfo.Flight.NumberInfants); // Thay bằng dữ liệu thực tế nếu cần
         }
 
+        public PassengerInformationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay) : this(thongTinHanhKhachVaChuyenBay.FlightInfo)
+        {
+            AddExistingInformation(thongTinHanhKhachVaChuyenBay);
+        }
+
+        private void AddExistingInformation(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay)
+        {
+            if (thongTinHanhKhachVaChuyenBay?.PassengerList == null || PassengerList == null)
+                return;
+
+            for (int i = 0; i < thongTinHanhKhachVaChuyenBay.PassengerList.Count && i < PassengerList.Count; i++)
+            {
+                var source = thongTinHanhKhachVaChuyenBay.PassengerList[i];
+                var target = PassengerList[i];
+
+                target.FullName = source.HoTen;
+                target.Gender = source.GioiTinh;
+                target.DateOfBirth = source.NgaySinh;
+                target.IdentityNumber = source.CCCD;
+
+                // Nếu là Infant thì kiểm tra thông tin người đi kèm
+                if (target.PassengerType == PassengerType.Infant && !string.IsNullOrEmpty(source.HoTenNguoiGiamHo))
+                {
+                    var matchingAdult = PassengerList
+                        .FirstOrDefault(p => p.PassengerType == PassengerType.Adult && p.FullName == source.HoTenNguoiGiamHo);
+
+                    target.AccompanyingAdult = matchingAdult;
+                }
+            }
+
+            ContactEmail = thongTinHanhKhachVaChuyenBay.ContactEmail;
+            ContactPhone = thongTinHanhKhachVaChuyenBay.ContactPhone;
+        }
+
         private void InitializePassengerList(int adultCount, int childCount, int infantCount)
         {
             PassengerList = new ObservableCollection<PassengerInfoModel>();

@@ -10,7 +10,7 @@
         Background="White"
         WindowStyle="None"
         AllowsTransparency="True"
-        DataContext="{StaticResource CustomerVM}">
+        >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

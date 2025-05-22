@@ -6,7 +6,7 @@
              xmlns:vmCust="clr-namespace:AirTicketSalesManagement.ViewModel.Customer"
              xmlns:vmStaff="clr-namespace:AirTicketSalesManagement.ViewModel.Staff"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             StartupUri="/View/Customer/AuthWindow.xaml">
+             StartupUri="/View/Login/AuthWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

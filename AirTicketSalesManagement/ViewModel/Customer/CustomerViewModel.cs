@@ -48,7 +48,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 }
                 else if (previousViewModelType == typeof(PaymentConfirmationViewModel))
                 {
-                    CurrentViewModel = new PassengerInformationViewModel((ThongTinChuyenBayDuocChon)previousParameter);
+                    CurrentViewModel = new PassengerInformationViewModel((ThongTinHanhKhachVaChuyenBay)previousParameter);
                 }
             };
         }
@@ -68,7 +68,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void NavigateToBookingHistory()
         {
-            CurrentViewModel = new BookingHistoryViewModel("KHDM", this);
+            CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
         }
 
         [RelayCommand]

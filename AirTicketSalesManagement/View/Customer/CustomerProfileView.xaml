@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980"
-             DataContext="{StaticResource CustomerProfileVM}">
+             >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
