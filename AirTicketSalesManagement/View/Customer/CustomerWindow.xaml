@@ -103,52 +103,30 @@
                             </Button>
 
                             <Expander Background="Transparent"
-                                  Foreground="White"
-                                  FontSize="14"
-                                  Margin="0,0,10,10"
-                                  ExpandDirection="Down">
-
-<<<<<<< HEAD
-                            <Expander.Header>
-                                <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
-                                   Height="24" Margin="0,0,10,0"/>
-                                    <TextBlock Text="Đặt vé" 
-                                               FontWeight="Bold"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Expander.Header>
-
-                            <StackPanel Margin="10,5,0,5">
-                                <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5"
-                                        Command="{Binding NavigateToFlightTicketBookingCommand}">
-=======
+                                      Foreground="White"
+                                      FontSize="14"
+                                      Margin="0,0,10,10"
+                                      ExpandDirection="Down">
                                 <Expander.Header>
->>>>>>> master
                                     <StackPanel Orientation="Horizontal">
-                                        <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
-                                   Height="24" Margin="0,0,10,0"/>
-                                        <TextBlock Text="Đặt vé" 
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"/>
+                                        <Icon:PackIconMaterial Kind="TicketPercent" Width="24" Height="24" Margin="0,0,10,0"/>
+                                        <TextBlock Text="Đặt vé" FontWeight="Bold" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Expander.Header>
 
                                 <StackPanel Margin="10,5,0,5">
                                     <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5"
-                                        Command="{Binding NavigateToFlightTicketBookingCommand}">
+                                            Command="{Binding NavigateToFlightTicketBookingCommand}">
                                         <StackPanel Orientation="Horizontal">
-                                            <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
-                                       Height="24" Margin="0,0,10,0"/>
+                                            <Icon:PackIconMaterial Kind="TicketPercent" Width="24" Height="24" Margin="0,0,10,0"/>
                                             <TextBlock Text="Đặt vé" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
 
                                     <Button Style="{StaticResource SidebarButton}" Padding="30,5,10,5"
-                                        Command="{Binding NavigateToBookingHistoryCommand}">
+                                            Command="{Binding NavigateToBookingHistoryCommand}">
                                         <StackPanel Orientation="Horizontal">
-                                            <Icon:PackIconMaterial Kind="History" Width="24" 
-                                       Height="24" Margin="0,0,10,0"/>
+                                            <Icon:PackIconMaterial Kind="History" Width="24" Height="24" Margin="0,0,10,0"/>
                                             <TextBlock Text="Lịch sử đặt vé" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
@@ -159,7 +137,7 @@
                                 Command="{Binding NavigateToCustomerProfileCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="AccountCircleOutline" Width="24" 
-                               Height="24" Margin="0,0,10,0" />
+                                                           Height="24" Margin="0,0,10,0" />
                                     <TextBlock Text="Thông tin cá nhân" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
@@ -168,7 +146,7 @@
                                 Command="{Binding NavigateToFlightScheduleSearchCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="Magnify" Width="24" 
-                               Height="24" Margin="0,0,10,0" />
+                                                           Height="24" Margin="0,0,10,0" />
                                     <TextBlock Text="Tra cứu lịch bay" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
