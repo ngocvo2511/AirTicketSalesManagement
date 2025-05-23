@@ -7,123 +7,271 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
              mc:Ignorable="d" 
-             d:DesignHeight="650" d:DesignWidth="980"
-             >
-    <Grid>
+             d:DesignHeight="650" d:DesignWidth="980">
+
+    <UserControl.Resources>
+        <!-- Gradient Brushes -->
+        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#667eea" Offset="0"/>
+            <GradientStop Color="#764ba2" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="CardGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#ffffff" Offset="0"/>
+            <GradientStop Color="#f8fafc" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Card Style -->
+        <Style x:Key="InfoCard" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Opacity="0.1" ShadowDepth="4" BlurRadius="12"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Level Badge Style -->
+        <Style x:Key="LevelBadge" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#ff6b6b" Offset="0"/>
+                        <GradientStop Color="#ee5a24" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#ee5a24" Opacity="0.3" ShadowDepth="2" BlurRadius="8"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Field Label Style -->
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#64748b"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <!-- Field Value Style -->
+        <Style x:Key="FieldValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#f1f5f9">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Grid Grid.Row="0" Margin="0 10 0 20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Text="Hồ sơ khách hàng" 
-                   FontSize="30" FontWeight="Bold"
-                   Margin="30 0 0 0"
-                   Foreground="#2C3E50"
-                   VerticalAlignment="Center" />
-
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <ToggleButton Template="{StaticResource ProfilePopupTemplate}" 
-                          Width="60"
-                          Height="60"
-                          Margin="0 0 40 0"/>
-            </StackPanel>
-        </Grid>
-
-        <!-- Content -->
-        <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+        <!-- Header với Gradient -->
+        <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" 
+                 Padding="30,25">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="Hồ Sơ Khách Hàng" 
+                               FontSize="32" FontWeight="Bold"
+                               Foreground="White"/>
+                    <TextBlock Text="Thông tin chi tiết" 
+                               FontSize="14" 
+                               Foreground="#e2e8f0"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <ToggleButton Grid.Column="1" 
+                              Template="{StaticResource ProfilePopupTemplate}" 
+                              Width="50" Height="50"
+                              VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
+            <Grid MaxWidth="1200">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Hàng 1: Avatar và Level -->
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 20">
-                    <!-- Avatar -->
-                    <Border Width="100" Height="100" Background="#D9D9D9" CornerRadius="50">
-                        <TextBlock Text="Avatar" 
-                                   HorizontalAlignment="Center" 
-                                   VerticalAlignment="Center" 
-                                   FontSize="12"
-                                   Foreground="Gray"/>
+                <!-- Profile Header Card -->
+                <Border Grid.Row="0" Style="{StaticResource InfoCard}" Margin="0,20,0,20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Avatar -->
+                        <Border Grid.Column="0" Width="120" Height="120" 
+                                Background="White" CornerRadius="60"
+                                BorderBrush="#e2e8f0" BorderThickness="3">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Ellipse Fill="#f1f5f9"/>
+                                <Icon:PackIconMaterial Kind="AccountCircle" 
+                                                       Width="80" Height="80"
+                                                       Foreground="#94a3b8"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Customer Name & Basic Info -->
+                        <StackPanel Grid.Column="1" Margin="30,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding HoTen}" 
+                                       FontSize="28" FontWeight="Bold"
+                                       Foreground="#1e293b"/>
+                            <TextBlock Text="{Binding Email}" 
+                                       FontSize="16" 
+                                       Foreground="#64748b"
+                                       Margin="0,4,0,8"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="Phone" 
+                                                       Width="16" Height="16"
+                                                       Foreground="#64748b"
+                                                       VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding SoDienThoai}" 
+                                           FontSize="14" 
+                                           Foreground="#64748b"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+
+
+                    </Grid>
+                </Border>
+
+                <!-- Detailed Information Grid -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Mã khách hàng -->
+                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource InfoCard}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Icon:PackIconMaterial Kind="Identifier" 
+                                                       Width="20" Height="20"
+                                                       Foreground="#3b82f6"/>
+                                <TextBlock Text="Mã Khách Hàng" 
+                                           Style="{StaticResource FieldLabel}"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding MaKhachHang}" 
+                                       Style="{StaticResource FieldValue}"/>
+                        </StackPanel>
                     </Border>
 
-                    <!-- Level -->
-                    <StackPanel Margin="50 0 0 10" VerticalAlignment="Bottom"
-                                Orientation="Horizontal">
-                        <TextBlock Text="Cấp độ: " FontWeight="SemiBold" FontSize="24"/>
-                        <TextBlock Text="{Binding Level}" FontSize="16" FontWeight="Bold" Foreground="#0078D7"/>
-                    </StackPanel>
-                </StackPanel>
+                    <!-- Căn cước công dân -->
+                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource InfoCard}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Icon:PackIconMaterial Kind="CardAccountDetails" 
+                                                       Width="20" Height="20"
+                                                       Foreground="#10b981"/>
+                                <TextBlock Text="Căn Cước Công Dân" 
+                                           Style="{StaticResource FieldLabel}"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding CanCuoc}" 
+                                       Style="{StaticResource FieldValue}"/>
+                        </StackPanel>
+                    </Border>
 
-                <!-- Hàng 2: Thông tin khách hàng -->
-                <Border BorderBrush="#388FF4"
-                        BorderThickness="2"
-                        CornerRadius="8"
-                        Padding="10"
-                        Grid.Row="2"
-                        Background="White"
-                        Margin="0 10 0 0">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <UniformGrid Columns="2" Rows="6" Margin="10" HorizontalAlignment="Stretch">
-                            <!-- Ô 1 -->
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="Mã khách hàng:" FontWeight="Bold" FontSize="20"/>
-                            </Border>
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="{Binding MaKhachHang}" FontSize="20"/>
-                            </Border>
+                    <!-- Giới tính -->
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource InfoCard}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Icon:PackIconMaterial Kind="GenderMaleFemale" 
+                                                       Width="20" Height="20"
+                                                       Foreground="#8b5cf6"/>
+                                <TextBlock Text="Giới Tính" 
+                                           Style="{StaticResource FieldLabel}"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding GioiTinh}" 
+                                       Style="{StaticResource FieldValue}"/>
+                        </StackPanel>
+                    </Border>
 
-                            <!-- Ô 2 -->
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="Tên khách hàng:" FontWeight="Bold" FontSize="20"/>
-                            </Border>
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="{Binding TenKhachHang}" FontSize="20"/>
-                            </Border>
+                    <!-- Ngày sinh -->
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource InfoCard}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Icon:PackIconMaterial Kind="Calendar" 
+                                                       Width="20" Height="20"
+                                                       Foreground="#f59e0b"/>
+                                <TextBlock Text="Ngày Sinh" 
+                                           Style="{StaticResource FieldLabel}"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding NgaySinh, StringFormat='{}{0:dd/MM/yyyy}'}" 
+                                       Style="{StaticResource FieldValue}"/>
+                        </StackPanel>
+                    </Border>
 
-                            <!-- Ô 3 -->
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="Giới tính:" FontWeight="Bold" FontSize="20"/>
-                            </Border>
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="{Binding GioiTinh}" FontSize="20"/>
-                            </Border>
+                    <!-- Số điện thoại -->
+                    <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource InfoCard}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Icon:PackIconMaterial Kind="Phone" 
+                                                       Width="20" Height="20"
+                                                       Foreground="#06b6d4"/>
+                                <TextBlock Text="Số Điện Thoại" 
+                                           Style="{StaticResource FieldLabel}"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding SoDienThoai}" 
+                                       Style="{StaticResource FieldValue}"/>
+                        </StackPanel>
+                    </Border>
 
-                            <!-- Ô 4 -->
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="Ngày sinh:" FontWeight="Bold" FontSize="20"/>
-                            </Border>
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="{Binding NgaySinh}" FontSize="20"/>
-                            </Border>
-
-                            <!-- Ô 5 -->
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="Số điện thoại:" FontWeight="Bold" FontSize="20"/>
-                            </Border>
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="{Binding SoDienThoai}" FontSize="20"/>
-                            </Border>
-
-                            <!-- Ô 6 -->
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="Email:" FontWeight="Bold" FontSize="20"/>
-                            </Border>
-                            <Border BorderBrush="#388FF4" BorderThickness="1" Padding="10">
-                                <TextBlock Text="{Binding Email}" FontSize="20"/>
-                            </Border>
-                        </UniformGrid>
-                    </ScrollViewer>
-                </Border>
+                    <!-- Email -->
+                    <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource InfoCard}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Icon:PackIconMaterial Kind="Email" 
+                                                       Width="20" Height="20"
+                                                       Foreground="#ef4444"/>
+                                <TextBlock Text="Email" 
+                                           Style="{StaticResource FieldLabel}"
+                                           Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Email}" 
+                                       Style="{StaticResource FieldValue}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </Grid>
-        </Border>
+        </ScrollViewer>
     </Grid>
 </UserControl>

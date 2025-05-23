@@ -19,10 +19,16 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private BaseViewModel currentViewModel;
 
+        [ObservableProperty]
+        private string hoTen;
+
         public string IdCustomer { get; set; }
         public CustomerViewModel()
         {
             CurrentViewModel = new HomePageViewModel();
+
+            //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
+            hoTen = UserSession.Current.CustomerName;
 
             NavigationService.NavigateToAction = (viewModelType, parameter) =>
             {

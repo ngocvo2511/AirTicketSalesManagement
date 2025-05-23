@@ -1,5 +1,6 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.View.Customer;
 using AirTicketSalesManagement.View.Login;
 using AirTicketSalesManagement.ViewModel.Customer;
@@ -103,9 +104,21 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     {
                         if (user.VaiTro == "KhachHang")
                         {
+                            var khachHang = context.Khachhangs.FirstOrDefault(kh => kh.MaKh == user.MaKh);
+                            if (khachHang == null)
+                            {
+                                AddError(nameof(Email), "Không tìm thấy thông tin khách hàng.");
+                                return;
+                            }
+                            UserSession.Current.CustomerId = user.MaKh;
+                            UserSession.Current.CustomerName = khachHang.HoTenKh;
+
                             var currentWindow = Application.Current.MainWindow;
                             var vm = new Customer.CustomerViewModel();
                             vm.IdCustomer = user.MaKh;
+
+
+                            //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
 
                             var customerWindow = new CustomerWindow
                             {
