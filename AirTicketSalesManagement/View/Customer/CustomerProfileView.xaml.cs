@@ -40,5 +40,6 @@ namespace AirTicketSalesManagement.View.Customer
             BaoMatContent.Visibility = Visibility.Visible;
             TongQuanContent.Visibility = Visibility.Collapsed;
         }
+
     }
 }

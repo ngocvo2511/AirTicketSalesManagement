@@ -10,6 +10,7 @@ using System.Windows;
 using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.View.Customer;
+using System.Globalization;
 
 namespace AirTicketSalesManagement
 {
@@ -20,6 +21,10 @@ namespace AirTicketSalesManagement
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+FrameworkElement.LanguageProperty.OverrideMetadata(
+            typeof(FrameworkElement),
+            new FrameworkPropertyMetadata(
+                System.Windows.Markup.XmlLanguage.GetLanguage("en-GB"))); // British culture for dd/MM/yyyy
             base.OnStartup(e);
 
 
