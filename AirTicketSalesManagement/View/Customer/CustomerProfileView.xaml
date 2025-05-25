@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:helper="clr-namespace:AirTicketSalesManagement.Helper" 
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980">
@@ -218,36 +219,7 @@
             </Setter>
         </Style>
 
-        <!-- Change Password Button Style -->
-        <Style x:Key="ChangePasswordButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#64748b"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="16,10"/>
-            <Setter Property="BorderBrush" Value="#e2e8f0"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="6" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#f8fafc"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="#cbd5e1"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
+        
         <!-- Edit Profile Popup Style -->
         <Style x:Key="EditPopupOverlay" TargetType="Grid">
             <Setter Property="Background">
@@ -544,6 +516,213 @@
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Foreground" Value="#374151"/>
             <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+
+
+        <!-- Change Password Popup Overlay Style -->
+        <Style x:Key="ChangePasswordPopupOverlay" TargetType="Grid">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="#000000" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChangePasswordPopupOpen}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                        From="0" To="1" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                        From="1" To="0" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Change Password Form Container Style -->
+        <Style x:Key="ChangePasswordFormContainer" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Width" Value="500"/>
+            <Setter Property="MaxHeight" Value="600"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Opacity="0.15" ShadowDepth="8" BlurRadius="20"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChangePasswordPopupOpen}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                        From="0.8" To="1" Duration="0:0:0.3">
+                                    <DoubleAnimation.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.3"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                        From="0.8" To="1" Duration="0:0:0.3">
+                                    <DoubleAnimation.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.3"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                        From="0" To="1" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Password Field Style -->
+        <Style x:Key="EditPasswordField" TargetType="PasswordBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Background" Value="#f8fafc"/>
+            <Setter Property="BorderBrush" Value="#e2e8f0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" 
+                                  HorizontalScrollBarVisibility="Hidden" 
+                                  VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#dc2626"/>
+                                <Setter TargetName="border" Property="Background" Value="White"/>
+                                <Setter TargetName="border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#dc2626" Opacity="0.2" ShadowDepth="0" BlurRadius="8"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#94a3b8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Show Password CheckBox Style -->
+        <Style x:Key="ShowPasswordCheckBox" TargetType="CheckBox">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#64748b"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="checkBoxBorder" 
+                            Width="18" Height="18" 
+                            Background="White"
+                            BorderBrush="#d1d5db" 
+                            BorderThickness="1.5"
+                            CornerRadius="4"
+                            Margin="0,0,8,0">
+                                <Path x:Name="checkMark"
+                                      Data="M 1 6 L 5 10 L 11 2"
+                                      Stroke="#10b981"
+                                      StrokeThickness="2"
+                                      Visibility="Collapsed"
+                                      StrokeLineJoin="Round"
+                                      Stretch="Uniform"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Width="12" Height="12"/>      
+                            </Border>
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="checkBoxBorder" Property="Background" Value="#f0f9ff"/>
+                                <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="#10b981"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="#94a3b8"/>
+                                <Setter Property="Foreground" Value="#1e293b"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Change Password Button Style -->
+        <Style x:Key="ChangePasswordButtonStyle" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#dc2626" Offset="0"/>
+                        <GradientStop Color="#b91c1c" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#dc2626" Opacity="0.3" ShadowDepth="2" BlurRadius="8"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#b91c1c" Offset="0"/>
+                                            <GradientStop Color="#991b1b" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#9ca3af"/>
+                                <Setter Property="Foreground" Value="#6b7280"/>
+                                <Setter TargetName="border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
 
@@ -859,7 +1038,8 @@
 
                                 <Button Grid.Column="1" Content="Đổi mật khẩu"
                                         Style="{StaticResource VerifyButtonStyle}"
-                                        VerticalAlignment="Bottom"/>
+                                        VerticalAlignment="Bottom"
+                                        Command="{Binding OpenChangePasswordCommand}"/>
                             </Grid>
                         </Border>
                     </Grid>
@@ -993,6 +1173,143 @@
                                 Command="{Binding SaveProfileCommand}">
                                     <Button.Effect>
                                         <DropShadowEffect Color="#10b981" Opacity="0.3" ShadowDepth="2" BlurRadius="8"/>
+                                    </Button.Effect>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <!-- Password -->
+        <!-- ✅ CHANGE PASSWORD POPUP OVERLAY -->
+        <Grid Grid.Row="1" x:Name="ChangePasswordPopupOverlay" Style="{StaticResource ChangePasswordPopupOverlay}">
+            <Border Style="{StaticResource ChangePasswordFormContainer}"
+            HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <!-- Header với gradient -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" 
+                    CornerRadius="16,16,0,0" Padding="24,20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Đổi mật khẩu" 
+                                   FontSize="20" FontWeight="Bold"
+                                   Foreground="White"/>
+
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Form Content -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" 
+                          MaxHeight="450" Padding="32,24">
+                        <StackPanel>
+
+                            <!-- Mật khẩu hiện tại -->
+                            <StackPanel Margin="20,20,20,16">
+                                <TextBlock Text="Mật khẩu hiện tại" Style="{StaticResource EditFieldLabel}"/>
+                                <Grid>
+                                    <TextBox Text="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                             Style="{StaticResource EditInputField}"
+                                             Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <PasswordBox x:Name="CurrentPasswordBox" 
+                                       Style="{StaticResource EditPasswordField}"
+                                       Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                                 helper:PasswordHelper.Attach="True"
+                                                 helper:PasswordHelper.BoundPassword="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Mật khẩu mới -->
+                            <StackPanel Margin="20,20,20,16">
+                                <TextBlock Text="Mật khẩu mới" Style="{StaticResource EditFieldLabel}"/>
+                                <Grid>
+                                    <TextBox Text="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                             Style="{StaticResource EditInputField}"
+                                             Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <PasswordBox x:Name="NewPasswordBox" 
+                                       Style="{StaticResource EditPasswordField}"
+                                       Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                                 helper:PasswordHelper.Attach="True"
+                                                 helper:PasswordHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                </Grid>
+                            </StackPanel>
+
+
+                            <!-- Xác nhận mật khẩu -->
+                            <StackPanel Margin="20,20,20,16">
+                                <TextBlock Text="Mật khẩu mới" Style="{StaticResource EditFieldLabel}"/>
+                                <Grid>
+                                    <TextBox Text="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                             Style="{StaticResource EditInputField}"
+                                             Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <PasswordBox x:Name="ConfirmPasswordBox" 
+                                       Style="{StaticResource EditPasswordField}"
+                                       Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                                 helper:PasswordHelper.Attach="True"
+                                                 helper:PasswordHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Checkbox hiện mật khẩu -->
+                            <StackPanel Margin="20,10,20,20">
+                                <CheckBox 
+                                Content="Hiện mật khẩu"
+                                Style="{StaticResource ShowPasswordCheckBox}"
+                                          IsChecked="{Binding IsPasswordVisible, Mode=TwoWay}"/>
+                            </StackPanel>
+
+                            <!-- Thông báo lỗi/thành công -->
+                            <Border Margin="20,0,20,20" 
+                          Background="#fef2f2" 
+                          BorderBrush="#fecaca" 
+                          BorderThickness="1" 
+                          CornerRadius="8" 
+                          Padding="12,8"
+                          Visibility="{Binding HasPasswordError, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Fill="#dc2626" 
+                                Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,7A1.5,1.5 0 0,1 13.5,8.5A1.5,1.5 0 0,1 12,10A1.5,1.5 0 0,1 10.5,8.5A1.5,1.5 0 0,1 12,7M12,17A5,5 0 0,1 7,12H9A3,3 0 0,0 12,15A3,3 0 0,0 15,12H17A5,5 0 0,1 12,17Z" 
+                                Width="16" Height="16" 
+                                VerticalAlignment="Center" 
+                                Margin="0,0,8,0"/>
+                                    <TextBlock Text="{Binding PasswordErrorMessage}" 
+                                     FontSize="13" 
+                                     Foreground="#dc2626" 
+                                     VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Action Buttons -->
+                            <Grid Margin="20,10,20,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0" Content="Hủy bỏ"
+                                Style="{StaticResource CancelButtonStyle}"
+                                Command="{Binding CloseChangePasswordPopupCommand}"/>
+
+                                <Button Grid.Column="2" Content="Đổi mật khẩu"
+                                Style="{StaticResource ChangePasswordButtonStyle}"
+                                Command="{Binding ChangePasswordCommand}">
+                                    <Button.Effect>
+                                        <DropShadowEffect Color="#dc2626" Opacity="0.3" ShadowDepth="2" BlurRadius="8"/>
                                     </Button.Effect>
                                 </Button>
                             </Grid>

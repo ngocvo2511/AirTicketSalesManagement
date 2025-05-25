@@ -29,6 +29,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private DateTime? ngaySinh;
         [ObservableProperty]
         private bool isEditPopupOpen;
+        [ObservableProperty]
+        private bool isChangePasswordPopupOpen;
+        [ObservableProperty]
+        private bool isPasswordVisible;
 
         [ObservableProperty]
         private string editHoTen;
@@ -42,6 +46,18 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private string editGioiTinh;
         [ObservableProperty]
         private DateTime? editNgaySinh;
+
+
+        [ObservableProperty]
+        private string currentPassword;
+        [ObservableProperty]
+        private string newPassword;
+        [ObservableProperty]
+        private string confirmPassword;
+        [ObservableProperty]
+        private bool hasPasswordError = false;
+        [ObservableProperty]
+        private string passwordErrorMessage;
 
 
 
@@ -219,6 +235,91 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         {
             // Ví dụ: bắt đầu bằng 0, từ 9–11 chữ số
             return System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{8,10}$");
+        }
+
+        [RelayCommand]
+        private void OpenChangePassword()
+        {
+            ResetPasswordField();
+            IsChangePasswordPopupOpen = true;
+        }
+
+        [RelayCommand]
+        private void CloseChangePasswordPopup()
+        {
+            IsChangePasswordPopupOpen = false;
+        }
+
+        [RelayCommand]
+        private void ChangePassword()
+        {
+            HideError();
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+
+                    var account = context.Taikhoans.FirstOrDefault(tk => tk.MaKh == UserSession.Current.CustomerId);
+                    if (account == null)
+                    {
+                        MessageBox.Show("Không tìm thấy tài khoản.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Kiểm tra mật khẩu hiện tại
+                    if (!BCrypt.Net.BCrypt.Verify(currentPassword, account.MatKhau))
+                    {
+                        ShowError("Mật khẩu hiện tại không đúng.");
+                        return;
+                    }
+
+                    // Kiểm tra xác nhận mật khẩu mới
+                    if (string.IsNullOrWhiteSpace(newPassword) || newPassword != confirmPassword)
+                    {
+                        MessageBox.Show("Mật khẩu mới không khớp hoặc trống.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    // Mã hóa mật khẩu mới
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                    account.MatKhau = hashedPassword;
+
+                    context.SaveChanges();
+
+                    MessageBox.Show("Đổi mật khẩu thành công.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // Xóa các trường để tránh lộ mật khẩu
+                    CurrentPassword = string.Empty;
+                    NewPassword = string.Empty;
+                    ConfirmPassword = string.Empty;
+                    IsChangePasswordPopupOpen = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Có lỗi xảy ra khi đổi mật khẩu: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ResetPasswordField()
+        {
+            CurrentPassword = string.Empty;
+            NewPassword = string.Empty;
+            ConfirmPassword = string.Empty;
+            HasPasswordError = false;
+            PasswordErrorMessage = string.Empty;
+        }
+
+        private void ShowError(string Error)
+        {
+            PasswordErrorMessage = Error;
+            HasPasswordError = true;
+        }
+
+        private void HideError()
+        {
+            HasPasswordError = false;
+            PasswordErrorMessage = string.Empty;
         }
     }
 }
