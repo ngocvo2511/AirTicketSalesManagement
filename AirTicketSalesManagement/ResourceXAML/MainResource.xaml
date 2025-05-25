@@ -5,16 +5,19 @@
                     xmlns:viewsLG="clr-namespace:AirTicketSalesManagement.View.Login"
                     xmlns:viewmodelCUST="clr-namespace:AirTicketSalesManagement.ViewModel.Customer"
                     xmlns:viewsCUST="clr-namespace:AirTicketSalesManagement.View.Customer"
+                    xmlns:viewmodelSTAFF="clr-namespace:AirTicketSalesManagement.ViewModel.Staff"
+                    xmlns:viewsSTAFF="clr-namespace:AirTicketSalesManagement.View.Staff"
                     xmlns:viewsNotify="clr-namespace:AirTicketSalesManagement.View.Notification">
     
-
+    <!-- Login -->
     <viewmodelLG:AuthViewModel x:Key="AuthVM"/>
     <viewmodelLG:LoginViewModel x:Key="LoginVM"/>
     <viewmodelLG:RegisterViewModel x:Key="RegisterVM"/>
     <viewmodelLG:ForgotPasswordViewModel x:Key="ForgotPasswordVM"/>
     <viewmodel:MainViewModel x:Key="MainVM"/>
-    
-    
+
+    <!-- Customer -->
+
     <viewmodelCUST:CustomerViewModel x:Key="CustomerVM"/>
     <viewmodelCUST:HomePageViewModel x:Key="HomePageVM"/>
     <viewmodelCUST:CustomerProfileViewModel x:Key="CustomerProfileVM"/>
@@ -23,12 +26,27 @@
     <viewmodelCUST:PassengerInformationViewModel x:Key="PassengerInformationVM"/>
     <viewmodelCUST:PaymentConfirmationViewModel x:Key="PaymentConfirmationVM"/>
 
+
+    <!-- Staff -->
+    <viewmodelSTAFF:StaffViewModel x:Key="StaffVM"/>
+    <viewmodelSTAFF:HomePageViewModel x:Key="HomePageVM"/>
+    <viewmodelsStaff:StaffProfileViewModel x:Key="StaffProfileVM"/>
+    <viewmodelsStaff:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
+    <viewmodelsStaff:TicketManagementViewModel x:Key="TicketManagementVM"/>
+    <viewmodelsStaff:CustomerManagementViewModel x:Key="CustomerManagementVM"/>   
+    
+   
+
+
+
     <viewmodel:ToastViewModel x:Key="ToastVM"/>
 
 
 
 
     <!-- DataTemplates -->
+
+    <!-- Login -->
     <DataTemplate DataType="{x:Type viewmodelLG:LoginViewModel}">
         <viewsLG:LoginView />
     </DataTemplate>
@@ -41,6 +59,8 @@
         <viewsLG:ForgotPasswordView />
     </DataTemplate>
 
+
+    <!-- Customer -->
     <DataTemplate DataType="{x:Type viewmodelCUST:HomePageViewModel}">
         <viewsCUST:HomePageView />
     </DataTemplate>
@@ -65,6 +85,9 @@
     <DataTemplate DataType="{x:Type viewmodelCUST:PaymentConfirmationViewModel}">
         <viewsCUST:PaymentConfirmationView/>
     </DataTemplate>
+
+    <!-- Staff -->
+    
 
     <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">
         <viewsNotify:ToastView/>

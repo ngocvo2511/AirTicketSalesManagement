@@ -13,139 +13,247 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ResourceXAML/MainResource.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Drop Shadow Effect -->
+            <DropShadowEffect x:Key="DropShadowEffect" 
+                          Color="Black" 
+                          Direction="270" 
+                          ShadowDepth="2" 
+                          BlurRadius="8" 
+                          Opacity="0.3"/>
+
+            <!-- Enhanced Sidebar Button Style -->
+            <Style x:Key="ModernSidebarButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="15,12"/>
+                <Setter Property="Margin" Value="5,2"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="White" Opacity="0.15"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="White" Opacity="0.25"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Modern Expander Style -->
+            <Style x:Key="ModernExpander" TargetType="Expander">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Margin" Value="5,2"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <!-- Thanh tiêu đề -->
+            <RowDefinition Height="*"/>
+            <!-- Nội dung chính -->
+        </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0"
+        <!-- 💠 Thanh tiêu đề -->
+        <uc:CustomTitleBar Grid.Row="0"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Enhanced Sidebar -->
+            <Grid Grid.Column="0"
               TextElement.Foreground="{DynamicResource MaterialDesignBody}"
               TextElement.FontWeight="Regular"
               TextElement.FontSize="13"
               TextOptions.TextFormattingMode="Ideal"
               TextOptions.TextRenderingMode="Auto"
               TextElement.FontFamily="{DynamicResource MaterialDesignFont}">
-            <Border Width="230" CornerRadius="0 15 15 0">
-                <Border.Background>
-                    <LinearGradientBrush>
-                        <GradientStop Color="#84BCF4" Offset="0.1" />
-                        <GradientStop Color="#388FF4" Offset="0.4" />
-                        <GradientStop Color="#5371FF" Offset="0.95" />
-                    </LinearGradientBrush>
-                </Border.Background>
 
-                <DockPanel Margin="10" LastChildFill="True">
+                <Border 
+                    Effect="{StaticResource DropShadowEffect}">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#667eea" Offset="0"/>
+                            <GradientStop Color="#764ba2" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
 
-                    <!-- Đăng xuất dock bottom -->
-                    <Button DockPanel.Dock="Bottom"
-                            Style="{StaticResource SidebarButton}"                      
-                            Margin="0 40 10 40"
+                    <DockPanel Margin="15" LastChildFill="True">
+
+                        <!-- Đăng xuất dock bottom -->
+                        <Button DockPanel.Dock="Bottom"
+                            Style="{StaticResource ModernSidebarButton}"                      
+                            Margin="0,30,0,20"
                             Command="{Binding LogoutCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <Icon:PackIconMaterial Kind="Logout" Width="24" Height="24" 
-                                                    Margin="0,0,10,0" />
-                            <TextBlock Text="Đăng xuất" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="ExitToApp" Width="22" Height="22" 
+                                                   Margin="0,0,12,0" />
+                                <TextBlock Text="Đăng xuất" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Nội dung còn lại -->
+                        <StackPanel>
+                            <!-- Logo Section -->
+                            <Grid Margin="0,15,0,25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" 
+                                    Background="White" 
+                                    CornerRadius="15"
+                                    Padding="8"
+                                    Effect="{StaticResource DropShadowEffect}">
+                                    <Image Source="pack://application:,,,/Resources/Images/logo.png"
+                                       Height="50" Width="50"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" 
+                                        VerticalAlignment="Center" 
+                                        Margin="15,0,0,0">
+                                    <TextBlock Text="FlyTogether" 
+                                           FontWeight="Bold" 
+                                           FontSize="18" 
+                                           Foreground="White"/>
+                                    <TextBlock Text="Staff Portal" 
+                                           FontSize="12" 
+                                           Foreground="White" 
+                                           Opacity="0.8"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- User Info Section -->
+                            <Border Background="#2C3E50" 
+    CornerRadius="15" 
+    Padding="15,10" 
+    Margin="0,0,0,20">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Background="White" 
+            CornerRadius="20" 
+            Width="40" Height="40">
+                                        <Icon:PackIconMaterial Kind="Account" 
+                               Width="24" Height="24" 
+                               Foreground="#667eea"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Xin chào!" 
+                   FontSize="12" 
+                   Foreground="White" 
+                   Opacity="0.9"/>
+                                        <TextBlock Text="{Binding HoTen}" 
+                   FontWeight="SemiBold" 
+                   FontSize="14" 
+                   Foreground="White"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+
+                            <!-- Navigation Menu -->
+                            <TextBlock Text="MENU CHÍNH" 
+                                   FontWeight="Bold" 
+                                   FontSize="11" 
+                                   Foreground="White" 
+                                   Opacity="0.7"
+                                   Margin="10,0,0,10"/>
+
+                            <!-- Menu Items -->
+                            <Button Style="{StaticResource ModernSidebarButton}"
+                                Command="{Binding NavigateToHomePageCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="Home" Width="22" 
+                                                       Height="22" Margin="0,0,12,0" />
+                                    <TextBlock Text="Trang chủ" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource ModernSidebarButton}"       
+                                Command="{Binding NavigateToFlightTicketBookingCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="AirplaneTakeoff" Width="22" 
+                           Height="22" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Đặt vé" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource ModernSidebarButton}"              
+                                Command="{Binding NavigateToTicketManagementCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="Ticket" Width="22" 
+                           Height="22" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Quản lý đặt vé" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource ModernSidebarButton}"              
+                                Command="{Binding NavigateToCustomerManagementCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="AccountGroup" Width="22" 
+                           Height="22" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Quản lý khách hàng" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource ModernSidebarButton}"
+                                Command="{Binding NavigateToStaffProfileCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="AccountEdit" Width="22" 
+                                                       Height="22" Margin="0,0,12,0" />
+                                    <TextBlock Text="Thông tin cá nhân" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Divider -->
+                            <Separator Background="White" 
+                                   Opacity="0.3" 
+                                   Margin="0,20,0,15"/>
+
+                           
                         </StackPanel>
-                    </Button>
+                    </DockPanel>
+                </Border>
+            </Grid>
 
-                    <!-- Nội dung còn lại -->
-                    <StackPanel>
-                        <!-- Logo -->
-                        <Grid Margin="0,10,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Image Source="pack://application:,,,/Resources/Images/logo.png"
-                                   Height="60" Width="60"
-                                   Grid.Column="0"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left" />
-
-                            <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}"
-                                          Command="{Binding ToggleExpandCommand}"
-                                          Grid.Column="1"
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          Margin="5" />
-                        </Grid>
-
-                        <TextBlock Text="Nhân viên" FontWeight="Bold" 
-                                   FontSize="16" Foreground="White" 
-                                   Margin="0,20,0,10"/>
-
-                        <!-- Trang chủ -->
-                        <Button Style="{StaticResource SidebarButton}">
-                            <StackPanel Orientation="Horizontal">
-                                <Icon:PackIconMaterial Kind="Home" Width="24" 
-                                   Height="24" Margin="0,0,10,0" />
-                                <TextBlock Text="Trang chủ" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <!-- Tra cứu lịch bay -->
-                        <Button Style="{StaticResource SidebarButton}">
-                            <StackPanel Orientation="Horizontal">
-                                <Icon:PackIconMaterial Kind="Magnify" Width="24" 
-                                   Height="24" Margin="0,0,10,0" />
-                                <TextBlock Text="Tra cứu lịch bay" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <!-- Bán vé -->
-                        <Button Style="{StaticResource SidebarButton}">
-                            <StackPanel Orientation="Horizontal">
-                                <Icon:PackIconMaterial Kind="TicketPercent" Width="24" 
-                                   Height="24" Margin="0,0,10,0"/>
-                                <TextBlock Text="Bán vé" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <!-- Tra cứu lịch sử đặt vé -->
-                        <Button Style="{StaticResource SidebarButton}">
-                            <StackPanel Orientation="Horizontal">
-                                <Icon:PackIconMaterial Kind="History" Width="24" 
-                                   Height="24" Margin="0,0,10,0"/>
-                                <TextBlock Text="Tra cứu lịch sử đặt vé" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <!-- Quản lý thông tin khách hàng -->
-                        <Button Style="{StaticResource SidebarButton}">
-                            <StackPanel Orientation="Horizontal">
-                                <Icon:PackIconMaterial Kind="AccountMultiple" Width="24" 
-                                   Height="24" Margin="0,0,10,0" />
-                                <TextBlock Text="Quản lý thông tin khách hàng" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <!-- Hồ sơ cá nhân -->
-                        <Button Style="{StaticResource SidebarButton}">
-                            <StackPanel Orientation="Horizontal">
-                                <Icon:PackIconMaterial Kind="AccountCircleOutline" Width="24" 
-                                   Height="24" Margin="0,0,10,0" />
-                                <TextBlock Text="Hồ sơ cá nhân" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-                </DockPanel>
-            </Border>
-        </Grid>
-
-        <Grid Grid.Column="1">
-            
-
-            
-            <ContentControl x:Name="MainContent" Grid.Row="1" 
-           Content="{Binding CurrentViewModel}"/>
-
-            <!--body:BookingHistoryUC Grid.Row="1"/-->
+            <Grid Grid.Column="1">
+                <ContentControl x:Name="MainContent" Grid.Row="1" 
+                            Content="{Binding CurrentViewModel}"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

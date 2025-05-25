@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:uc="clr-namespace:AirTicketSalesManagement.Resources.User_Controls"
-        xmlns:body="clr-namespace:AirTicketSalesManagement.View.MainWindows.Customer"
+        xmlns:body="clr-namespace:AirTicketSalesManagement.View.Customer"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="FlyTogether" Height="700" Width="1200"
@@ -209,7 +209,7 @@
                             <Button Style="{StaticResource ModernSidebarButton}"       
                                     Command="{Binding NavigateToFlightTicketBookingCommand}">
                                 <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="TicketConfirmation" Width="22" 
+                                    <Icon:PackIconMaterial Kind="AirplaneTakeoff" Width="22" 
                                Height="22" Margin="0,0,12,0"/>
                                     <TextBlock Text="Đặt vé" VerticalAlignment="Center"/>
                                 </StackPanel>

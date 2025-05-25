@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AirTicketSalesManagement.View.Staff.Staff_HomePageUC"
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Staff.HomePageView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -51,9 +51,10 @@
                 <!-- Lời chào -->
                 <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
                     <Border Width="50" Height="50" CornerRadius="25" Background="LightBlue" Margin="0 0 20 0" ClipToBounds="True">
-                        <Image Source="/Resources/Images/avatar.png"
-                               Stretch="UniformToFill"
-                               Width="50" Height="50" />
+<!--                        <Image 
+                         Source="/Resources/Images/avatar.png" 
+                            Stretch="UniformToFill"
+                               Width="50" Height="50" />  -->
                     </Border>
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="Xin chào, Nhân viên ..." FontSize="24" FontWeight="Bold" />
