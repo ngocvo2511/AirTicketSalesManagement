@@ -5,7 +5,7 @@ namespace AirTicketSalesManagement.Models;
 
 public partial class Khachhang
 {
-    public string MaKh { get; set; } = null!;
+    public int MaKh { get; set; }
 
     public string? HoTenKh { get; set; }
 
@@ -17,7 +17,7 @@ public partial class Khachhang
 
     public string? SoDt { get; set; }
 
-    public string? GiayToTt { get; set; }
+    public string? Cccd { get; set; }
 
     public virtual ICollection<Datve> Datves { get; set; } = new List<Datve>();
 

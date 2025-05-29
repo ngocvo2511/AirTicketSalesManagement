@@ -32,7 +32,6 @@
             <converters:TicketSelectionConverter x:Key="TicketSelectionConverter"/>
             <converters:NonNullToVisibilityConverter x:Key="NonNullToVisibilityConverter"/>
             <converters:InverseNonNullToVisibilityConverter x:Key="InverseNonNullToVisibilityConverter"/>
-            <vmCust:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
 
 
 

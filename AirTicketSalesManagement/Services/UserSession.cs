@@ -8,7 +8,7 @@ namespace AirTicketSalesManagement.Services
 {
     public class UserSession
     {
-        public string CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public string CustomerName { get; set; }
         // các thuộc tính khác
 

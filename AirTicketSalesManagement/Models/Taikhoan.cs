@@ -11,9 +11,9 @@ public partial class Taikhoan
 
     public string VaiTro { get; set; } = null!;
 
-    public string? MaNv { get; set; }
+    public int? MaNv { get; set; }
 
-    public string? MaKh { get; set; }
+    public int? MaKh { get; set; }
 
     public virtual Khachhang? MaKhNavigation { get; set; }
 

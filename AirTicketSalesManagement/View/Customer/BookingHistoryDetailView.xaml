@@ -119,8 +119,8 @@
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Text="Giấy tờ tuỳ thân:" FontWeight="Bold" Foreground="Gray" FontSize="16"/>
-                                                <TextBlock Text="{Binding GiayToTuyThan}" Grid.Column="1" FontSize="16"/>
+                                                <TextBlock Text="Căn cước công dân: " FontWeight="Bold" Foreground="Gray" FontSize="16"/>
+                                                <TextBlock Text="{Binding Cccd}" Grid.Column="1" FontSize="16"/>
                                             </Grid>
 
                                             <Grid Margin="0 0 0 5"

@@ -59,7 +59,7 @@ public partial class AirTicketDbContext : DbContext
     {
         modelBuilder.Entity<Chuyenbay>(entity =>
         {
-            entity.HasKey(e => e.SoHieuCb).HasName("PK__CHUYENBA__FB4E27FB12F2DE5D");
+            entity.HasKey(e => e.SoHieuCb).HasName("PK__CHUYENBA__FB4E27FB9B9F7175");
 
             entity.ToTable("CHUYENBAY");
 
@@ -68,9 +68,6 @@ public partial class AirTicketDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("SoHieuCB");
             entity.Property(e => e.HangHangKhong).HasMaxLength(50);
-            entity.Property(e => e.MayBay)
-                .HasMaxLength(30)
-                .IsUnicode(false);
             entity.Property(e => e.Sbden)
                 .HasMaxLength(3)
                 .IsUnicode(false)
@@ -96,75 +93,48 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Ctdv>(entity =>
         {
-            entity.HasKey(e => e.MaCtdv).HasName("PK__CTDV__1E4E40E6D8DAAFA5");
+            entity.HasKey(e => e.MaCtdv).HasName("PK__CTDV__1E4E40E6F3C4F32B");
 
             entity.ToTable("CTDV");
 
-            entity.Property(e => e.MaCtdv)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaCTDV");
-            entity.Property(e => e.CccdnguoiGiamHo)
+            entity.Property(e => e.MaCtdv).HasColumnName("MaCTDV");
+            entity.Property(e => e.Cccd)
                 .HasMaxLength(12)
                 .IsUnicode(false)
                 .IsFixedLength()
-                .HasColumnName("CCCDNguoiGiamHo");
+                .HasColumnName("CCCD");
             entity.Property(e => e.GiaVeTt)
                 .HasColumnType("money")
                 .HasColumnName("GiaVeTT");
-            entity.Property(e => e.GiayToTuyThan)
-                .HasMaxLength(12)
-                .IsUnicode(false);
             entity.Property(e => e.GioiTinh).HasMaxLength(10);
             entity.Property(e => e.HoTenHk)
                 .HasMaxLength(30)
                 .HasColumnName("HoTenHK");
             entity.Property(e => e.HoTenNguoiGiamHo).HasMaxLength(30);
-            entity.Property(e => e.MaDv)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaDV");
-            entity.Property(e => e.MaLv)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaLV");
-            entity.Property(e => e.SoDtlienLac)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .IsFixedLength()
-                .HasColumnName("SoDTLienLac");
+            entity.Property(e => e.MaDv).HasColumnName("MaDV");
+            entity.Property(e => e.MaLv).HasColumnName("MaLV");
 
             entity.HasOne(d => d.MaDvNavigation).WithMany(p => p.Ctdvs)
                 .HasForeignKey(d => d.MaDv)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_CTDV_DATVE");
+                .HasConstraintName("FK__CTDV__MaDV__4D94879B");
 
             entity.HasOne(d => d.MaLvNavigation).WithMany(p => p.Ctdvs)
                 .HasForeignKey(d => d.MaLv)
-                .HasConstraintName("FK__CTDV__MaLV__4F7CD00D");
+                .HasConstraintName("FK__CTDV__MaLV__4E88ABD4");
         });
 
         modelBuilder.Entity<Datve>(entity =>
         {
-            entity.HasKey(e => e.MaDv).HasName("PK__DATVE__27258657A460918E");
+            entity.HasKey(e => e.MaDv).HasName("PK__DATVE__27258657AC4138D1");
 
             entity.ToTable("DATVE");
 
-            entity.Property(e => e.MaDv)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaDV");
+            entity.Property(e => e.MaDv).HasColumnName("MaDV");
             entity.Property(e => e.Email)
                 .HasMaxLength(254)
                 .IsUnicode(false);
-            entity.Property(e => e.MaKh)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaKH");
-            entity.Property(e => e.MaLb)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaLB");
+            entity.Property(e => e.MaKh).HasColumnName("MaKH");
+            entity.Property(e => e.MaLb).HasColumnName("MaLB");
             entity.Property(e => e.Slve).HasColumnName("SLVe");
             entity.Property(e => e.SoDtlienLac)
                 .HasMaxLength(10)
@@ -192,23 +162,21 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Khachhang>(entity =>
         {
-            entity.HasKey(e => e.MaKh).HasName("PK__KHACHHAN__2725CF1E4C591A64");
+            entity.HasKey(e => e.MaKh).HasName("PK__KHACHHAN__2725CF1EDEDF8357");
 
             entity.ToTable("KHACHHANG");
 
-            entity.HasIndex(e => e.Email, "UQ__KHACHHAN__A9D10534FA68FA35").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__KHACHHAN__A9D10534AE4F61E1").IsUnique();
 
-            entity.Property(e => e.MaKh)
-                .HasMaxLength(10)
+            entity.Property(e => e.MaKh).HasColumnName("MaKH");
+            entity.Property(e => e.Cccd)
+                .HasMaxLength(12)
                 .IsUnicode(false)
-                .HasColumnName("MaKH");
+                .IsFixedLength()
+                .HasColumnName("CCCD");
             entity.Property(e => e.Email)
                 .HasMaxLength(254)
                 .IsUnicode(false);
-            entity.Property(e => e.GiayToTt)
-                .HasMaxLength(30)
-                .IsUnicode(false)
-                .HasColumnName("GiayToTT");
             entity.Property(e => e.GioiTinh).HasMaxLength(10);
             entity.Property(e => e.HoTenKh)
                 .HasMaxLength(30)
@@ -222,14 +190,11 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Lichbay>(entity =>
         {
-            entity.HasKey(e => e.MaLb).HasName("PK__LICHBAY__2725C7617EBCC9A3");
+            entity.HasKey(e => e.MaLb).HasName("PK__LICHBAY__2725C761596210CE");
 
             entity.ToTable("LICHBAY");
 
-            entity.Property(e => e.MaLb)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaLB");
+            entity.Property(e => e.MaLb).HasColumnName("MaLB");
             entity.Property(e => e.GiaVe).HasColumnType("money");
             entity.Property(e => e.GioDen).HasColumnType("datetime");
             entity.Property(e => e.GioDi).HasColumnType("datetime");
@@ -252,19 +217,13 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Loaive>(entity =>
         {
-            entity.HasKey(e => e.MaLv).HasName("PK__LOAIVE__2725C74D05B20322");
+            entity.HasKey(e => e.MaLv).HasName("PK__LOAIVE__2725C74D7CE21880");
 
             entity.ToTable("LOAIVE");
 
-            entity.Property(e => e.MaLv)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaLV");
+            entity.Property(e => e.MaLv).HasColumnName("MaLV");
             entity.Property(e => e.HangGhe).HasMaxLength(30);
-            entity.Property(e => e.MaLb)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaLB");
+            entity.Property(e => e.MaLb).HasColumnName("MaLB");
             entity.Property(e => e.SlveConLai).HasColumnName("SLVeConLai");
             entity.Property(e => e.SlveToiDa).HasColumnName("SLVeToiDa");
 
@@ -275,26 +234,25 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Nhanvien>(entity =>
         {
-            entity.HasKey(e => e.MaNv).HasName("PK__NHANVIEN__2725D70A37946AE6");
+            entity.HasKey(e => e.MaNv).HasName("PK__NHANVIEN__2725D70A14FE292B");
 
             entity.ToTable("NHANVIEN");
 
-            entity.HasIndex(e => e.Cccd, "UQ__NHANVIEN__A955A0AA2610829A").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__NHANVIEN__A9D10534D87CFCC4").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__NHANVIEN__A9D105349D2DC9C1").IsUnique();
-
-            entity.Property(e => e.MaNv)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaNV");
+            entity.Property(e => e.MaNv).HasColumnName("MaNV");
             entity.Property(e => e.Cccd)
                 .HasMaxLength(12)
                 .IsUnicode(false)
+                .IsFixedLength()
                 .HasColumnName("CCCD");
             entity.Property(e => e.Email)
                 .HasMaxLength(254)
                 .IsUnicode(false);
-            entity.Property(e => e.HoTen).HasMaxLength(50);
+            entity.Property(e => e.GioiTinh).HasMaxLength(10);
+            entity.Property(e => e.HoTenNv)
+                .HasMaxLength(50)
+                .HasColumnName("HoTenNV");
             entity.Property(e => e.SoDt)
                 .HasMaxLength(10)
                 .IsUnicode(false)
@@ -304,13 +262,11 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Quydinh>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__QUYDINH__3214EC278C8FE82F");
+            entity.HasKey(e => e.Id).HasName("PK__QUYDINH__3214EC2751540B9B");
 
             entity.ToTable("QUYDINH");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.SoSanBayTgtoiDa).HasColumnName("SoSanBayTGToiDa");
             entity.Property(e => e.TgdatVeChamNhat).HasColumnName("TGDatVeChamNhat");
             entity.Property(e => e.TgdungMax).HasColumnName("TGDungMax");
@@ -320,7 +276,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Sanbay>(entity =>
         {
-            entity.HasKey(e => e.MaSb).HasName("PK__SANBAY__2725080EA19DDC54");
+            entity.HasKey(e => e.MaSb).HasName("PK__SANBAY__2725080E7DD4F959");
 
             entity.ToTable("SANBAY");
 
@@ -338,7 +294,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Sanbaytrunggian>(entity =>
         {
-            entity.HasKey(e => new { e.Stt, e.SoHieuCb }).HasName("PK__SANBAYTR__65AA54EFBF60A7D8");
+            entity.HasKey(e => new { e.Stt, e.SoHieuCb }).HasName("PK__SANBAYTR__65AA54EF31D55EB7");
 
             entity.ToTable("SANBAYTRUNGGIAN");
 
@@ -366,33 +322,29 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Taikhoan>(entity =>
         {
-            entity.HasKey(e => e.Email).HasName("PK__TAIKHOAN__A9D105357DAA9682");
+            entity.HasKey(e => e.Email).HasName("PK__TAIKHOAN__A9D1053544B0221E");
 
             entity.ToTable("TAIKHOAN");
 
             entity.Property(e => e.Email)
                 .HasMaxLength(254)
                 .IsUnicode(false);
-            entity.Property(e => e.MaKh)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaKH");
-            entity.Property(e => e.MaNv)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("MaNV");
+            entity.Property(e => e.MaKh).HasColumnName("MaKH");
+            entity.Property(e => e.MaNv).HasColumnName("MaNV");
             entity.Property(e => e.MatKhau)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.VaiTro).HasMaxLength(20);
+            entity.Property(e => e.VaiTro)
+                .HasMaxLength(20)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.MaKhNavigation).WithMany(p => p.Taikhoans)
                 .HasForeignKey(d => d.MaKh)
-                .HasConstraintName("FK__TAIKHOAN__MaKH__59FA5E80");
+                .HasConstraintName("FK__TAIKHOAN__MaKH__5812160E");
 
             entity.HasOne(d => d.MaNvNavigation).WithMany(p => p.Taikhoans)
                 .HasForeignKey(d => d.MaNv)
-                .HasConstraintName("FK__TAIKHOAN__MaNV__59063A47");
+                .HasConstraintName("FK__TAIKHOAN__MaNV__571DF1D5");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,6 +1,7 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.ViewModel.Customer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AirTicketSalesManagement.ViewModel.Customer
+namespace AirTicketSalesManagement.ViewModel.Booking
 {
     public partial class PaymentConfirmationViewModel : BaseViewModel
     {
@@ -67,64 +68,49 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         {
             using (var context = new AirTicketDbContext())
             {
-                // 1. Tạo mã đặt vé mới (ví dụ random, hoặc tự tăng tùy bạn)
-                string maDatVe = GenerateMaDatVe(); // Bạn tự viết hàm này nhé
-
-                // 2. Tạo đối tượng DATVE
                 var datVe = new Datve
                 {
-                    MaDv = maDatVe,
                     MaLb = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.MaLichBay,
-                    MaKh = "KH001", // giả sử bạn đã có mã khách hàng hiện tại
+                    MaKh = 1, // ví dụ
                     ThoiGianDv = DateTime.Now,
                     Slve = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberAdults +
                            ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberChildren +
                            ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberInfants,
                     SoDtlienLac = ThongTinHanhKhachVaChuyenBay.ContactPhone,
                     Email = ThongTinHanhKhachVaChuyenBay.ContactEmail,
-                    TongTienTt = TotalPrice, // bạn tự viết hàm tính tổng tiền
+                    TongTienTt = TotalPrice,
                     TtdatVe = "Đã thanh toán"
                 };
 
-                // Thêm vào DbSet
                 context.Datves.Add(datVe);
+                context.SaveChanges(); // BẮT BUỘC: để MaDv được gán giá trị từ DB
 
-                // 3. Insert danh sách CTDV
+                int maDatVe = datVe.MaDv;
+
                 foreach (var passenger in ThongTinHanhKhachVaChuyenBay.PassengerList)
                 {
-                    string maCTDV = GenerateMaCTDV(); // tự sinh mã chi tiết đặt vé
-
                     var ctdv = new Ctdv
                     {
-                        MaCtdv = maCTDV,
                         MaDv = maDatVe,
                         HoTenHk = passenger.HoTen,
                         GioiTinh = passenger.GioiTinh,
                         NgaySinh = DateOnly.FromDateTime(passenger.NgaySinh),
-                        GiayToTuyThan = passenger.CCCD,
+                        Cccd = passenger.CCCD,
                         HoTenNguoiGiamHo = passenger.HoTenNguoiGiamHo,
-                        MaLv = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.MaHangVe, // mã loại vé
-                        GiaVeTt = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.GiaVe // giá vé
+                        MaLv = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.MaHangVe,
+                        GiaVeTt = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.GiaVe
                     };
 
                     context.Ctdvs.Add(ctdv);
                 }
 
-                // 4. Save changes vào database
                 context.SaveChanges();
             }
+
             MessageBox.Show("Đặt vé thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             NavigationService.NavigateTo<HomePageViewModel>();
         }
 
-        private string GenerateMaDatVe()
-        {
-            return "DV" + DateTime.Now.Ticks.ToString().Substring(10);
-        }
 
-        private string GenerateMaCTDV()
-        {
-            return "CT" + DateTime.Now.Ticks.ToString().Substring(10);
-        }
     }
 }

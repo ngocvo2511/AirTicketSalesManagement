@@ -13,8 +13,6 @@ public partial class Chuyenbay
 
     public string? HangHangKhong { get; set; }
 
-    public string? MayBay { get; set; }
-
     public double? SoGioBay { get; set; }
 
     public string? TtkhaiThac { get; set; }

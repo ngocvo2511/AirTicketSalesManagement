@@ -7,6 +7,8 @@
                     xmlns:viewsCUST="clr-namespace:AirTicketSalesManagement.View.Customer"
                     xmlns:viewmodelSTAFF="clr-namespace:AirTicketSalesManagement.ViewModel.Staff"
                     xmlns:viewsSTAFF="clr-namespace:AirTicketSalesManagement.View.Staff"
+                    xmlns:viewmodelBOOKING="clr-namespace:AirTicketSalesManagement.ViewModel.Booking"
+                    
                     xmlns:viewsNotify="clr-namespace:AirTicketSalesManagement.View.Notification">
     
     <!-- Login -->
@@ -22,9 +24,11 @@
     <viewmodelCUST:HomePageViewModel x:Key="HomePageVM"/>
     <viewmodelCUST:CustomerProfileViewModel x:Key="CustomerProfileVM"/>
     <viewmodelCUST:BookingHistoryViewModel x:Key="BookingHistoryVM"/>
-    <viewmodelCUST:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
-    <viewmodelCUST:PassengerInformationViewModel x:Key="PassengerInformationVM"/>
-    <viewmodelCUST:PaymentConfirmationViewModel x:Key="PaymentConfirmationVM"/>
+    
+    <viewmodelBOOKING:PassengerInformationViewModel x:Key="PassengerInformationVM"/>
+    <viewmodelBOOKING:PaymentConfirmationViewModel x:Key="PaymentConfirmationVM"/>
+
+    <viewmodelBOOKING:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
 
 
     <!-- Staff -->
@@ -70,10 +74,10 @@
     <DataTemplate DataType="{x:Type viewmodelCUST:BookingHistoryViewModel}">
         <viewsCUST:BookingHistoryView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewmodelCUST:FlightScheduleSearchViewModel}">
+    <DataTemplate DataType="{x:Type viewmodelBOOKING:FlightScheduleSearchViewModel}">
         <viewsCUST:FlightScheduleSearchView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewmodelCUST:PassengerInformationViewModel}">
+    <DataTemplate DataType="{x:Type viewmodelBOOKING:PassengerInformationViewModel}">
         <viewsCUST:PassengerInformationView />
     </DataTemplate>
 
@@ -81,7 +85,7 @@
         <viewsCUST:BookingHistoryDetailView/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewmodelCUST:PaymentConfirmationViewModel}">
+    <DataTemplate DataType="{x:Type viewmodelBOOKING:PaymentConfirmationViewModel}">
         <viewsCUST:PaymentConfirmationView/>
     </DataTemplate>
 

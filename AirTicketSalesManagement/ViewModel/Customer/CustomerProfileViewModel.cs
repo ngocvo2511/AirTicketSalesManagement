@@ -78,8 +78,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         HoTen = khachHang.HoTenKh;
                         SoDienThoai = khachHang.SoDt;
                         Email = khachHang.Email;
-                        MaKhachHang = khachHang.MaKh;
-                        CanCuoc = khachHang.GiayToTt;
+                        MaKhachHang = khachHang.MaKh.ToString();
+                        CanCuoc = khachHang.Cccd;
                         GioiTinh = khachHang.GioiTinh;
                         if (khachHang.NgaySinh.HasValue)
                         {
@@ -181,7 +181,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                 return;
                             }
                         }
-                        khachHang.GiayToTt = EditCanCuoc;
+                        khachHang.Cccd = EditCanCuoc;
 
 
                         // Giới tính: nếu có nhập thì lưu

@@ -10,7 +10,7 @@ namespace AirTicketSalesManagement.Models
     public partial class HangVe : ObservableObject
     {
         [ObservableProperty]
-        private string maHangVe;
+        private int maHangVe;
 
         [ObservableProperty]
         private string tenHangVe;
