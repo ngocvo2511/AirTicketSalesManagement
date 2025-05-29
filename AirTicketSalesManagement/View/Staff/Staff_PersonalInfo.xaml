@@ -7,9 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980">
 
-    <UserControl.DataContext>
-        <vm:StaffPersonalInfoVM />
-    </UserControl.DataContext>
+
 
     <Grid Background="#F5F7FA">
         <Grid.RowDefinitions>

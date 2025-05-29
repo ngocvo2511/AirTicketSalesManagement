@@ -58,4 +58,8 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="View\Booking\" />
+	</ItemGroup>
 </Project>

@@ -34,10 +34,7 @@
             <converters:InverseNonNullToVisibilityConverter x:Key="InverseNonNullToVisibilityConverter"/>
             <vmCust:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
 
-            <vmStaff:StaffFlightScheduleLookUpVM x:Key="StaffFlightScheduleLookUpVM"/>
-            <vmStaff:StaffCustomerInfoFillVM x:Key="StaffCustomerInfoFillVM"/>
-            <vmStaff:StaffFlightMakesPaymentMethodsVM x:Key="StaffFlightMakesPaymentMethodsVM"/>
-            <vmStaff:StaffFlightSelectingTicketsVM x:Key="StaffFlightSelectingTicketsVM"/>
+
 
         </ResourceDictionary>
     </Application.Resources>

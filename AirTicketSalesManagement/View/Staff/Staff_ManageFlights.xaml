@@ -8,9 +8,6 @@
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1000">
 
-    <UserControl.DataContext>
-        <vm:StaffManageFlightsVM />
-    </UserControl.DataContext>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>

@@ -29,11 +29,10 @@
 
     <!-- Staff -->
     <viewmodelSTAFF:StaffViewModel x:Key="StaffVM"/>
-    <viewmodelSTAFF:HomePageViewModel x:Key="HomePageVM"/>
-    <viewmodelsStaff:StaffProfileViewModel x:Key="StaffProfileVM"/>
-    <viewmodelsStaff:FlightScheduleSearchViewModel x:Key="FlightScheduleSearchVM"/>
-    <viewmodelsStaff:TicketManagementViewModel x:Key="TicketManagementVM"/>
-    <viewmodelsStaff:CustomerManagementViewModel x:Key="CustomerManagementVM"/>   
+    <viewmodelSTAFF:HomePageViewModel x:Key="StaffHomePageVM"/>
+    <viewmodelSTAFF:StaffProfileViewModel x:Key="StaffProfileVM"/>
+    <viewmodelSTAFF:TicketManagementViewModel x:Key="TicketManagementVM"/>
+    <viewmodelSTAFF:CustomerManagementViewModel x:Key="CustomerManagementVM"/>   
     
    
 
