@@ -31,25 +31,19 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
             hoTen = UserSession.Current.CustomerName;
 
-            
+
         }
 
         [RelayCommand]
-        private void NavigateToStaffProfile()
+        private void NavigateToAdminProfile()
         {
-            CurrentViewModel = new StaffProfileViewModel();
+            CurrentViewModel = new AdminProfileViewModel();
         }
 
         [RelayCommand]
         private void NavigateToHomePage()
         {
             CurrentViewModel = new HomePageViewModel();
-        }
-
-        [RelayCommand]
-        private void NavigateToFlightTicketBooking()
-        {
-            CurrentViewModel = new FlightScheduleSearchViewModel();
         }
 
         [RelayCommand]
@@ -63,6 +57,38 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             CurrentViewModel = new CustomerManagementViewModel();
         }
+
+        [RelayCommand]
+        private void NavigateToReport()
+        {
+            CurrentViewModel = new ReportViewModel();
+        }
+
+        [RelayCommand]
+        private void NavigateToFlightManagement()
+        {
+            CurrentViewModel = new FlightManagementViewModel();
+        }
+
+        [RelayCommand]
+        private void NavigateToScheduleManagement()
+        {
+            CurrentViewModel = new ScheduleManagementViewModel();
+        }
+
+        [RelayCommand]
+        private void NavigateToAccountManagement()
+        {
+            CurrentViewModel = new AccountManagementViewModel();
+        }
+
+        [RelayCommand]
+        private void NavigateToRegulationManagement()
+        {
+            CurrentViewModel = new RegulationManagementViewModel();
+        }
+
+
 
         [RelayCommand]
         private void Logout()

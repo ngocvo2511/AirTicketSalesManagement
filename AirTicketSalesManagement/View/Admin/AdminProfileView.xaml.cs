@@ -24,5 +24,21 @@ namespace AirTicketSalesManagement.View.Admin
         {
             InitializeComponent();
         }
+
+        private void TabTongQuan_Click(object sender, RoutedEventArgs e)
+        {
+            TabTongQuan.IsChecked = true;
+            TabBaoMat.IsChecked = false;
+            TongQuanContent.Visibility = Visibility.Visible;
+            BaoMatContent.Visibility = Visibility.Collapsed;
+        }
+
+        private void TabBaoMat_Click(object sender, RoutedEventArgs e)
+        {
+            TabBaoMat.IsChecked = true;
+            TabTongQuan.IsChecked = false;
+            BaoMatContent.Visibility = Visibility.Visible;
+            TongQuanContent.Visibility = Visibility.Collapsed;
+        }
     }
 }

@@ -48,6 +48,12 @@
     <viewmodelADMIN:AdminViewModel x:Key="AdminVM"/>
     <viewmodelADMIN:HomePageViewModel x:Key="AdminHomePageVM"/>
     <viewmodelADMIN:AdminProfileViewModel x:Key="AdminProfileVM"/>
+    <viewmodelADMIN:ReportViewModel x:Key="ReportVM"/>
+    <viewmodelADMIN:RegulationManagementViewModel x:Key="RegulationManagementVM"/>
+    <viewmodelADMIN:FlightManagementViewModel x:Key="FlightManagementVM"/>
+    <viewmodelADMIN:ScheduleManagementViewModel x:Key="ScheduleManagementVM"/>
+    <viewmodelADMIN:AccountManagementViewModel x:Key="AccountManagementVM"/>
+    
 
 
 
@@ -119,6 +125,10 @@
                                              
     <DataTemplate DataType="{x:Type viewmodelADMIN:AdminProfileViewModel}">
         <viewsADMIN:AdminProfileView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelADMIN:FlightManagementViewModel}">
+        <viewsADMIN:FlightManagementView />
     </DataTemplate>
 
 
