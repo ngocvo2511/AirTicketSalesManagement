@@ -3,7 +3,9 @@ using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.View.Customer;
 using AirTicketSalesManagement.View.Login;
+using AirTicketSalesManagement.View.Staff;
 using AirTicketSalesManagement.ViewModel.Customer;
+using AirTicketSalesManagement.ViewModel.Staff;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections;
@@ -133,7 +135,31 @@ namespace AirTicketSalesManagement.ViewModel.Login
                         }
                         else if (user.VaiTro == "NhanVien")
                         {
+                            var nhanvien = context.Nhanviens.FirstOrDefault(nv => nv.MaNv == user.MaNv);
+                            if (nhanvien == null)
+                            {
+                                AddError(nameof(Email), "Không tìm thấy thông tin nhân viên.");
+                                return;
+                            }
+                            UserSession.Current.StaffId = user.MaNv;
+                            UserSession.Current.CustomerName = nhanvien.HoTenNv;
 
+                            var currentWindow = Application.Current.MainWindow;
+                            var vm = new StaffViewModel();
+
+
+                            //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
+
+                            var staffWindow = new StaffWindow
+                            {
+                                DataContext = vm
+                            };
+                            Application.Current.MainWindow = staffWindow;
+                            currentWindow?.Close();
+                            staffWindow.Opacity = 0;
+                            staffWindow.Show();
+                            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
+                            staffWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
                         }
                         else if (user.VaiTro == "Admin")
                         {

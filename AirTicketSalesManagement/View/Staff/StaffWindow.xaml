@@ -7,7 +7,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="FlyTogether" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
-        Background="White">
+        Background="White"
+                WindowStyle="None"
+        AllowsTransparency="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

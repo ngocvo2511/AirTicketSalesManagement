@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AirTicketSalesManagement.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,16 @@ namespace AirTicketSalesManagement.ViewModel.Staff
 
         [ObservableProperty]
         private string hoTen;
+
+        public StaffViewModel()
+        {
+            CurrentViewModel = new HomePageViewModel();
+
+            //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
+            hoTen = UserSession.Current.CustomerName;
+
+            
+        }
 
         [RelayCommand]
         private void NavigateToStaffProfile()

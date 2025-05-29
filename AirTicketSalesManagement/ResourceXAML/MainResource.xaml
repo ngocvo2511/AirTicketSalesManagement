@@ -8,6 +8,8 @@
                     xmlns:viewmodelSTAFF="clr-namespace:AirTicketSalesManagement.ViewModel.Staff"
                     xmlns:viewsSTAFF="clr-namespace:AirTicketSalesManagement.View.Staff"
                     xmlns:viewmodelBOOKING="clr-namespace:AirTicketSalesManagement.ViewModel.Booking"
+                    xmlns:viewmodelADMIN="clr-namespace:AirTicketSalesManagement.ViewModel.Admin"
+                    xmlns:viewsADMIN="clr-namespace:AirTicketSalesManagement.View.Admin"                    
                     
                     xmlns:viewsNotify="clr-namespace:AirTicketSalesManagement.View.Notification">
     
@@ -36,9 +38,14 @@
     <viewmodelSTAFF:HomePageViewModel x:Key="StaffHomePageVM"/>
     <viewmodelSTAFF:StaffProfileViewModel x:Key="StaffProfileVM"/>
     <viewmodelSTAFF:TicketManagementViewModel x:Key="TicketManagementVM"/>
-    <viewmodelSTAFF:CustomerManagementViewModel x:Key="CustomerManagementVM"/>   
-    
-   
+    <viewmodelSTAFF:CustomerManagementViewModel x:Key="CustomerManagementVM"/>
+
+
+    <!-- Admin -->
+    <viewmodelADMIN:AdminViewModel x:Key="AdminVM"/>
+    <viewmodelADMIN:HomePageViewModel x:Key="AdminHomePageVM"/>
+    <viewmodelADMIN:AdminProfileViewModel x:Key="AdminProfileVM"/>
+
 
 
 
@@ -90,7 +97,24 @@
     </DataTemplate>
 
     <!-- Staff -->
-    
+    <DataTemplate DataType="{x:Type viewmodelSTAFF:HomePageViewModel}">
+        <viewsSTAFF:HomePageView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelSTAFF:StaffProfileViewModel}">
+        <viewsSTAFF:StaffProfileView />
+    </DataTemplate>
+
+
+    <!-- Admin -->
+    <DataTemplate DataType="{x:Type viewmodelADMIN:HomePageViewModel}">
+        <viewsADMIN:HomePageView />          
+    </DataTemplate>                          
+                                             
+    <DataTemplate DataType="{x:Type viewmodelADMIN:AdminProfileViewModel}">
+        <viewsADMIN:AdminProfileView />
+    </DataTemplate>
+
 
     <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">
         <viewsNotify:ToastView/>
