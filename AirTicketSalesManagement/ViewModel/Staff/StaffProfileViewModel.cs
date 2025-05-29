@@ -130,8 +130,8 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var khachHang = context.Khachhangs.FirstOrDefault(kh => kh.MaKh == UserSession.Current.CustomerId);
-                    if (khachHang != null)
+                    var nhanVien = context.Nhanviens.FirstOrDefault(kh => kh.MaNv == UserSession.Current.StaffId);
+                    if (nhanVien != null)
                     {
                         // Họ tên: bắt buộc phải nhập
                         if (string.IsNullOrWhiteSpace(EditHoTen))
@@ -140,7 +140,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                             EditHoTen = HoTen;
                             return;
                         }
-                        khachHang.HoTenKh = EditHoTen;
+                        nhanVien.HoTenNv = EditHoTen;
 
                         // Email: nếu có nhập thì phải đúng định dạng
                         if (string.IsNullOrWhiteSpace(EditEmail))
@@ -158,7 +158,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                                 EditEmail = Email;
                                 return;
                             }
-                            khachHang.Email = EditEmail;
+                            nhanVien.Email = EditEmail;
                         }
 
                         // Số điện thoại: nếu có nhập thì kiểm tra định dạng
@@ -170,7 +170,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                                 return;
                             }
                         }
-                        khachHang.SoDt = EditSoDienThoai;
+                        nhanVien.SoDt = EditSoDienThoai;
 
 
                         // Căn cước: nếu có nhập thì kiểm tra độ dài hợp lệ (ví dụ 9 hoặc 12 số)
@@ -182,13 +182,13 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                                 return;
                             }
                         }
-                        khachHang.Cccd = EditCanCuoc;
+                        nhanVien.Cccd = EditCanCuoc;
 
 
                         // Giới tính: nếu có nhập thì lưu
                         if (!string.IsNullOrWhiteSpace(EditGioiTinh))
                         {
-                            khachHang.GioiTinh = EditGioiTinh;
+                            nhanVien.GioiTinh = EditGioiTinh;
                         }
 
                         // Ngày sinh: nếu có nhập thì phải nhỏ hơn ngày hiện tại
@@ -199,11 +199,11 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                                 MessageBox.Show("Ngày sinh không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                                 return;
                             }
-                            khachHang.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);
+                            nhanVien.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);
                         }
                         else
                         {
-                            khachHang.NgaySinh = null;
+                            nhanVien.NgaySinh = null;
                         }
 
 
@@ -260,7 +260,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 using (var context = new AirTicketDbContext())
                 {
 
-                    var account = context.Taikhoans.FirstOrDefault(tk => tk.MaKh == UserSession.Current.CustomerId);
+                    var account = context.Taikhoans.FirstOrDefault(tk => tk.MaNv == UserSession.Current.StaffId);
                     if (account == null)
                     {
                         MessageBox.Show("Không tìm thấy tài khoản.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);

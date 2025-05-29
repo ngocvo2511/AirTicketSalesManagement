@@ -1,4 +1,6 @@
 ﻿using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.View.Login;
+using AirTicketSalesManagement.ViewModel.Login;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -6,6 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
+using System.Windows;
+using AirTicketSalesManagement.ViewModel.Booking;
+using AirTicketSalesManagement.Models;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {
@@ -24,7 +30,33 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
             hoTen = UserSession.Current.CustomerName;
 
-            
+            NavigationService.NavigateToAction = (viewModelType, parameter) =>
+            {
+                if (viewModelType == typeof(PassengerInformationViewModel))
+                {
+                    CurrentViewModel = new PassengerInformationViewModel((ThongTinChuyenBayDuocChon)parameter);
+                }
+                else if (viewModelType == typeof(PaymentConfirmationViewModel))
+                {
+                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinHanhKhachVaChuyenBay)parameter);
+                }
+                else if (viewModelType == typeof(HomePageViewModel))
+                {
+                    CurrentViewModel = new Staff.HomePageViewModel();
+                }
+            };
+
+            NavigationService.NavigateBackAction = (previousViewModelType, previousParameter) =>
+            {
+                if (previousViewModelType == typeof(PassengerInformationViewModel))
+                {
+                    CurrentViewModel = new FlightScheduleSearchViewModel();
+                }
+                else if (previousViewModelType == typeof(PaymentConfirmationViewModel))
+                {
+                    CurrentViewModel = new PassengerInformationViewModel((ThongTinHanhKhachVaChuyenBay)previousParameter);
+                }
+            };
         }
 
         [RelayCommand]
@@ -57,5 +89,23 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             CurrentViewModel = new CustomerManagementViewModel();
         }
 
+        [RelayCommand]
+        private void Logout()
+        {
+            UserSession.Current.CustomerId = null;
+            UserSession.Current.CustomerName = null;
+            UserSession.Current.StaffId = null;
+            var currentWindow = Application.Current.MainWindow;
+            var authWindow = new AuthWindow()
+            {
+                DataContext = new AuthViewModel()
+            };
+            Application.Current.MainWindow = authWindow;
+            currentWindow?.Close();
+            authWindow.Opacity = 0;
+            authWindow.Show();
+            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
+            authWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
+        }
     }
 }

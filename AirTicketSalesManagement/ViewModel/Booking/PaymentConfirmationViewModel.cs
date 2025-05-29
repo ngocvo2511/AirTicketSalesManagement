@@ -71,7 +71,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 var datVe = new Datve
                 {
                     MaLb = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.MaLichBay,
-                    MaKh = 1, // ví dụ
+                    MaKh = UserSession.Current.isStaff ? null : UserSession.Current.CustomerId,
+                    MaNv = UserSession.Current.isStaff ? UserSession.Current.StaffId : null,
                     ThoiGianDv = DateTime.Now,
                     Slve = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberAdults +
                            ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberChildren +
@@ -108,7 +109,10 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             }
 
             MessageBox.Show("Đặt vé thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-            NavigationService.NavigateTo<HomePageViewModel>();
+            if (UserSession.Current.isStaff)
+                NavigationService.NavigateTo<Staff.HomePageViewModel>();
+            else
+                NavigationService.NavigateTo<Customer.HomePageViewModel>();
         }
 
 

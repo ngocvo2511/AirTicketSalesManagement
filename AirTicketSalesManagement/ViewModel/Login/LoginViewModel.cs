@@ -1,9 +1,11 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.View.Admin;
 using AirTicketSalesManagement.View.Customer;
 using AirTicketSalesManagement.View.Login;
 using AirTicketSalesManagement.View.Staff;
+using AirTicketSalesManagement.ViewModel.Admin;
 using AirTicketSalesManagement.ViewModel.Customer;
 using AirTicketSalesManagement.ViewModel.Staff;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -143,6 +145,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                             }
                             UserSession.Current.StaffId = user.MaNv;
                             UserSession.Current.CustomerName = nhanvien.HoTenNv;
+                            UserSession.Current.isStaff = true;
 
                             var currentWindow = Application.Current.MainWindow;
                             var vm = new StaffViewModel();
@@ -163,7 +166,32 @@ namespace AirTicketSalesManagement.ViewModel.Login
                         }
                         else if (user.VaiTro == "Admin")
                         {
+                            var nhanvien = context.Nhanviens.FirstOrDefault(nv => nv.MaNv == user.MaNv);
+                            if (nhanvien == null)
+                            {
+                                AddError(nameof(Email), "Không tìm thấy thông tin nhân viên.");
+                                return;
+                            }
+                            UserSession.Current.StaffId = user.MaNv;
+                            UserSession.Current.CustomerName = nhanvien.HoTenNv;
+                            UserSession.Current.isStaff = true;
 
+                            var currentWindow = Application.Current.MainWindow;
+                            var vm = new AdminViewModel();
+
+
+                            //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
+
+                            var adminWindow = new AdminWindow
+                            {
+                                DataContext = vm
+                            };
+                            Application.Current.MainWindow = adminWindow;
+                            currentWindow?.Close();
+                            adminWindow.Opacity = 0;
+                            adminWindow.Show();
+                            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
+                            adminWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
                         }
                         else return;
                     }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using AirTicketSalesManagement.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace AirTicketSalesManagement.Data;
 
@@ -40,21 +38,10 @@ public partial class AirTicketDbContext : DbContext
 
     public virtual DbSet<Taikhoan> Taikhoans { get; set; }
 
-    public string GetConnectionString(string name = "DefaultConnection")
-    {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-        var config = builder.Build();
-        return config.GetConnectionString(name);
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var connectionString = GetConnectionString();
-        optionsBuilder.UseSqlServer(connectionString);
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=LAPTOP-9JTTD1R2;Database=QLVMB;User Id=sa;Password=123;TrustServerCertificate=True;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Chuyenbay>(entity =>
@@ -135,6 +122,7 @@ public partial class AirTicketDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.MaKh).HasColumnName("MaKH");
             entity.Property(e => e.MaLb).HasColumnName("MaLB");
+            entity.Property(e => e.MaNv).HasColumnName("MaNV");
             entity.Property(e => e.Slve).HasColumnName("SLVe");
             entity.Property(e => e.SoDtlienLac)
                 .HasMaxLength(10)
@@ -158,6 +146,10 @@ public partial class AirTicketDbContext : DbContext
             entity.HasOne(d => d.MaLbNavigation).WithMany(p => p.Datves)
                 .HasForeignKey(d => d.MaLb)
                 .HasConstraintName("FK__DATVE__MaLB__49C3F6B7");
+
+            entity.HasOne(d => d.MaNvNavigation).WithMany(p => p.Datves)
+                .HasForeignKey(d => d.MaNv)
+                .HasConstraintName("FK__DATVE__MaNV__59063A47");
         });
 
         modelBuilder.Entity<Khachhang>(entity =>

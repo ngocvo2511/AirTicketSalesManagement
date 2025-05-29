@@ -19,5 +19,7 @@ public partial class Nhanvien
 
     public string? Cccd { get; set; }
 
+    public virtual ICollection<Datve> Datves { get; set; } = new List<Datve>();
+
     public virtual ICollection<Taikhoan> Taikhoans { get; set; } = new List<Taikhoan>();
 }

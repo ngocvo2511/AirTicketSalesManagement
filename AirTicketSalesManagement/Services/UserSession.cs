@@ -12,6 +12,7 @@ namespace AirTicketSalesManagement.Services
 
         public int? StaffId { get; set; }
         public string CustomerName { get; set; }
+        public bool isStaff { get; set; } = false;
         // các thuộc tính khác
 
         public static UserSession Current { get; } = new UserSession();

@@ -26,7 +26,10 @@
     <viewmodelCUST:HomePageViewModel x:Key="HomePageVM"/>
     <viewmodelCUST:CustomerProfileViewModel x:Key="CustomerProfileVM"/>
     <viewmodelCUST:BookingHistoryViewModel x:Key="BookingHistoryVM"/>
-    
+
+
+    <!-- Booking -->
+
     <viewmodelBOOKING:PassengerInformationViewModel x:Key="PassengerInformationVM"/>
     <viewmodelBOOKING:PaymentConfirmationViewModel x:Key="PaymentConfirmationVM"/>
 
@@ -81,6 +84,9 @@
     <DataTemplate DataType="{x:Type viewmodelCUST:BookingHistoryViewModel}">
         <viewsCUST:BookingHistoryView />
     </DataTemplate>
+
+    <!-- Booking -->
+
     <DataTemplate DataType="{x:Type viewmodelBOOKING:FlightScheduleSearchViewModel}">
         <viewsCUST:FlightScheduleSearchView />
     </DataTemplate>

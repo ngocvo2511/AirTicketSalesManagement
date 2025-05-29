@@ -23,9 +23,13 @@ public partial class Datve
 
     public string? TtdatVe { get; set; }
 
+    public int? MaNv { get; set; }
+
     public virtual ICollection<Ctdv> Ctdvs { get; set; } = new List<Ctdv>();
 
     public virtual Khachhang? MaKhNavigation { get; set; }
 
     public virtual Lichbay? MaLbNavigation { get; set; }
+
+    public virtual Nhanvien? MaNvNavigation { get; set; }
 }
