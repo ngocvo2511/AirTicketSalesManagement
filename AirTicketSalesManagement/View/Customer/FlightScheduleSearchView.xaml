@@ -31,17 +31,7 @@
                                Margin="8,0,0,15"
                                VerticalAlignment="Center"/>
 
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <RadioButton x:Name="OneWayRadio" 
-             Content="Một chiều" 
-             Margin="0 0 15 0"
-             GroupName="TripType"
-             IsChecked="{Binding IsRoundTrip, Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}"/>
-                        <RadioButton x:Name="RoundTripRadio" 
-             Content="Khứ hồi" 
-             GroupName="TripType"
-             IsChecked="{Binding IsRoundTrip, Mode=TwoWay}"/>
-                    </StackPanel>
+                    
                 </Grid>
 
                 <Grid Margin="10">

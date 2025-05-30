@@ -233,7 +233,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <!-- Thanh tiêu đề -->
             <RowDefinition Height="*"/>
             <!-- Nội dung chính -->
