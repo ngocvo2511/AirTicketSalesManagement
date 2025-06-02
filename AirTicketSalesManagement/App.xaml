@@ -32,6 +32,7 @@
             <converters:TicketSelectionConverter x:Key="TicketSelectionConverter"/>
             <converters:NonNullToVisibilityConverter x:Key="NonNullToVisibilityConverter"/>
             <converters:InverseNonNullToVisibilityConverter x:Key="InverseNonNullToVisibilityConverter"/>
+            <converters:AirportDisplayConverter x:Key="AirportDisplayConverter"/>
 
 
 

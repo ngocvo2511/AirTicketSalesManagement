@@ -17,24 +17,17 @@
         </Grid.RowDefinitions>
 
         <!-- Panel tìm kiếm -->
-        <Border Grid.Row="0" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+        <Border Grid.Row="0" Background="#F5F7FA" CornerRadius="10" Padding="23" Margin="0 0 0 20">
             <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                <!-- Tiêu đề -->
+                <TextBlock Text="Nhập thông tin chuyến bay cần tìm" 
+                       FontSize="20" 
+                       FontWeight="SemiBold" 
+                       Margin="0,0,0,17"
+                       Foreground="#2C3E50"/>
 
-                    <TextBlock Grid.Column="0" Text="Nhập thông tin chuyến bay cần tìm" 
-                               FontSize="18" 
-                               FontWeight="SemiBold" 
-                               Margin="8,0,0,15"
-                               VerticalAlignment="Center"/>
-
-                    
-                </Grid>
-
-                <Grid Margin="10">
+                <!-- Container chính cho form -->
+                <Grid Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -43,374 +36,351 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Điểm khởi hành -->
-                    <Grid Grid.Column="0" Grid.Row="0" Margin="0 0 20 20">
+                    <!-- Hàng 1: Điểm khởi hành và Điểm đến -->
+                    <Grid Grid.Column="0" Grid.Row="0" Margin="0,0,15,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <materialDesign:PackIcon Kind="FlightTakeoff" 
-                                                 Grid.Column="0"
-                                                 Foreground="#388FF4"
-                                                 Width="30" Height="30" 
-                                                 VerticalAlignment="Bottom" 
-                                                 Margin="0,0,10,5"/>
+                                             Grid.Column="0"
+                                             Foreground="#388FF4"
+                                             Width="30" Height="30" 
+                                             VerticalAlignment="Bottom" 
+                                             Margin="0,0,15,5"/>
 
                         <ComboBox Grid.Column="1"
-          materialDesign:HintAssist.Hint="Điểm khởi hành"
-          IsEditable="True"
-          Width="260"
-          Height="40"
-          FontSize="14"
-          HorizontalAlignment="Left"
-          ItemsSource="{Binding DiemDiList}"
-          Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-          Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                              materialDesign:HintAssist.Hint="Điểm khởi hành"
+                              IsEditable="True"
+                              Height="45"
+                                  Width="260"
+                              FontSize="14"
+                                  HorizontalAlignment="Left"
+                              ItemsSource="{Binding DiemDiList}"
+                              Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </Grid>
 
-                    <!-- Điểm đến -->
-                    <Grid Grid.Column="1" Grid.Row="0" Margin="0 0 0 20">
+                    <Grid Grid.Column="1" Grid.Row="0" Margin="15,0,0,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <materialDesign:PackIcon Kind="FlightLand" 
-                                                 Grid.Column="0"
-                                                 Foreground="#388FF4"
-                                                 Width="30" Height="30" 
-                                                 VerticalAlignment="Bottom" 
-                                                 Margin="0,0,10,5"/>
+                                             Grid.Column="0"
+                                             Foreground="#388FF4"
+                                             Width="30" Height="30" 
+                                             VerticalAlignment="Bottom" 
+                                             Margin="0,0,15,5"/>
 
-                        <!-- Điểm đến -->
                         <ComboBox Grid.Column="1"
-          materialDesign:HintAssist.Hint="Điểm đến"
-          IsEditable="True"
-          Width="260"
-          Height="40"
-          FontSize="14"
-          HorizontalAlignment="Left"
-          ItemsSource="{Binding DiemDenList}"
-          Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-          Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                              materialDesign:HintAssist.Hint="Điểm đến"
+                              IsEditable="True"
+                              Height="45"
+                                  Width="260"
+                                  HorizontalAlignment="Left"
+                              FontSize="14"
+                              ItemsSource="{Binding DiemDenList}"
+                              Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </Grid>
 
-                    <!-- Ngày khởi hành -->
-                    <Grid Grid.Column="0" Grid.Row="1" Margin="0 0 20 20">
+                    <!-- Hàng 2: Ngày khởi hành và Số lượng hành khách -->
+                    <Grid Grid.Column="0" Grid.Row="1" Margin="0,0,15,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <materialDesign:PackIcon Kind="CalendarMonth" 
-                                                 Grid.Column="0"
-                                                 Foreground="#388FF4"
-                                                 Width="30" Height="30" 
-                                                 VerticalAlignment="Bottom" 
-                                                 Margin="0,0,10,5"/>
+                                             Grid.Column="0"
+                                             Foreground="#388FF4"
+                                             Width="30" Height="30" 
+                                             VerticalAlignment="Bottom" 
+                                             Margin="0,0,15,5"/>
 
                         <DatePicker Grid.Column="1"
+                                Height="45"
                                     Width="260"
-                                    Height="40"
-                                    FontSize="14"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    materialDesign:HintAssist.Hint="Ngày đi"
-                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
-                                    SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
+                                FontSize="14"
+                                VerticalAlignment="Center"
+                                materialDesign:HintAssist.Hint="Ngày đi"
+                                Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
                     </Grid>
 
-                    <!-- Ngày về (chỉ hiển thị khi chọn khứ hồi) -->
-                    <Grid Grid.Column="1" Grid.Row="1" Margin="0 0 0 20">
-                        <Grid.Style>
-                            <Style TargetType="Grid">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=RoundTripRadio, Path=IsChecked}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ElementName=RoundTripRadio, Path=IsChecked}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Grid.Style>
-
+                    <Grid Grid.Column="1" Grid.Row="1" Margin="15,0,0,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <materialDesign:PackIcon Kind="CalendarClock" 
-                            Grid.Column="0"
-                            Foreground="#388FF4"
-                            Width="30" Height="30" 
-                            VerticalAlignment="Bottom" 
-                            Margin="0,0,10,5"/>
-
-                        <DatePicker Grid.Column="1"
-                x:Name="ReturnDatePicker"
-                Width="260"
-                Height="40"
-                FontSize="14"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                materialDesign:HintAssist.Hint="Ngày về"
-                Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
-                SelectedDate="{Binding NgayVe, Mode=TwoWay}"/>
-                    </Grid>
-
-                    <!-- Số lượng hành khách -->
-                    <Grid Grid.Column="0" Grid.Row="2" Margin="0 0 20 0">
-                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <materialDesign:PackIcon Kind="AccountGroup" 
-                                                 Grid.Column="0"
-                                                 Foreground="#388FF4"
-                                                 Width="30" Height="30" 
-                                                 VerticalAlignment="Bottom" 
-                                                 Margin="0,0,10,5"/>
+                                             Grid.Column="0"
+                                             Foreground="#388FF4"
+                                             Width="30" Height="30" 
+                                             VerticalAlignment="Bottom" 
+                                             Margin="0,0,15,5"/>
 
-                        <Grid Grid.Column="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="1"
+                             materialDesign:HintAssist.Hint="Số lượng hành khách"
+                             Height="45"
+                                 Width="260"
+                                 HorizontalAlignment="Left"
+                             FontSize="14"
+                             IsReadOnly="True"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Text="{Binding PassengerSummary}"
+                             VerticalAlignment="Center"/>
 
-                            <TextBox Grid.Column="0"
-                                     materialDesign:HintAssist.Hint="Hành khách"
-                                     Width="220"
-                                     FontSize="14"
-                                     HorizontalAlignment="Left"
-                                     IsReadOnly="True"
-                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                     Text="{Binding PassengerSummary}" Margin="0,5,0,5"/>
-
-                            <Button Grid.Column="1" 
-                                    Style="{StaticResource MaterialDesignFlatLightButton}"
-                                    Width="40" Height="40"
-                                    Padding="0"
-                                    Margin="5,0,0,0"
-                                    Command="{Binding OpenPassengerSelectorCommand}">
-                                <materialDesign:PackIcon Kind="MenuDown" Width="30" Height="30"/>
-                            </Button>
-                        </Grid>
+                        <Button Grid.Column="2" 
+                            x:Name="PassengerSelectorButton"
+                            Style="{StaticResource MaterialDesignFlatLightButton}"
+                            Width="45" Height="45"
+                            Padding="0"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            Command="{Binding OpenPassengerSelectorCommand}">
+                            <materialDesign:PackIcon Kind="MenuDown" Width="25" Height="25"/>
+                        </Button>
                     </Grid>
 
-                    <!-- Popup để chọn số lượng hành khách -->
-                    <Popup x:Name="PassengerSelectorPopup" 
-                           IsOpen="{Binding IsPassengerSelectorOpen, Mode=TwoWay}"
-                           StaysOpen="False"
-                           PlacementTarget="{Binding ElementName=PassengerSelectorButton}"
-                           Placement="Bottom" 
-                           Width="380"
-                           AllowsTransparency="True">
-                        <Border Background="White" 
-                                BorderBrush="#DDDDDD" 
-                                BorderThickness="1" 
-                                CornerRadius="8"
-                                Padding="20">
-                            <StackPanel>
-                                <TextBlock Text="Hành khách" 
-                                           FontWeight="SemiBold"
-                                           FontSize="16"
-                                           Margin="0,0,0,15"/>
-
-                                <!-- Người lớn -->
-                                <Grid Margin="0,0,0,20">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Column="0" Grid.Row="0" 
-                                               Text="Người lớn" 
-                                               FontSize="14"
-                                               FontWeight="Medium"/>
-                                    <TextBlock Grid.Column="0" Grid.Row="1" 
-                                               Text="Người lớn (từ 12 tuổi)" 
-                                               Foreground="#666666"
-                                               FontSize="13"/>
-
-                                    <StackPanel Grid.Column="1" Grid.RowSpan="2" 
-                                                Orientation="Horizontal" 
-                                                VerticalAlignment="Center">
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="40" Height="40"
-                                                BorderBrush="#DDDDDD"
-                                                BorderThickness="1"
-                                                Background="Transparent"
-                                                Command="{Binding DecreaseAdultCommand}">
-                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333" Width="20" Height="20"/>
-                                        </Button>
-
-                                        <TextBlock Text="{Binding AdultCount, Mode=TwoWay}" 
-                                                   VerticalAlignment="Center" 
-                                                   HorizontalAlignment="Center" 
-                                                   FontWeight="Medium"
-                                                   FontSize="18"
-                                                   Width="40"
-                                                   TextAlignment="Center"
-                                                   Margin="10,0"/>
-
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="40" Height="40"
-                                                BorderBrush="#DDDDDD"
-                                                BorderThickness="1"
-                                                Background="Transparent"
-                                                Command="{Binding IncreaseAdultCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623" Width="20" Height="20"/>
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-
-                                <!-- Trẻ em (2-12 tuổi) -->
-                                <Grid Margin="0,0,0,20">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Column="0" Grid.Row="0" 
-                                               Text="Trẻ em" 
-                                               FontSize="14"
-                                               FontWeight="Medium"/>
-                                    <TextBlock Grid.Column="0" Grid.Row="1" 
-                                               Text="Trẻ em (2-12 tuổi)" 
-                                               Foreground="#666666"
-                                               FontSize="13"/>
-
-                                    <StackPanel Grid.Column="1" Grid.RowSpan="2" 
-                                                Orientation="Horizontal" 
-                                                VerticalAlignment="Center">
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="40" Height="40"
-                                                BorderBrush="#DDDDDD"
-                                                BorderThickness="1"
-                                                Background="Transparent"
-                                                Command="{Binding DecreaseChildCommand}">
-                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333" Width="20" Height="20"/>
-                                        </Button>
-
-                                        <TextBlock Text="{Binding ChildCount}" 
-                                                   VerticalAlignment="Center" 
-                                                   HorizontalAlignment="Center" 
-                                                   FontWeight="Medium"
-                                                   FontSize="18"
-                                                   Width="40"
-                                                   TextAlignment="Center"
-                                                   Margin="10,0"/>
-
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="40" Height="40"
-                                                BorderBrush="#DDDDDD"
-                                                BorderThickness="1"
-                                                Background="Transparent"
-                                                Command="{Binding IncreaseChildCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623" Width="20" Height="20"/>
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-
-                                <!-- Trẻ sơ sinh (dưới 2 tuổi) -->
-                                <Grid Margin="0,0,0,20">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Column="0" Grid.Row="0" 
-                                               Text="Trẻ em" 
-                                               FontSize="14"
-                                               FontWeight="Medium"/>
-                                    <TextBlock Grid.Column="0" Grid.Row="1" 
-                                               Text="Trẻ em (dưới 2 tuổi)" 
-                                               Foreground="#666666"
-                                               FontSize="13"/>
-
-                                    <StackPanel Grid.Column="1" Grid.RowSpan="2" 
-                                                Orientation="Horizontal" 
-                                                VerticalAlignment="Center">
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="40" Height="40"
-                                                BorderBrush="#DDDDDD"
-                                                BorderThickness="1"
-                                                Background="Transparent"
-                                                Command="{Binding DecreaseInfantCommand}">
-                                            <materialDesign:PackIcon Kind="Minus" Foreground="#333333" Width="20" Height="20"/>
-                                        </Button>
-
-                                        <TextBlock Text="{Binding InfantCount}" 
-                                                   VerticalAlignment="Center" 
-                                                   HorizontalAlignment="Center" 
-                                                   FontWeight="Medium"
-                                                   FontSize="18"
-                                                   Width="40"
-                                                   TextAlignment="Center"
-                                                   Margin="10,0"/>
-
-                                        <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                Width="40" Height="40"
-                                                BorderBrush="#DDDDDD"
-                                                BorderThickness="1"
-                                                Background="Transparent"
-                                                Command="{Binding IncreaseInfantCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#F5A623" Width="20" Height="20"/>
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-
-                                <!-- Nút Áp dụng -->
-                                <Button Content="ÁP DỤNG" 
-                                        Style="{StaticResource MaterialDesignRaisedButton}"
-                                        Background="#388FF4"
-                                        Foreground="White"
-                                        FontSize="14"
-                                        FontWeight="Medium"
-                                        Height="45"
-                                        Margin="0,10,0,0"
-                                        HorizontalAlignment="Stretch"
-                                        Command="{Binding ApplyPassengerSelectionCommand}"/>
-                            </StackPanel>
-                        </Border>
-                    </Popup>
-
-                    <!-- Button tìm kiếm -->
-                    <Button Grid.Column="1" Grid.Row="2"
-                            Style="{StaticResource MaterialDesignRaisedButton}"
-                            Background="#388FF4"
-                            BorderBrush="Transparent"
-                            Foreground="White"
-                            Height="50"
-                            Width="260"
-                            FontSize="15"
-                            FontWeight="Medium"
-                            HorizontalAlignment="Left"
-                            Content="TÌM CHUYẾN BAY"
-                            materialDesign:ButtonAssist.CornerRadius="8"
-                            Command="{Binding SearchFlightCommand}">
+                    <!-- Hàng 3: Button tìm kiếm (căn giữa, span 2 cột) -->
+                    <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#388FF4"
+                        BorderBrush="Transparent"
+                        Foreground="White"
+                        Height="55"
+                        Width="230"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Right"
+                        Content="TÌM CHUYẾN BAY"
+                        materialDesign:ButtonAssist.CornerRadius="10"
+                        Command="{Binding SearchFlightCommand}"
+                        Margin="0,10,130,0">
                         <Button.Effect>
-                            <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3"/>
+                            <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.3" Color="#388FF4"/>
                         </Button.Effect>
                     </Button>
                 </Grid>
+
+                <!-- Popup để chọn số lượng hành khách -->
+                <Popup x:Name="PassengerSelectorPopup" 
+                   IsOpen="{Binding IsPassengerSelectorOpen, Mode=TwoWay}"
+                   StaysOpen="False"
+                   PlacementTarget="{Binding ElementName=PassengerSelectorButton}"
+                   Placement="Bottom" 
+                   Width="400"
+                   AllowsTransparency="True">
+                    <Border Background="White" 
+                        BorderBrush="#E0E0E0" 
+                        BorderThickness="1" 
+                        CornerRadius="10"
+                        Padding="25">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2"/>
+                        </Border.Effect>
+
+                        <StackPanel>
+                            <TextBlock Text="Chọn số lượng hành khách" 
+                                   FontWeight="SemiBold"
+                                   FontSize="18"
+                                   Margin="0,0,0,20"
+                                   Foreground="#2C3E50"/>
+
+                            <!-- Người lớn -->
+                            <Grid Margin="0,0,0,25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Column="0" Grid.Row="0" 
+                                       Text="Người lớn" 
+                                       FontSize="15"
+                                       FontWeight="Medium"
+                                       Foreground="#2C3E50"/>
+                                <TextBlock Grid.Column="0" Grid.Row="1" 
+                                       Text="Từ 12 tuổi trở lên" 
+                                       Foreground="#7F8C8D"
+                                       FontSize="13"
+                                       Margin="0,2,0,0"/>
+
+                                <StackPanel Grid.Column="1" Grid.RowSpan="2" 
+                                        Orientation="Horizontal" 
+                                        VerticalAlignment="Center">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        Width="45" Height="45"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        Background="Transparent"
+                                        Command="{Binding DecreaseAdultCommand}">
+                                        <materialDesign:PackIcon Kind="Minus" Foreground="#7F8C8D" Width="20" Height="20"/>
+                                    </Button>
+
+                                    <TextBlock Text="{Binding AdultCount, Mode=TwoWay}" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center" 
+                                           FontWeight="SemiBold"
+                                           FontSize="18"
+                                           Width="50"
+                                           TextAlignment="Center"
+                                           Margin="15,0"
+                                           Foreground="#2C3E50"/>
+
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        Width="45" Height="45"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        Background="Transparent"
+                                        Command="{Binding IncreaseAdultCommand}">
+                                        <materialDesign:PackIcon Kind="Plus" Foreground="#388FF4" Width="20" Height="20"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Trẻ em (2-12 tuổi) -->
+                            <Grid Margin="0,0,0,25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Column="0" Grid.Row="0" 
+                                       Text="Trẻ em" 
+                                       FontSize="15"
+                                       FontWeight="Medium"
+                                       Foreground="#2C3E50"/>
+                                <TextBlock Grid.Column="0" Grid.Row="1" 
+                                       Text="Từ 2 đến 12 tuổi" 
+                                       Foreground="#7F8C8D"
+                                       FontSize="13"
+                                       Margin="0,2,0,0"/>
+
+                                <StackPanel Grid.Column="1" Grid.RowSpan="2" 
+                                        Orientation="Horizontal" 
+                                        VerticalAlignment="Center">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        Width="45" Height="45"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        Background="Transparent"
+                                        Command="{Binding DecreaseChildCommand}">
+                                        <materialDesign:PackIcon Kind="Minus" Foreground="#7F8C8D" Width="20" Height="20"/>
+                                    </Button>
+
+                                    <TextBlock Text="{Binding ChildCount}" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center" 
+                                           FontWeight="SemiBold"
+                                           FontSize="18"
+                                           Width="50"
+                                           TextAlignment="Center"
+                                           Margin="15,0"
+                                           Foreground="#2C3E50"/>
+
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        Width="45" Height="45"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        Background="Transparent"
+                                        Command="{Binding IncreaseChildCommand}">
+                                        <materialDesign:PackIcon Kind="Plus" Foreground="#388FF4" Width="20" Height="20"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Trẻ sơ sinh (dưới 2 tuổi) -->
+                            <Grid Margin="0,0,0,25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Column="0" Grid.Row="0" 
+                                       Text="Trẻ sơ sinh" 
+                                       FontSize="15"
+                                       FontWeight="Medium"
+                                       Foreground="#2C3E50"/>
+                                <TextBlock Grid.Column="0" Grid.Row="1" 
+                                       Text="Dưới 2 tuổi" 
+                                       Foreground="#7F8C8D"
+                                       FontSize="13"
+                                       Margin="0,2,0,0"/>
+
+                                <StackPanel Grid.Column="1" Grid.RowSpan="2" 
+                                        Orientation="Horizontal" 
+                                        VerticalAlignment="Center">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        Width="45" Height="45"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        Background="Transparent"
+                                        Command="{Binding DecreaseInfantCommand}">
+                                        <materialDesign:PackIcon Kind="Minus" Foreground="#7F8C8D" Width="20" Height="20"/>
+                                    </Button>
+
+                                    <TextBlock Text="{Binding InfantCount}" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center" 
+                                           FontWeight="SemiBold"
+                                           FontSize="18"
+                                           Width="50"
+                                           TextAlignment="Center"
+                                           Margin="15,0"
+                                           Foreground="#2C3E50"/>
+
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        Width="45" Height="45"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        Background="Transparent"
+                                        Command="{Binding IncreaseInfantCommand}">
+                                        <materialDesign:PackIcon Kind="Plus" Foreground="#388FF4" Width="20" Height="20"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Nút Áp dụng -->
+                            <Button Content="ÁP DỤNG" 
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#388FF4"
+                                Foreground="White"
+                                FontSize="15"
+                                FontWeight="SemiBold"
+                                Height="50"
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Stretch"
+                                materialDesign:ButtonAssist.CornerRadius="8"
+                                Command="{Binding ApplyPassengerSelectionCommand}">
+                                <Button.Effect>
+                                    <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3" Color="#388FF4"/>
+                                </Button.Effect>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </Popup>
             </StackPanel>
         </Border>
 

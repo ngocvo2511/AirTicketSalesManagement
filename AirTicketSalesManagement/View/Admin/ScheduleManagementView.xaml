@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AirTicketSalesManagement.View.Admin.FlightManagementView"
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Admin.ScheduleManagementView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -135,15 +135,15 @@
 
         <!-- Header Section -->
         <Grid Grid.Row="0" Margin="0,0,0,15">
-            
+
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Icon:PackIconMaterial Kind="AirplaneTakeoff" Width="32" Height="32" 
                                      Foreground="#6366F1" Margin="0,0,12,0"/>
-                <TextBlock Text="QUẢN LÝ CHUYẾN BAY" Style="{StaticResource HeaderTextStyle}"/>
+                <TextBlock Text="QUẢN LÝ LỊCH BAY" Style="{StaticResource HeaderTextStyle}"/>
             </StackPanel>
 
- <!--           <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <!--           <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Border Background="#EEF2FF" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <Icon:PackIconMaterial Kind="ClockOutline" Width="16" Height="16" 
@@ -168,7 +168,7 @@
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,18">
                     <Icon:PackIconMaterial Kind="Magnify" Width="20" Height="20" 
                                          Foreground="#64748B" Margin="0,0,8,0"/>
-                    <TextBlock Text="Tìm kiếm chuyến bay" FontSize="16" FontWeight="SemiBold" 
+                    <TextBlock Text="Tìm kiếm lịch bay" FontSize="16" FontWeight="SemiBold" 
                              Foreground="#334155"/>
                 </StackPanel>
 
