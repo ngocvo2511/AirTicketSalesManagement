@@ -118,7 +118,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         public void Search()
         {
             Flights.Clear();
-            MessageBox.Show(HangHangKhong + " " + TrangThai);
 
             using (var context = new AirTicketDbContext())
             {

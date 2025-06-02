@@ -101,6 +101,7 @@
 
         <!-- DataGrid Row Style - Fix cho alternating rows -->
         <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridRow_PreviewMouseLeftButtonDown"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Style.Triggers>
@@ -222,33 +223,29 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Margin="0,0,12,0">
-                        <TextBlock Text="Hãng hàng không" FontWeight="Medium" 
+                        <TextBlock Text="Ngày đi" FontWeight="Medium" 
                                  Foreground="#374151" Margin="0,0,0,6"/>
-                        <ComboBox x:Name="cboHangHangKhong"
-                                  Text="{Binding HangHangKhong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  materialDesign:HintAssist.Hint="Tất cả các hãng"
-                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                  Height="52" FontSize="14">
-                            <ComboBoxItem Content="Tất cả" Tag="Tất cả"/>
-                            <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
-                            <ComboBoxItem Content="VietJet Air" Tag="VietJet Air"/>
-                            <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
-                            <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
-                        </ComboBox>
+                        <DatePicker Grid.Column="1"
+        Height="52"
+
+                                    FontSize="14"
+        materialDesign:HintAssist.Hint="Ngày đi"
+        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+        SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Margin="6,0,6,0">
-                        <TextBlock Text="Trạng thái khai thác" FontWeight="Medium" 
+                        <TextBlock Text="Tình trạng lịch bay" FontWeight="Medium" 
                                  Foreground="#374151" Margin="0,0,0,6"/>
                         <ComboBox x:Name="cboSearchStatus"
-                                  Text="{Binding TrangThai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  materialDesign:HintAssist.Hint="Tất cả trạng thái"
+                                  Text="{Binding TinhTrangLichBay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  materialDesign:HintAssist.Hint="Tất cả"
                                   Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                   Height="52" FontSize="14">
                             <ComboBoxItem Content="Tất cả" Tag="Tất cả"/>
-                            <ComboBoxItem Content="Đang khai thác" Tag="Đang khai thác"/>
-                            <ComboBoxItem Content="Tạm dừng" Tag="Tạm dừng"/>
-                            <ComboBoxItem Content="Ngừng khai thác" Tag="Ngừng khai thác"/>
+                            <ComboBoxItem Content="Chờ cất cánh" Tag="Chờ cất cánh"/>
+                            <ComboBoxItem Content="Đã cất cánh" Tag="Đã cất cánh"/>
+                            <ComboBoxItem Content="Hoàn thành" Tag="Hoàn thành"/>
                         </ComboBox>
                     </StackPanel>
 
@@ -305,7 +302,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="ViewList" Width="20" Height="20" 
                                                  Foreground="#374151" Margin="0,0,8,0"/>
-                            <TextBlock Text="DANH SÁCH CHUYẾN BAY" FontWeight="Bold" 
+                            <TextBlock Text="DANH SÁCH LỊCH BAY" FontWeight="Bold" 
                                      FontSize="16" Foreground="#374151"/>
                         </StackPanel>
 
@@ -317,33 +314,34 @@
                 </Border>
 
                 <!-- DataGrid -->
-                <DataGrid Grid.Row="1" x:Name="dgFlights"
-                          ItemsSource="{Binding Flights}"
-                          SelectedItem="{Binding SelectedFlight}"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          CanUserDeleteRows="False"
-                          CanUserReorderColumns="True"
-                          CanUserResizeColumns="True"
-                          CanUserResizeRows="False"
-                          CanUserSortColumns="True"
-                          IsReadOnly="True"
-                          GridLinesVisibility="None"
-                          HeadersVisibility="Column"
-                          SelectionMode="Single"
-                          RowHeaderWidth="0"
-                          Background="Transparent"
-                          BorderThickness="0"
-                          ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
-                          CellStyle="{StaticResource DataGridCellStyle}"
-                          RowStyle="{StaticResource DataGridRowStyle}"
-                          >
+                <!-- DataGrid -->
+                <DataGrid Grid.Row="1" x:Name="dgLichBay"
+          ItemsSource="{Binding FlightSchedule}"
+          SelectedItem="{Binding SelectedLichBay}"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          CanUserDeleteRows="False"
+          CanUserReorderColumns="True"
+          CanUserResizeColumns="True"
+          CanUserResizeRows="False"
+          CanUserSortColumns="True"
+          IsReadOnly="True"
+          GridLinesVisibility="None"
+          HeadersVisibility="Column"
+          SelectionMode="Single"
+          RowHeaderWidth="0"
+          Background="Transparent"
+          BorderThickness="0"
+          RowDetailsVisibilityMode="VisibleWhenSelected"
+          ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+          CellStyle="{StaticResource DataGridCellStyle}"
+          RowStyle="{StaticResource DataGridRowStyle}"
+          >
 
                     <DataGrid.Columns>
                         <!-- Flight Number Column -->
                         <DataGridTextColumn Header="Số hiệu CB" Binding="{Binding SoHieuCb}" 
-                                          Width="100" MinWidth="100"
-                                            >
+                          Width="110" MinWidth="110">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="FontWeight" Value="Bold"/>
@@ -354,107 +352,132 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- Departure Airport Column -->
-                        <DataGridTemplateColumn Header="Sân bay đi" Width="*" MinWidth="150">
+                        <!-- Route Column (Departure -> Destination) -->
+                        <DataGridTemplateColumn Header="Tuyến bay" Width="180" MinWidth="180">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontWeight="Medium"
-                       FontSize="13"
-                       Foreground="#374151"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource AirportDisplayConverter}">
-                                                <Binding Path="SbdiNavigation.TenSb"/>
-                                                <Binding Path="Sbdi"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding SoHieuCbNavigation.Sbdi}" 
+                                  FontWeight="Medium" FontSize="13" Foreground="#374151"/>
+                                        <Icon:PackIconMaterial Kind="ArrowRight" Width="16" Height="16" 
+                                             Foreground="#9CA3AF" Margin="8,0"/>
+                                        <TextBlock Text="{Binding SoHieuCbNavigation.Sbden}" 
+                                  FontWeight="Medium" FontSize="13" Foreground="#374151"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-
-
-                        <!-- Destination Airport Column -->
-                        <DataGridTemplateColumn Header="Sân bay đi" Width="*" MinWidth="150">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock FontWeight="Medium"
-FontSize="13"
-Foreground="#374151"
-VerticalAlignment="Center"
-HorizontalAlignment="Left">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource AirportDisplayConverter}">
-                                                <Binding Path="SbdenNavigation.TenSb"/>
-                                                <Binding Path="Sbden"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <!-- Airline Column -->
-                        <DataGridTextColumn Header="Hãng hàng không" Binding="{Binding HangHangKhong}" 
-                                          Width="140" MinWidth="120">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="TextWrapping" Value="Wrap"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Foreground" Value="#374151"/>
-                                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-
-                        <!-- Flight Duration Column -->
-                        <DataGridTextColumn Header="Thời gian bay" 
-                                          Binding="{Binding SoGioBay, StringFormat={}{0:F1}h}" 
-                                          Width="111" MinWidth="111">
+                        <!-- Departure Date Column -->
+                        <DataGridTextColumn Header="Ngày bay" 
+                          Binding="{Binding GioDi, StringFormat=dd/MM/yyyy}" 
+                          Width="100" MinWidth="100">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="FontWeight" Value="Medium"/>
-                                    <Setter Property="Foreground" Value="#059669"/>
+                                    <Setter Property="Foreground" Value="#374151"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Time Range Column -->
+                        <DataGridTemplateColumn Header="Thời gian" Width="120" MinWidth="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#059669"
+                                  HorizontalAlignment="Center">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0:HH:mm}">
+                                                    <Binding Path="GioDi"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Text="→" FontSize="10" Foreground="#6B7280" 
+                                  HorizontalAlignment="Center" Margin="0,-2"/>
+                                        <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#DC2626"
+                                  HorizontalAlignment="Center">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0:HH:mm}">
+                                                    <Binding Path="GioDen"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Aircraft Type Column -->
+                        <DataGridTextColumn Header="Loại máy bay" Binding="{Binding LoaiMb}" 
+                          Width="100" MinWidth="100">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="Foreground" Value="#374151"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Available Seats Column -->
+                        <DataGridTextColumn Header="Chỗ trống" Binding="{Binding SlveKt}" 
+                          Width="80" MinWidth="80">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SlveKt, Converter={StaticResource GreaterThanConverter}, ConverterParameter=20}" Value="True">
+                                            <Setter Property="Foreground" Value="#16A34A"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SlveKt, Converter={StaticResource BetweenConverter}, ConverterParameter='5,20'}" Value="True">
+                                            <Setter Property="Foreground" Value="#D97706"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding SlveKt, Converter={StaticResource LessThanConverter}, ConverterParameter=5}" Value="True">
+                                            <Setter Property="Foreground" Value="#DC2626"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
                         <!-- Status Column -->
-                        <DataGridTemplateColumn Header="Trạng thái" Width="88" MinWidth="88">
+                        <DataGridTemplateColumn Header="Trạng thái" Width="120" MinWidth="120">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border CornerRadius="16" Padding="12,6" HorizontalAlignment="Center">
                                         <Border.Style>
                                             <Style TargetType="Border">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding TtkhaiThac}" Value="Đang khai thác">
-                                                        <Setter Property="Background" Value="#DCFCE7"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TtkhaiThac}" Value="Tạm dừng">
+                                                    <DataTrigger Binding="{Binding TtlichBay}" Value="Chờ cất cánh">
                                                         <Setter Property="Background" Value="#FEF3C7"/>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TtkhaiThac}" Value="Ngừng khai thác">
-                                                        <Setter Property="Background" Value="#FEE2E2"/>
+                                                    <DataTrigger Binding="{Binding TtlichBay}" Value="Đã cất cánh">
+                                                        <Setter Property="Background" Value="#DBEAFE"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TtlichBay}" Value="Hoàn thành">
+                                                        <Setter Property="Background" Value="#DCFCE7"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
-                                        <TextBlock Text="{Binding TTKhaiThac}" FontSize="11" FontWeight="SemiBold">
+                                        <TextBlock Text="{Binding TtlichBay}" FontSize="11" FontWeight="SemiBold">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding TTKhaiThac}" Value="Đang khai thác">
-                                                            <Setter Property="Foreground" Value="#16A34A"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding TTKhaiThac}" Value="Tạm dừng">
+                                                        <DataTrigger Binding="{Binding TtlichBay}" Value="Chờ cất cánh">
                                                             <Setter Property="Foreground" Value="#D97706"/>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding TTKhaiThac}" Value="Ngừng khai thác">
-                                                            <Setter Property="Foreground" Value="#DC2626"/>
+                                                        <DataTrigger Binding="{Binding TtlichBay}" Value="Đã cất cánh">
+                                                            <Setter Property="Foreground" Value="#2563EB"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TtlichBay}" Value="Hoàn thành">
+                                                            <Setter Property="Foreground" Value="#16A34A"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -471,25 +494,25 @@ HorizontalAlignment="Left">
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                ToolTip="Chỉnh sửa chuyến bay"
-                                                Command="{Binding DataContext.EditFlightCommand, 
-                                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                CommandParameter="{Binding}"
-                                                Width="32" Height="32" Margin="2">
+                                ToolTip="Chỉnh sửa lịch bay"
+                                Command="{Binding DataContext.EditLichBayCommand, 
+                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding}"
+                                Width="32" Height="32" Margin="2">
                                             <Border CornerRadius="6" Background="#EEF2FF" Padding="6">
                                                 <Icon:PackIconMaterial Kind="Pencil" Width="14" Height="14" 
-                                                                     Foreground="#3B82F6"/>
+                                                     Foreground="#3B82F6"/>
                                             </Border>
                                         </Button>
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                                ToolTip="Xóa chuyến bay"
-                                                Command="{Binding DataContext.DeleteFlightCommand, 
-                                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                CommandParameter="{Binding}"
-                                                Width="32" Height="32" Margin="2">
+                                ToolTip="Xóa lịch bay"
+                                Command="{Binding DataContext.DeleteLichBayCommand, 
+                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                CommandParameter="{Binding}"
+                                Width="32" Height="32" Margin="2">
                                             <Border CornerRadius="6" Background="#FEF2F2" Padding="6">
                                                 <Icon:PackIconMaterial Kind="Delete" Width="14" Height="14" 
-                                                                     Foreground="#EF4444"/>
+                                                     Foreground="#EF4444"/>
                                             </Border>
                                         </Button>
                                     </StackPanel>
@@ -498,29 +521,173 @@ HorizontalAlignment="Left">
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
 
+                    <!-- Row Details Template -->
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" 
+                    CornerRadius="8" Margin="10,5">
+                                <Grid Margin="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Header -->
+                                    <TextBlock Grid.Row="0" Text="Chi tiết lịch bay" 
+                              FontSize="16" FontWeight="SemiBold" 
+                              Foreground="#1F2937" Margin="0,0,0,10"/>
+
+                                    <!-- Flight Details -->
+                                    <Grid Grid.Row="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Left Column -->
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="Thông tin chuyến bay" FontWeight="SemiBold" 
+                                      Foreground="#374151" Margin="0,0,0,8"/>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,4">
+                                                <TextBlock Text="Mã lịch bay:" FontWeight="Medium" 
+                                          Foreground="#6B7280" Width="100"/>
+                                                <TextBlock Text="{Binding MaLb}" Foreground="#374151"/>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,4">
+                                                <TextBlock Text="Số hiệu CB:" FontWeight="Medium" 
+                                          Foreground="#6B7280" Width="100"/>
+                                                <TextBlock Text="{Binding SoHieuCb}" Foreground="#374151" FontWeight="SemiBold"/>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,4">
+                                                <TextBlock Text="Loại máy bay:" FontWeight="Medium" 
+                                          Foreground="#6B7280" Width="100"/>
+                                                <TextBlock Text="{Binding LoaiMb}" Foreground="#374151"/>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Middle Column -->
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Thời gian bay" FontWeight="SemiBold" 
+                                      Foreground="#374151" Margin="0,0,0,8"/>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,4">
+                                                <TextBlock Text="Giờ khởi hành:" FontWeight="Medium" 
+                                          Foreground="#6B7280" Width="100"/>
+                                                <TextBlock Text="{Binding GioDi, StringFormat=dd/MM/yyyy HH:mm}" 
+                                          Foreground="#059669" FontWeight="SemiBold"/>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,4">
+                                                <TextBlock Text="Giờ đến:" FontWeight="Medium" 
+                                          Foreground="#6B7280" Width="100"/>
+                                                <TextBlock Text="{Binding GioDen, StringFormat=dd/MM/yyyy HH:mm}" 
+                                          Foreground="#DC2626" FontWeight="SemiBold"/>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,4">
+                                                <TextBlock Text="Trạng thái:" FontWeight="Medium" 
+                                          Foreground="#6B7280" Width="100"/>
+                                                <Border CornerRadius="12" Padding="8,4" Background="#DCFCE7">
+                                                    <TextBlock Text="{Binding TtlichBay}" FontSize="10" 
+                                              FontWeight="SemiBold" Foreground="#16A34A"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Right Column -->
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="Thông tin vé" FontWeight="SemiBold" 
+                                      Foreground="#374151" Margin="0,0,0,8"/>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,4">
+                                                <TextBlock Text="Số lượng vé:" FontWeight="Medium" 
+                                          Foreground="#6B7280" Width="100"/>
+                                                <TextBlock Text="{Binding SlveKt}" Foreground="#374151" FontWeight="SemiBold"/>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,4">
+                                                <TextBlock Text="Giá vé cơ bản:" FontWeight="Medium" 
+                                          Foreground="#6B7280" Width="100"/>
+                                                <TextBlock Text="{Binding GiaVe, StringFormat=N0}" 
+                                          Foreground="#059669" FontWeight="SemiBold"/>
+                                                <TextBlock Text=" VNĐ" Foreground="#059669" FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Ticket Types Section -->
+                                    <StackPanel Grid.Row="4">
+                                        <TextBlock Text="Các loại vé" FontWeight="SemiBold" 
+                                  Foreground="#374151" Margin="0,10,0,8"/>
+
+                                        <ItemsControl ItemsSource="{Binding Loaives}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid Columns="3"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="White" CornerRadius="6" 
+                                           BorderBrush="#E5E7EB" BorderThickness="1" 
+                                           Margin="0,0,10,8" Padding="12">
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding HangGhe}" 
+                                                      FontWeight="SemiBold" Foreground="#1F2937"/>
+                                                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                                                <TextBlock Text="Hệ số giá: " FontSize="11" Foreground="#6B7280"/>
+                                                                <TextBlock Text="{Binding HeSoGia, StringFormat=x{0:F1}}" 
+                                                          FontSize="11" Foreground="#059669" FontWeight="SemiBold"/>
+                                                            </StackPanel>
+                                                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                                <TextBlock Text="Còn lại: " FontSize="11" Foreground="#6B7280"/>
+                                                                <TextBlock Text="{Binding SlveConLai}" 
+                                                          FontSize="11" Foreground="#DC2626" FontWeight="SemiBold"/>
+                                                                <TextBlock Text="/" FontSize="11" Foreground="#6B7280"/>
+                                                                <TextBlock Text="{Binding SlveToiDa}" 
+                                                          FontSize="11" Foreground="#6B7280"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+
                     <!-- Empty State Template -->
                     <DataGrid.Style>
                         <Style TargetType="DataGrid">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Flights.Count}" Value="0">
+                                <DataTrigger Binding="{Binding LichBays.Count}" Value="0">
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate>
                                                 <Border Background="White" CornerRadius="0,0,12,12">
                                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                                               Margin="60">
+                                               Margin="60">
                                                         <Border Background="#F3F4F6" CornerRadius="50" 
-                                                               Width="100" Height="100" Margin="0,0,0,24">
-                                                            <Icon:PackIconMaterial Kind="AirplaneTakeoff" 
-                                                                                 Width="48" Height="48" 
-                                                                                 Foreground="#9CA3AF"/>
+                                               Width="100" Height="100" Margin="0,0,0,24">
+                                                            <Icon:PackIconMaterial Kind="CalendarClock" 
+                                                                 Width="48" Height="48" 
+                                                                 Foreground="#9CA3AF"/>
                                                         </Border>
-                                                        <TextBlock Text="Không tìm thấy chuyến bay nào" 
-                                                                 FontSize="20" FontWeight="SemiBold" 
-                                                                 Foreground="#374151" HorizontalAlignment="Center"/>
-                                                        <TextBlock Text="Thử thay đổi bộ lọc tìm kiếm hoặc thêm chuyến bay mới" 
-                                                                 FontSize="14" Foreground="#6B7280" 
-                                                                 HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                                        <TextBlock Text="Không tìm thấy lịch bay nào" 
+                                                 FontSize="20" FontWeight="SemiBold" 
+                                                 Foreground="#374151" HorizontalAlignment="Center"/>
+                                                        <TextBlock Text="Thử thay đổi bộ lọc tìm kiếm hoặc thêm lịch bay mới" 
+                                                 FontSize="14" Foreground="#6B7280" 
+                                                 HorizontalAlignment="Center" Margin="0,8,0,0"/>
                                                     </StackPanel>
                                                 </Border>
                                             </ControlTemplate>
@@ -546,19 +713,19 @@ HorizontalAlignment="Left">
                 <Border Background="#DCFCE7" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="8" Height="8" Fill="#16A34A" Margin="0,0,6,0"/>
-                        <TextBlock Text="Đang khai thác" FontSize="12" FontWeight="Medium" Foreground="#16A34A"/>
+                        <TextBlock Text="Chờ cất cánh" FontSize="12" FontWeight="Medium" Foreground="#16A34A"/>
                     </StackPanel>
                 </Border>
                 <Border Background="#FEF3C7" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="8" Height="8" Fill="#D97706" Margin="0,0,6,0"/>
-                        <TextBlock Text="Tạm dừng" FontSize="12" FontWeight="Medium" Foreground="#D97706"/>
+                        <TextBlock Text="Đã cất cánh" FontSize="12" FontWeight="Medium" Foreground="#D97706"/>
                     </StackPanel>
                 </Border>
                 <Border Background="#FEE2E2" CornerRadius="8" Padding="12,6">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="8" Height="8" Fill="#DC2626" Margin="0,0,6,0"/>
-                        <TextBlock Text="Ngừng khai thác" FontSize="12" FontWeight="Medium" Foreground="#DC2626"/>
+                        <TextBlock Text="Hoàn thành" FontSize="12" FontWeight="Medium" Foreground="#DC2626"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

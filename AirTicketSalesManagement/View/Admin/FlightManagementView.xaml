@@ -377,7 +377,7 @@
 
 
                         <!-- Destination Airport Column -->
-                        <DataGridTemplateColumn Header="Sân bay đi" Width="*" MinWidth="150">
+                        <DataGridTemplateColumn Header="Sân bay đến" Width="*" MinWidth="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock FontWeight="Medium"

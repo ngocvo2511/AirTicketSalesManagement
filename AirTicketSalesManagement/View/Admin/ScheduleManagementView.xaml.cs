@@ -24,5 +24,14 @@ namespace AirTicketSalesManagement.View.Admin
         {
             InitializeComponent();
         }
+
+        private void DataGridRow_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DataGridRow row && row.IsSelected)
+            {
+                dgLichBay.SelectedItem = null;
+                e.Handled = true; // Ngăn DataGrid chọn lại dòng
+            }
+        }
     }
 }

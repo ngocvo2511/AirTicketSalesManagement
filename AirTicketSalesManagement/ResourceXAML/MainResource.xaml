@@ -130,6 +130,10 @@
     <DataTemplate DataType="{x:Type viewmodelADMIN:FlightManagementViewModel}">
         <viewsADMIN:FlightManagementView />
     </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type viewmodelADMIN:ScheduleManagementViewModel}">
+        <viewsADMIN:ScheduleManagementView />
+    </DataTemplate>
 
 
     <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">

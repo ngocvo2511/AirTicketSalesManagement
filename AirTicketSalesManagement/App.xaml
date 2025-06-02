@@ -33,6 +33,12 @@
             <converters:NonNullToVisibilityConverter x:Key="NonNullToVisibilityConverter"/>
             <converters:InverseNonNullToVisibilityConverter x:Key="InverseNonNullToVisibilityConverter"/>
             <converters:AirportDisplayConverter x:Key="AirportDisplayConverter"/>
+            <converters:GreaterThanConverter x:Key="GreaterThanConverter" />
+            <converters:LessThanConverter x:Key="LessThanConverter" />
+            <converters:BetweenConverter x:Key="BetweenConverter" />
+            <converters:SeatAvailabilityColorConverter x:Key="SeatAvailabilityColorConverter" />
+            <converters:CurrencyConverter x:Key="CurrencyConverter" />
+            <converters:FlightDurationConverter x:Key="FlightDurationConverter" />
 
 
 
