@@ -9,7 +9,90 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Staff"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980">
-    <Grid>
+
+    <UserControl.Resources>
+        <Style x:Key="HistoryCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#40000000" BlurRadius="15" ShadowDepth="3" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="HistoryButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="20,8"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#30000000" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="HistorySearchBox" TargetType="TextBox">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="12" 
+                                BorderBrush="#E9ECEF" 
+                                BorderThickness="2">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Margin="{TemplateBinding Padding}"
+                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#3498DB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="HistoryDataGridColumnHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="BorderBrush" Value="#E9ECEF"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        </Style>
+
+        <Style x:Key="HistoryDataGridRow" TargetType="DataGridRow">
+            <Setter Property="Height" Value="55"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F8F9FA"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="HistoryDataGridCell" TargetType="DataGridCell">
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F5F6FA">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -17,101 +100,261 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" Margin="0 10 0 20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Text="Lịch sử đặt vé" 
-               FontSize="30" FontWeight="Bold"
-               Margin="30 0 0 0"
-               Foreground="#2C3E50"
-               VerticalAlignment="Center" />
-
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <ToggleButton Template="{StaticResource ProfilePopupTemplate}" 
-                      Width="60"
-                      Height="60"
-                      Margin="0 0 40 0"/>
-            </StackPanel>
+        <Grid Grid.Row="0" Margin="0 10 0 10">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#388FF4" Offset="0"/>
+                    <GradientStop Color="#E8F4FD" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Border Height="80">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Lịch sử đặt vé" 
+                               FontSize="30" FontWeight="Bold"
+                               Margin="30 0 0 0"
+                               Foreground="#2C3E50"
+                               VerticalAlignment="Center" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <ToggleButton Template="{StaticResource ProfilePopupTemplate}" 
+                                      Width="60"
+                                      Height="60"
+                                      Margin="0 0 40 0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
-        <!-- Top Bar -->
-        <Grid Grid.Row="1" Margin="20 0 20 5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBox x:Name="SearchTextBox" Width="300" Height="35"
-         Margin="0 0 10 0"
-         materialDesign:HintAssist.Hint="Tra cứu lịch sử đặt vé" />
-                <Button Width="40" Height="35" Background="#3498DB"
-        Foreground="White" Padding="5">
-                    <materialDesign:PackIcon Kind="Magnify" Width="20" Height="20"/>
-                </Button>
-            </StackPanel>
+        <!-- Search Bar -->
+        <Border Grid.Row="1" Style="{StaticResource HistoryCard}" Margin="25,0,25,15">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                Grid.Column="1" Margin="10">
-                <Button Content="Thêm"
-                        Margin="5 0"
-                        Width="80" Height="35"
-                        Background="#2ECC71" Foreground="White"
-                        Style="{StaticResource MaterialDesignRaisedButton}" />
-                <Button Content="Xóa"
-                        Margin="5 0"
-                        Width="80" Height="35"
-                        Background="#E74C3C" Foreground="White"
-                        Style="{StaticResource MaterialDesignRaisedButton}" />
-            </StackPanel>
-        </Grid>
-        
-        <!-- Content -->
-        <ScrollViewer Grid.Row="2" 
-              VerticalScrollBarVisibility="Auto" 
-              HorizontalScrollBarVisibility="Auto">
-            <DataGrid AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False" Margin="10">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Mã đặt vé" Binding="{Binding MaDatVe}" Width="100"/>
-                    <DataGridTextColumn Header="Ngày đặt" Binding="{Binding NgayDat}" Width="100"/>
-                    <DataGridTextColumn Header="Loại vé" Binding="{Binding LoaiVe}" Width="100"/>
-                    <DataGridTextColumn Header="Số lượng" Binding="{Binding SoLuongVe}" Width="100"/>
-                    <DataGridTextColumn Header="Họ tên hành khách" Binding="{Binding HoTenHanhKhac}" Width="150"/>
-                    <DataGridTextColumn Header="Điểm khởi hành" Binding="{Binding DiemDi}" Width="150"/>
-                    <DataGridTextColumn Header="Điểm đến" Binding="{Binding DiemDen}" Width="150"/>
-                    <DataGridTextColumn Header="Ngày đi" Binding="{Binding GioDi}" Width="120"/>
-                    <DataGridTextColumn Header="Ngày về" Binding="{Binding GioDen}" Width="120"/>
-                    <DataGridTextColumn Header="Hạng vé" Binding="{Binding HangVe}" Width="120"/>
-                    <DataGridTextColumn Header="Trạng thái" Binding="{Binding TinhTrangDatVe}" Width="120"/>
-                    <DataGridTextColumn Header="Giá vé" Binding="{Binding TongTienThanhToan}" Width="100"/>
-                    <DataGridTemplateColumn Header="Xác nhận thanh toán/Hủy vé" MinWidth="120" Width="Auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
-                                    <Button
-                                            Style="{StaticResource MaterialDesignToolButton}"
-                                            ToolTip="Xác nhận đặt vé"
-                                            Command="{Binding DataContext.XacNhanCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}">
-                                        <materialDesign:PackIcon Kind="Check" Width="20" Height="20" Foreground="Green"/>
-                                    </Button>
-                                    
-                                    <Button
-                                            Style="{StaticResource MaterialDesignToolButton}"
-                                            ToolTip="Hủy đặt vé"
-                                            Command="{Binding DataContext.HuyVeCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}">
-                                        <materialDesign:PackIcon Kind="Close" Width="20" Height="20" Foreground="Red"/>
-                                    </Button>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBox x:Name="SearchTextBox" 
+                             Width="350" 
+                             Style="{StaticResource HistorySearchBox}"
+                             materialDesign:HintAssist.Hint="🔍 Tìm kiếm theo mã đặt vé, tên khách hàng..." 
+                             materialDesign:HintAssist.FontFamily="Segoe UI"/>
 
-                </DataGrid.Columns>
-            </DataGrid>
-        </ScrollViewer>
+                    <Button Width="45" Height="45" 
+                            Background="#3498DB"
+                            Foreground="White" 
+                            Margin="10,0,0,0"
+                            Style="{StaticResource MaterialDesignFloatingActionButton}">
+                        <materialDesign:PackIcon Kind="Magnify" Width="22" Height="22"/>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Right"
+                            Grid.Column="1">
+
+                    <Button Content="Thêm mới"
+                            Width="120" 
+                            Background="#27AE60" 
+                            Foreground="White"
+                            Style="{StaticResource HistoryButton}"
+                            Margin="0,0,10,0"/>
+
+                    <Button Content="🗑️ Xóa"
+                            Width="100" 
+                            Background="#E74C3C" 
+                            Foreground="White"
+                            Style="{StaticResource HistoryButton}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Data Grid -->
+        <Border Grid.Row="2" Style="{StaticResource HistoryCard}" Margin="25,0,25,25">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                          HorizontalScrollBarVisibility="Auto">
+                <DataGrid AutoGenerateColumns="False" 
+                          HeadersVisibility="Column" 
+                          CanUserAddRows="False"
+                          GridLinesVisibility="None"
+                          Background="White"
+                          BorderThickness="0"
+                          ColumnHeaderStyle="{StaticResource HistoryDataGridColumnHeader}"
+                          RowStyle="{StaticResource HistoryDataGridRow}"
+                          CellStyle="{StaticResource HistoryDataGridCell}">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="📋 Mã đặt vé" 
+                                            Binding="{Binding MaDatVe}" 
+                                            Width="110">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Foreground" Value="#3498DB"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="📅 Ngày đặt" 
+                                            Binding="{Binding NgayDat}" 
+                                            Width="110"/>
+
+                        <DataGridTextColumn Header="🎫 Loại vé" 
+                                            Binding="{Binding LoaiVe}" 
+                                            Width="100"/>
+
+                        <DataGridTextColumn Header="🔢 Số lượng" 
+                                            Binding="{Binding SoLuongVe}" 
+                                            Width="90">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="👤 Họ tên hành khách" 
+                                            Binding="{Binding HoTenHanhKhac}" 
+                                            Width="160">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="🛫 Điểm khởi hành" 
+                                            Binding="{Binding DiemDi}" 
+                                            Width="150"/>
+
+                        <DataGridTextColumn Header="🛬 Điểm đến" 
+                                            Binding="{Binding DiemDen}" 
+                                            Width="150"/>
+
+
+                        <DataGridTextColumn Header="🕐 Ngày đi" 
+                                            Binding="{Binding GioDi}" 
+                                            Width="130"/>
+
+                        <DataGridTextColumn Header="🕑 Ngày về" 
+                                            Binding="{Binding GioDen}" 
+                                            Width="130"/>
+
+                        <DataGridTextColumn Header="💺 Hạng vé" 
+                                            Binding="{Binding HangVe}" 
+                                            Width="100"/>
+
+                        <DataGridTemplateColumn Header="📊 Trạng thái" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="15" 
+                                            Padding="10,5" 
+                                            HorizontalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding TinhTrangDatVe}" Value="Đã xác nhận">
+                                                        <Setter Property="Background" Value="#D4F6D4"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TinhTrangDatVe}" Value="Chờ xác nhận">
+                                                        <Setter Property="Background" Value="#FFF3CD"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TinhTrangDatVe}" Value="Đã hủy">
+                                                        <Setter Property="Background" Value="#F8D7DA"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding TinhTrangDatVe}" 
+                                                   FontSize="11" 
+                                                   FontWeight="Medium"
+                                                   HorizontalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TinhTrangDatVe}" Value="Đã xác nhận">
+                                                            <Setter Property="Foreground" Value="#28A745"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TinhTrangDatVe}" Value="Chờ xác nhận">
+                                                            <Setter Property="Foreground" Value="#FFC107"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TinhTrangDatVe}" Value="Đã hủy">
+                                                            <Setter Property="Foreground" Value="#DC3545"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="💰 Giá vé" 
+                                            Binding="{Binding TongTienThanhToan}" 
+                                            Width="120">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="#E74C3C"/>
+                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Header="⚡ Thao tác" Width="140">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" 
+                                                HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center">
+
+                                        <!-- Confirm Button -->
+                                        <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                                Width="35" Height="35"
+                                                Margin="5,0"
+                                                ToolTip="Xác nhận đặt vé"
+                                                Command="{Binding DataContext.XacNhanCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}">
+                                            <Border Background="#27AE60" 
+                                                    CornerRadius="8" 
+                                                    Width="30" Height="30">
+                                                <materialDesign:PackIcon Kind="Check" 
+                                                                       Width="16" Height="16" 
+                                                                       Foreground="White"
+                                                                       HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Button>
+
+                                        <!-- Cancel Button -->
+                                        <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                                Width="35" Height="35"
+                                                Margin="5,0"
+                                                ToolTip="Hủy đặt vé"
+                                                Command="{Binding DataContext.HuyVeCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}">
+                                            <Border Background="#E74C3C" 
+                                                    CornerRadius="8" 
+                                                    Width="30" Height="30">
+                                                <materialDesign:PackIcon Kind="Close" 
+                                                                       Width="16" Height="16" 
+                                                                       Foreground="White"
+                                                                       HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </UserControl>
