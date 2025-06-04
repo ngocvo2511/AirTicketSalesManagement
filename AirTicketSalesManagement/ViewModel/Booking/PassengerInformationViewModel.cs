@@ -12,7 +12,7 @@ using System.Windows.Input;
 using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AirTicketSalesManagement.ViewModel.Customer
+namespace AirTicketSalesManagement.ViewModel.Booking
 {
     public partial class PassengerInformationViewModel : BaseViewModel
     {

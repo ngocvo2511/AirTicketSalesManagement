@@ -5,9 +5,11 @@ namespace AirTicketSalesManagement.Models;
 
 public partial class Nhanvien
 {
-    public string MaNv { get; set; } = null!;
+    public int MaNv { get; set; }
 
-    public string? HoTen { get; set; }
+    public string? HoTenNv { get; set; }
+
+    public string? GioiTinh { get; set; }
 
     public DateOnly? NgaySinh { get; set; }
 
@@ -16,6 +18,8 @@ public partial class Nhanvien
     public string? SoDt { get; set; }
 
     public string? Cccd { get; set; }
+
+    public virtual ICollection<Datve> Datves { get; set; } = new List<Datve>();
 
     public virtual ICollection<Taikhoan> Taikhoans { get; set; } = new List<Taikhoan>();
 }

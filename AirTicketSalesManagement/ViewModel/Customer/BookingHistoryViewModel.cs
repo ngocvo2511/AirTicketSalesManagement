@@ -1,5 +1,6 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -45,10 +46,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
         //private ObservableCollection<string>
         public BookingHistoryViewModel() { }
-        public BookingHistoryViewModel(string idCustomer, CustomerViewModel parent)
+        public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent)
         {
             this.parent = parent;
-            LoadData(idCustomer);
+            LoadData(UserSession.Current.CustomerId);
             //rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
             //    {
             //        new KQLichSuDatVe
@@ -96,7 +97,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             //HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
             //IsEmpty = HistoryBooking.Count == 0;
         }
-        public async Task LoadData(string idCustomer)
+        public async Task LoadData(int? idCustomer)
         {
             try
             {
@@ -118,7 +119,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                       HangHangKhong = chuyenbay.HangHangKhong,
                                       GioDi = lichbay.GioDi,
                                       GioDen = lichbay.GioDen,
-                                      LoaiMayBay = chuyenbay.MayBay,
+                                      LoaiMayBay = lichbay.LoaiMb,
                                       NgayDat = datve.ThoiGianDv,
                                       TrangThai = datve.TtdatVe,
                                       SoLuongKhach = datve.Ctdvs.Count

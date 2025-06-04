@@ -12,19 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using AirTicketSalesManagement.ViewModel;
 
-namespace AirTicketSalesManagement.Resources.User_Controls
+namespace AirTicketSalesManagement.View.Admin
 {
     /// <summary>
-    /// Interaction logic for CustomerMenuBar.xaml
+    /// Interaction logic for FlightManagementView.xaml
     /// </summary>
-    public partial class CustomerMenuBar : UserControl
+    public partial class FlightManagementView : UserControl
     {
-        public CustomerMenuBar()
+        public FlightManagementView()
         {
             InitializeComponent();
-            this.DataContext = new ViewModel.MenuBarViewModel();
         }
     }
 }

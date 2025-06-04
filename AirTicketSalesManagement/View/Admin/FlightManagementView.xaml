@@ -1,0 +1,597 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Admin.FlightManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AirTicketSalesManagement.View.Admin"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1200">
+
+    <UserControl.Resources>
+        <!-- Custom Card Style -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="2" 
+                                    Opacity="0.08" BlurRadius="8"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Search Card Style -->
+        <Style x:Key="SearchCardStyle" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#F8FAFC" Offset="0"/>
+                        <GradientStop Color="#F1F5F9" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="1" 
+                                    Opacity="0.05" BlurRadius="4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Header Style -->
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#6366F1" Offset="0"/>
+                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Status Badge Styles -->
+        <Style x:Key="StatusActiveStyle" TargetType="Border">
+            <Setter Property="Background" Value="#DCFCE7"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <Style x:Key="StatusPausedStyle" TargetType="Border">
+            <Setter Property="Background" Value="#FEF3C7"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <Style x:Key="StatusInactiveStyle" TargetType="Border">
+            <Setter Property="Background" Value="#FEE2E2"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <!-- DataGrid Header Style -->
+        <Style x:Key="DataGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- DataGrid Cell Style -->
+        <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <!-- DataGrid Row Style - Fix cho alternating rows -->
+        <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <!-- Hover state - màu rõ ràng hơn -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E5E7EB"/>
+                </Trigger>
+                <!-- Selected state - màu đậm hơn để dễ thấy -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#DBEAFE"/>
+                    <Setter Property="Foreground" Value="#1E40AF"/>
+                </Trigger>
+                <!-- Selected + Hover -->
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="True"/>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#BFDBFE"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header Section -->
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Icon:PackIconMaterial Kind="AirplaneTakeoff" Width="32" Height="32" 
+                                     Foreground="#6366F1" Margin="0,0,12,0"/>
+                <TextBlock Text="QUẢN LÝ CHUYẾN BAY" Style="{StaticResource HeaderTextStyle}"/>
+            </StackPanel>
+
+ <!--           <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Border Background="#EEF2FF" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Icon:PackIconMaterial Kind="ClockOutline" Width="16" Height="16" 
+                                             Foreground="#6366F1" Margin="0,0,6,0"/>
+                        <TextBlock Text="{Binding Source={x:Static System:DateTime.Now}, StringFormat='dd/MM/yyyy HH:mm'}" 
+                                 FontSize="12" Foreground="#4F46E5" FontWeight="Medium"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>   -->
+        </Grid>
+
+        <!-- Search Section -->
+        <Border Grid.Row="1" Style="{StaticResource SearchCardStyle}" Padding="22" Margin="0,0,0,24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Search Header -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,18">
+                    <Icon:PackIconMaterial Kind="Magnify" Width="20" Height="20" 
+                                         Foreground="#64748B" Margin="0,0,8,0"/>
+                    <TextBlock Text="Tìm kiếm chuyến bay" FontSize="16" FontWeight="SemiBold" 
+                             Foreground="#334155"/>
+                </StackPanel>
+
+                <!-- Search Fields Row 1 -->
+                <Grid Grid.Row="1" Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="Số hiệu chuyến bay" FontWeight="Medium" 
+                                 Foreground="#374151" Margin="0,0,0,6"/>
+                        <TextBox x:Name="txtSearchFlightNumber" 
+                                 Text="{Binding SoHieuCB, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="VN123, VJ456..."
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Height="52" FontSize="14"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="6,0,6,0">
+                        <TextBlock Text="Sân bay đi" FontWeight="Medium" 
+                                 Foreground="#374151" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="cboSearchDeparture"
+                                  ItemsSource="{Binding DiemDiList}"
+                                  Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  materialDesign:HintAssist.Hint="Chọn sân bay đi"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  Height="52" FontSize="14"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Margin="12,0,0,0">
+                        <TextBlock Text="Sân bay đến" FontWeight="Medium" 
+                                 Foreground="#374151" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="cboSearchDestination"
+                                  ItemsSource="{Binding DiemDenList}"
+                                  Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  materialDesign:HintAssist.Hint="Chọn sân bay đến"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  Height="52" FontSize="14"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Search Fields Row 2 -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="Hãng hàng không" FontWeight="Medium" 
+                                 Foreground="#374151" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="cboHangHangKhong"
+                                  Text="{Binding HangHangKhong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  materialDesign:HintAssist.Hint="Tất cả các hãng"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  Height="52" FontSize="14">
+                            <ComboBoxItem Content="Tất cả" Tag="Tất cả"/>
+                            <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
+                            <ComboBoxItem Content="VietJet Air" Tag="VietJet Air"/>
+                            <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
+                            <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="6,0,6,0">
+                        <TextBlock Text="Trạng thái khai thác" FontWeight="Medium" 
+                                 Foreground="#374151" Margin="0,0,0,6"/>
+                        <ComboBox x:Name="cboSearchStatus"
+                                  Text="{Binding TrangThai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  materialDesign:HintAssist.Hint="Tất cả trạng thái"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  Height="52" FontSize="14">
+                            <ComboBoxItem Content="Tất cả" Tag="Tất cả"/>
+                            <ComboBoxItem Content="Đang khai thác" Tag="Đang khai thác"/>
+                            <ComboBoxItem Content="Tạm dừng" Tag="Tạm dừng"/>
+                            <ComboBoxItem Content="Ngừng khai thác" Tag="Ngừng khai thác"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Search Buttons -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" 
+                               VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="12,0,0,0">
+                        <Button x:Name="btnSearch" 
+                                Command="{Binding SearchCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#6366F1"
+                                BorderBrush="#6366F1"
+                                Margin="0,0,8,0" Width="130" Height="50">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="Magnify" Width="16" Height="16" Margin="0,0,6,0"/>
+                                    <TextBlock Text="Tìm kiếm" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button x:Name="btnClearSearch"
+                                Command="{Binding ClearSearchCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                BorderBrush="#E5E7EB"
+                                Width="90" Height="50">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="FilterRemove" Width="16" Height="16" Margin="0,0,6,0"/>
+                                    <TextBlock Text="Xóa" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Flight DataGrid -->
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- DataGrid Header -->
+                <Border Grid.Row="0" Background="#F8FAFC" CornerRadius="12,12,0,0" 
+                       BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Padding="20,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="ViewList" Width="20" Height="20" 
+                                                 Foreground="#374151" Margin="0,0,8,0"/>
+                            <TextBlock Text="DANH SÁCH CHUYẾN BAY" FontWeight="Bold" 
+                                     FontSize="16" Foreground="#374151"/>
+                        </StackPanel>
+
+                        <Border Grid.Column="1" Background="#EEF2FF" CornerRadius="16" Padding="12,6">
+                            <TextBlock Text="{Binding FlightCount, StringFormat='Tổng: {0} chuyến bay'}"
+                                     FontWeight="SemiBold" FontSize="12" Foreground="#4F46E5"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- DataGrid -->
+                <DataGrid Grid.Row="1" x:Name="dgFlights"
+                          ItemsSource="{Binding Flights}"
+                          SelectedItem="{Binding SelectedFlight}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserReorderColumns="True"
+                          CanUserResizeColumns="True"
+                          CanUserResizeRows="False"
+                          CanUserSortColumns="True"
+                          IsReadOnly="True"
+                          GridLinesVisibility="None"
+                          HeadersVisibility="Column"
+                          SelectionMode="Single"
+                          RowHeaderWidth="0"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                          CellStyle="{StaticResource DataGridCellStyle}"
+                          RowStyle="{StaticResource DataGridRowStyle}"
+                          >
+
+                    <DataGrid.Columns>
+                        <!-- Flight Number Column -->
+                        <DataGridTextColumn Header="Số hiệu CB" Binding="{Binding SoHieuCb}" 
+                                          Width="100" MinWidth="100"
+                                            >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="#1D4ED8"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Departure Airport Column -->
+                        <DataGridTemplateColumn Header="Sân bay đi" Width="*" MinWidth="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontWeight="Medium"
+                       FontSize="13"
+                       Foreground="#374151"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource AirportDisplayConverter}">
+                                                <Binding Path="SbdiNavigation.TenSb"/>
+                                                <Binding Path="Sbdi"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
+
+                        <!-- Destination Airport Column -->
+                        <DataGridTemplateColumn Header="Sân bay đến" Width="*" MinWidth="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontWeight="Medium"
+FontSize="13"
+Foreground="#374151"
+VerticalAlignment="Center"
+HorizontalAlignment="Left">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource AirportDisplayConverter}">
+                                                <Binding Path="SbdenNavigation.TenSb"/>
+                                                <Binding Path="Sbden"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Airline Column -->
+                        <DataGridTextColumn Header="Hãng hàng không" Binding="{Binding HangHangKhong}" 
+                                          Width="140" MinWidth="120">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Foreground" Value="#374151"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Flight Duration Column -->
+                        <DataGridTextColumn Header="Thời gian bay" 
+                                          Binding="{Binding SoGioBay, StringFormat={}{0:F1}h}" 
+                                          Width="111" MinWidth="111">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="Foreground" Value="#059669"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Status Column -->
+                        <DataGridTemplateColumn Header="Trạng thái" Width="88" MinWidth="88">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="16" Padding="12,6" HorizontalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding TtkhaiThac}" Value="Đang khai thác">
+                                                        <Setter Property="Background" Value="#DCFCE7"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TtkhaiThac}" Value="Tạm dừng">
+                                                        <Setter Property="Background" Value="#FEF3C7"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TtkhaiThac}" Value="Ngừng khai thác">
+                                                        <Setter Property="Background" Value="#FEE2E2"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding TTKhaiThac}" FontSize="11" FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TTKhaiThac}" Value="Đang khai thác">
+                                                            <Setter Property="Foreground" Value="#16A34A"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TTKhaiThac}" Value="Tạm dừng">
+                                                            <Setter Property="Foreground" Value="#D97706"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TTKhaiThac}" Value="Ngừng khai thác">
+                                                            <Setter Property="Foreground" Value="#DC2626"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Actions Column -->
+                        <DataGridTemplateColumn Header="Thao tác" Width="83" MinWidth="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Chỉnh sửa chuyến bay"
+                                                Command="{Binding DataContext.EditFlightCommand, 
+                                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Width="32" Height="32" Margin="2">
+                                            <Border CornerRadius="6" Background="#EEF2FF" Padding="6">
+                                                <Icon:PackIconMaterial Kind="Pencil" Width="14" Height="14" 
+                                                                     Foreground="#3B82F6"/>
+                                            </Border>
+                                        </Button>
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Xóa chuyến bay"
+                                                Command="{Binding DataContext.DeleteFlightCommand, 
+                                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Width="32" Height="32" Margin="2">
+                                            <Border CornerRadius="6" Background="#FEF2F2" Padding="6">
+                                                <Icon:PackIconMaterial Kind="Delete" Width="14" Height="14" 
+                                                                     Foreground="#EF4444"/>
+                                            </Border>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                    <!-- Empty State Template -->
+                    <DataGrid.Style>
+                        <Style TargetType="DataGrid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Flights.Count}" Value="0">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Border Background="White" CornerRadius="0,0,12,12">
+                                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                               Margin="60">
+                                                        <Border Background="#F3F4F6" CornerRadius="50" 
+                                                               Width="100" Height="100" Margin="0,0,0,24">
+                                                            <Icon:PackIconMaterial Kind="AirplaneTakeoff" 
+                                                                                 Width="48" Height="48" 
+                                                                                 Foreground="#9CA3AF"/>
+                                                        </Border>
+                                                        <TextBlock Text="Không tìm thấy chuyến bay nào" 
+                                                                 FontSize="20" FontWeight="SemiBold" 
+                                                                 Foreground="#374151" HorizontalAlignment="Center"/>
+                                                        <TextBlock Text="Thử thay đổi bộ lọc tìm kiếm hoặc thêm chuyến bay mới" 
+                                                                 FontSize="14" Foreground="#6B7280" 
+                                                                 HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Style>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Action Buttons -->
+        <Grid Grid.Row="3" Margin="0,15,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Status Summary -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Background="#DCFCE7" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="8" Height="8" Fill="#16A34A" Margin="0,0,6,0"/>
+                        <TextBlock Text="Đang khai thác" FontSize="12" FontWeight="Medium" Foreground="#16A34A"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#FEF3C7" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="8" Height="8" Fill="#D97706" Margin="0,0,6,0"/>
+                        <TextBlock Text="Tạm dừng" FontSize="12" FontWeight="Medium" Foreground="#D97706"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#FEE2E2" CornerRadius="8" Padding="12,6">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="8" Height="8" Fill="#DC2626" Margin="0,0,6,0"/>
+                        <TextBlock Text="Ngừng khai thác" FontSize="12" FontWeight="Medium" Foreground="#DC2626"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button x:Name="btnAddFlight"
+                        Command="{Binding AddFlightCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#10B981"
+                        BorderBrush="#10B981"
+                        Width="140" Height="40" Margin="0,0,12,0">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="Plus" Width="18" Height="18" Margin="0,0,8,0"/>
+                            <TextBlock Text="Thêm mới" FontWeight="Medium"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button x:Name="btnRefresh"
+                        Command="{Binding RefreshCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        BorderBrush="#E5E7EB"
+                        Width="120" Height="40">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="Refresh" Width="18" Height="18" Margin="0,0,8,0"/>
+                            <TextBlock Text="Làm mới" FontWeight="Medium"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -5,7 +5,7 @@ namespace AirTicketSalesManagement.Models;
 
 public partial class Lichbay
 {
-    public string MaLb { get; set; } = null!;
+    public int MaLb { get; set; }
 
     public string? SoHieuCb { get; set; }
 

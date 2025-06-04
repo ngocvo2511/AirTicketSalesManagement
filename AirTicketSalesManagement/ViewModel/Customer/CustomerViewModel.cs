@@ -1,6 +1,7 @@
 ﻿using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.View.Login;
+using AirTicketSalesManagement.ViewModel.Booking;
 using AirTicketSalesManagement.ViewModel.Login;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -22,7 +23,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private string hoTen;
 
-        public string IdCustomer { get; set; }
+        public int? IdCustomer { get; set; }
         public CustomerViewModel()
         {
             CurrentViewModel = new HomePageViewModel();

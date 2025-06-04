@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
  
-namespace AirTicketSalesManagement.ViewModel.Customer
+namespace AirTicketSalesManagement.ViewModel.Booking
 {
     public partial class FlightScheduleSearchViewModel : BaseViewModel
     {

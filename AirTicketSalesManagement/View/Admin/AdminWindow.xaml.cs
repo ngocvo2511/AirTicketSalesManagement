@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AirTicketSalesManagement.View.Staff
+namespace AirTicketSalesManagement.View.Admin
 {
     /// <summary>
-    /// Interaction logic for StaffFlightMakesPaymentMethods.xaml
+    /// Interaction logic for AdminWindow.xaml
     /// </summary>
-    public partial class StaffFlightMakesPaymentMethods : UserControl
+    public partial class AdminWindow : Window
     {
-        public StaffFlightMakesPaymentMethods()
+        public AdminWindow()
         {
             InitializeComponent();
         }

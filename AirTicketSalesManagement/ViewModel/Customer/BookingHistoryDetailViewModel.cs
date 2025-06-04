@@ -1,5 +1,6 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -73,7 +74,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                       HoTenHk = ctdv.HoTenHk,
                                       GioiTinh = ctdv.GioiTinh,
                                       NgaySinh = ctdv.NgaySinh,
-                                      GiayToTuyThan = ctdv.GiayToTuyThan,
+                                      Cccd = ctdv.Cccd,
                                       HoTenNguoiGiamHo = ctdv.HoTenNguoiGiamHo,
                                       MaLv = ctdv.MaLv,
                                       GiaVeTt = ctdv.GiaVeTt
@@ -89,7 +90,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             [RelayCommand]
         private void GoBack()
         {
-            parent.CurrentViewModel = new BookingHistoryViewModel(parent.IdCustomer, parent);
+            parent.CurrentViewModel = new BookingHistoryViewModel(UserSession.Current.CustomerId, parent);
         }
         [RelayCommand]
         private async Task CancelPassenger(Ctdv ctdv)

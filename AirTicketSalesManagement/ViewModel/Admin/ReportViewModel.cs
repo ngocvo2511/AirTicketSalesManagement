@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AirTicketSalesManagement.ViewModel.Staff
+namespace AirTicketSalesManagement.ViewModel.Admin
 {
-    public class FlightScheduleSearchViewModel : BaseViewModel
+    public partial class ReportViewModel : BaseViewModel
     {
     }
 }

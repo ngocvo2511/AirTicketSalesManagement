@@ -112,36 +112,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         #endregion
 
         #region add account
-        public string GenerateCustomerID()
-        {
-            string prefix = "KH";
-            int ?maxLength;
-            isFailed = false;
-            try
-            {
-                using (var context = new AirTicketDbContext())
-                {
-                    maxLength = context.Model.FindEntityType(typeof(Khachhang)).FindProperty(nameof(Khachhang.MaKh)).GetMaxLength() - 2;
-                    var lastID = context.Khachhangs.OrderByDescending(c => c.MaKh).Select(c => c.MaKh).FirstOrDefault();
-                    int nextNumber = 1;
-                    if (lastID != null)
-                    {
-                        var numberPart = lastID.Substring(prefix.Length);
-                        if (int.TryParse(numberPart, out int parsed))
-                        {
-                            nextNumber = parsed + 1;
-                        }
-                    }
-                    string formattedNumber = nextNumber.ToString(new string('0', (int)maxLength));
-                    return prefix + formattedNumber;
-                }
-            }
-            catch(Exception)
-            {
-                isFailed = true;
-                return string.Empty;
-            }
-        }
+       
         public async Task AddCustomer()
         {
             if (isFailed)
@@ -153,11 +124,9 @@ namespace AirTicketSalesManagement.ViewModel.Login
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    string ID = GenerateCustomerID();
                     string hashPass = BCrypt.Net.BCrypt.HashPassword(Password);
                     var customer = new Khachhang
                     {
-                        MaKh = ID,
                         Email = Email,
                         HoTenKh = Name
                     };

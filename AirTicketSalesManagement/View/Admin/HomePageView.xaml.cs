@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AirTicketSalesManagement.View.Staff
+namespace AirTicketSalesManagement.View.Admin
 {
     /// <summary>
-    /// Interaction logic for StaffFlightInputInformations.xaml
+    /// Interaction logic for HomePageView.xaml
     /// </summary>
-    public partial class StaffFlightInputInformations : UserControl
+    public partial class HomePageView : UserControl
     {
-        public StaffFlightInputInformations()
+        public HomePageView()
         {
             InitializeComponent();
         }

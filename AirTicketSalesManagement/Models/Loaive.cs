@@ -5,9 +5,9 @@ namespace AirTicketSalesManagement.Models;
 
 public partial class Loaive
 {
-    public string MaLv { get; set; } = null!;
+    public int MaLv { get; set; }
 
-    public string? MaLb { get; set; }
+    public int? MaLb { get; set; }
 
     public string? HangGhe { get; set; }
 
