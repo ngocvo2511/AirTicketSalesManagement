@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Admin.AdminAccountManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="900">
+
+    <UserControl.Resources>
+        <DropShadowEffect x:Key="DropShadowEffect"
+                          Color="Black" Direction="270"
+                          ShadowDepth="2" BlurRadius="8" Opacity="0.3" />
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Margin" Value="8 0 0 0"/>
+            <Setter Property="MinWidth" Value="80"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="White" CornerRadius="12" Margin="20"
+            Padding="20" Effect="{StaticResource DropShadowEffect}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Tiêu đề -->
+                <RowDefinition Height="*"/>
+                <!-- Danh sách -->
+                <RowDefinition Height="Auto"/>
+                <!-- Form + nút -->
+            </Grid.RowDefinitions>
+
+            <!-- Tiêu đề -->
+            <TextBlock Text="Quản lý tài khoản Admin"
+                       FontSize="24" FontWeight="SemiBold"
+                       Foreground="Black" Grid.Row="0" Margin="0 0 0 16"/>
+
+            <!-- Danh sách tài khoản -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <DataGrid ItemsSource="{Binding AdminAccounts}"
+                          SelectedItem="{Binding SelectedAccount}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          FontSize="14"
+                          HeadersVisibility="Column"
+                          BorderThickness="0"
+                          RowHeight="36"
+                          Background="White"
+                          Foreground="Black"
+                          GridLinesVisibility="None">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tên đăng nhập" Binding="{Binding Username}" Width="*" />
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*" />
+                        <DataGridTextColumn Header="Quyền" Binding="{Binding Role}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+
+            <!-- Form & Button -->
+            <DockPanel Grid.Row="2" Margin="0,20,0,0" LastChildFill="False">
+
+                <!-- Nhập liệu -->
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" HorizontalAlignment="Left" >
+                    <StackPanel Margin="0,0,20,0">
+                        <TextBlock Text="Tên đăng nhập" FontWeight="Bold" Foreground="Black"/>
+                        <TextBox Width="180" Text="{Binding NewUsername}" BorderBrush="#ccc"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,20,0">
+                        <TextBlock Text="Email" FontWeight="Bold" Foreground="Black"/>
+                        <TextBox Width="176" Text="{Binding NewEmail}" BorderBrush="#ccc"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Mật khẩu" FontWeight="Bold" Foreground="Black"/>
+                        <PasswordBox x:Name="PasswordInput" Width="154" BorderBrush="#ccc"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Nút hành động -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                            DockPanel.Dock="Right" VerticalAlignment="Bottom" Margin="0,0,0,0">
+
+                    <Button Content="Thêm"
+                            Command="{Binding AddCommand}"
+                            CommandParameter="{Binding Password, ElementName=PasswordInput}"
+                            Background="#667eea"
+                            Style="{StaticResource ActionButtonStyle}"/>
+
+                    <Button Content="Sửa"
+                            Command="{Binding EditCommand}"
+                            Background="#ffa726"
+                            Style="{StaticResource ActionButtonStyle}"/>
+
+                    <Button Content="Xóa"
+                            Command="{Binding DeleteCommand}"
+                            Background="#e53935"
+                            Style="{StaticResource ActionButtonStyle}"/>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+    </Border>
+</UserControl>
