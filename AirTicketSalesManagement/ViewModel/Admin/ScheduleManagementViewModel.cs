@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using OfficeOpenXml;
+using System.IO;
 
 namespace AirTicketSalesManagement.ViewModel.Admin
 {
@@ -193,6 +196,64 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             if (start >= 0 && end > start)
                 return displayString.Substring(start + 1, end - start - 1);
             return displayString;
+        }
+
+        [RelayCommand]
+        public void ImportFromExcel()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Excel Files|*.xlsx;*.xls",
+                Title = "Chọn file Excel lịch bay"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    ExcelPackage.License.SetNonCommercialOrganization("AirTicketSale");
+
+                    using var package = new ExcelPackage(new FileInfo(openFileDialog.FileName));
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+
+                    using var context = new AirTicketDbContext();
+
+                    int rowCount = worksheet.Dimension.Rows;
+
+                    for (int row = 2; row <= rowCount; row++) // Bỏ hàng tiêu đề
+                    {
+                        string soHieuCB = worksheet.Cells[row, 1].Text;
+                        DateTime gioDi = DateTime.Parse(worksheet.Cells[row, 2].Text);
+                        DateTime gioDen = DateTime.Parse(worksheet.Cells[row, 3].Text);
+                        string loaiMB = worksheet.Cells[row, 4].Text;
+                        int slVe = int.Parse(worksheet.Cells[row, 5].Text);
+                        decimal giaVe = decimal.Parse(worksheet.Cells[row, 6].Text);
+                        string tinhTrang = worksheet.Cells[row, 7].Text;
+
+                        var lichBay = new Lichbay
+                        {
+                            SoHieuCb = soHieuCB,
+                            GioDi = gioDi,
+                            GioDen = gioDen,
+                            LoaiMb = loaiMB,
+                            SlveKt = slVe,
+                            GiaVe = giaVe,
+                            TtlichBay = tinhTrang
+                        };
+
+                        context.Lichbays.Add(lichBay);
+                    }
+
+                    context.SaveChanges();
+                    MessageBox.Show("Nhập lịch bay từ Excel thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    LoadFlightSchedule(); // Tải lại danh sách
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi đọc file Excel: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }
