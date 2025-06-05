@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AirTicketSalesManagement.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,8 +31,9 @@ namespace AirTicketSalesManagement.View.Admin
             if (sender is DataGridRow row && row.IsSelected)
             {
                 dgLichBay.SelectedItem = null;
-                e.Handled = true; // Ngăn DataGrid chọn lại dòng
+                e.Handled = true;
             }
         }
     }
+
 }

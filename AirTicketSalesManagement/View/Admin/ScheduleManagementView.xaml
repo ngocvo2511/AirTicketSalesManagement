@@ -702,6 +702,7 @@
         </Border>
 
         <!-- Action Buttons -->
+        <!-- Action Buttons -->
         <Grid Grid.Row="3" Margin="0,15,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -732,12 +733,13 @@
 
             <!-- Action Buttons -->
             <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <!-- Nút Thêm mới -->
                 <Button x:Name="btnAddFlight"
-                        Command="{Binding AddFlightCommand}"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        Background="#10B981"
-                        BorderBrush="#10B981"
-                        Width="140" Height="40" Margin="0,0,12,0">
+                Command="{Binding AddFlightCommand}"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                Background="#10B981"
+                BorderBrush="#10B981"
+                Width="140" Height="40" Margin="0,0,12,0">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Plus" Width="18" Height="18" Margin="0,0,8,0"/>
@@ -746,11 +748,26 @@
                     </Button.Content>
                 </Button>
 
+                <!-- ✅ Nút Nhập Excel -->
+                <Button x:Name="btnImportExcel"
+                Command="{Binding ImportFromExcelCommand}"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                BorderBrush="#E5E7EB"
+                Width="140" Height="40" Margin="0,0,12,0">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="FileExcel" Width="18" Height="18" Margin="0,0,8,0"/>
+                            <TextBlock Text="Nhập Excel" FontWeight="Medium"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <!-- Nút Làm mới -->
                 <Button x:Name="btnRefresh"
-                        Command="{Binding RefreshCommand}"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        BorderBrush="#E5E7EB"
-                        Width="120" Height="40">
+                Command="{Binding RefreshCommand}"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                BorderBrush="#E5E7EB"
+                Width="120" Height="40">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Refresh" Width="18" Height="18" Margin="0,0,8,0"/>
