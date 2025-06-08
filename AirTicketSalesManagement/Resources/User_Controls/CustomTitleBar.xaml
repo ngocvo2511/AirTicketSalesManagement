@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              Height="30" Background="Transparent">
+    
     <Grid Height="30">
         <Grid.Background>
-            <SolidColorBrush Color="White"/>
+            <SolidColorBrush Color="#F0F0F0" />
         </Grid.Background>
 
         <Grid.ColumnDefinitions>
