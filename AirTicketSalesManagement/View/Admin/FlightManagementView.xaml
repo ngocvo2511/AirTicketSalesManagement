@@ -1240,7 +1240,7 @@ HorizontalAlignment="Left">
                                     <TextBlock Text="Hủy" FontWeight="Medium"/>
                                 </Button>
 
-                                <Button x:Name="btnEditSave"
+                                <Button x:Name="btnSaveEdit"
                             Command="{Binding SaveEditFlightCommand}"
                             Style="{StaticResource MaterialDesignRaisedButton}"
                             Background="#10B981"

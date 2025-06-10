@@ -9,7 +9,6 @@ CREATE TABLE SANBAY
 	QuocGia NVARCHAR(30)
 )
 
-
 CREATE TABLE CHUYENBAY
 (
 	SoHieuCB VARCHAR(10) PRIMARY KEY,
@@ -19,6 +18,7 @@ CREATE TABLE CHUYENBAY
 	SoGioBay FLOAT,
 	TTKhaiThac NVARCHAR(30)
 )
+select * from CHUYENBAY
 
 CREATE TABLE SANBAYTRUNGGIAN (
 	STT INT,
@@ -28,10 +28,11 @@ CREATE TABLE SANBAYTRUNGGIAN (
     GhiChu NVARCHAR(255),
 	PRIMARY KEY (STT, SoHieuCB)
 )
+select * from SANBAYTRUNGGIAN
 
 CREATE TABLE LICHBAY
 (
-	MaLB VARCHAR(10) PRIMARY KEY,
+	MaLB INT IDENTITY(1,1) PRIMARY KEY,
 	SoHieuCB VARCHAR(10) FOREIGN KEY REFERENCES CHUYENBAY(SoHieuCB),
 	GioDi DATETIME,
 	GioDen DATETIME,
@@ -40,11 +41,11 @@ CREATE TABLE LICHBAY
 	GiaVe MONEY,
 	TTLichBay NVARCHAR(30)
 )
-
+select * from LICHBAY
 CREATE TABLE LOAIVE
 (
-	MaLV VARCHAR(10) PRIMARY KEY,
-	MaLB VARCHAR(10) FOREIGN KEY REFERENCES LICHBAY(MaLB),
+	MaLV INT IDENTITY(1,1) PRIMARY KEY,
+	MaLB INT FOREIGN KEY REFERENCES LICHBAY(MaLB),
 	HangGhe NVARCHAR(30),
 	HeSoGia FLOAT,
 	SLVeToiDa INT,
@@ -53,20 +54,21 @@ CREATE TABLE LOAIVE
 
 CREATE TABLE KHACHHANG
 (
-	MaKH VARCHAR(10) PRIMARY KEY,
+	MaKH INT IDENTITY(1,1) PRIMARY KEY,
 	HoTenKH NVARCHAR(30),
 	GioiTinh NVARCHAR(10),
 	NgaySinh DATE,
 	Email VARCHAR(254) UNIQUE,
 	SoDT CHAR(10),
-	GiayToTT VARCHAR(30)
+	CCCD CHAR(12)
 )
 
 CREATE TABLE DATVE
 (
-	MaDV VARCHAR(10) PRIMARY KEY,
-	MaLB VARCHAR(10) FOREIGN KEY REFERENCES LICHBAY(MaLB),
-	MaKH VARCHAR(10) FOREIGN KEY REFERENCES KHACHHANG(MaKH),
+	MaDV INT IDENTITY(1,1) PRIMARY KEY,
+	MaLB INT FOREIGN KEY REFERENCES LICHBAY(MaLB),
+	MaKH INT FOREIGN KEY REFERENCES KHACHHANG(MaKH),
+	MaNV INT FOREIGN KEY REFERENCES NHANVIEN(MaNV),
 	ThoiGianDV DATETIME,
 	SLVe INT,
 	SoDTLienLac CHAR(10),
@@ -74,22 +76,24 @@ CREATE TABLE DATVE
 	TongTienTT MONEY,
 	TTDatVe NVARCHAR(30)
 )
+select * from LICHBAY
+update CHUYENBAY set HangHangKhong = 'Vietjet Air' where SoGioBay=1.5
 
 CREATE TABLE CTDV
 (
-	MaCTDV VARCHAR(10) PRIMARY KEY,
-	MaDV VARCHAR(10) FOREIGN KEY REFERENCES DATVE(MaDV),
+	MaCTDV INT IDENTITY(1,1) PRIMARY KEY,
+	MaDV INT FOREIGN KEY REFERENCES DATVE(MaDV),
 	HoTenHK NVARCHAR(30),
 	GioiTinh NVARCHAR(10),
 	NgaySinh DATE,
-	GiayToTuyThan VARCHAR(12),
+	CCCD CHAR(12),
 	HoTenNguoiGiamHo NVARCHAR(30),
-	MaLV VARCHAR(10) FOREIGN KEY REFERENCES LOAIVE(MaLV),
+	MaLV INT FOREIGN KEY REFERENCES LOAIVE(MaLV),
 	GiaVeTT MONEY
 )
 
 CREATE TABLE QUYDINH (
-    ID INT PRIMARY KEY,             
+    ID INT IDENTITY(1,1) PRIMARY KEY,             
     SoSanBay INT,
     ThoiGianBayToiThieu INT,        
     SoSanBayTGToiDa INT,
@@ -100,22 +104,26 @@ CREATE TABLE QUYDINH (
 	TGHuyDatVe INT
 )
 CREATE TABLE NHANVIEN (
-    MaNV VARCHAR(10) PRIMARY KEY,
+    MaNV INT IDENTITY(1,1) PRIMARY KEY,
     HoTenNV NVARCHAR(50),
     GioiTinh NVARCHAR(10),
     NgaySinh DATE,
     Email VARCHAR(254) UNIQUE,
     SoDT CHAR(10),
-    CCCD VARCHAR(12) UNIQUE
+    CCCD CHAR(12)
 )
 CREATE TABLE TAIKHOAN(
 	Email VARCHAR(254) PRIMARY KEY,
     MatKhau VARCHAR(100) NOT NULL,
-    VaiTro NVARCHAR(20) NOT NULL CHECK (VaiTro IN ('Admin', 'QuanLy', 'NhanVien', 'KhachHang')),
-    MaNV VARCHAR(10) FOREIGN KEY REFERENCES NHANVIEN(MaNV),
-    MaKH VARCHAR(10) FOREIGN KEY REFERENCES KHACHHANG(MaKH)
+    VaiTro VARCHAR(20) NOT NULL CHECK (VaiTro IN ('Admin', 'QuanLy', 'NhanVien', 'KhachHang')),
+    MaNV INT FOREIGN KEY REFERENCES NHANVIEN(MaNV),
+    MaKH INT FOREIGN KEY REFERENCES KHACHHANG(MaKH)
 )
-
+INSERT INTO NHANVIEN(HoTenNV, Email) values ('Ngoc Vo Xuan', 'ad@ad.com')
+select * from SANBAYTRUNGGIAN where SoHieuCB='VN109'
+delete from NHANVIEN
+INSERT INTO TAIKHOAN(Email, MatKhau, VaiTro, MaNV) values ('ad@ad.com', '$2a$12$X6ZEfqxwVBMDc0j9zzibyu9btxvTSNEuHDaADPgBnAEf0oRwn/QSO', 'Admin', 2)
+update TAIKHOAN set VaiTro = 'NhanVien' where Email = 'nv@nv.com'
 DELETE FROM SANBAY
 -- Sân bay quốc tế
 INSERT INTO SANBAY (MaSB, TenSB, ThanhPho, QuocGia) VALUES
@@ -146,49 +154,57 @@ INSERT INTO SANBAY (MaSB, TenSB, ThanhPho, QuocGia) VALUES
 ('TBB', N'Sân bay Tuy Hòa', N'Phú Yên', N'Việt Nam')
 
 
-INSERT INTO CHUYENBAY (SoHieuCB, SBDi, SBDen, HangHangKhong, MayBay, SoGioBay, TTKhaiThac)
+INSERT INTO CHUYENBAY (SoHieuCB, SBDi, SBDen, HangHangKhong, SoGioBay, TTKhaiThac)
 VALUES 
-('VN101', 'SGN', 'HAN', N'Vietnam Airlines', 'Airbus A321', 2.0, N'Đang khai thác'),
-('VN102', 'HAN', 'DAD', N'Vietnam Airlines', 'Boeing 787', 1.2, N'Đang khai thác'),
-('VJ205', 'SGN', 'DAD', N'Vietjet Air', 'Airbus A320', 1.5, N'Đang khai thác'),
-('QH301', 'HAN', 'CXR', N'Bamboo Airways', 'Embraer E190', 1.7, N'Đang khai thác');
+('VN101', 'SGN', 'HAN', N'Vietnam Airlines', 2.0, N'Đang khai thác'),
+('VN102', 'HAN', 'DAD', N'Vietnam Airlines', 1.2, N'Đang khai thác'),
+('VJ205', 'SGN', 'DAD', N'Vietjet Air', 1.5, N'Đang khai thác'),
+('QH301', 'HAN', 'CXR', N'Bamboo Airways', 1.7, N'Đang khai thác');
 
 INSERT INTO SANBAYTRUNGGIAN (STT, MaSBTG, SoHieuCB, ThoiGianDung, GhiChu)
 VALUES 
 (1, 'DAD', 'VN101', 30, N'Dừng kỹ thuật'),
 (1, 'VCA', 'VN102', 25, N'Tiếp nhiên liệu');
 
-INSERT INTO LICHBAY (MaLB, SoHieuCB, GioDi, GioDen, LoaiMB, SLVeKT, GiaVe, TTLichBay)
+INSERT INTO LICHBAY (SoHieuCB, GioDi, GioDen, LoaiMB, SLVeKT, GiaVe, TTLichBay)
 VALUES 
-('LB001', 'VN101', '2025-04-25 08:00', '2025-04-25 10:00', N'Airbus A321', 200, 1500000, N'Còn chỗ'),
-('LB002', 'VN102', '2025-04-25 13:00', '2025-04-25 14:15', N'Boeing 787', 150, 1200000, N'Còn chỗ'),
-('LB003', 'VJ205', '2025-04-26 09:00', '2025-04-26 10:30', N'Airbus A320', 180, 1000000, N'Còn chỗ'),
-('LB004', 'QH301', '2025-04-26 16:00', '2025-04-26 17:45', N'Embraer E190', 120, 1300000, N'Còn chỗ');
+('VN101', '2025-04-25 08:00', '2025-04-25 10:00', N'Airbus A321', 200, 1500000, N'Còn chỗ'),
+('VN102', '2025-04-25 13:00', '2025-04-25 14:15', N'Boeing 787', 150, 1200000, N'Còn chỗ'),
+('VJ205', '2025-04-26 09:00', '2025-04-26 10:30', N'Airbus A320', 180, 1000000, N'Còn chỗ'),
+('QH301', '2025-04-26 16:00', '2025-04-26 17:45', N'Embraer E190', 120, 1300000, N'Còn chỗ');
 
-INSERT INTO LOAIVE (MaLV, MaLB, HangGhe, HeSoGia, SLVeToiDa, SLVeConLai)
+INSERT INTO LOAIVE (MaLB, HangGhe, HeSoGia, SLVeToiDa, SLVeConLai)
 VALUES 
-('LV001', 'LB001', N'Phổ thông', 1.0, 150, 100),
-('LV002', 'LB001', N'Thương gia', 1.5, 50, 30),
-('LV003', 'LB002', N'Phổ thông', 1.0, 100, 70),
-('LV004', 'LB002', N'Thương gia', 1.6, 50, 20),
-('LV005', 'LB003', N'Phổ thông', 1.0, 180, 90),
-('LV006', 'LB004', N'Phổ thông', 1.0, 100, 60),
-('LV007', 'LB004', N'Hạng đặc biệt', 2.0, 20, 10);
+(1, N'Phổ thông', 1.0, 150, 100),
+(1, N'Thương gia', 1.5, 50, 30),
+(2, N'Phổ thông', 1.0, 100, 70),
+(2, N'Thương gia', 1.6, 50, 20),
+(3, N'Phổ thông', 1.0, 180, 90),
+(4, N'Phổ thông', 1.0, 100, 60),
+(4, N'Hạng đặc biệt', 2.0, 20, 10);
 
 
-INSERT INTO KHACHHANG (MaKH, HoTenKH, GioiTinh, NgaySinh, Email, SoDT, GiayToTT)
+INSERT INTO KHACHHANG (HoTenKH, GioiTinh, NgaySinh, Email, SoDT, CCCD)
 VALUES 
-('KH001', N'Nguyễn Văn A', N'Nam', '1990-05-20', 'vana@example.com', '0912345678', '0123456789'),
-('KH002', N'Trần Thị B', N'Nữ', '1995-08-15', 'thib@example.com', '0987654321', '9876543210'),
-('KH003', N'Lê Văn C', N'Nam', '1988-12-30', 'vanc@example.com', '0909123456', '4567891230'),
-('KH004', N'Phạm Thị D', N'Nữ', '2000-02-10', 'thid@example.com', '0934567890', '3216549870');
-
+(N'Nguyễn Văn A', N'Nam', '1990-05-20', 'vana@example.com', '0912345678', '0123456789'),
+(N'Trần Thị B', N'Nữ', '1995-08-15', 'thib@example.com', '0987654321', '9876543210'),
+(N'Lê Văn C', N'Nam', '1988-12-30', 'vanc@example.com', '0909123456', '4567891230'),
+(N'Phạm Thị D', N'Nữ', '2000-02-10', 'thid@example.com', '0934567890', '3216549870');
+ 
 
 select * from DATVE inner join CTDV on DATVE.MADV = CTDV.MADV
 
 select * from TAIKHOAN
+select * from KHACHHANG
 select * from DATVE
+delete from DATVE
+delete from CTDV
+
 select * from CTDV
+set dateformat dmy
+update KHACHHANG
+set GioiTinh = 'Nam', NgaySinh='25/11/2005', SoDT='0987682438', GiayToTT='052205003846'
+where HoTenKH='vo xuan ngoc'
 
 INSERT INTO DATVE (MaDV, MaLB, MaKH, ThoiGianDV, SLVe, SoDTLienLac, Email, TongTienTT, TTDatVe)
 VALUES
