@@ -123,9 +123,69 @@
                 </MultiTrigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="PopupCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="0" BlurRadius="20"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#3B82F6"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#3B82F6"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
     </UserControl.Resources>
 
-    <Grid Margin="15">
+    <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -134,7 +194,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header Section -->
-        <Grid Grid.Row="0" Margin="0,0,0,15">
+        <Grid Grid.Row="0" Margin="15,15,15,15">
             
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -156,7 +216,7 @@
         </Grid>
 
         <!-- Search Section -->
-        <Border Grid.Row="1" Style="{StaticResource SearchCardStyle}" Padding="22" Margin="0,0,0,24">
+        <Border Grid.Row="1" Style="{StaticResource SearchCardStyle}" Padding="22" Margin="15,0,15,24">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -286,7 +346,7 @@
         </Border>
 
         <!-- Flight DataGrid -->
-        <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="15,0,15,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
@@ -535,7 +595,7 @@ HorizontalAlignment="Left">
         </Border>
 
         <!-- Action Buttons -->
-        <Grid Grid.Row="3" Margin="0,15,0,0">
+        <Grid Grid.Row="3" Margin="15,15,15,15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -592,6 +652,611 @@ HorizontalAlignment="Left">
                     </Button.Content>
                 </Button>
             </StackPanel>
+
+        </Grid>
+        
+        
+        <!-- Popup -->
+        <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" Visibility="{Binding IsAddPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <!-- Popup Container -->
+            <Border Style="{StaticResource PopupCardStyle}" 
+                Width="700" Height="550" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                    >
+
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="#F8FAFC" 
+                        CornerRadius="16,16,0,0" 
+                        BorderBrush="#E5E7EB" 
+                        BorderThickness="0,0,0,1" 
+                        Padding="24,20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#EEF2FF" CornerRadius="8" 
+                                    Width="40" Height="40" Margin="0,0,12,0">
+                                    <Icon:PackIconMaterial Kind="AirplanePlus" 
+                                                     Width="37" Height="37" 
+                                                     Foreground="#3B82F6"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="THÊM CHUYẾN BAY MỚI" 
+                                         FontSize="18" FontWeight="Bold" 
+                                         Foreground="#1F2937"/>
+                                    <TextBlock Text="Nhập thông tin chi tiết chuyến bay" 
+                                         FontSize="13" Foreground="#6B7280"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Button Grid.Column="1" 
+                                Style="{StaticResource MaterialDesignIconButton}"
+                                Command="{Binding CloseAddCommand}"
+                                Width="32" Height="32">
+                                <Icon:PackIconMaterial Kind="Close" Width="16" Height="16" 
+                                                 Foreground="#6B7280"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" 
+                              Padding="24,20">
+                        <StackPanel>
+                            <!-- Flight Information Section -->
+                            <TextBlock Text="Thông tin chuyến bay" 
+                                 Style="{StaticResource SectionHeaderStyle}"/>
+
+                            <Grid Margin="0,0,0,24">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Flight Number -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Số hiệu chuyến bay" 
+                                         Style="{StaticResource LabelStyle}"/>
+                                    <TextBox x:Name="txtFlightNumber"
+                                       Text="{Binding AddSoHieuCB}"
+                                       Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             Height="52" FontSize="14"
+                                       materialDesign:HintAssist.Hint="VN123, VJ456..."/>
+                                </StackPanel>
+
+                                <!-- Airline -->
+                                <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Hãng hàng không" 
+                                         Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbAirline"
+                                              Text="{Binding AddHangHangKhong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"               
+                                              materialDesign:HintAssist.Hint="Chọn hãng hàng không"                              
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"                                
+                                              Height="52" FontSize="14">
+                                        <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
+                                        <ComboBoxItem Content="VietJet Air" Tag="VietJet Air"/>
+                                        <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
+                                        <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <!-- Departure Airport -->
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Sân bay đi" 
+                                         Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbDepartureAirport"
+                                              ItemsSource="{Binding AddDiemDiList}"
+                                              Text="{Binding AddDiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              materialDesign:HintAssist.Hint="Chọn sân bay đi"
+                                              Height="52" FontSize="14"/>
+                                </StackPanel>
+
+                                <!-- Destination Airport -->
+                                <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Sân bay đến" 
+                                         Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbDestinationAirport"
+                                              ItemsSource="{Binding AddDiemDenList}"
+                                              Text="{Binding AddDiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              materialDesign:HintAssist.Hint="Chọn sân bay đến"
+                                              Height="52" FontSize="14"/>
+                                </StackPanel>
+
+                                <!-- Flight Duration -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Thời gian bay (giờ)" 
+                                         Style="{StaticResource LabelStyle}"/>
+                                    <TextBox x:Name="txtFlightDuration"
+                                       Text="{Binding AddThoiGianBay}"
+                                       Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             FontSize="14" Height="52"
+                                       materialDesign:HintAssist.Hint="VD: 1.5, 2.0"/>
+                                </StackPanel>
+
+                                <!-- Status -->
+                                <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Trạng thái khai thác" 
+                                         Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbStatus"                                 
+                                              Text="{Binding AddTTKhaiThac, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                              Height="52" FontSize="14"
+                                        materialDesign:HintAssist.Hint="Chọn trạng thái">
+                                        <ComboBoxItem Content="Đang khai thác"/>
+                                        <ComboBoxItem Content="Tạm dừng"/>
+                                        <ComboBoxItem Content="Ngừng khai thác"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Intermediate Airports Section -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Sân bay trung gian (tùy chọn)" 
+                                         Style="{StaticResource SectionHeaderStyle}"/>
+
+                                    <Button Grid.Column="1" 
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Command="{Binding AddIntermediateAirportCommand}"
+                                        Height="32" Padding="12,6">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Kind="Plus" Width="14" Height="14" 
+                                                             Margin="0,0,4,0"/>
+                                            <TextBlock Text="Thêm sân bay" FontSize="12"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+
+                                <!-- Intermediate Airports List -->
+                                <ItemsControl Grid.Row="1" ItemsSource="{Binding DanhSachSBTG}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#F9FAFB" 
+                                                CornerRadius="8" 
+                                                BorderBrush="#E5E7EB" 
+                                                BorderThickness="1" 
+                                                Padding="16" 
+                                                Margin="0,0,0,12">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"/>
+                                                        <RowDefinition Height="auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" 
+                                                         Text="{Binding STT}" 
+                                                         FontWeight="Bold" 
+                                                         FontSize="16" 
+                                                         Foreground="#3B82F6"
+                                                         VerticalAlignment="Center"
+                                                         Margin="0,0,16,0"/>
+
+                                                    <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                                                        <TextBlock Text="Sân bay trung gian" 
+                                                             FontSize="12" 
+                                                             Foreground="#6B7280" 
+                                                             Margin="0,0,0,4"/>
+                                                        <ComboBox ItemsSource="{Binding SbtgList}"
+                                                                  Text="{Binding MaSBTG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Height="36" FontSize="13"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2" Margin="0,0,16,0">
+                                                        <TextBlock Text="Thời gian dừng (phút)" 
+                                                             FontSize="12" 
+                                                             Foreground="#6B7280" 
+                                                             Margin="0,0,0,4"/>
+                                                        <TextBox Text="{Binding ThoiGianDung}" 
+                                                           Height="36" FontSize="13"/>
+                                                    </StackPanel>
+
+                                                    <Button Grid.Column="3" 
+                                                        Style="{StaticResource MaterialDesignIconButton}"
+                                                        Command="{Binding DataContext.RemoveIntermediateAirportCommand, 
+                                                                 RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Width="32" Height="32">
+                                                        <Icon:PackIconMaterial Kind="Close" 
+                                                                         Width="16" Height="16" 
+                                                                         Foreground="#EF4444"/>
+                                                    </Button>
+                                                    
+                                                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,16,16,0">
+                                                        <TextBlock Text="Ghi chú" 
+                                                             FontSize="12" 
+                                                             Foreground="#6B7280" 
+                                                             Margin="0,0,0,4"/>
+                                                        <TextBox Text="{Binding GhiChu}" 
+                                                           Height="36" FontSize="13"/>
+                                                    </StackPanel>                                                    
+                                                    
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Footer -->
+                    <Border Grid.Row="2" Background="#F8FAFC" 
+                        CornerRadius="0,0,16,16" 
+                        BorderBrush="#E5E7EB" 
+                        BorderThickness="0,1,0,0" 
+                        Padding="24,16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button x:Name="btnCancel"
+                                    Command="{Binding CancelAddFlightCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    BorderBrush="#E5E7EB"
+                                    Width="100" Height="40" 
+                                    Margin="0,0,12,0">
+                                    <TextBlock Text="Hủy" FontWeight="Medium"/>
+                                </Button>
+
+                                <Button x:Name="btnSave"
+                                    Command="{Binding SaveFlightCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="#10B981"
+                                    BorderBrush="#10B981"
+                                    Width="120" Height="40">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Icon:PackIconMaterial Kind="Check" Width="16" Height="16" 
+                                                         Margin="0,0,6,0"/>
+                                        <TextBlock Text="Lưu" FontWeight="Medium"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Popup -->
+        <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" Visibility="{Binding IsEditPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <!-- Popup Container -->
+            <Border Style="{StaticResource PopupCardStyle}" 
+        Width="700" Height="550" 
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center"
+            >
+
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="#F8FAFC" 
+                CornerRadius="16,16,0,0" 
+                BorderBrush="#E5E7EB" 
+                BorderThickness="0,0,0,1" 
+                Padding="24,20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#EEF2FF" CornerRadius="8" 
+                            Width="40" Height="40" Margin="0,0,12,0">
+                                    <Icon:PackIconMaterial Kind="AirplanePlus" 
+                                             Width="37" Height="37" 
+                                             Foreground="#3B82F6"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="SỬA CHUYẾN BAY" 
+                                 FontSize="18" FontWeight="Bold" 
+                                 Foreground="#1F2937"/>
+                                    <TextBlock Text="Nhập thông tin chi tiết chuyến bay" 
+                                 FontSize="13" Foreground="#6B7280"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Button Grid.Column="1" 
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding CloseEditCommand}"
+                        Width="32" Height="32">
+                                <Icon:PackIconMaterial Kind="Close" Width="16" Height="16" 
+                                         Foreground="#6B7280"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" 
+                      Padding="24,20">
+                        <StackPanel>
+                            <!-- Flight Information Section -->
+                            <TextBlock Text="Thông tin chuyến bay" 
+                         Style="{StaticResource SectionHeaderStyle}"/>
+
+                            <Grid Margin="0,0,0,24">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Flight Number -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Số hiệu chuyến bay" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <TextBox x:Name="txtEditFlightNumber"
+                               Text="{Binding EditSoHieuCB}"
+                                             IsReadOnly="True"
+                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Height="52" FontSize="14"
+                               materialDesign:HintAssist.Hint="VN123, VJ456..."/>
+                                </StackPanel>
+
+                                <!-- Airline -->
+                                <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Hãng hàng không" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbEditAirline"
+                                      Text="{Binding EditHangHangKhong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"               
+                                      materialDesign:HintAssist.Hint="Chọn hãng hàng không"                              
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"                                
+                                      Height="52" FontSize="14">
+                                        <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
+                                        <ComboBoxItem Content="VietJet Air" Tag="VietJet Air"/>
+                                        <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
+                                        <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <!-- Departure Airport -->
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Sân bay đi" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbEditDepartureAirport"
+                                      ItemsSource="{Binding EditDiemDiList}"
+                                      Text="{Binding EditDiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      materialDesign:HintAssist.Hint="Chọn sân bay đi"
+                                      Height="52" FontSize="14"/>
+                                </StackPanel>
+
+                                <!-- Destination Airport -->
+                                <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Sân bay đến" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbEditDestinationAirport"
+                                      ItemsSource="{Binding EditDiemDenList}"
+                                      Text="{Binding EditDiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      materialDesign:HintAssist.Hint="Chọn sân bay đến"
+                                      Height="52" FontSize="14"/>
+                                </StackPanel>
+
+                                <!-- Flight Duration -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Thời gian bay (giờ)" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <TextBox x:Name="txtEditFlightDuration"
+                               Text="{Binding EditThoiGianBay}"
+                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     FontSize="14" Height="52"
+                               materialDesign:HintAssist.Hint="VD: 1.5, 2.0"/>
+                                </StackPanel>
+
+                                <!-- Status -->
+                                <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Trạng thái khai thác" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbEditStatus"                                 
+                                      Text="{Binding EditTTKhaiThac, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      Height="52" FontSize="14"
+                                materialDesign:HintAssist.Hint="Chọn trạng thái">
+                                        <ComboBoxItem Content="Đang khai thác"/>
+                                        <ComboBoxItem Content="Tạm dừng"/>
+                                        <ComboBoxItem Content="Ngừng khai thác"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Intermediate Airports Section -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Sân bay trung gian (tùy chọn)" 
+                                 Style="{StaticResource SectionHeaderStyle}"/>
+
+                                    <Button Grid.Column="1" 
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Command="{Binding EditIntermediateAirportCommand}"
+                                Height="32" Padding="12,6">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Kind="Plus" Width="14" Height="14" 
+                                                     Margin="0,0,4,0"/>
+                                            <TextBlock Text="Thêm sân bay" FontSize="12"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+
+                                <!-- Intermediate Airports List -->
+                                <ItemsControl Grid.Row="1" ItemsSource="{Binding DanhSachEditSBTG}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#F9FAFB" 
+                                        CornerRadius="8" 
+                                        BorderBrush="#E5E7EB" 
+                                        BorderThickness="1" 
+                                        Padding="16" 
+                                        Margin="0,0,0,12">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"/>
+                                                        <RowDefinition Height="auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" 
+                                                 Text="{Binding STT}" 
+                                                 FontWeight="Bold" 
+                                                 FontSize="16" 
+                                                 Foreground="#3B82F6"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,16,0"/>
+
+                                                    <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                                                        <TextBlock Text="Sân bay trung gian" 
+                                                     FontSize="12" 
+                                                     Foreground="#6B7280" 
+                                                     Margin="0,0,0,4"/>
+                                                        <ComboBox ItemsSource="{Binding SbtgList}"
+                                                          Text="{Binding MaSBTG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    Height="36" FontSize="13"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2" Margin="0,0,16,0">
+                                                        <TextBlock Text="Thời gian dừng (phút)" 
+                                                     FontSize="12" 
+                                                     Foreground="#6B7280" 
+                                                     Margin="0,0,0,4"/>
+                                                        <TextBox Text="{Binding ThoiGianDung}" 
+                                                   Height="36" FontSize="13"/>
+                                                    </StackPanel>
+
+                                                    <Button Grid.Column="3" 
+                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.RemoveIntermediateAirportCommand, 
+                                                         RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Width="32" Height="32">
+                                                        <Icon:PackIconMaterial Kind="Close" 
+                                                                 Width="16" Height="16" 
+                                                                 Foreground="#EF4444"/>
+                                                    </Button>
+
+                                                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,16,16,0">
+                                                        <TextBlock Text="Ghi chú" 
+                                                     FontSize="12" 
+                                                     Foreground="#6B7280" 
+                                                     Margin="0,0,0,4"/>
+                                                        <TextBox Text="{Binding GhiChu}" 
+                                                   Height="36" FontSize="13"/>
+                                                    </StackPanel>
+
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Footer -->
+                    <Border Grid.Row="2" Background="#F8FAFC" 
+                CornerRadius="0,0,16,16" 
+                BorderBrush="#E5E7EB" 
+                BorderThickness="0,1,0,0" 
+                Padding="24,16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button x:Name="btnCancelEdit"
+                            Command="{Binding CancelEditFlightCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            BorderBrush="#E5E7EB"
+                            Width="100" Height="40" 
+                            Margin="0,0,12,0">
+                                    <TextBlock Text="Hủy" FontWeight="Medium"/>
+                                </Button>
+
+                                <Button x:Name="btnEditSave"
+                            Command="{Binding SaveEditFlightCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#10B981"
+                            BorderBrush="#10B981"
+                            Width="120" Height="40">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Icon:PackIconMaterial Kind="Check" Width="16" Height="16" 
+                                                 Margin="0,0,6,0"/>
+                                        <TextBlock Text="Lưu" FontWeight="Medium"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>
