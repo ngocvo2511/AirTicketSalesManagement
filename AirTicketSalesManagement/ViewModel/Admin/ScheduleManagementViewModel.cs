@@ -27,6 +27,11 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty] private ObservableCollection<Lichbay> flightSchedule = new();
         [ObservableProperty] private ObservableCollection<string> sanBayList = new();
 
+        [ObservableProperty]
+        private bool isAddSchedulePopupOpen = false;
+        [ObservableProperty]
+        private bool isEditSchedulePopupOpen = false;
+
         public ObservableCollection<string> DiemDiList => new(SanBayList.Where(s => s != DiemDen));
         public ObservableCollection<string> DiemDenList => new(SanBayList.Where(s => s != DiemDi));
 
@@ -168,6 +173,47 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     MessageBox.Show($"Lỗi khi đọc file Excel: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        [RelayCommand]
+        public void AddSchedule()
+        {
+            ResetAddField();
+            IsAddSchedulePopupOpen = true;
+        }
+
+        private void ResetAddField()
+        {
+
+        }
+
+        [RelayCommand]
+        public void CancelAddSchedule()
+        {
+            IsAddSchedulePopupOpen = false;
+        }
+
+        [RelayCommand]
+        public void CloseAddSchedule()
+        {
+            IsAddSchedulePopupOpen = false;
+        }
+
+        [RelayCommand]
+        public void SaveSchedule()
+        {
+
+        }
+
+        [RelayCommand]
+        public void EditSchedule()
+        {
+            ResetEditField();
+            IsAddSchedulePopupOpen = true;
+        }
+
+        private void ResetEditField()
+        {
         }
     }
 }

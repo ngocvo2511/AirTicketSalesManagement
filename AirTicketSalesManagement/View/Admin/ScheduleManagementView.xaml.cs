@@ -21,19 +21,38 @@ namespace AirTicketSalesManagement.View.Admin
     /// </summary>
     public partial class ScheduleManagementView : UserControl
     {
+
         public ScheduleManagementView()
         {
             InitializeComponent();
         }
 
+
         private void DataGridRow_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is DataGridRow row && row.IsSelected)
+            
+        }
+
+        private void EditButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true; // CHẶN hoàn toàn sự kiện lan ra DataGridRow
+        }
+
+        private object _lastSelectedItem = null;
+
+        private void dgLichBay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgLichBay.SelectedItem == _lastSelectedItem)
             {
-                dgLichBay.SelectedItem = null;
-                e.Handled = true;
+                dgLichBay.SelectedItem = null; // Bỏ chọn → ẩn chi tiết
+                _lastSelectedItem = null;
+            }
+            else
+            {
+                _lastSelectedItem = dgLichBay.SelectedItem;
             }
         }
+
     }
 
 }

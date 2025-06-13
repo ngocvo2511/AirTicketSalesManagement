@@ -660,7 +660,7 @@ HorizontalAlignment="Left">
         <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" Visibility="{Binding IsAddPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
             <!-- Popup Container -->
             <Border Style="{StaticResource PopupCardStyle}" 
-                Width="700" Height="550" 
+                Width="750" Height="600" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"
                     >
