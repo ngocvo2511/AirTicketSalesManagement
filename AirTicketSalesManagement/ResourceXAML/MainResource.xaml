@@ -54,6 +54,7 @@
     <viewmodelADMIN:ScheduleManagementViewModel x:Key="ScheduleManagementVM"/>
     <viewmodelADMIN:AccountManagementViewModel x:Key="AccountManagementVM"/>
     
+    
 
 
 
@@ -130,14 +131,17 @@
     <DataTemplate DataType="{x:Type viewmodelADMIN:FlightManagementViewModel}">
         <viewsADMIN:FlightManagementView />
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type viewmodelADMIN:ScheduleManagementViewModel}">
         <viewsADMIN:ScheduleManagementView />
     </DataTemplate>
 
-
+    <DataTemplate DataType="{x:Type viewmodelADMIN:RegulationManagementViewModel}">
+        <viewsADMIN:RegulationManagementView />
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">
         <viewsNotify:ToastView/>
     </DataTemplate>
-
+    
 </ResourceDictionary>
