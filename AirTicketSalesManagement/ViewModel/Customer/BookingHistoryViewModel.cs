@@ -24,9 +24,9 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private DateTime? ngayDatFilter;
         [ObservableProperty]
-        private string? noiDiFilter;
+        private string noiDiFilter;
         [ObservableProperty]
-        private string? noiDenFilter;
+        private string noiDenFilter;
         [ObservableProperty]
         private string? hangHangKhongFilter;
         [ObservableProperty]
@@ -39,6 +39,16 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
         public ObservableCollection<string> DiemDenList =>
             new(SanBayList.Where(s => s != NoiDiFilter));
+
+        partial void OnNoiDiFilterChanged(string value)
+        {
+            OnPropertyChanged(nameof(DiemDenList));
+        }
+
+        partial void OnNoiDenFilterChanged(string value)
+        {
+            OnPropertyChanged(nameof(DiemDiList));
+        }
         [ObservableProperty]
         private ObservableCollection<KQLichSuDatVe>? historyBooking = new();
         [ObservableProperty]
@@ -181,6 +191,12 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private void DeleteDate()
         {
             NgayDatFilter = null;
+        }
+
+        partial void OnSanBayListChanged(ObservableCollection<string> value)
+        {
+            OnPropertyChanged(nameof(DiemDiList));
+            OnPropertyChanged(nameof(DiemDenList));
         }
     }
 }
