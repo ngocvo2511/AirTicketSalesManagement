@@ -284,17 +284,18 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 foreach (var flight in flights)
                 {
                     // Lấy danh sách hạng vé
-                    var ticketClasses = context.Loaives
-                        .Where(lv => lv.MaLb == flight.MaLb)
-                        .Select(lv => new HangVe
+                    var ticketClasses = context.Hangvetheolichbays
+                        .Include(hvlb => hvlb.MaHvNavigation)
+                        .Where(hvlb => hvlb.MaLb == flight.MaLb)
+                        .Select(hvlb => new HangVe
                         {
-                            MaHangVe = lv.MaLv,
-                            TenHangVe = lv.HangGhe,
-                            GiaVe = flight.GiaVe.Value * (decimal)lv.HeSoGia,
-                            SoGheConLai = lv.SlveConLai ?? 0,
-                            BackgroundColor = GetBackgroundColorForTicketClass(lv.HangGhe),
-                            HeaderColor = GetHeaderColorForTicketClass(lv.HangGhe),
-                            ButtonColor = GetButtonColorForTicketClass(lv.HangGhe)
+                            MaHangVe = hvlb.MaHv.Value,
+                            TenHangVe = hvlb.MaHvNavigation.TenHv,
+                            GiaVe = flight.GiaVe.Value * (decimal)hvlb.MaHvNavigation.HeSoGia,
+                            SoGheConLai = hvlb.SlveConLai ?? 0,
+                            BackgroundColor = GetBackgroundColorForTicketClass(hvlb.MaHvNavigation.TenHv),
+                            HeaderColor = GetHeaderColorForTicketClass(hvlb.MaHvNavigation.TenHv),
+                            ButtonColor = GetButtonColorForTicketClass(hvlb.MaHvNavigation.TenHv)
                         })
                         .ToObservableCollection();
 

@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
     public partial class BookingHistoryDetailViewModel : BaseViewModel
@@ -36,31 +37,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private async Task LoadData()
         {
             CanCancle = true;
-            //CtdvList = new ObservableCollection<Ctdv>
-            //{
-            //    new Ctdv
-            //    {
-            //        HoTenHk = "Nguyễn Văn A",
-            //        GiayToTuyThan = "012345678",
-            //        NgaySinh = new DateOnly(1995, 5, 20),
-            //        GioiTinh = "Nam",
-            //    },
-            //    new Ctdv
-            //    {
-            //        HoTenHk = "Trần Thị B",
-            //        GiayToTuyThan = "987654321",
-            //        NgaySinh = new DateOnly(2000, 10, 15),
-            //        GioiTinh = "Nữ",
-            //    },
-            //    new Ctdv
-            //    {
-            //        HoTenHk = "Lê Minh C",
-            //        GiayToTuyThan = null, // Không có giấy tờ
-            //        NgaySinh = new DateOnly(2015, 8, 12),
-            //        GioiTinh = "Nam",
-            //        HoTenNguoiGiamHo = "Nguyễn Thị D",
-            //    }
-            //};
+           
             try
             {
                 using (var context = new AirTicketDbContext())
@@ -76,7 +53,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                       NgaySinh = ctdv.NgaySinh,
                                       Cccd = ctdv.Cccd,
                                       HoTenNguoiGiamHo = ctdv.HoTenNguoiGiamHo,
-                                      MaLv = ctdv.MaLv,
+                                      MaHvLb = ctdv.MaHvLb,
                                       GiaVeTt = ctdv.GiaVeTt
                                   }).ToList();
                     CtdvList = new ObservableCollection<Ctdv>(result);

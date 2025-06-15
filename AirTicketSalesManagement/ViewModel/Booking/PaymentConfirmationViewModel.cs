@@ -88,6 +88,18 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
                 int maDatVe = datVe.MaDv;
 
+                // Lấy đúng MaHV_LB từ DB
+                int maHV_LB = context.Hangvetheolichbays
+                    .Where(hv => hv.MaLb == ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.MaLichBay &&
+                                 hv.MaHv == ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.MaHangVe)
+                    .Select(hv => hv.MaHvLb)
+                    .First();
+
+                // Trừ số vé còn lại
+                var hangVe = context.Hangvetheolichbays.First(h => h.MaHvLb == maHV_LB);
+                hangVe.SlveConLai -= ThongTinHanhKhachVaChuyenBay.PassengerList.Count;
+
+
                 foreach (var passenger in ThongTinHanhKhachVaChuyenBay.PassengerList)
                 {
                     var ctdv = new Ctdv
@@ -98,7 +110,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                         NgaySinh = DateOnly.FromDateTime(passenger.NgaySinh),
                         Cccd = passenger.CCCD,
                         HoTenNguoiGiamHo = passenger.HoTenNguoiGiamHo,
-                        MaLv = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.MaHangVe,
+                        MaHvLb = maHV_LB,
                         GiaVeTt = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.GiaVe
                     };
 
