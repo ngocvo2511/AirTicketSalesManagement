@@ -341,27 +341,26 @@
 
                 <!-- DataGrid -->
                 <DataGrid Grid.Row="1" x:Name="dgLichBay"
-                  ItemsSource="{Binding FlightSchedule}"
-                  SelectedItem="{Binding SelectedLichBay}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  CanUserReorderColumns="True"
-                  CanUserResizeColumns="True"
-                  CanUserResizeRows="False"
-                  CanUserSortColumns="True"
-                  IsReadOnly="True"
-                  GridLinesVisibility="None"
-                  HeadersVisibility="Column"
-                  SelectionMode="Single"
-                  RowHeaderWidth="0"
-                  Background="Transparent"
-                  BorderThickness="0"
-                  RowDetailsVisibilityMode="VisibleWhenSelected"
-                  ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}"
-                  RowStyle="{StaticResource DataGridRowStyle}"
-                                    SelectionChanged="dgLichBay_SelectionChanged"
+ItemsSource="{Binding FlightSchedule}"
+SelectedItem="{Binding SelectedLichBay}"
+AutoGenerateColumns="False"
+CanUserAddRows="False"
+CanUserDeleteRows="False"
+CanUserReorderColumns="True"
+CanUserResizeColumns="True"
+CanUserResizeRows="False"
+CanUserSortColumns="True"
+IsReadOnly="True"
+GridLinesVisibility="None"
+HeadersVisibility="Column"
+SelectionMode="Single"
+RowHeaderWidth="0"
+Background="Transparent"
+BorderThickness="0"
+RowDetailsVisibilityMode="VisibleWhenSelected"
+ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+CellStyle="{StaticResource DataGridCellStyle}"
+RowStyle="{StaticResource DataGridRowStyle}"
 >
 
                     <DataGrid.Columns>
@@ -520,28 +519,26 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                ToolTip="Chỉnh sửa lịch bay"
-                                Command="{Binding DataContext.EditScheduleCommand, 
-                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                CommandParameter="{Binding}"
-
-                                Width="32" Height="32" Margin="2"
-                                                Focusable="False">
-
+         ToolTip="Chỉnh sửa lịch bay"
+         Command="{Binding DataContext.EditLichBayCommand, 
+                  RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                         PreviewMouseDown="EditButton_PreviewMouseDown"
+         CommandParameter="{Binding}"
+         Width="32" Height="32" Margin="2">
                                             <Border CornerRadius="6" Background="#EEF2FF" Padding="6">
                                                 <Icon:PackIconMaterial Kind="Pencil" Width="14" Height="14" 
-                                                     Foreground="#3B82F6"/>
+                              Foreground="#3B82F6"/>
                                             </Border>
                                         </Button>
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
-                                ToolTip="Xóa lịch bay"
-                                Command="{Binding DataContext.DeleteLichBayCommand, 
-                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                CommandParameter="{Binding}"
-                                Width="32" Height="32" Margin="2">
+         ToolTip="Xóa lịch bay"
+         Command="{Binding DataContext.DeleteLichBayCommand, 
+                  RelativeSource={RelativeSource AncestorType=DataGrid}}"
+         CommandParameter="{Binding}"
+         Width="32" Height="32" Margin="2">
                                             <Border CornerRadius="6" Background="#FEF2F2" Padding="6">
                                                 <Icon:PackIconMaterial Kind="Delete" Width="14" Height="14" 
-                                                     Foreground="#EF4444"/>
+                              Foreground="#EF4444"/>
                                             </Border>
                                         </Button>
                                     </StackPanel>

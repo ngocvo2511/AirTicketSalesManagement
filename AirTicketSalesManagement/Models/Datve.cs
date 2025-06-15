@@ -11,6 +11,8 @@ public partial class Datve
 
     public int? MaKh { get; set; }
 
+    public int? MaNv { get; set; }
+
     public DateTime? ThoiGianDv { get; set; }
 
     public int? Slve { get; set; }
@@ -22,8 +24,6 @@ public partial class Datve
     public decimal? TongTienTt { get; set; }
 
     public string? TtdatVe { get; set; }
-
-    public int? MaNv { get; set; }
 
     public virtual ICollection<Ctdv> Ctdvs { get; set; } = new List<Ctdv>();
 

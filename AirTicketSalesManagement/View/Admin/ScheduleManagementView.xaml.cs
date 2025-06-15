@@ -1,4 +1,5 @@
 ﻿using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.ViewModel.Admin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,32 +28,24 @@ namespace AirTicketSalesManagement.View.Admin
             InitializeComponent();
         }
 
-
         private void DataGridRow_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            
-        }
-
-        private void EditButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            e.Handled = true; // CHẶN hoàn toàn sự kiện lan ra DataGridRow
-        }
-
-        private object _lastSelectedItem = null;
-
-        private void dgLichBay_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (dgLichBay.SelectedItem == _lastSelectedItem)
+            if (sender is DataGridRow row && row.IsSelected)
             {
-                dgLichBay.SelectedItem = null; // Bỏ chọn → ẩn chi tiết
-                _lastSelectedItem = null;
-            }
-            else
-            {
-                _lastSelectedItem = dgLichBay.SelectedItem;
+                dgLichBay.SelectedItem = null;
+                e.Handled = true;
             }
         }
 
+        private void EditButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var vm = dgLichBay.DataContext as ScheduleManagementViewModel;
+            if (vm != null)
+            {
+                vm.IsEditSchedulePopupOpen = true;
+            }
+            e.Handled = true;
+        }
     }
 
 }
