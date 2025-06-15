@@ -19,18 +19,50 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 {
     public partial class ScheduleManagementViewModel : BaseViewModel
     {
-        [ObservableProperty] private string diemDi;
-        [ObservableProperty] private string diemDen;
-        [ObservableProperty] private string soHieuCB;
-        [ObservableProperty] private string tinhTrangLichBay;
-        [ObservableProperty] private DateTime? ngayDi;
-        [ObservableProperty] private ObservableCollection<Lichbay> flightSchedule = new();
-        [ObservableProperty] private ObservableCollection<string> sanBayList = new();
+        [ObservableProperty] 
+        private string diemDi;
+        [ObservableProperty] 
+        private string diemDen;
+        [ObservableProperty] 
+        private string soHieuCB;
+        [ObservableProperty] 
+        private string tinhTrangLichBay;
+        [ObservableProperty] 
+        private DateTime? ngayDi;
+        [ObservableProperty] 
+        private ObservableCollection<Lichbay> flightSchedule = new();
+        [ObservableProperty] 
+        private ObservableCollection<string> sanBayList = new();
 
         [ObservableProperty]
         private bool isAddSchedulePopupOpen = false;
         [ObservableProperty]
         private bool isEditSchedulePopupOpen = false;
+
+        //Add Schedule
+        [ObservableProperty]
+        private string addSoHieuCB;
+        [ObservableProperty]
+        private DateTime? addNgayDi;
+        [ObservableProperty]
+        private DateTime? addNgayDen;
+        [ObservableProperty]
+        private string addGioDi = "";
+
+        [ObservableProperty]
+        private string addGioDen = "";
+        [ObservableProperty]
+        private string addLoaiMB;
+        [ObservableProperty]
+        private string addSLVeKT;
+        [ObservableProperty]
+        private string addGiaVe;
+        [ObservableProperty]
+        private string addTTLichBay;
+        [ObservableProperty]
+        private ObservableCollection<string> flightNumberList;
+
+
 
         public ObservableCollection<string> DiemDiList => new(SanBayList.Where(s => s != DiemDen));
         public ObservableCollection<string> DiemDenList => new(SanBayList.Where(s => s != DiemDi));
@@ -56,6 +88,17 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 .OrderBy(display => display)
                 .ToList();
             SanBayList = new ObservableCollection<string>(danhSach);
+        }
+
+        public void LoadSoHieuCB()
+        {
+            using (var context = new AirTicketDbContext())
+            {
+                var list = context.Chuyenbays
+                                  .Select(cb => cb.SoHieuCb)
+                                  .ToList();
+                FlightNumberList = new ObservableCollection<string>(list);
+            }
         }
 
         public void LoadFlightSchedule()
@@ -179,12 +222,22 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         public void AddSchedule()
         {
             ResetAddField();
+            LoadSoHieuCB();
             IsAddSchedulePopupOpen = true;
         }
 
         private void ResetAddField()
         {
-
+            AddSoHieuCB = string.Empty;
+            AddNgayDi = null;
+            AddNgayDen = null;
+            AddGioDi = string.Empty;
+            AddGioDen = string.Empty;
+            AddLoaiMB = string.Empty;
+            AddSLVeKT = string.Empty;
+            AddGiaVe = string.Empty;
+            AddTTLichBay = string.Empty;
+             
         }
 
         [RelayCommand]

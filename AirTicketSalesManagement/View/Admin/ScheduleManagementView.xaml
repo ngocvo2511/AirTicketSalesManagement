@@ -803,6 +803,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                 </Button>
             </StackPanel>
         </Grid>
+        
         <!-- Popup Thêm Lịch Bay -->
         <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" Visibility="{Binding IsAddSchedulePopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
             <!-- Popup Container -->
@@ -881,9 +882,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                  Style="{StaticResource LabelStyle}"/>
                                     <ComboBox x:Name="cbFlightNumber" 
                                       ItemsSource="{Binding FlightNumberList}"
-                                      SelectedValue="{Binding AddSoHieuCB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                      DisplayMemberPath="Display"
-                                      SelectedValuePath="SoHieuCB"
+                                        Text="{Binding AddSoHieuCB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                       materialDesign:HintAssist.Hint="Chọn chuyến bay"
                                       Height="52" FontSize="14"/>
@@ -915,11 +914,23 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                        materialDesign:HintAssist.Hint="Chọn ngày đi"
                                        Height="52" FontSize="14" Margin="0,0,0,8"/>
-                                    <materialDesign:TimePicker x:Name="tpDepartureTime"
-                                                      SelectedTime="{Binding AddGioDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                      Style="{StaticResource MaterialDesignOutlinedTimePicker}"
-                                                      materialDesign:HintAssist.Hint="Chọn giờ đi"
-                                                      Height="52" FontSize="14"/>
+                                    <StackPanel>
+                                        <TextBox x:Name="txtDepartureTime"
+         Text="{Binding AddGioDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+         materialDesign:HintAssist.Hint="VD: 08:30, 14:45"
+         Height="52" FontSize="14"
+         PreviewTextInput="TimeTextBox_PreviewTextInput"
+         PreviewKeyDown="TimeTextBox_PreviewKeyDown"
+         TextChanged="TimeTextBox_TextChanged"
+         LostFocus="TimeTextBox_LostFocus"
+                                                 Tag="{Binding ElementName=lblDepartureTimeError}"/>
+                                        <Label x:Name="lblDepartureTimeError" 
+           Content=""
+           Foreground="Red"
+           FontSize="12"
+           Visibility="Collapsed"/>
+                                    </StackPanel>
                                 </StackPanel>
 
                                 <!-- Arrival Time -->
@@ -931,11 +942,23 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                        materialDesign:HintAssist.Hint="Chọn ngày đến"
                                        Height="52" FontSize="14" Margin="0,0,0,8"/>
-                                    <materialDesign:TimePicker x:Name="tpArrivalTime"
-                                                      SelectedTime="{Binding AddGioDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                      Style="{StaticResource MaterialDesignOutlinedTimePicker}"
-                                                      materialDesign:HintAssist.Hint="Chọn giờ đến"
-                                                      Height="52" FontSize="14"/>
+                                    <StackPanel>
+                                        <TextBox x:Name="txtArrivalTime"
+Text="{Binding AddGioDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+Style="{StaticResource MaterialDesignOutlinedTextBox}"
+materialDesign:HintAssist.Hint="VD: 08:30, 14:45"
+Height="52" FontSize="14"
+PreviewTextInput="TimeTextBox_PreviewTextInput"
+PreviewKeyDown="TimeTextBox_PreviewKeyDown"
+TextChanged="TimeTextBox_TextChanged"
+LostFocus="TimeTextBox_LostFocus"
+                                                 Tag="{Binding ElementName=lblArrivalTimeError}"/>
+                                        <Label x:Name="lblArrivalTimeError" 
+  Content=""
+  Foreground="Red"
+  FontSize="12"
+  Visibility="Collapsed"/>
+                                    </StackPanel>
                                 </StackPanel>
 
                                 <!-- Aircraft Type -->
