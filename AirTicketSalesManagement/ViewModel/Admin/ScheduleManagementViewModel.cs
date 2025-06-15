@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
+using AirTicketSalesManagement.Models.UIModels;
 
 namespace AirTicketSalesManagement.ViewModel.Admin
 {
@@ -62,6 +63,33 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty]
         private ObservableCollection<string> flightNumberList;
 
+        [ObservableProperty]
+        private ObservableCollection<HangVeTheoLichBay> ticketClassForScheduleList;
+
+        [ObservableProperty]
+        private ObservableCollection<string> ticketClassList;
+
+        //Edit Schedule
+        [ObservableProperty]
+        private string editSoHieuCB;
+        [ObservableProperty]
+        private DateTime? editNgayDi;
+        [ObservableProperty]
+        private DateTime? editNgayDen;
+        [ObservableProperty]
+        private string editGioDi = "";
+
+        [ObservableProperty]
+        private string editGioDen = "";
+        [ObservableProperty]
+        private string editLoaiMB;
+        [ObservableProperty]
+        private string editSLVeKT;
+        [ObservableProperty]
+        private string editGiaVe;
+        [ObservableProperty]
+        private string editTTLichBay;
+
 
 
         public ObservableCollection<string> DiemDiList => new(SanBayList.Where(s => s != DiemDen));
@@ -98,6 +126,17 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                                   .Select(cb => cb.SoHieuCb)
                                   .ToList();
                 FlightNumberList = new ObservableCollection<string>(list);
+            }
+        }
+
+        public void LoadHangVe()
+        {
+            using (var context = new AirTicketDbContext())
+            {
+                var list = context.Hangves
+                                  .Select(cb => cb.TenHv)
+                                  .ToList();
+                TicketClassList = new ObservableCollection<string>(list);
             }
         }
 
@@ -223,6 +262,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             ResetAddField();
             LoadSoHieuCB();
+            TicketClassForScheduleList = new ObservableCollection<HangVeTheoLichBay>();
             IsAddSchedulePopupOpen = true;
         }
 
@@ -237,7 +277,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             AddSLVeKT = string.Empty;
             AddGiaVe = string.Empty;
             AddTTLichBay = string.Empty;
-             
         }
 
         [RelayCommand]
@@ -253,20 +292,103 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void SaveSchedule()
+        public void SaveAddSchedule()
         {
 
+        }
+
+        [RelayCommand]
+        public void AddTicketClass()
+        {
+            LoadHangVe();
+            try
+            {
+                // Tạo sân bay trung gian mới với STT tự động tăng
+                var hangVeTheoLichBay = new HangVeTheoLichBay()
+                {
+                    STT = TicketClassForScheduleList.Count + 1, // Tự động tăng STT
+                    TenHangVe = string.Empty, // Mã sân bay trung gian sẽ được nhập sau
+                    SLVeToiDa = 0, 
+                    SLVeConLai = 0,
+                    HangVeList = new ObservableCollection<string>(TicketClassList),
+                    OnTenHangVeChangedCallback = UpdateTicketClassList
+                };
+
+                // Thêm vào collection
+                TicketClassForScheduleList.Add(hangVeTheoLichBay);
+                UpdateTicketClassList();
+                // Log hoặc thông báo thành công (tùy chọn)
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi
+                MessageBox.Show($"Lỗi khi thêm sân bay trung gian: {ex.Message}",
+                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UpdateTicketClassList()
+        {
+            if (TicketClassForScheduleList == null || TicketClassForScheduleList.Count == 0)
+            {
+                return;
+            }
+            // Danh sách cơ bản loại bỏ điểm đi và điểm đến
+            var danhSachCoBan = TicketClassList
+                .ToList();
+
+            // Lấy danh sách mã sân bay đã được chọn ở các item khác
+            foreach (var item in TicketClassForScheduleList)
+            {
+                var daChon = TicketClassForScheduleList
+                    .Where(x => x != item && !string.IsNullOrWhiteSpace(x.TenHangVe))
+                    .Select(x => x.TenHangVe)
+                    .ToList();
+
+                var danhSachLoc = danhSachCoBan
+                    .Where(x => !daChon.Contains(x))
+                    .ToList();
+
+                item.HangVeList = new ObservableCollection<string>(danhSachLoc);
+            }
         }
 
         [RelayCommand]
         public void EditSchedule()
         {
             ResetEditField();
+            LoadSoHieuCB();
             IsAddSchedulePopupOpen = true;
         }
 
         private void ResetEditField()
         {
+
         }
+
+        [RelayCommand]
+        public void CancelEditSchedule()
+        {
+            IsAddSchedulePopupOpen = false;
+        }
+
+        [RelayCommand]
+        public void CloseEditSchedule()
+        {
+            IsAddSchedulePopupOpen = false;
+        }
+
+        [RelayCommand]
+        public void SaveEditSchedule()
+        {
+
+        }
+
+        [RelayCommand]
+        public void EditTicketClass()
+        {
+
+        }
+
     }
 }

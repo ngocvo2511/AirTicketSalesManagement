@@ -1045,7 +1045,372 @@ LostFocus="TimeTextBox_LostFocus"
                                 </Grid>
 
                                 <!-- Ticket Classes List -->
-                                <ItemsControl Grid.Row="1" ItemsSource="{Binding DanhSachLoaiVe}">
+                                <ItemsControl Grid.Row="1" ItemsSource="{Binding TicketClassForScheduleList}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#F9FAFB" 
+                                        CornerRadius="8" 
+                                        BorderBrush="#E5E7EB" 
+                                        BorderThickness="1" 
+                                        Padding="16" 
+                                        Margin="0,0,0,12">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" 
+                                                 Text="{Binding STT}" 
+                                                 FontWeight="Bold" 
+                                                 FontSize="16" 
+                                                 Foreground="#3B82F6"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,16,0"/>
+
+                                                    <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                                                        <TextBlock Text="Hạng ghế" 
+                                                     FontSize="12" 
+                                                     Foreground="#6B7280" 
+                                                     Margin="0,0,0,4"/>
+                                                        <ComboBox Height="36" FontSize="13"
+                                                                  ItemsSource="{Binding HangVeList}"
+                                                                  Text="{Binding TenHangVe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                            
+                                                        </ComboBox>
+                                                    </StackPanel>
+
+                                                    
+
+                                                    <StackPanel Grid.Column="3" Margin="0,0,12,0">
+                                                        <TextBlock Text="Số ghế tối đa" 
+                                                     FontSize="12" 
+                                                     Foreground="#6B7280" 
+                                                     Margin="0,0,0,4"/>
+                                                        <TextBox Text="{Binding SLVeToiDa}" 
+                                                   Height="36" FontSize="13"
+                                                   materialDesign:HintAssist.Hint="VD: 20, 50"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="4" Margin="0,0,12,0">
+                                                        <TextBlock Text="Số ghế còn lại" 
+                                                     FontSize="12" 
+                                                     Foreground="#6B7280" 
+                                                     Margin="0,0,0,4"/>
+                                                        <TextBox Text="{Binding SLVeConLai}" 
+                                                   Height="36" FontSize="13"
+                                                   materialDesign:HintAssist.Hint="VD: 20, 50"/>
+                                                    </StackPanel>
+
+                                                    <Button Grid.Column="5" 
+                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.RemoveAddTicketClassCommand, 
+                                                         RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Width="32" Height="32">
+                                                        <Icon:PackIconMaterial Kind="Close" 
+                                                                 Width="16" Height="16" 
+                                                                 Foreground="#EF4444"/>
+                                                    </Button>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Footer -->
+                    <Border Grid.Row="2" Background="#F8FAFC" 
+                CornerRadius="0,0,16,16" 
+                BorderBrush="#E5E7EB" 
+                BorderThickness="0,1,0,0" 
+                Padding="24,16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button x:Name="btnCancelSchedule"
+                            Command="{Binding CancelAddScheduleCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            BorderBrush="#E5E7EB"
+                            Width="100" Height="40" 
+                            Margin="0,0,12,0">
+                                    <TextBlock Text="Hủy" FontWeight="Medium"/>
+                                </Button>
+
+                                <Button x:Name="btnSaveSchedule"
+                            Command="{Binding SaveAddScheduleCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#10B981"
+                            BorderBrush="#10B981"
+                            Width="120" Height="40">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Icon:PackIconMaterial Kind="Check" Width="16" Height="16" 
+                                                 Margin="0,0,6,0"/>
+                                        <TextBlock Text="Lưu" FontWeight="Medium"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Popup Sửa Lịch Bay -->
+        <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" Visibility="{Binding IsEditSchedulePopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <!-- Popup Container -->
+            <Border Style="{StaticResource PopupCardStyle}" 
+        Width="750" Height="600" 
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center">
+
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="#F8FAFC" 
+                CornerRadius="16,16,0,0" 
+                BorderBrush="#E5E7EB" 
+                BorderThickness="0,0,0,1" 
+                Padding="24,20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#EEF2FF" CornerRadius="8" 
+                            Width="40" Height="40" Margin="0,0,12,0">
+                                    <Icon:PackIconMaterial Kind="CalendarPlus" 
+                                             Width="37" Height="37" 
+                                             Foreground="#3B82F6"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="SỬA LỊCH BAY" 
+                                 FontSize="18" FontWeight="Bold" 
+                                 Foreground="#1F2937"/>
+                                    <TextBlock Text="Sửa lịch bay cho chuyến bay" 
+                                 FontSize="13" Foreground="#6B7280"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Button Grid.Column="1" 
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Command="{Binding CloseEditScheduleCommand}"
+                        Width="32" Height="32">
+                                <Icon:PackIconMaterial Kind="Close" Width="16" Height="16" 
+                                         Foreground="#6B7280"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" 
+                      Padding="24,20">
+                        <StackPanel>
+                            <!-- Flight Selection Section -->
+                            <TextBlock Text="Chọn chuyến bay" 
+                         Style="{StaticResource SectionHeaderStyle}"/>
+
+                            <Grid Margin="0,0,0,24">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Flight Selection -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,16">
+                                    <TextBlock Text="Số hiệu chuyến bay" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox 
+                                      ItemsSource="{Binding FlightNumberList}"
+                                        Text="{Binding EditSoHieuCB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      materialDesign:HintAssist.Hint="Chọn chuyến bay"
+                                      Height="52" FontSize="14"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Flight Schedule Information Section -->
+                            <TextBlock Text="Thông tin lịch bay" 
+                         Style="{StaticResource SectionHeaderStyle}"/>
+
+                            <Grid Margin="0,0,0,24">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Departure Time -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Giờ khởi hành" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <DatePicker 
+                                       SelectedDate="{Binding EditNgayDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                       materialDesign:HintAssist.Hint="Chọn ngày đi"
+                                       Height="52" FontSize="14" Margin="0,0,0,8"/>
+                                    <StackPanel>
+                                        <TextBox
+         Text="{Binding EditGioDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+         materialDesign:HintAssist.Hint="VD: 08:30, 14:45"
+         Height="52" FontSize="14"
+         PreviewTextInput="TimeTextBox_PreviewTextInput"
+         PreviewKeyDown="TimeTextBox_PreviewKeyDown"
+         TextChanged="TimeTextBox_TextChanged"
+         LostFocus="TimeTextBox_LostFocus"
+                                                 Tag="{Binding ElementName=lblEditDepartureTimeError}"/>
+                                        <Label x:Name="lblEditDepartureTimeError" 
+           Content=""
+           Foreground="Red"
+           FontSize="12"
+           Visibility="Collapsed"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- Arrival Time -->
+                                <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Giờ đến" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <DatePicker
+                                       SelectedDate="{Binding EditNgayDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                       materialDesign:HintAssist.Hint="Chọn ngày đến"
+                                       Height="52" FontSize="14" Margin="0,0,0,8"/>
+                                    <StackPanel>
+                                        <TextBox 
+Text="{Binding AddGioDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+Style="{StaticResource MaterialDesignOutlinedTextBox}"
+materialDesign:HintAssist.Hint="VD: 08:30, 14:45"
+Height="52" FontSize="14"
+PreviewTextInput="TimeTextBox_PreviewTextInput"
+PreviewKeyDown="TimeTextBox_PreviewKeyDown"
+TextChanged="TimeTextBox_TextChanged"
+LostFocus="TimeTextBox_LostFocus"
+                                                 Tag="{Binding ElementName=lblEditArrivalTimeError}"/>
+                                        <Label x:Name="lblEditArrivalTimeError" 
+  Content=""
+  Foreground="Red"
+  FontSize="12"
+  Visibility="Collapsed"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- Aircraft Type -->
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Loại máy bay" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox 
+                                      Text="{Binding EditLoaiMB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      materialDesign:HintAssist.Hint="Chọn loại máy bay"
+                                      Height="52" FontSize="14">
+                                        <ComboBoxItem Content="Boeing 737"/>
+                                        <ComboBoxItem Content="Airbus A320"/>
+                                        <ComboBoxItem Content="Airbus A321"/>
+                                        <ComboBoxItem Content="Boeing 787"/>
+                                        <ComboBoxItem Content="Airbus A350"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <!-- Economy Seats -->
+                                <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Số lượng vé khai thác" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <TextBox 
+                               Text="{Binding EditSLVeKT}"
+                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                               Height="52" FontSize="14"
+                               materialDesign:HintAssist.Hint="VD: 180, 200"/>
+                                </StackPanel>
+
+                                <!-- Base Price -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,16">
+                                    <TextBlock Text="Giá vé cơ bản (VNĐ)" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <TextBox 
+                               Text="{Binding EditGiaVe}"
+                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                               Height="52" FontSize="14"
+                               materialDesign:HintAssist.Hint="VD: 1500000"/>
+                                </StackPanel>
+
+                                <!-- Status -->
+                                <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,16">
+                                    <TextBlock Text="Tình trạng lịch bay" 
+                                 Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox
+                                      Text="{Binding EditTTLichBay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      Height="52" FontSize="14"
+                                      materialDesign:HintAssist.Hint="Chọn trạng thái">
+                                        <ComboBoxItem Content="Chờ cất cánh"/>
+                                        <ComboBoxItem Content="Đã cất cánh"/>
+                                        <ComboBoxItem Content="Hoàn thành"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Ticket Classes Section -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Hạng ghế và giá vé" 
+                                 Style="{StaticResource SectionHeaderStyle}"/>
+
+                                    <Button Grid.Column="1" 
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Command="{Binding EditTicketClassCommand}"
+                                Height="32" Padding="12,6">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Kind="Plus" Width="14" Height="14" 
+                                                     Margin="0,0,4,0"/>
+                                            <TextBlock Text="Thêm hạng ghế" FontSize="12"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+
+                                <!-- Ticket Classes List -->
+                                <ItemsControl Grid.Row="1" ItemsSource="{Binding EditTicketClass}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Background="#F9FAFB" 
@@ -1121,7 +1486,7 @@ LostFocus="TimeTextBox_LostFocus"
 
                                                     <Button Grid.Column="5" 
                                                 Style="{StaticResource MaterialDesignIconButton}"
-                                                Command="{Binding DataContext.RemoveTicketClassCommand, 
+                                                Command="{Binding DataContext.RemoveEditTicketClassCommand, 
                                                          RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 Width="32" Height="32">
@@ -1151,8 +1516,8 @@ LostFocus="TimeTextBox_LostFocus"
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                <Button x:Name="btnCancelSchedule"
-                            Command="{Binding CancelAddScheduleCommand}"
+                                <Button 
+                            Command="{Binding CancelEditScheduleCommand}"
                             Style="{StaticResource MaterialDesignOutlinedButton}"
                             BorderBrush="#E5E7EB"
                             Width="100" Height="40" 
@@ -1160,8 +1525,8 @@ LostFocus="TimeTextBox_LostFocus"
                                     <TextBlock Text="Hủy" FontWeight="Medium"/>
                                 </Button>
 
-                                <Button x:Name="btnSaveSchedule"
-                            Command="{Binding SaveScheduleCommand}"
+                                <Button
+                            Command="{Binding SaveEditScheduleCommand}"
                             Style="{StaticResource MaterialDesignRaisedButton}"
                             Background="#10B981"
                             BorderBrush="#10B981"
