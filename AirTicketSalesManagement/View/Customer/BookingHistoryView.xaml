@@ -44,8 +44,8 @@
             <ComboBox Width="250" Margin="20"
               FontSize="16"
               IsEditable="True"
-              ItemsSource="{Binding SanBayList}"
-              Text="{Binding NoiDiFilter, Mode=TwoWay}"
+              ItemsSource="{Binding DiemDiList}"
+              Text="{Binding NoiDiFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
               materialDesign:HintAssist.Hint="Nơi đi"/>
 
             <!-- ComboBox nơi đến -->
@@ -53,7 +53,7 @@
               IsEditable="True"
               FontSize="16"
               ItemsSource="{Binding DiemDenList}"
-              Text="{Binding NoiDenFilter, Mode=TwoWay}"
+              Text="{Binding NoiDenFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
               materialDesign:HintAssist.Hint="Nơi đến"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center" HorizontalAlignment="Left">
