@@ -180,12 +180,12 @@ VALUES
 ('VN102', '2025-04-25 13:00', '2025-04-25 14:15', N'Boeing 787', 150, 1200000, N'Còn chỗ'),
 ('VJ205', '2025-04-26 09:00', '2025-04-26 10:30', N'Airbus A320', 180, 1000000, N'Còn chỗ'),
 ('QH301', '2025-04-26 16:00', '2025-04-26 17:45', N'Embraer E190', 120, 1300000, N'Còn chỗ');
-
+update LICHBAY set TTLichBay = N'Chờ cất cánh'
 INSERT INTO HANGVE (TenHV, HeSoGia)
 VALUES
 (N'Phổ thông', 1),
 (N'Thương gia', 1.05)
-
+select * from HANGVETHEOLICHBAY
 INSERT INTO HANGVETHEOLICHBAY(MaLB, MaHV, SLVeToiDa, SLVeConLai)
 VALUES
 (1, 1, 100, 100),
