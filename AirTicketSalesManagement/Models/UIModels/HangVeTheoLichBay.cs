@@ -15,9 +15,9 @@ namespace AirTicketSalesManagement.Models.UIModels
         [ObservableProperty]
         private string tenHangVe;
         [ObservableProperty]
-        private int? sLVeToiDa;
+        private string sLVeToiDa;
         [ObservableProperty]
-        private int? sLVeConLai;
+        private string sLVeConLai;
         [ObservableProperty]
         private ObservableCollection<string> hangVeList;
         public Action? OnTenHangVeChangedCallback { get; set; }

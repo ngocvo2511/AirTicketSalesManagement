@@ -520,7 +520,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
          ToolTip="Chỉnh sửa lịch bay"
-         Command="{Binding DataContext.EditLichBayCommand, 
+         Command="{Binding DataContext.EditScheduleCommand, 
                   RelativeSource={RelativeSource AncestorType=DataGrid}}"
                          PreviewMouseDown="EditButton_PreviewMouseDown"
          CommandParameter="{Binding}"
@@ -532,7 +532,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                         </Button>
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
          ToolTip="Xóa lịch bay"
-         Command="{Binding DataContext.DeleteLichBayCommand, 
+         Command="{Binding DataContext.DeleteScheduleCommand, 
                   RelativeSource={RelativeSource AncestorType=DataGrid}}"
          CommandParameter="{Binding}"
          Width="32" Height="32" Margin="2">
@@ -604,7 +604,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                       Foreground="#374151" Margin="0,0,0,8"/>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Giờ khởi hành:" FontWeight="Medium" 
+                                                <TextBlock Text="Giờ đi:" FontWeight="Medium" 
                                           Foreground="#6B7280" Width="100"/>
                                                 <TextBlock Text="{Binding GioDi, StringFormat=dd/MM/yyyy HH:mm}" 
                                           Foreground="#059669" FontWeight="SemiBold"/>
@@ -653,7 +653,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                         <TextBlock Text="Các loại vé" FontWeight="SemiBold" 
                                   Foreground="#374151" Margin="0,10,0,8"/>
 
-                                        <ItemsControl ItemsSource="{Binding Loaives}">
+                                        <ItemsControl ItemsSource="{Binding Hangvetheolichbays}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <UniformGrid Columns="3"/>
@@ -665,11 +665,11 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                            BorderBrush="#E5E7EB" BorderThickness="1" 
                                            Margin="0,0,10,8" Padding="12">
                                                         <StackPanel>
-                                                            <TextBlock Text="{Binding HangGhe}" 
+                                                            <TextBlock Text="{Binding MaHvNavigation.TenHv}" 
                                                       FontWeight="SemiBold" Foreground="#1F2937"/>
                                                             <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                                                                 <TextBlock Text="Hệ số giá: " FontSize="11" Foreground="#6B7280"/>
-                                                                <TextBlock Text="{Binding HeSoGia, StringFormat=x{0:F1}}" 
+                                                                <TextBlock Text="{Binding MaHvNavigation.HeSoGia, StringFormat=x{0:F1}}" 
                                                           FontSize="11" Foreground="#059669" FontWeight="SemiBold"/>
                                                             </StackPanel>
                                                             <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
@@ -1063,7 +1063,6 @@ LostFocus="TimeTextBox_LostFocus"
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
@@ -1089,7 +1088,7 @@ LostFocus="TimeTextBox_LostFocus"
 
                                                     
 
-                                                    <StackPanel Grid.Column="3" Margin="0,0,12,0">
+                                                    <StackPanel Grid.Column="2" Margin="0,0,12,0">
                                                         <TextBlock Text="Số ghế tối đa" 
                                                      FontSize="12" 
                                                      Foreground="#6B7280" 
@@ -1099,7 +1098,7 @@ LostFocus="TimeTextBox_LostFocus"
                                                    materialDesign:HintAssist.Hint="VD: 20, 50"/>
                                                     </StackPanel>
 
-                                                    <StackPanel Grid.Column="4" Margin="0,0,12,0">
+                                                    <StackPanel Grid.Column="3" Margin="0,0,12,0">
                                                         <TextBlock Text="Số ghế còn lại" 
                                                      FontSize="12" 
                                                      Foreground="#6B7280" 
@@ -1109,7 +1108,7 @@ LostFocus="TimeTextBox_LostFocus"
                                                    materialDesign:HintAssist.Hint="VD: 20, 50"/>
                                                     </StackPanel>
 
-                                                    <Button Grid.Column="5" 
+                                                    <Button Grid.Column="4" 
                                                 Style="{StaticResource MaterialDesignIconButton}"
                                                 Command="{Binding DataContext.RemoveAddTicketClassCommand, 
                                                          RelativeSource={RelativeSource AncestorType=UserControl}}"

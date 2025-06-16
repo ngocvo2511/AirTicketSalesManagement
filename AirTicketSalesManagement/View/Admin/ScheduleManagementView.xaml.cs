@@ -39,10 +39,14 @@ namespace AirTicketSalesManagement.View.Admin
 
         private void EditButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            var vm = dgLichBay.DataContext as ScheduleManagementViewModel;
-            if (vm != null)
+            var button = sender as Button;
+            if (button?.DataContext is Lichbay lichbay)
             {
-                vm.IsEditSchedulePopupOpen = true;
+                var vm = dgLichBay.DataContext as ScheduleManagementViewModel;
+                if (vm != null)
+                {
+                    vm.EditSchedule(lichbay);
+                }
             }
             e.Handled = true;
         }

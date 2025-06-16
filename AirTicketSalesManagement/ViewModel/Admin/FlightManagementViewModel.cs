@@ -275,7 +275,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         public void AddFlight()
         {
             ResetAddField();
-            DanhSachSBTG = new ObservableCollection<SBTG>();
             IsAddPopupOpen = true;
         }
 
@@ -287,6 +286,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             AddHangHangKhong = string.Empty;
             AddTTKhaiThac = string.Empty;
             AddThoiGianBay = string.Empty;
+            DanhSachSBTG = new ObservableCollection<SBTG>();
         }
 
         [RelayCommand]
