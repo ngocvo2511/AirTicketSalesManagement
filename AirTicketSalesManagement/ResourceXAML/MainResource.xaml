@@ -139,7 +139,11 @@
     <DataTemplate DataType="{x:Type viewmodelADMIN:RegulationManagementViewModel}">
         <viewsADMIN:RegulationManagementView />
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type viewmodelADMIN:AccountManagementViewModel}">
+        <viewsADMIN:AccountManagementView />
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">
         <viewsNotify:ToastView/>
     </DataTemplate>
