@@ -696,15 +696,15 @@ RowStyle="{StaticResource DataGridRowStyle}"
                     <DataGrid.Style>
                         <Style TargetType="DataGrid">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding LichBays.Count}" Value="0">
+                                <DataTrigger Binding="{Binding FlightSchedule.Count}" Value="0">
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate>
                                                 <Border Background="White" CornerRadius="0,0,12,12">
                                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                               Margin="60">
+                                               Margin="40">
                                                         <Border Background="#F3F4F6" CornerRadius="50" 
-                                               Width="100" Height="100" Margin="0,0,0,24">
+                                               Width="50" Height="50" Margin="0,0,0,24">
                                                             <Icon:PackIconMaterial Kind="CalendarClock" 
                                                                  Width="48" Height="48" 
                                                                  Foreground="#9CA3AF"/>

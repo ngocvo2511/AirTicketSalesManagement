@@ -345,7 +345,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Taikhoan>(entity =>
         {
-            entity.HasKey(e => e.Email).HasName("PK__TAIKHOAN__A9D10535CB9990C2");
+            entity.HasKey(e => e.Email).HasName("PK__TAIKHOAN__A9D10535E69EB34C");
 
             entity.ToTable("TAIKHOAN");
 
@@ -357,17 +357,15 @@ public partial class AirTicketDbContext : DbContext
             entity.Property(e => e.MatKhau)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.VaiTro)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            entity.Property(e => e.VaiTro).HasMaxLength(20);
 
             entity.HasOne(d => d.MaKhNavigation).WithMany(p => p.Taikhoans)
                 .HasForeignKey(d => d.MaKh)
-                .HasConstraintName("FK__TAIKHOAN__MaKH__6A30C649");
+                .HasConstraintName("FK__TAIKHOAN__MaKH__76969D2E");
 
             entity.HasOne(d => d.MaNvNavigation).WithMany(p => p.Taikhoans)
                 .HasForeignKey(d => d.MaNv)
-                .HasConstraintName("FK__TAIKHOAN__MaNV__693CA210");
+                .HasConstraintName("FK__TAIKHOAN__MaNV__75A278F5");
         });
 
         OnModelCreatingPartial(modelBuilder);

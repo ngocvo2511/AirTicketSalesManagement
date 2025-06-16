@@ -133,7 +133,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     var customerAccount = new Taikhoan
                     {
                         Email = Email,
-                        VaiTro = "KhachHang",
+                        VaiTro = "Khách hàng",
                         MatKhau = hashPass,
                         MaKhNavigation = customer
                     };

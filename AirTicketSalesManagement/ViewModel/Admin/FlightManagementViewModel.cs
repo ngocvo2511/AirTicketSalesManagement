@@ -119,8 +119,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty]
         private string editTTKhaiThac;
         [ObservableProperty]
-        private ObservableCollection<SBTG> danhSachEditSBTG;
-        [ObservableProperty]
         private bool isEditPopupOpen = false;
 
         public ObservableCollection<string> EditDiemDiList =>
@@ -496,7 +494,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [RelayCommand]
         public void EditFlight()
         {
-            DanhSachEditSBTG = new ObservableCollection<SBTG>();
+            DanhSachSBTG = new ObservableCollection<SBTG>();
             ResetEditField();
             IsEditPopupOpen = true;
         }
@@ -515,7 +513,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             EditThoiGianBay = SelectedFlight?.SoGioBay.ToString() ?? string.Empty;
             foreach (var sbtg in SelectedFlight?.Sanbaytrunggians ?? Enumerable.Empty<Sanbaytrunggian>())
             {
-                DanhSachEditSBTG.Add(new SBTG
+                DanhSachSBTG.Add(new SBTG
                 {
                     STT = sbtg.Stt,
                     MaSBTG = $"{sbtg.MaSbtgNavigation.ThanhPho} ({sbtg.MaSbtgNavigation.MaSb}), {sbtg.MaSbtgNavigation.QuocGia}",
@@ -649,7 +647,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     context.Sanbaytrunggians.RemoveRange(existingFlight.Sanbaytrunggians);
 
                     // Thêm lại sân bay trung gian mới
-                    foreach (var sbtg in DanhSachEditSBTG)
+                    foreach (var sbtg in DanhSachSBTG)
                     {
                         if (!string.IsNullOrWhiteSpace(sbtg.MaSBTG))
                         {
@@ -717,7 +715,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     int removedSTT = editSBTG.STT;
 
                     // Xóa khỏi collection
-                    DanhSachEditSBTG.Remove(editSBTG);
+                    DanhSachSBTG.Remove(editSBTG);
 
                     // Cập nhật lại STT cho các sân bay sau sân bay bị xóa
                     UpdateSTTAfterRemoval(removedSTT);

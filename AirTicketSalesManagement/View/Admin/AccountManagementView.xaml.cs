@@ -25,4 +25,40 @@ namespace AirTicketSalesManagement.View.Admin
             InitializeComponent();
         }
     }
+
+    public class RoleToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is ComboBoxItem selectedItem)
+            {
+                string role = selectedItem.Content.ToString();
+                return role == "Nhân viên" || role == "Khách hàng" ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class AdminRoleToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is ComboBoxItem selectedItem)
+            {
+                string role = selectedItem.Content.ToString();
+                return role == "Quản trị viên" ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
