@@ -1409,7 +1409,7 @@ LostFocus="TimeTextBox_LostFocus"
                                 </Grid>
 
                                 <!-- Ticket Classes List -->
-                                <ItemsControl Grid.Row="1" ItemsSource="{Binding EditTicketClass}">
+                                <ItemsControl Grid.Row="1" ItemsSource="{Binding TicketClassForScheduleList}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Background="#F9FAFB" 
@@ -1424,7 +1424,6 @@ LostFocus="TimeTextBox_LostFocus"
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
@@ -1444,26 +1443,15 @@ LostFocus="TimeTextBox_LostFocus"
                                                      FontSize="12" 
                                                      Foreground="#6B7280" 
                                                      Margin="0,0,0,4"/>
-                                                        <ComboBox Text="{Binding HangGhe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Height="36" FontSize="13">
-                                                            <ComboBoxItem Content="Phổ thông"/>
-                                                            <ComboBoxItem Content="Phổ thông đặc biệt"/>
-                                                            <ComboBoxItem Content="Thương gia"/>
-                                                            <ComboBoxItem Content="Hạng nhất"/>
+                                                        <ComboBox Height="36" FontSize="13"
+                                                                  ItemsSource="{Binding HangVeList}"
+                                                                  Text="{Binding TenHangVe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
                                                         </ComboBox>
                                                     </StackPanel>
 
-                                                    <StackPanel Grid.Column="2" Margin="0,0,12,0">
-                                                        <TextBlock Text="Hệ số giá" 
-                                                     FontSize="12" 
-                                                     Foreground="#6B7280" 
-                                                     Margin="0,0,0,4"/>
-                                                        <TextBox Text="{Binding HeSoGia}" 
-                                                   Height="36" FontSize="13"
-                                                   materialDesign:HintAssist.Hint="VD: 1.0, 1.5"/>
-                                                    </StackPanel>
 
-                                                    <StackPanel Grid.Column="3" Margin="0,0,12,0">
+                                                    <StackPanel Grid.Column="2" Margin="0,0,12,0">
                                                         <TextBlock Text="Số ghế tối đa" 
                                                      FontSize="12" 
                                                      Foreground="#6B7280" 
@@ -1473,7 +1461,7 @@ LostFocus="TimeTextBox_LostFocus"
                                                    materialDesign:HintAssist.Hint="VD: 20, 50"/>
                                                     </StackPanel>
 
-                                                    <StackPanel Grid.Column="4" Margin="0,0,12,0">
+                                                    <StackPanel Grid.Column="3" Margin="0,0,12,0">
                                                         <TextBlock Text="Số ghế còn lại" 
                                                      FontSize="12" 
                                                      Foreground="#6B7280" 
@@ -1483,7 +1471,7 @@ LostFocus="TimeTextBox_LostFocus"
                                                    materialDesign:HintAssist.Hint="VD: 20, 50"/>
                                                     </StackPanel>
 
-                                                    <Button Grid.Column="5" 
+                                                    <Button Grid.Column="4" 
                                                 Style="{StaticResource MaterialDesignIconButton}"
                                                 Command="{Binding DataContext.RemoveEditTicketClassCommand, 
                                                          RelativeSource={RelativeSource AncestorType=UserControl}}"

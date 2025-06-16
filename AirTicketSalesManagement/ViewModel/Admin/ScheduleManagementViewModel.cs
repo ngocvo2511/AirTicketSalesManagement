@@ -454,18 +454,22 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             EditSLVeKT = selectedLichBay?.SlveKt?.ToString() ?? string.Empty;
             EditTTLichBay = selectedLichBay?.TtlichBay?.ToString() ?? string.Empty;
             EditGiaVe = selectedLichBay?.GiaVe?.ToString("#,##0") + " VNĐ" ?? string.Empty;
-            //foreach (var hangVe in selectedLichBay?.Hangvetheolichbays ?? Enumerable.Empty<Hangvetheolichbay>())
-            //{
-            //    TicketClassForScheduleList.Add(new HangVeTheoLichBay
-            //    {
-            //        STT = TicketClassForScheduleList.Count + 1,
-            //        TenHangVe = hangVe.TenHv,
-            //        SLVeToiDa = hangVe.SlveToida.ToString(),
-            //        SLVeConLai = hangVe.SlveConlai.ToString(),
-            //        HangVeList = new ObservableCollection<string>(TicketClassList),
-            //        OnTenHangVeChangedCallback = UpdateTicketClassList
-            //    });
-            //}
+            LoadHangVe();
+            TicketClassForScheduleList = new ObservableCollection<HangVeTheoLichBay>();
+            foreach (var hangVe in selectedLichBay?.Hangvetheolichbays ?? Enumerable.Empty<Hangvetheolichbay>())
+            {
+                TicketClassForScheduleList.Add(new HangVeTheoLichBay
+                {
+                    STT = TicketClassForScheduleList.Count + 1,
+                    TenHangVe = hangVe.MaHvNavigation.TenHv,
+                    SLVeToiDa = hangVe.SlveToiDa.ToString(),
+                    SLVeConLai = hangVe.SlveConLai.ToString(),
+                    HangVeList = new ObservableCollection<string>(TicketClassList),
+                    OnTenHangVeChangedCallback = UpdateTicketClassList
+                });
+            }
+
+
             //EditDiemDi = SelectedLichBay?.SbdiNavigation != null
             //? $"{SelectedFlight.SbdiNavigation.ThanhPho} ({SelectedFlight.SbdiNavigation.MaSb}), {SelectedFlight.SbdiNavigation.QuocGia}"
             //: string.Empty;
