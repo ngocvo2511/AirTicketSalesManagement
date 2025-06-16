@@ -525,6 +525,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     OnMaSBTGChangedCallback = CapNhatSBTGList
                 });
             }
+            CapNhatSBTGList();
         }
 
         [RelayCommand]

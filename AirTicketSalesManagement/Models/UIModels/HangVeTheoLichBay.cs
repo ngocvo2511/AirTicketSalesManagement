@@ -11,6 +11,8 @@ namespace AirTicketSalesManagement.Models.UIModels
     public partial class HangVeTheoLichBay : ObservableObject
     {
         [ObservableProperty]
+        private int iD;
+        [ObservableProperty]
         private int sTT;
         [ObservableProperty]
         private string tenHangVe;

@@ -51,6 +51,20 @@ namespace AirTicketSalesManagement.View.Admin
             e.Handled = true;
         }
 
+        private void DeleteButton_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.DataContext is Lichbay lichbay)
+            {
+                var vm = dgLichBay.DataContext as ScheduleManagementViewModel;
+                if (vm != null)
+                {
+                    vm.DeleteSchedule(lichbay);
+                }
+            }
+            e.Handled = true;
+        }
+
         private void TimeTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
