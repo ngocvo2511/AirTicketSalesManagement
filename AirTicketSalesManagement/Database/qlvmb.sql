@@ -63,7 +63,6 @@ CREATE TABLE KHACHHANG
 	HoTenKH NVARCHAR(30),
 	GioiTinh NVARCHAR(10),
 	NgaySinh DATE,
-	Email VARCHAR(254) UNIQUE,
 	SoDT CHAR(10),
 	CCCD CHAR(12)
 )
@@ -73,11 +72,11 @@ CREATE TABLE NHANVIEN (
     HoTenNV NVARCHAR(50),
     GioiTinh NVARCHAR(10),
     NgaySinh DATE,
-    Email VARCHAR(254) UNIQUE,
     SoDT CHAR(10),
     CCCD CHAR(12)
 )
-
+select * from TAIKHOAN
+delete from NHANVIEN where MaNV=2
 CREATE TABLE DATVE
 (
 	MaDV INT IDENTITY(1,1) PRIMARY KEY,
@@ -121,15 +120,17 @@ CREATE TABLE QUYDINH (
 )
 
 CREATE TABLE TAIKHOAN(
-	Email VARCHAR(254) PRIMARY KEY,
+	MaTK INT IDENTITY(1,1) PRIMARY KEY,
+	Email VARCHAR(254) UNIQUE,
     MatKhau VARCHAR(100) NOT NULL,
-    VaiTro VARCHAR(20) NOT NULL CHECK (VaiTro IN ('Admin', 'QuanLy', 'NhanVien', 'KhachHang')),
+    VaiTro NVARCHAR(20) NOT NULL CHECK (VaiTro IN (N'Admin', N'Nhân viên', N'Khách hàng')),
     MaNV INT FOREIGN KEY REFERENCES NHANVIEN(MaNV),
     MaKH INT FOREIGN KEY REFERENCES KHACHHANG(MaKH)
 )
-INSERT INTO NHANVIEN(HoTenNV, Email) values ('Ngoc Vo Xuan', 'ad@ad.com')
+
+INSERT INTO NHANVIEN(HoTenNV) values ('Ngoc Vo Xuan')
 select * from SANBAYTRUNGGIAN where SoHieuCB='VN109'
-select * from NHANVIEN
+select * from TAIKHOAN
 INSERT INTO TAIKHOAN(Email, MatKhau, VaiTro, MaNV) values ('ad@ad.com', '$2a$12$X6ZEfqxwVBMDc0j9zzibyu9btxvTSNEuHDaADPgBnAEf0oRwn/QSO', 'Admin', 1)
 update TAIKHOAN set VaiTro = 'NhanVien' where Email = 'nv@nv.com'
 DELETE FROM SANBAY
@@ -176,11 +177,11 @@ VALUES
 
 INSERT INTO LICHBAY (SoHieuCB, GioDi, GioDen, LoaiMB, SLVeKT, GiaVe, TTLichBay)
 VALUES 
-('VN101', '2025-04-25 08:00', '2025-04-25 10:00', N'Airbus A321', 200, 1500000, N'Còn chỗ'),
-('VN102', '2025-04-25 13:00', '2025-04-25 14:15', N'Boeing 787', 150, 1200000, N'Còn chỗ'),
-('VJ205', '2025-04-26 09:00', '2025-04-26 10:30', N'Airbus A320', 180, 1000000, N'Còn chỗ'),
-('QH301', '2025-04-26 16:00', '2025-04-26 17:45', N'Embraer E190', 120, 1300000, N'Còn chỗ');
-update LICHBAY set TTLichBay = N'Chờ cất cánh'
+('VN101', '2025-04-25 08:00', '2025-04-25 10:00', N'Airbus A321', 200, 1500000, N'Chờ cất cánh'),
+('VN102', '2025-04-25 13:00', '2025-04-25 14:15', N'Boeing 787', 150, 1200000, N'Chờ cất cánh'),
+('VJ205', '2025-04-26 09:00', '2025-04-26 10:30', N'Airbus A320', 180, 1000000, N'Chờ cất cánh'),
+('QH301', '2025-04-26 16:00', '2025-04-26 17:45', N'Embraer E190', 120, 1300000, N'Chờ cất cánh');
+
 INSERT INTO HANGVE (TenHV, HeSoGia)
 VALUES
 (N'Phổ thông', 1),
@@ -215,3 +216,6 @@ delete from CTDV
 
 select * from CTDV
 set dateformat dmy
+
+select * from TAIKHOAN
+select * from NHANVIEN

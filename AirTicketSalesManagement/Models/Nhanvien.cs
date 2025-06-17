@@ -13,8 +13,6 @@ public partial class Nhanvien
 
     public DateOnly? NgaySinh { get; set; }
 
-    public string? Email { get; set; }
-
     public string? SoDt { get; set; }
 
     public string? Cccd { get; set; }

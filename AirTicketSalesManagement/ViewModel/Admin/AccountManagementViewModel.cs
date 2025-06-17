@@ -1,6 +1,7 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Models.UIModels;
+using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -211,7 +212,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         var newNhanVien = new Nhanvien
                         {
                             HoTenNv = AddFullName,
-                            Email = AddEmail
                         };
 
                         context.Nhanviens.Add(newNhanVien);
@@ -223,7 +223,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         var newKhachHang = new Khachhang
                         {
                             HoTenKh = AddFullName,
-                            Email = AddEmail
                         };
 
                         context.Khachhangs.Add(newKhachHang);
@@ -258,10 +257,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
         }
 
-        private bool IsValidPhone(string phone)
-        {
-            return !string.IsNullOrWhiteSpace(phone) && phone.Length == 10 && phone.All(char.IsDigit);
-        }
 
         [RelayCommand]
         public void EditAccount()
@@ -304,7 +299,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void SaveEdit()
+        public void SaveEditAccount()
         {
             try
             {
@@ -319,7 +314,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 using (var context = new AirTicketDbContext())
                 {
                     var existingAccount = context.Taikhoans
-                        .FirstOrDefault(tk => tk.Email == EditEmail);
+                        .FirstOrDefault(tk => tk.MaTk == SelectedAccount.Id);
 
                     if (existingAccount == null)
                     {
@@ -328,22 +323,90 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         return;
                     }
 
+                    if (!IsValidEmail(EditEmail))
+                    {
+                        MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                    if (existingAccount.Email != EditEmail)
+                    {
+                        if (context.Taikhoans.Any(tk => tk.Email == EditEmail))
+                        {
+                            MessageBox.Show("Email này đã được sử dụng.",
+                                          "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
+                        }
+                        existingAccount.Email = EditEmail;
+                    }
+
+                    if (!string.IsNullOrEmpty(EditPassword))
+                    {
+                        existingAccount.MatKhau = BCrypt.Net.BCrypt.HashPassword(EditPassword);
+                    }
+
+                    if (existingAccount.MaTk == UserSession.Current.AccountId && existingAccount.VaiTro != EditRole)
+                    {
+                        MessageBox.Show("Không thể chỉnh sửa vai trò tài khoản của bạn.",
+                                          "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
                     existingAccount.VaiTro = EditRole;
 
                     if (EditRole == "Nhân viên" || EditRole == "Admin" && EditSelectedUser != null)
                     {
-                        existingAccount.MaNv = EditSelectedUser.Id;
-                        existingAccount.MaKh = null;
+                        if (existingAccount.MaKh != null) //neu la khach hang -> tao nv moi
+                        {
+                            var oldCustomer = context.Khachhangs.Find(existingAccount.MaKh);
+                            if (oldCustomer != null)
+                            {
+                                var newNhanVien = new Nhanvien
+                                {
+                                    HoTenNv = EditFullName,
+                                    GioiTinh = oldCustomer.GioiTinh,
+                                    NgaySinh = oldCustomer.NgaySinh,
+                                    SoDt = oldCustomer.SoDt,
+                                    Cccd = oldCustomer.Cccd
+                                };
+                                context.Nhanviens.Add(newNhanVien);
+                                context.SaveChanges(); // Để lấy được MaNV mới
+
+                                existingAccount.MaNv = newNhanVien.MaNv;
+                                existingAccount.MaKh = null;
+                            }
+                        }
+                        else
+                        {
+                            var staff = context.Nhanviens.Find(existingAccount.MaNv);
+                            staff.HoTenNv = EditFullName;
+                        }
                     }
                     else if (EditRole == "Khách hàng" && EditSelectedUser != null)
                     {
-                        existingAccount.MaKh = EditSelectedUser.Id;
-                        existingAccount.MaNv = null;
-                    }
-                    else
-                    {
-                        existingAccount.MaNv = null;
-                        existingAccount.MaKh = null;
+                        if (existingAccount.MaNv != null)
+                        {
+                            var oldNhanVien = context.Nhanviens.Find(existingAccount.MaNv);
+                            if (oldNhanVien != null)
+                            {
+                                var newKhachHang = new Khachhang
+                                {
+                                    HoTenKh = oldNhanVien.HoTenNv,
+                                    GioiTinh = oldNhanVien.GioiTinh,
+                                    NgaySinh = oldNhanVien.NgaySinh,
+                                    SoDt = oldNhanVien.SoDt,
+                                    Cccd = oldNhanVien.Cccd
+                                };
+                                context.Khachhangs.Add(newKhachHang);
+                                context.SaveChanges(); // Để lấy MaKH mới
+
+                                existingAccount.MaKh = newKhachHang.MaKh;
+                                existingAccount.MaNv = null;
+                            }
+                        }
+                        else
+                        {
+                            var customer = context.Khachhangs.Find(existingAccount.MaKh);
+                            customer.HoTenKh = EditFullName;
+                        }
                     }
 
                     context.SaveChanges();
@@ -405,6 +468,19 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 MessageBox.Show("Đã xảy ra lỗi khi xóa tài khoản: " + ex.Message,
                               "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

@@ -6,6 +6,9 @@ namespace AirTicketSalesManagement.Models.UIModels;
 public partial class AccountModel : ObservableObject
 {
     [ObservableProperty]
+    private int id;
+
+    [ObservableProperty]
     private string email = string.Empty;
 
     [ObservableProperty]
@@ -30,6 +33,7 @@ public partial class AccountModel : ObservableObject
     {
         var model = new AccountModel
         {
+            Id = tk.MaTk,
             Email = tk.Email,
             MatKhau = tk.MatKhau,
             VaiTro = tk.VaiTro,

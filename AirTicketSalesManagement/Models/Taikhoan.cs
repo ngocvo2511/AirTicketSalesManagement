@@ -5,7 +5,9 @@ namespace AirTicketSalesManagement.Models;
 
 public partial class Taikhoan
 {
-    public string Email { get; set; } = null!;
+    public int MaTk { get; set; }
+
+    public string? Email { get; set; }
 
     public string MatKhau { get; set; } = null!;
 

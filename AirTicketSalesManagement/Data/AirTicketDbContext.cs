@@ -61,7 +61,7 @@ public partial class AirTicketDbContext : DbContext
     {
         modelBuilder.Entity<Chuyenbay>(entity =>
         {
-            entity.HasKey(e => e.SoHieuCb).HasName("PK__CHUYENBA__FB4E27FB35D7C79B");
+            entity.HasKey(e => e.SoHieuCb).HasName("PK__CHUYENBA__FB4E27FB3018DA55");
 
             entity.ToTable("CHUYENBAY");
 
@@ -95,7 +95,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Ctdv>(entity =>
         {
-            entity.HasKey(e => e.MaCtdv).HasName("PK__CTDV__1E4E40E6356C76EF");
+            entity.HasKey(e => e.MaCtdv).HasName("PK__CTDV__1E4E40E6ACE4C34D");
 
             entity.ToTable("CTDV");
 
@@ -118,16 +118,16 @@ public partial class AirTicketDbContext : DbContext
 
             entity.HasOne(d => d.MaDvNavigation).WithMany(p => p.Ctdvs)
                 .HasForeignKey(d => d.MaDv)
-                .HasConstraintName("FK__CTDV__MaDV__70DDC3D8");
+                .HasConstraintName("FK__CTDV__MaDV__52593CB8");
 
             entity.HasOne(d => d.MaHvLbNavigation).WithMany(p => p.Ctdvs)
                 .HasForeignKey(d => d.MaHvLb)
-                .HasConstraintName("FK__CTDV__MaHV_LB__71D1E811");
+                .HasConstraintName("FK__CTDV__MaHV_LB__534D60F1");
         });
 
         modelBuilder.Entity<Datve>(entity =>
         {
-            entity.HasKey(e => e.MaDv).HasName("PK__DATVE__27258657FEA403AA");
+            entity.HasKey(e => e.MaDv).HasName("PK__DATVE__27258657DF3F09E6");
 
             entity.ToTable("DATVE");
 
@@ -156,20 +156,20 @@ public partial class AirTicketDbContext : DbContext
 
             entity.HasOne(d => d.MaKhNavigation).WithMany(p => p.Datves)
                 .HasForeignKey(d => d.MaKh)
-                .HasConstraintName("FK__DATVE__MaKH__5CD6CB2B");
+                .HasConstraintName("FK__DATVE__MaKH__4E88ABD4");
 
             entity.HasOne(d => d.MaLbNavigation).WithMany(p => p.Datves)
                 .HasForeignKey(d => d.MaLb)
-                .HasConstraintName("FK__DATVE__MaLB__5BE2A6F2");
+                .HasConstraintName("FK__DATVE__MaLB__4D94879B");
 
             entity.HasOne(d => d.MaNvNavigation).WithMany(p => p.Datves)
                 .HasForeignKey(d => d.MaNv)
-                .HasConstraintName("FK__DATVE__MaNV__5DCAEF64");
+                .HasConstraintName("FK__DATVE__MaNV__4F7CD00D");
         });
 
         modelBuilder.Entity<Hangve>(entity =>
         {
-            entity.HasKey(e => e.MaHv).HasName("PK__HANGVE__2725A6D250F39F68");
+            entity.HasKey(e => e.MaHv).HasName("PK__HANGVE__2725A6D2E8ED5E97");
 
             entity.ToTable("HANGVE");
 
@@ -181,7 +181,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Hangvetheolichbay>(entity =>
         {
-            entity.HasKey(e => e.MaHvLb).HasName("PK__HANGVETH__1853D482C21CAFE7");
+            entity.HasKey(e => e.MaHvLb).HasName("PK__HANGVETH__1853D482C3F10A5D");
 
             entity.ToTable("HANGVETHEOLICHBAY");
 
@@ -193,20 +193,18 @@ public partial class AirTicketDbContext : DbContext
 
             entity.HasOne(d => d.MaHvNavigation).WithMany(p => p.Hangvetheolichbays)
                 .HasForeignKey(d => d.MaHv)
-                .HasConstraintName("FK__HANGVETHEO__MaHV__6E01572D");
+                .HasConstraintName("FK__HANGVETHEO__MaHV__46E78A0C");
 
             entity.HasOne(d => d.MaLbNavigation).WithMany(p => p.Hangvetheolichbays)
                 .HasForeignKey(d => d.MaLb)
-                .HasConstraintName("FK__HANGVETHEO__MaLB__6D0D32F4");
+                .HasConstraintName("FK__HANGVETHEO__MaLB__45F365D3");
         });
 
         modelBuilder.Entity<Khachhang>(entity =>
         {
-            entity.HasKey(e => e.MaKh).HasName("PK__KHACHHAN__2725CF1ED2870925");
+            entity.HasKey(e => e.MaKh).HasName("PK__KHACHHAN__2725CF1E232C6FE6");
 
             entity.ToTable("KHACHHANG");
-
-            entity.HasIndex(e => e.Email, "UQ__KHACHHAN__A9D10534E03532C3").IsUnique();
 
             entity.Property(e => e.MaKh).HasColumnName("MaKH");
             entity.Property(e => e.Cccd)
@@ -214,9 +212,6 @@ public partial class AirTicketDbContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("CCCD");
-            entity.Property(e => e.Email)
-                .HasMaxLength(254)
-                .IsUnicode(false);
             entity.Property(e => e.GioiTinh).HasMaxLength(10);
             entity.Property(e => e.HoTenKh)
                 .HasMaxLength(30)
@@ -230,7 +225,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Lichbay>(entity =>
         {
-            entity.HasKey(e => e.MaLb).HasName("PK__LICHBAY__2725C76189696B62");
+            entity.HasKey(e => e.MaLb).HasName("PK__LICHBAY__2725C761215B55AE");
 
             entity.ToTable("LICHBAY");
 
@@ -257,11 +252,9 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Nhanvien>(entity =>
         {
-            entity.HasKey(e => e.MaNv).HasName("PK__NHANVIEN__2725D70AB11D9E01");
+            entity.HasKey(e => e.MaNv).HasName("PK__NHANVIEN__2725D70AB18E030C");
 
             entity.ToTable("NHANVIEN");
-
-            entity.HasIndex(e => e.Email, "UQ__NHANVIEN__A9D10534F84E78AA").IsUnique();
 
             entity.Property(e => e.MaNv).HasColumnName("MaNV");
             entity.Property(e => e.Cccd)
@@ -269,9 +262,6 @@ public partial class AirTicketDbContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("CCCD");
-            entity.Property(e => e.Email)
-                .HasMaxLength(254)
-                .IsUnicode(false);
             entity.Property(e => e.GioiTinh).HasMaxLength(10);
             entity.Property(e => e.HoTenNv)
                 .HasMaxLength(50)
@@ -285,7 +275,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Quydinh>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__QUYDINH__3214EC2789A8D7DF");
+            entity.HasKey(e => e.Id).HasName("PK__QUYDINH__3214EC279D88D6C2");
 
             entity.ToTable("QUYDINH");
 
@@ -299,7 +289,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Sanbay>(entity =>
         {
-            entity.HasKey(e => e.MaSb).HasName("PK__SANBAY__2725080EF1390895");
+            entity.HasKey(e => e.MaSb).HasName("PK__SANBAY__2725080E4088113D");
 
             entity.ToTable("SANBAY");
 
@@ -317,7 +307,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Sanbaytrunggian>(entity =>
         {
-            entity.HasKey(e => new { e.Stt, e.SoHieuCb }).HasName("PK__SANBAYTR__65AA54EF1223BCF0");
+            entity.HasKey(e => new { e.Stt, e.SoHieuCb }).HasName("PK__SANBAYTR__65AA54EFED46EA5C");
 
             entity.ToTable("SANBAYTRUNGGIAN");
 
@@ -345,10 +335,13 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Taikhoan>(entity =>
         {
-            entity.HasKey(e => e.Email).HasName("PK__TAIKHOAN__A9D10535E69EB34C");
+            entity.HasKey(e => e.MaTk).HasName("PK__TAIKHOAN__272500706F4EBA33");
 
             entity.ToTable("TAIKHOAN");
 
+            entity.HasIndex(e => e.Email, "UQ__TAIKHOAN__A9D105344257395A").IsUnique();
+
+            entity.Property(e => e.MaTk).HasColumnName("MaTK");
             entity.Property(e => e.Email)
                 .HasMaxLength(254)
                 .IsUnicode(false);
@@ -361,11 +354,11 @@ public partial class AirTicketDbContext : DbContext
 
             entity.HasOne(d => d.MaKhNavigation).WithMany(p => p.Taikhoans)
                 .HasForeignKey(d => d.MaKh)
-                .HasConstraintName("FK__TAIKHOAN__MaKH__76969D2E");
+                .HasConstraintName("FK__TAIKHOAN__MaKH__5AEE82B9");
 
             entity.HasOne(d => d.MaNvNavigation).WithMany(p => p.Taikhoans)
                 .HasForeignKey(d => d.MaNv)
-                .HasConstraintName("FK__TAIKHOAN__MaNV__75A278F5");
+                .HasConstraintName("FK__TAIKHOAN__MaNV__59FA5E80");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -779,7 +779,6 @@
                                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,16">
                                     <TextBox x:Name="txtEditEmail"
                                              Text="{Binding EditEmail}"
-                                             IsReadOnly="True"
                                              Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                              Height="53" FontSize="14"
                                               materialDesign:HintAssist.Hint="Email"/>
