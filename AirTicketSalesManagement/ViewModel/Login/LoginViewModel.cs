@@ -106,7 +106,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     }
                     else
                     {
-                        if (user.VaiTro == "KhachHang")
+                        if (user.VaiTro == "Khách hàng")
                         {
                             var khachHang = context.Khachhangs.FirstOrDefault(kh => kh.MaKh == user.MaKh);
                             if (khachHang == null)
@@ -114,6 +114,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                                 AddError(nameof(Email), "Không tìm thấy thông tin khách hàng.");
                                 return;
                             }
+                            UserSession.Current.AccountId = user.MaTk;
                             UserSession.Current.CustomerId = user.MaKh;
                             UserSession.Current.CustomerName = khachHang.HoTenKh;
 
@@ -135,7 +136,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                             var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(270));
                             customerWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
                         }
-                        else if (user.VaiTro == "NhanVien")
+                        else if (user.VaiTro == "Nhân viên")
                         {
                             var nhanvien = context.Nhanviens.FirstOrDefault(nv => nv.MaNv == user.MaNv);
                             if (nhanvien == null)
@@ -143,6 +144,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                                 AddError(nameof(Email), "Không tìm thấy thông tin nhân viên.");
                                 return;
                             }
+                            UserSession.Current.AccountId = user.MaTk;
                             UserSession.Current.StaffId = user.MaNv;
                             UserSession.Current.CustomerName = nhanvien.HoTenNv;
                             UserSession.Current.isStaff = true;
@@ -172,6 +174,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                                 AddError(nameof(Email), "Không tìm thấy thông tin nhân viên.");
                                 return;
                             }
+                            UserSession.Current.AccountId = user.MaTk;
                             UserSession.Current.StaffId = user.MaNv;
                             UserSession.Current.CustomerName = nhanvien.HoTenNv;
                             UserSession.Current.isStaff = true;
