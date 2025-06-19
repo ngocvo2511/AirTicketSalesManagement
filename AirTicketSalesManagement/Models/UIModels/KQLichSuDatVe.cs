@@ -22,5 +22,14 @@ namespace AirTicketSalesManagement.Models
 
         public DateTime? NgayDat { get; set; }
         public string? TrangThai { get; set; }
+        public bool CanCancel
+        {
+            get
+            {
+                if (TrangThai == "Đã huỷ") return false;
+                // thêm kiểm tra qui định
+                return true;
+            }
+        }
     }
 }

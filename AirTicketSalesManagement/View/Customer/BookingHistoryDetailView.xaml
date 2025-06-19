@@ -16,7 +16,7 @@
                 </Border.Effect>
 
                 <StackPanel>
-                    <TextBlock Text="Thông tin chuyến bay" FontSize="24" FontWeight="Bold" Margin="0 0 0 15"/>
+                    <TextBlock Text="Thông tin chuyến bay" FontSize="24" FontWeight="Bold" Margin="0 0 0 15" Foreground="#6366F1"/>
 
                     <Grid Margin="0 0 0 10">
                         <Grid.RowDefinitions>
@@ -64,8 +64,24 @@
                         <TextBlock Text="{Binding LichSuDatVe.LoaiMayBay}" Grid.Column="1" Grid.Row="6" Margin="0 5" FontSize="16"/>
 
                         <!-- Trạng thái -->
-                        <TextBlock Text="Trạng thái:" Grid.Row="7" FontWeight="Bold" Margin="0 5" FontSize="16"/>
-                        <TextBlock Text="{Binding LichSuDatVe.TrangThai}" Grid.Column="1" Grid.Row="7" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="Tình trạng đặt vé:" Grid.Row="7" FontWeight="Bold" Margin="0 5" FontSize="16"/>
+                        <TextBlock Text="{Binding LichSuDatVe.TrangThai}" Grid.Column="1" Grid.Row="7" Margin="0 5" FontSize="16">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding LichSuDatVe.TrangThai}" Value="Đã hủy">
+                                            <Setter Property="Foreground" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding LichSuDatVe.TrangThai}" Value="Đã thanh toán">
+                                            <Setter Property="Foreground" Value="Green"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding LichSuDatVe.TrangThai}" Value="Chờ thanh toán">
+                                            <Setter Property="Foreground" Value="#007ACC"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </Grid>
                 </StackPanel>
             </Border>
