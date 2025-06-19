@@ -53,59 +53,58 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private ObservableCollection<KQLichSuDatVe>? historyBooking = new();
         [ObservableProperty]
         private bool isEmpty;
-
         //private ObservableCollection<string>
         public BookingHistoryViewModel() { }
         public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent)
         {
             this.parent = parent;
-            LoadData(UserSession.Current.CustomerId);
-            //rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
-            //    {
-            //        new KQLichSuDatVe
-            //        {
-            //            MaVe = "MV01",
-            //            MaDiemDi = "HAN",
-            //            MaDiemDen = "SGN",
-            //            HangHangKhong = "Vietnam Airlines",
-            //            GioDi = new DateTime(2025, 5, 10, 8, 30, 0),
-            //            GioDen = new DateTime(2025, 5, 10, 10, 45, 0),
-            //            LoaiMayBay = "Airbus A321",
-            //            NgayDat = new DateTime(2025, 4, 20),
-            //            TrangThai = "Đã thanh toán",
-            //            SoLuongKhach = 5
-            //        },
-            //        new KQLichSuDatVe
-            //        {
-            //            MaVe = "MV02",
-            //            MaDiemDi = "DAT",
-            //    MaDiemDen = "HAN",
-            //    DiemDi = "Đà Nẵng(DAT), Việt Nam",
-            //    DiemDen = "Hà Nội(HAN), Việt Nam",
-            //    HangHangKhong = "Bamboo Airways",
-            //    GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
-            //    GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
-            //    LoaiMayBay = "Embraer E190",
-            //    NgayDat = new DateTime(2025, 4, 21),
-            //    TrangThai = "Chờ thanh toán",
-            //    SoLuongKhach = 4
-            //        },
-            //        new KQLichSuDatVe
-            //{
-            //    MaVe = "MV03",
-            //    MaDiemDi = "CAN",
-            //    MaDiemDen = "DAL",
-            //    HangHangKhong = "VietJet Air",
-            //    GioDi = new DateTime(2025, 5, 15, 6, 45, 0),
-            //    GioDen = new DateTime(2025, 5, 15, 7, 50, 0),
-            //    LoaiMayBay = "Airbus A320",
-            //    NgayDat = new DateTime(2025, 4, 22),
-            //    TrangThai = "Đã hủy",
-            //    SoLuongKhach = 3
-            //},
-            //    };
-            //HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
-            //IsEmpty = HistoryBooking.Count == 0;
+            //LoadData(UserSession.Current.CustomerId);
+            rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
+                {
+                    new KQLichSuDatVe
+                    {
+                        MaVe = 1,
+                        MaDiemDi = "HAN",
+                        MaDiemDen = "SGN",
+                        HangHangKhong = "Vietnam Airlines",
+                        GioDi = new DateTime(2025, 5, 10, 8, 30, 0),
+                        GioDen = new DateTime(2025, 5, 10, 10, 45, 0),
+                        LoaiMayBay = "Airbus A321",
+                        NgayDat = new DateTime(2025, 4, 20),
+                        TrangThai = "Đã thanh toán",
+                        SoLuongKhach = 5
+                    },
+                    new KQLichSuDatVe
+                    {
+                        MaVe = 2,
+                        MaDiemDi = "DAT",
+                MaDiemDen = "HAN",
+                DiemDi = "Đà Nẵng(DAT), Việt Nam",
+                DiemDen = "Hà Nội(HAN), Việt Nam",
+                HangHangKhong = "Bamboo Airways",
+                GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
+                GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
+                LoaiMayBay = "Embraer E190",
+                NgayDat = new DateTime(2025, 4, 21),
+                TrangThai = "Chờ thanh toán",
+                SoLuongKhach = 4
+                    },
+                    new KQLichSuDatVe
+            {
+                MaVe = 3,
+                MaDiemDi = "CAN",
+                MaDiemDen = "DAL",
+                HangHangKhong = "VietJet Air",
+                GioDi = new DateTime(2025, 5, 15, 6, 45, 0),
+                GioDen = new DateTime(2025, 5, 15, 7, 50, 0),
+                LoaiMayBay = "Airbus A320",
+                NgayDat = new DateTime(2025, 4, 22),
+                TrangThai = "Đã hủy",
+                SoLuongKhach = 3
+            },
+                };
+            HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
+            IsEmpty = HistoryBooking.Count == 0;
         }
         public async Task LoadData(int? idCustomer)
         {
