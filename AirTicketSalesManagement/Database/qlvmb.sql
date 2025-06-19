@@ -131,6 +131,8 @@ CREATE TABLE TAIKHOAN(
 INSERT INTO NHANVIEN(HoTenNV) values ('Ngoc Vo Xuan')
 select * from SANBAYTRUNGGIAN where SoHieuCB='VN109'
 select * from TAIKHOAN
+select * from NHANVIEN
+
 INSERT INTO TAIKHOAN(Email, MatKhau, VaiTro, MaNV) values ('ad@ad.com', '$2a$12$X6ZEfqxwVBMDc0j9zzibyu9btxvTSNEuHDaADPgBnAEf0oRwn/QSO', 'Admin', 1)
 update TAIKHOAN set VaiTro = 'NhanVien' where Email = 'nv@nv.com'
 DELETE FROM SANBAY
