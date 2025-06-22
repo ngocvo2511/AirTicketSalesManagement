@@ -80,7 +80,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private void NavigateToTicketManagement()
         {
-            CurrentViewModel = new TicketManagementViewModel();
+            CurrentViewModel = new TicketManagementViewModel(this);
         }
 
         [RelayCommand]

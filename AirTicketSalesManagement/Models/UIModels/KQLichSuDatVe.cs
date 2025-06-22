@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +22,24 @@ namespace AirTicketSalesManagement.Models
         public int? SoLuongKhach { get; set; }
 
         public DateTime? NgayDat { get; set; }
-        public string? TrangThai { get; set; }
+        private string? _trangThai;
+        public string? TrangThai
+        {
+            get => _trangThai;
+            set
+            {
+                if (SetProperty(ref _trangThai, value))
+                {
+                    OnPropertyChanged(nameof(CanCancel));
+                }
+            }
+        }
+
         public bool CanCancel
         {
             get
-            {
-                if (TrangThai == "Đã huỷ") return false;
+            {              
+                if (TrangThai == "Đã hủy") return false;
                 // thêm kiểm tra qui định
                 return true;
             }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -58,7 +59,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent)
         {
             this.parent = parent;
-            //LoadData(UserSession.Current.CustomerId);
+            LoadData(UserSession.Current.CustomerId);
             rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
                 {
                     new KQLichSuDatVe
@@ -104,6 +105,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             },
                 };
             HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
+            foreach (var ve in HistoryBooking)
+            {
+                Debug.WriteLine($"{ve.MaVe}: {ve.TrangThai} -> CanCancel = {ve.CanCancel}");
+            }
             IsEmpty = HistoryBooking.Count == 0;
         }
         public async Task LoadData(int? idCustomer)
@@ -190,6 +195,17 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private void DeleteDate()
         {
             NgayDatFilter = null;
+        }
+
+        [RelayCommand]
+        private void ClearFilter()
+        {
+            NgayDatFilter = null;
+            NoiDiFilter = null;
+            NoiDenFilter = null;
+            HangHangKhongFilter = null;
+            HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
+            IsEmpty = HistoryBooking.Count == 0;
         }
 
         partial void OnSanBayListChanged(ObservableCollection<string> value)

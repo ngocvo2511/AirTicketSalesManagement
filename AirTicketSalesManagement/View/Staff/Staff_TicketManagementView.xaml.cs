@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace AirTicketSalesManagement.View.Staff
 {
     /// <summary>
-    /// Interaction logic for Staff_BookingHistorySearch.xaml
+    /// Interaction logic for Staff_TicketManagementView.xaml
     /// </summary>
-    public partial class Staff_BookingHistorySearch : UserControl
+    public partial class Staff_TicketManagementView : UserControl
     {
-        public Staff_BookingHistorySearch()
+        public Staff_TicketManagementView()
         {
             InitializeComponent();
         }

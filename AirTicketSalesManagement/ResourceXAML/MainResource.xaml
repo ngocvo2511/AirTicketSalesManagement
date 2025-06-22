@@ -118,6 +118,9 @@
         <viewsSTAFF:StaffProfileView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewmodelSTAFF:TicketManagementViewModel}">
+        <viewsSTAFF:Staff_TicketManagementView />
+    </DataTemplate>
 
     <!-- Admin -->
     <DataTemplate DataType="{x:Type viewmodelADMIN:HomePageViewModel}">
