@@ -59,7 +59,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent)
         {
             this.parent = parent;
-            LoadData(UserSession.Current.CustomerId);
+            //LoadData(UserSession.Current.CustomerId);
             rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
                 {
                     new KQLichSuDatVe
@@ -117,7 +117,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var result = await (from datve in context.Datves
+                    var query = (from datve in context.Datves
                                   where datve.MaKh == idCustomer
                                   join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
                                   join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
@@ -137,7 +137,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                       NgayDat = datve.ThoiGianDv,
                                       TrangThai = datve.TtdatVe,
                                       SoLuongKhach = datve.Ctdvs.Count
-                                  }).ToListAsync();
+                                  });
+                    var result = await query.OrderByDescending(x => x.NgayDat).ToListAsync();
                     rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
                     HistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
                     IsEmpty = HistoryBooking.Count == 0;
@@ -190,11 +191,6 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 HistoryBooking = new ObservableCollection<KQLichSuDatVe>(filter);
                 IsEmpty = HistoryBooking.Count == 0;
             }
-        }
-        [RelayCommand]
-        private void DeleteDate()
-        {
-            NgayDatFilter = null;
         }
 
         [RelayCommand]

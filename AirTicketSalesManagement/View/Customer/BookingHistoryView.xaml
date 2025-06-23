@@ -190,7 +190,7 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Grid.Row="3">
             <StackPanel>
-                <TextBlock Text="Không có chuyến bay nào" 
+                <TextBlock Text="Không có lượt đặt vé nào" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Center" 
             FontSize="16" 
@@ -245,7 +245,7 @@
                     <TextBlock Text="{Binding HangHangKhong}" FontSize="20" 
                              FontWeight="SemiBold" Foreground="#6366F1"/>
                     
-                    <Grid Margin="0,10">
+                    <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -280,7 +280,7 @@
                     </Grid>
 
                     <!-- Passenger Count -->
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                         <materialDesign:PackIcon Kind="AccountMultiple" 
                                 Margin="0,0,10,0" Foreground="#6B7280"/>
                         <TextBlock FontSize="14" Foreground="#374151">
