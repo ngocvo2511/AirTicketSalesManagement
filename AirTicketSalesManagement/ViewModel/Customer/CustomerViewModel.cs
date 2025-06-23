@@ -74,6 +74,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             WeakReferenceMessenger.Default.Register<PaymentSuccessMessage>(this, (r, m) =>
             {
                 // Chuyển sang màn hình Booking History
+                if (CurrentViewModel is PaymentConfirmationViewModel paymentConfirmationViewModel)
+                {
+                    paymentConfirmationViewModel.HandlePaymentSuccess();
+                }
                 CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
             });
         }

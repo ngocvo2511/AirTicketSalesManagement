@@ -1,18 +1,11 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
-using AirTicketSalesManagement.ViewModel.Customer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AirTicketSalesManagement.ViewModel.Booking
 {
@@ -24,6 +17,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private string flightCode;
 
         [ObservableProperty]
+        private string logoUrl;
+
+        [ObservableProperty]
         private bool isVNPaySelected = true;
 
         [ObservableProperty]
@@ -32,6 +28,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         public HangVe SelectedTicketClass { get; set; }
 
         public KQTraCuuChuyenBayMoRong Flight { get; set; }
+
+        public ThongTinChuyenBayDuocChon thongTinChuyenBayDuocChon { get; set; }
 
         public ThongTinHanhKhachVaChuyenBay ThongTinHanhKhachVaChuyenBay { get; set; }
         public string AdultSummary { get; set; }
@@ -51,7 +49,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay)
         {
             ThongTinHanhKhachVaChuyenBay = thongTinHanhKhachVaChuyenBay;
-            ThongTinChuyenBayDuocChon thongTinChuyenBayDuocChon = thongTinHanhKhachVaChuyenBay.FlightInfo;
+            thongTinChuyenBayDuocChon = thongTinHanhKhachVaChuyenBay.FlightInfo;
             FlightCode = $"{thongTinChuyenBayDuocChon.Flight.MaSBDi} - {thongTinChuyenBayDuocChon.Flight.MaSBDen} ({thongTinChuyenBayDuocChon.Flight.HangHangKhong})";
             SelectedTicketClass = thongTinChuyenBayDuocChon.TicketClass;
             Flight = thongTinChuyenBayDuocChon.Flight;
@@ -66,6 +64,25 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             TaxAndFees = 0;
             TotalPrice = (Flight.NumberAdults + Flight.NumberChildren + Flight.NumberInfants) * SelectedTicketClass.GiaVe + TaxAndFees;
             vnpayPayment = new VnpayPayment();
+            LogoUrl = GetAirlineLogo(Flight.HangHangKhong);
+        }
+
+        private string GetAirlineLogo(string airlineName)
+        {
+            if (string.IsNullOrWhiteSpace(airlineName))
+                return "/Resources/Images/default.png";
+
+
+            if (airlineName == "Vietnam Airlines")
+                return "/Resources/Images/vietnamair.png";
+            if (airlineName == "Vietjet Air")
+                return "/Resources/Images/vietjet.png";
+            if (airlineName == "Bamboo Airways")
+                return "/Resources/Images/bamboo.jpg";
+            if (airlineName == "Vietravel Airlines")
+                return "/Resources/Images/vietravel.png";
+
+            return "/Images/default.png";
         }
 
         [RelayCommand]
@@ -100,7 +117,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 if (!string.IsNullOrEmpty(paymentUrl))
                 {
                     // Lưu thông tin đặt vé tạm thời với trạng thái "Chờ thanh toán"
-                    SaveBookingWithPendingStatus();
+                    SaveBookingWithPendingStatus("Online");
                     WeakReferenceMessenger.Default.Send(new PaymentRequestedMessage(paymentUrl));
 
                 }
@@ -111,71 +128,62 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             }
         }
 
-        private void SaveBookingWithPendingStatus()
+
+        private void SaveBookingWithPendingStatus(string paymentType)
         {
+            int idDatVe = thongTinChuyenBayDuocChon.Id;
+
             using (var context = new AirTicketDbContext())
             {
-                var datVe = new Datve
-                {
-                    MaLb = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.MaLichBay,
-                    MaKh = UserSession.Current.isStaff ? null : UserSession.Current.CustomerId,
-                    MaNv = UserSession.Current.isStaff ? UserSession.Current.StaffId : null,
-                    ThoiGianDv = DateTime.Now,
-                    Slve = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberAdults +
-                           ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberChildren +
-                           ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberInfants,
-                    SoDtlienLac = ThongTinHanhKhachVaChuyenBay.ContactPhone,
-                    Email = ThongTinHanhKhachVaChuyenBay.ContactEmail,
-                    TongTienTt = TotalPrice,
-                    TtdatVe = "Chờ thanh toán"
-                };
+                var datVe = context.Datves.FirstOrDefault(dv => dv.MaDv == idDatVe);
+                if (datVe == null)
+                    return; // hoặc xử lý lỗi
 
-                context.Datves.Add(datVe);
+                // Cập nhật thông tin liên lạc
+                datVe.SoDtlienLac = ThongTinHanhKhachVaChuyenBay.ContactPhone;
+                datVe.Email = ThongTinHanhKhachVaChuyenBay.ContactEmail;
+                datVe.TongTienTt = TotalPrice;
+                datVe.TtdatVe = $"Chưa thanh toán ({paymentType})"; // chuyển trạng thái
+                datVe.ThoiGianDv = DateTime.Now; // cập nhật lại thời gian giữ chỗ
+
                 context.SaveChanges();
 
-                SavePassengerDetails(datVe.MaDv, context);
-            }
-        }
+                // Lưu hành khách
+                // Lấy đúng MaHV_LB từ DB
+                int maHV_LB = context.Hangvetheolichbays
+                    .Where(hv => hv.MaHvLb == ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.MaHangVe)
+                    .Select(hv => hv.MaHvLb)
+                    .FirstOrDefault();
 
-        private void SavePassengerDetails(int maDatVe, AirTicketDbContext context)
-        {
-            // Lấy đúng MaHV_LB từ DB
-            int maHV_LB = context.Hangvetheolichbays
-                .Where(hv => hv.MaLb == ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.MaLichBay &&
-                             hv.MaHv == ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.MaHangVe)
-                .Select(hv => hv.MaHvLb)
-                .First();
 
-            // Trừ số vé còn lại
-            var hangVe = context.Hangvetheolichbays.First(h => h.MaHvLb == maHV_LB);
-            hangVe.SlveConLai -= ThongTinHanhKhachVaChuyenBay.PassengerList.Count;
-
-            foreach (var passenger in ThongTinHanhKhachVaChuyenBay.PassengerList)
-            {
-                var ctdv = new Ctdv
+                foreach (var passenger in ThongTinHanhKhachVaChuyenBay.PassengerList)
                 {
-                    MaDv = maDatVe,
-                    HoTenHk = passenger.HoTen,
-                    GioiTinh = passenger.GioiTinh,
-                    NgaySinh = DateOnly.FromDateTime(passenger.NgaySinh),
-                    Cccd = passenger.CCCD,
-                    HoTenNguoiGiamHo = passenger.HoTenNguoiGiamHo,
-                    MaHvLb = maHV_LB,
-                    GiaVeTt = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.GiaVe
-                };
+                    var ctdv = new Ctdv
+                    {
+                        MaDv = datVe.MaDv,
+                        HoTenHk = passenger.HoTen,
+                        GioiTinh = passenger.GioiTinh,
+                        NgaySinh = DateOnly.FromDateTime(passenger.NgaySinh),
+                        Cccd = passenger.CCCD,
+                        HoTenNguoiGiamHo = passenger.HoTenNguoiGiamHo,
+                        MaHvLb = maHV_LB,
+                        GiaVeTt = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.GiaVe
+                    };
 
-                context.Ctdvs.Add(ctdv);
+                    context.Ctdvs.Add(ctdv);
+                }
+
+                context.SaveChanges();
             }
-
-            context.SaveChanges();
         }
+
 
         private void ProcessCashPayment()
         {
             try
             {
-                SaveBookingWithCompletedStatus();
-                MessageBox.Show("Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy trong vòng 24 giờ.",
+                SaveBookingWithPendingStatus("Tiền mặt");
+                MessageBox.Show("Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
                     "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 NavigateToHomePage();
@@ -194,32 +202,46 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 NavigationService.NavigateTo<Customer.HomePageViewModel>();
         }
 
-        private void SaveBookingWithCompletedStatus()
+        public void HandlePaymentSuccess()
         {
-            using (var context = new AirTicketDbContext())
+            try
             {
-                var datVe = new Datve
+                using (var context = new AirTicketDbContext())
                 {
-                    MaLb = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.MaLichBay,
-                    MaKh = UserSession.Current.isStaff ? null : UserSession.Current.CustomerId,
-                    MaNv = UserSession.Current.isStaff ? UserSession.Current.StaffId : null,
-                    ThoiGianDv = DateTime.Now,
-                    Slve = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberAdults +
-                           ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberChildren +
-                           ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberInfants,
-                    SoDtlienLac = ThongTinHanhKhachVaChuyenBay.ContactPhone,
-                    Email = ThongTinHanhKhachVaChuyenBay.ContactEmail,
-                    TongTienTt = TotalPrice,
-                    TtdatVe = "Đã thanh toán"
-                };
+                    Datve datVe = null;
 
-                context.Datves.Add(datVe);
-                context.SaveChanges();
+                    if (!UserSession.Current.isStaff) //khach hang
+                    {
+                        // Trường hợp khách hàng
+                        int customerId = UserSession.Current.CustomerId.Value;
+                        datVe = context.Datves
+                            .Where(dv => dv.MaKh == customerId &&
+                                         dv.ThoiGianDv >= DateTime.Now.AddMinutes(-20))
+                            .OrderByDescending(dv => dv.ThoiGianDv)
+                            .FirstOrDefault();
+                    }
+                    else 
+                    {
+                        // Trường hợp nhân viên
+                        int employeeId = UserSession.Current.StaffId.Value;
+                        datVe = context.Datves
+                            .Where(dv => dv.MaNv == employeeId &&
+                                         dv.ThoiGianDv >= DateTime.Now.AddMinutes(-20))
+                            .OrderByDescending(dv => dv.ThoiGianDv)
+                            .FirstOrDefault();
+                    }
 
-                SavePassengerDetails(datVe.MaDv, context);
+                    if (datVe != null && datVe.TtdatVe == "Chưa thanh toán (Online)")
+                    {
+                        datVe.TtdatVe = "Đã thanh toán";
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[HandlePaymentSuccess] Lỗi cập nhật thanh toán: {ex.Message}");
             }
         }
     }
-
-
 }

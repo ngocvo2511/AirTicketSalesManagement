@@ -116,7 +116,10 @@ namespace AirTicketSalesManagement.ViewModel.Login
                             }
                             UserSession.Current.AccountId = user.MaTk;
                             UserSession.Current.CustomerId = user.MaKh;
+                            UserSession.Current.StaffId = null; 
                             UserSession.Current.CustomerName = khachHang.HoTenKh;
+                            UserSession.Current.isStaff = false;
+                            UserSession.Current.Email = user.Email;
 
                             var currentWindow = Application.Current.MainWindow;
                             var vm = new Customer.CustomerViewModel();
@@ -145,9 +148,12 @@ namespace AirTicketSalesManagement.ViewModel.Login
                                 return;
                             }
                             UserSession.Current.AccountId = user.MaTk;
+                            UserSession.Current.CustomerId = null; 
                             UserSession.Current.StaffId = user.MaNv;
                             UserSession.Current.CustomerName = nhanvien.HoTenNv;
                             UserSession.Current.isStaff = true;
+                            UserSession.Current.Email = user.Email;
+
 
                             var currentWindow = Application.Current.MainWindow;
                             var vm = new StaffViewModel();
@@ -175,9 +181,12 @@ namespace AirTicketSalesManagement.ViewModel.Login
                                 return;
                             }
                             UserSession.Current.AccountId = user.MaTk;
+                            UserSession.Current.CustomerId = null;
                             UserSession.Current.StaffId = user.MaNv;
                             UserSession.Current.CustomerName = nhanvien.HoTenNv;
                             UserSession.Current.isStaff = true;
+                            UserSession.Current.Email = user.Email;
+
 
                             var currentWindow = Application.Current.MainWindow;
                             var vm = new AdminViewModel();

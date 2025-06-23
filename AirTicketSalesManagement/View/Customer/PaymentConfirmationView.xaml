@@ -67,7 +67,7 @@
                     <!-- Tiêu đề -->
                     <TextBlock Grid.Row="0" 
                                Text="Thông tin chuyến bay" 
-                               FontSize="16" 
+                               FontSize="18" 
                                FontWeight="SemiBold" 
                                Foreground="#388FF4"
                                Margin="0,0,0,15"/>
@@ -80,7 +80,7 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Logo hãng bay -->
-                        <Image Grid.Column="0" Width="60" Height="60" Margin="0,0,15,0" Source="{Binding LogoUrl}"/>
+                        <Image Grid.Column="0" Width="60" Height="60" Margin="0,0,15,0" Source="{Binding LogoUrl}" RenderOptions.BitmapScalingMode="HighQuality"/>
 
                         <!-- Thông tin chuyến bay -->
                         <Grid Grid.Column="1">
@@ -91,30 +91,30 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                <TextBlock Text="{Binding Flight.MaSBDi}" FontWeight="Bold" FontSize="16"/>
+                                <TextBlock Text="{Binding Flight.MaSBDi}" FontWeight="Bold" FontSize="17"/>
                                 <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Flight.MaSBDen}" FontWeight="Bold" FontSize="16"/>
-                                <TextBlock Text=" | " Margin="5,0" FontSize="16"/>
-                                <TextBlock Text="{Binding Flight.HangHangKhong}" FontSize="14"/>
+                                <TextBlock Text="{Binding Flight.MaSBDen}" FontWeight="Bold" FontSize="17"/>
+                                <TextBlock Text=" | " Margin="5,0" FontSize="17"/>
+                                <TextBlock Text="{Binding Flight.HangHangKhong}" FontSize="17"/>
                             </StackPanel>
 
                             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
-                                <TextBlock Text="{Binding Flight.NgayDi, StringFormat=dd/MM/yyyy}" FontWeight="SemiBold"/>
-                                <TextBlock Text=" | " Margin="5,0"/>
-                                <TextBlock Text="{Binding Flight.GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
-                                <TextBlock Text=" - " Margin="5,0"/>
-                                <TextBlock Text="{Binding Flight.GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
-                                <TextBlock Text=" | " Margin="5,0"/>
-                                <TextBlock Text="{Binding Flight.ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666"/>
+                                <TextBlock Text="{Binding Flight.NgayDi, StringFormat=dd/MM/yyyy}" FontWeight="SemiBold" FontSize="14"/>
+                                <TextBlock Text=" | " Margin="5,0" FontSize="14"/>
+                                <TextBlock Text="{Binding Flight.GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold" FontSize="14"/>
+                                <TextBlock Text=" - " Margin="5,0" FontSize="14"/>
+                                <TextBlock Text="{Binding Flight.GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold" FontSize="14"/>
+                                <TextBlock Text=" | " Margin="5,0" FontSize="14"/>
+                                <TextBlock Text="{Binding Flight.ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666" FontSize="14"/>
                             </StackPanel>
 
                             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
-                                <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Flight.MayBay}" Foreground="#666666"/>
-                                <TextBlock Text=" | " Margin="5,0"/>
-                                <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Hạng: " Foreground="#666666"/>
-                                <TextBlock Text="{Binding SelectedTicketClass.TenHangVe}" Foreground="#666666" FontWeight="Medium"/>
+                                <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Flight.MayBay}" Foreground="#666666" FontSize="14"/>
+                                <TextBlock Text=" | " Margin="5,0" FontSize="14"/>
+                                <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="14"/>
+                                <TextBlock Text="Hạng: " Foreground="#666666" FontSize="14"/>
+                                <TextBlock Text="{Binding SelectedTicketClass.TenHangVe}" Foreground="#666666" FontWeight="Medium" FontSize="14"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -133,7 +133,7 @@
                     <!-- Tiêu đề -->
                     <TextBlock Grid.Row="0" 
                                Text="Chi tiết hóa đơn" 
-                               FontSize="16" 
+                               FontSize="18" 
                                FontWeight="SemiBold" 
                                Foreground="#388FF4"
                                Margin="0,0,0,15"/>
@@ -155,19 +155,23 @@
                         <!-- Người lớn -->
                         <TextBlock Grid.Row="0" Grid.Column="0" 
                                    Text="{Binding AdultSummary}" 
+                                   FontSize="16"
                                    Margin="0,0,0,8"/>
                         <TextBlock Grid.Row="0" Grid.Column="1" 
                                    Text="{Binding AdultTotalPrice, StringFormat={}{0:N0} VND}" 
+                                   FontSize="16"
                                    TextAlignment="Right" 
                                    Margin="0,0,0,8"/>
 
                         <!-- Trẻ em -->
                         <TextBlock Grid.Row="1" Grid.Column="0" 
                                    Text="{Binding ChildSummary}" 
+                                   FontSize="16"
                                    Margin="0,0,0,8"
                                    Visibility="{Binding HasChildren, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         <TextBlock Grid.Row="1" Grid.Column="1" 
                                    Text="{Binding ChildTotalPrice, StringFormat={}{0:N0} VND}" 
+                                   FontSize="16"
                                    TextAlignment="Right" 
                                    Margin="0,0,0,8"
                                    Visibility="{Binding HasChildren, Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -175,10 +179,12 @@
                         <!-- Em bé -->
                         <TextBlock Grid.Row="2" Grid.Column="0" 
                                    Text="{Binding InfantSummary}" 
+                                   FontSize="16"
                                    Margin="0,0,0,8"
                                    Visibility="{Binding HasInfants, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         <TextBlock Grid.Row="2" Grid.Column="1" 
                                    Text="{Binding InfantTotalPrice, StringFormat={}{0:N0} VND}" 
+                                   FontSize="16"
                                    TextAlignment="Right" 
                                    Margin="0,0,0,8"
                                    Visibility="{Binding HasInfants, Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -186,9 +192,11 @@
                         <!-- Phí và thuế -->
                         <TextBlock Grid.Row="3" Grid.Column="0" 
                                    Text="Thuế và phí dịch vụ" 
+                                   FontSize="16"
                                    Margin="0,0,0,8"/>
                         <TextBlock Grid.Row="3" Grid.Column="1" 
                                    Text="{Binding TaxAndFees, StringFormat={}{0:N0} VND}" 
+                                   FontSize="16"
                                    TextAlignment="Right" 
                                    Margin="0,0,0,8"/>
 
@@ -229,7 +237,7 @@
                     <!-- Tiêu đề -->
                     <TextBlock Grid.Row="0" 
                                Text="Phương thức thanh toán" 
-                               FontSize="16" 
+                               FontSize="18" 
                                FontWeight="SemiBold" 
                                Foreground="#388FF4"
                                Margin="0,0,0,15"/>
@@ -251,15 +259,16 @@
                                        Source="/Resources/Images/vnpay_logo.png" 
                                        Width="40" 
                                        Height="40" 
-                                       Margin="0,0,15,0"/>
+                                       Margin="0,0,15,0"
+                                       RenderOptions.BitmapScalingMode="HighQuality"/>
 
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="Thanh toán online qua VNPay" 
                                                FontWeight="Medium" 
-                                               FontSize="14"/>
+                                               FontSize="16"/>
                                     <TextBlock Text="Thanh toán bằng QR code hoặc thẻ ATM/Visa/MasterCard qua cổng VNPay" 
                                                Foreground="#666666" 
-                                               FontSize="12" 
+                                               FontSize="14" 
                                                Margin="0,3,0,0"/>
                                 </StackPanel>
                             </Grid>
@@ -285,10 +294,10 @@
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="Thanh toán tiền mặt tại quầy" 
                                                FontWeight="Medium" 
-                                               FontSize="14"/>
+                                               FontSize="16"/>
                                     <TextBlock Text="Quý khách vui lòng thanh toán trực tiếp tại quầy vé trong vòng 24 giờ sau khi đặt vé" 
                                                Foreground="#666666" 
-                                               FontSize="12" 
+                                               FontSize="14" 
                                                Margin="0,3,0,0"/>
                                 </StackPanel>
                             </Grid>
@@ -298,7 +307,7 @@
             </Border>
 
             <!-- Nút điều hướng -->
-            <Grid Grid.Row="4" Margin="0,0,0,20">
+            <Grid Grid.Row="4" Margin="20,0,20,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>

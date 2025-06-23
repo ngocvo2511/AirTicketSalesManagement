@@ -78,15 +78,15 @@
 
                                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                                         <TextBlock Text="{Binding PassengerTypeText}" 
-                                                   FontSize="16" 
+                                                   FontSize="17" 
                                                    FontWeight="SemiBold" 
                                                    Foreground="#388FF4"/>
                                         <TextBlock Text=" #" 
-                                                   FontSize="16" 
+                                                   FontSize="17" 
                                                    FontWeight="SemiBold" 
                                                    Foreground="#388FF4"/>
                                         <TextBlock Text="{Binding Index}" 
-                                                   FontSize="16" 
+                                                   FontSize="17" 
                                                    FontWeight="SemiBold" 
                                                    Foreground="#388FF4"/>
                                     </StackPanel>
@@ -113,6 +113,7 @@
                                         <!-- Họ tên -->
                                         <TextBox Grid.Column="0" Grid.Row="0"
                                                  Margin="0,0,10,15"
+                                                 FontSize="16"
                                                  materialDesign:HintAssist.Hint="Họ và tên (theo CCCD/Hộ chiếu)"
                                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                                  Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
@@ -120,6 +121,7 @@
                                         <!-- Giới tính -->
                                         <ComboBox Grid.Column="1" Grid.Row="0"
                                                   Margin="10,0,0,15"
+                                                  FontSize="16"
                                                   materialDesign:HintAssist.Hint="Giới tính"
                                                   Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                                   ItemsSource="{Binding GenderOptions}"
@@ -128,6 +130,7 @@
                                         <!-- Ngày sinh -->
                                         <DatePicker Grid.Column="0" Grid.Row="1"
                                                     Margin="0,0,10,15"
+                                                    FontSize="16"
                                                     materialDesign:HintAssist.Hint="Ngày sinh"
                                                     Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                                     SelectedDate="{Binding DateOfBirth}"/>
@@ -135,6 +138,7 @@
                                         <!-- CCCD/Hộ chiếu -->
                                         <TextBox Grid.Column="1" Grid.Row="1"
                                                  Margin="10,0,0,15"
+                                                 FontSize="16"
                                                  materialDesign:HintAssist.Hint="Số CCCD/Hộ chiếu"
                                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                                  Text="{Binding IdentityNumber, UpdateSourceTrigger=PropertyChanged}"/>
@@ -154,6 +158,7 @@
                                         <!-- Họ tên -->
                                         <TextBox Grid.Column="0" Grid.Row="0"
                                                  Margin="0,0,10,15"
+                                                 FontSize="16"
                                                  materialDesign:HintAssist.Hint="Họ và tên"
                                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                                  Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
@@ -161,6 +166,7 @@
                                         <!-- Giới tính -->
                                         <ComboBox Grid.Column="1" Grid.Row="0"
                                                   Margin="10,0,0,15"
+                                                  FontSize="16"
                                                   materialDesign:HintAssist.Hint="Giới tính"
                                                   Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                                   ItemsSource="{Binding GenderOptions}"
@@ -169,6 +175,7 @@
                                         <!-- Ngày sinh -->
                                         <DatePicker Grid.Column="0" Grid.Row="1"
                                                     Margin="0,0,10,15"
+                                                    FontSize="16"
                                                     materialDesign:HintAssist.Hint="Ngày sinh"
                                                     Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                                     SelectedDate="{Binding DateOfBirth}"/>
@@ -188,6 +195,7 @@
                                         <!-- Họ tên -->
                                         <TextBox Grid.Column="0" Grid.Row="0"
                                                  Margin="0,0,10,15"
+                                                 FontSize="16"
                                                  materialDesign:HintAssist.Hint="Họ và tên"
                                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                                  Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"/>
@@ -195,6 +203,7 @@
                                         <!-- Giới tính -->
                                         <ComboBox Grid.Column="1" Grid.Row="0"
                                                   Margin="10,0,0,15"
+                                                  FontSize="16"
                                                   materialDesign:HintAssist.Hint="Giới tính"
                                                   Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                                   ItemsSource="{Binding GenderOptions}"
@@ -203,6 +212,7 @@
                                         <!-- Ngày sinh -->
                                         <DatePicker Grid.Column="0" Grid.Row="1"
                                                     Margin="0,0,10,15"
+                                                    FontSize="16"
                                                     materialDesign:HintAssist.Hint="Ngày sinh"
                                                     Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                                     SelectedDate="{Binding DateOfBirth}"/>
@@ -215,12 +225,14 @@
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Grid.Column="0" 
+                                                       FontSize="16"
                                                        Text="Bay cùng: " 
                                                        VerticalAlignment="Center"
                                                        Margin="0,0,10,0"/>
 
                                             <ComboBox Grid.Column="1"
                                                       materialDesign:HintAssist.Hint="Chọn người lớn đi cùng"
+                                                      FontSize="16"
                                                       Style="{StaticResource MaterialDesignOutlinedComboBox}"
                                                       ItemsSource="{Binding AdultPassengers}"
                                                       DisplayMemberPath="FullName"
@@ -245,7 +257,7 @@
                     <!-- Tiêu đề -->
                     <TextBlock Grid.Row="0" 
                                Text="Thông tin liên hệ" 
-                               FontSize="16" 
+                               FontSize="17" 
                                FontWeight="SemiBold" 
                                Foreground="#388FF4"
                                Margin="0,0,0,15"/>
@@ -260,6 +272,7 @@
                         <!-- Email -->
                         <TextBox Grid.Column="0"
                                  Margin="0,0,10,0"
+                                 FontSize="16"
                                  materialDesign:HintAssist.Hint="Email"
                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                  Text="{Binding ContactEmail, UpdateSourceTrigger=PropertyChanged}"/>
@@ -267,6 +280,7 @@
                         <!-- Số điện thoại -->
                         <TextBox Grid.Column="1"
                                  Margin="10,0,0,0"
+                                 FontSize="16"
                                  materialDesign:HintAssist.Hint="Số điện thoại"
                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                  Text="{Binding ContactPhone, UpdateSourceTrigger=PropertyChanged}"/>
@@ -275,7 +289,7 @@
             </Border>
 
             <!-- Nút điều hướng -->
-            <Grid Grid.Row="3" Margin="0,0,0,20">
+            <Grid Grid.Row="3" Margin="20,0,20,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>

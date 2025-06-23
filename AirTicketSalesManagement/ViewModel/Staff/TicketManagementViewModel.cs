@@ -30,7 +30,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private string? hangHangKhongFilter;
         [ObservableProperty]
         private string emailFilter;
-        [ObservableProperty]       
+        [ObservableProperty]
         private string bookingStatusFilter;
         [ObservableProperty]
         private ObservableCollection<string> bookingStatusList = new();
@@ -63,53 +63,53 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         public TicketManagementViewModel(StaffViewModel parent)
         {
             this.parent = parent;
-            _ = LoadData(); 
-           // rootHistoryBooking = new ObservableCollection<QuanLiDatVe>
-           //{
-           //    new QuanLiDatVe
-           //    {
-           //        MaVe = 1,
-           //        MaDiemDi = "HAN",
-           //        MaDiemDen = "SGN",
-           //        HangHangKhong = "Vietnam Airlines",
-           //        GioDi = new DateTime(2025, 5, 10, 8, 30, 0),
-           //        GioDen = new DateTime(2025, 5, 10, 10, 45, 0),
-           //        LoaiMayBay = "Airbus A321",
-           //        NgayDat = new DateTime(2025, 4, 20),
-           //        TrangThai = "Đã thanh toán",
-           //        SoLuongKhach = 5
-           //    },
-           //    new QuanLiDatVe
-           //    {
-           //        MaVe = 2,
-           //        MaDiemDi = "DAT",
-           //        MaDiemDen = "HAN",
-           //        DiemDi = "Đà Nẵng(DAT), Việt Nam",
-           //        DiemDen = "Hà Nội(HAN), Việt Nam",
-           //        HangHangKhong = "Bamboo Airways",
-           //        GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
-           //        GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
-           //        LoaiMayBay = "Embraer E190",
-           //        NgayDat = new DateTime(2025, 4, 21),
-           //        TrangThai = "Chờ thanh toán",
-           //        SoLuongKhach = 4
-           //    },
-           //    new QuanLiDatVe
-           //    {
-           //        MaVe = 3,
-           //        MaDiemDi = "CAN",
-           //        MaDiemDen = "DAL",
-           //        HangHangKhong = "VietJet Air",
-           //        GioDi = new DateTime(2025, 5, 15, 6, 45, 0),
-           //        GioDen = new DateTime(2025, 5, 15, 7, 50, 0),
-           //        LoaiMayBay = "Airbus A320",
-           //        NgayDat = new DateTime(2025, 4, 22),
-           //        TrangThai = "Đã hủy",
-           //        SoLuongKhach = 3
-           //    },
-           //};
-           // HistoryBooking = new ObservableCollection<QuanLiDatVe>(rootHistoryBooking);
-           // IsEmpty = HistoryBooking.Count == 0;
+            _ = LoadData();
+            // rootHistoryBooking = new ObservableCollection<QuanLiDatVe>
+            //{
+            //    new QuanLiDatVe
+            //    {
+            //        MaVe = 1,
+            //        MaDiemDi = "HAN",
+            //        MaDiemDen = "SGN",
+            //        HangHangKhong = "Vietnam Airlines",
+            //        GioDi = new DateTime(2025, 5, 10, 8, 30, 0),
+            //        GioDen = new DateTime(2025, 5, 10, 10, 45, 0),
+            //        LoaiMayBay = "Airbus A321",
+            //        NgayDat = new DateTime(2025, 4, 20),
+            //        TrangThai = "Đã thanh toán",
+            //        SoLuongKhach = 5
+            //    },
+            //    new QuanLiDatVe
+            //    {
+            //        MaVe = 2,
+            //        MaDiemDi = "DAT",
+            //        MaDiemDen = "HAN",
+            //        DiemDi = "Đà Nẵng(DAT), Việt Nam",
+            //        DiemDen = "Hà Nội(HAN), Việt Nam",
+            //        HangHangKhong = "Bamboo Airways",
+            //        GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
+            //        GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
+            //        LoaiMayBay = "Embraer E190",
+            //        NgayDat = new DateTime(2025, 4, 21),
+            //        TrangThai = "Chờ thanh toán",
+            //        SoLuongKhach = 4
+            //    },
+            //    new QuanLiDatVe
+            //    {
+            //        MaVe = 3,
+            //        MaDiemDi = "CAN",
+            //        MaDiemDen = "DAL",
+            //        HangHangKhong = "VietJet Air",
+            //        GioDi = new DateTime(2025, 5, 15, 6, 45, 0),
+            //        GioDen = new DateTime(2025, 5, 15, 7, 50, 0),
+            //        LoaiMayBay = "Airbus A320",
+            //        NgayDat = new DateTime(2025, 4, 22),
+            //        TrangThai = "Đã hủy",
+            //        SoLuongKhach = 3
+            //    },
+            //};
+            // HistoryBooking = new ObservableCollection<QuanLiDatVe>(rootHistoryBooking);
+            // IsEmpty = HistoryBooking.Count == 0;
         }
         public async Task LoadData()
         {
@@ -166,7 +166,9 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                     {
                         "Tất cả",
                         "Đã thanh toán",
-                        "Chờ thanh toán",
+                        "Chưa thanh toán (Tiền mặt)",
+                        "Chưa thanh toán (Online)",
+                        "Giữ chỗ",
                         "Đã hủy"
                     };
                     BookingStatusFilter = "Tất cả";
@@ -207,12 +209,12 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 }
                 if (!string.IsNullOrWhiteSpace(BookingStatusFilter))
                 {
-                    filter = filter.Where(v=>v.TrangThai == BookingStatusFilter || BookingStatusFilter == "Tất cả");
+                    filter = filter.Where(v => v.TrangThai == BookingStatusFilter || BookingStatusFilter == "Tất cả");
                 }
-                if(!string.IsNullOrWhiteSpace(EmailFilter))
+                if (!string.IsNullOrWhiteSpace(EmailFilter))
                 {
                     filter = filter.Where(v => v.EmailNguoiDat != null && v.EmailNguoiDat.Contains(EmailFilter, StringComparison.OrdinalIgnoreCase));
-                }                   
+                }
                 HistoryBooking = new ObservableCollection<QuanLiDatVe>(filter);
                 IsEmpty = HistoryBooking.Count == 0;
             }

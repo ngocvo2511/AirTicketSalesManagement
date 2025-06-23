@@ -9,14 +9,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Resources\Images\bamboo.jpg" />
 		<None Remove="Resources\Images\homebg.png" />
 		<None Remove="Resources\Images\logo.png" />
 		<None Remove="Resources\Images\logoxoanen.png" />
 		<None Remove="Resources\Images\removebg.png" />
+		<None Remove="Resources\Images\vietjet.png" />
+		<None Remove="Resources\Images\vietnamair.png" />
+		<None Remove="Resources\Images\vietravel.png" />
 		<None Remove="Resources\Images\vnpay_logo.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Resources\Images\bamboo.jpg">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	  <Resource Include="Resources\Images\homebg.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Resource>
@@ -51,6 +58,15 @@
 		</Resource>
 		<Resource Include="Resources\Images\removebg.png">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Images\vietjet.png">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Images\vietnamair.png">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Images\vietravel.png">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
 		<Resource Include="Resources\Images\vnpay_logo.png">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
