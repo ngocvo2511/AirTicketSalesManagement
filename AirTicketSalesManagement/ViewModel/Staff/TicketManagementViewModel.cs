@@ -117,30 +117,36 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var query = (from datve in context.Datves
-                                       join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
-                                       join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
-                                       join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
-                                       join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
-                                       join Khachhang in context.Khachhangs on datve.MaKh equals Khachhang.MaKh  
-                                       join Taikhoan in context.Taikhoans on Khachhang.MaKh equals Taikhoan.MaKh
+                    var query = from datve in context.Datves
+                                 join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
+                                 join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
+                                 join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
+                                 join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
+                                 join khachhang in context.Khachhangs on datve.MaKh equals khachhang.MaKh into khGroup
+                                 from kh in khGroup.DefaultIfEmpty()
+                                 join taikhoanKH in context.Taikhoans on kh.MaKh equals taikhoanKH.MaKh into tkKhGroup
+                                 from tkKh in tkKhGroup.DefaultIfEmpty()
+                                 join nhanvien in context.Nhanviens on datve.MaNv equals nhanvien.MaNv into nvGroup
+                                 from nv in nvGroup.DefaultIfEmpty()
+                                 join taikhoanNV in context.Taikhoans on nv.MaNv equals taikhoanNV.MaNv into tkNvGroup
+                                 from tkNv in tkNvGroup.DefaultIfEmpty()
                                  select new QuanLiDatVe
-                                       {
-                                           MaVe = datve.MaDv,
-                                           MaDiemDi = chuyenbay.Sbdi,
-                                           MaDiemDen = chuyenbay.Sbden,
-                                           DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
-                                           DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
-                                           HangHangKhong = chuyenbay.HangHangKhong,
-                                           GioDi = lichbay.GioDi,
-                                           GioDen = lichbay.GioDen,
-                                           LoaiMayBay = lichbay.LoaiMb,
-                                           HoTenNguoiDat = Khachhang.HoTenKh,
-                                           EmailNguoiDat = Taikhoan.Email,
-                                           NgayDat = datve.ThoiGianDv,
-                                           TrangThai = datve.TtdatVe,
-                                           SoLuongKhach = datve.Ctdvs.Count
-                                       });
+                                 {
+                                     MaVe = datve.MaDv,
+                                     MaDiemDi = chuyenbay.Sbdi,
+                                     MaDiemDen = chuyenbay.Sbden,
+                                     DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
+                                     DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
+                                     HangHangKhong = chuyenbay.HangHangKhong,
+                                     GioDi = lichbay.GioDi,
+                                     GioDen = lichbay.GioDen,
+                                     LoaiMayBay = lichbay.LoaiMb,
+                                     HoTenNguoiDat = kh != null ? kh.HoTenKh : (nv != null ? nv.HoTenNv : "Không rõ"),
+                                     EmailNguoiDat = tkKh != null ? tkKh.Email : (tkNv != null ? tkNv.Email : ""),
+                                     NgayDat = datve.ThoiGianDv,
+                                     TrangThai = datve.TtdatVe,
+                                     SoLuongKhach = datve.Ctdvs.Count
+                                 };
                     var result = await query.OrderByDescending(x=>x.NgayDat).ToListAsync();
                     rootHistoryBooking = new ObservableCollection<QuanLiDatVe>(result);
                     HistoryBooking = new ObservableCollection<QuanLiDatVe>(result);
