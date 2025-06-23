@@ -57,8 +57,8 @@
                               materialDesign:HintAssist.Hint="Điểm khởi hành"
                               IsEditable="True"
                               Height="45"
-                                  Width="260"
-                              FontSize="14"
+                                  Width="320"
+                              FontSize="17"
                                   HorizontalAlignment="Left"
                               ItemsSource="{Binding DiemDiList}"
                               Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -82,16 +82,16 @@
                               materialDesign:HintAssist.Hint="Điểm đến"
                               IsEditable="True"
                               Height="45"
-                                  Width="260"
+                                  Width="320"
                                   HorizontalAlignment="Left"
-                              FontSize="14"
+                              FontSize="17"
                               ItemsSource="{Binding DiemDenList}"
                               Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </Grid>
 
                     <!-- Hàng 2: Ngày khởi hành và Số lượng hành khách -->
-                    <Grid Grid.Column="0" Grid.Row="1" Margin="0,0,15,15">
+                    <Grid Grid.Column="1" Grid.Row="1" Margin="15,0,0,15" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -106,16 +106,16 @@
 
                         <DatePicker Grid.Column="1"
                                 Height="45"
-                                    Width="260"
+                                    Width="320"
                                     HorizontalAlignment="Left"
-                                FontSize="14"
+                                FontSize="17"
                                 VerticalAlignment="Center"
                                 materialDesign:HintAssist.Hint="Ngày đi"
                                 Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
                                 SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
                     </Grid>
 
-                    <Grid Grid.Column="1" Grid.Row="1" Margin="15,0,0,15">
+                    <Grid Grid.Column="0" Grid.Row="1" Margin="0,0,15,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="auto"/>
@@ -130,11 +130,12 @@
                                              Margin="0,0,15,5"/>
 
                         <TextBox Grid.Column="1"
+                                 x:Name="PassengerNumber"
                              materialDesign:HintAssist.Hint="Số lượng hành khách"
                              Height="45"
-                                 Width="260"
+                                 Width="320"
                                  HorizontalAlignment="Left"
-                             FontSize="14"
+                             FontSize="17"
                              IsReadOnly="True"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                              Text="{Binding PassengerSummary}"
@@ -160,13 +161,12 @@
                         Foreground="White"
                         Height="55"
                         Width="230"
-                        FontSize="16"
+                        FontSize="17"
                         FontWeight="SemiBold"
-                        HorizontalAlignment="Right"
                         Content="TÌM CHUYẾN BAY"
                         materialDesign:ButtonAssist.CornerRadius="10"
                         Command="{Binding SearchFlightCommand}"
-                        Margin="0,10,130,0">
+                        Margin="520,10,0,0">
                         <Button.Effect>
                             <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.3" Color="#388FF4"/>
                         </Button.Effect>
@@ -177,7 +177,7 @@
                 <Popup x:Name="PassengerSelectorPopup" 
                    IsOpen="{Binding IsPassengerSelectorOpen, Mode=TwoWay}"
                    StaysOpen="False"
-                   PlacementTarget="{Binding ElementName=PassengerSelectorButton}"
+                   PlacementTarget="{Binding ElementName=PassengerNumber}"
                    Placement="Bottom" 
                    Width="400"
                    AllowsTransparency="True">
@@ -432,7 +432,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Logo hãng bay -->
-                                        <Image Grid.Column="0" Width="60" Height="60" Margin="0,0,15,0" Source="{Binding LogoUrl}"/>
+                                        <Image Grid.Column="0" Width="70" Height="70" Margin="0,0,15,0" Source="{Binding LogoUrl}" RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" UseLayoutRounding="True"/>
 
                                         <!-- Thông tin chuyến bay -->
                                         <Grid Grid.Column="1">
@@ -443,20 +443,20 @@
                                             </Grid.RowDefinitions>
 
                                             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                                <TextBlock Text="{Binding MaSBDi}" FontWeight="Bold" FontSize="16"/>
+                                                <TextBlock Text="{Binding MaSBDi}" FontWeight="Bold" FontSize="17"/>
                                                 <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
-                                                <TextBlock Text="{Binding MaSBDen}" FontWeight="Bold" FontSize="16"/>
-                                                <TextBlock Text=" | " Margin="5,0" FontSize="16"/>
-                                                <TextBlock Text="{Binding HangHangKhong}" FontSize="14"/>
+                                                <TextBlock Text="{Binding MaSBDen}" FontWeight="Bold" FontSize="17"/>
+                                                <TextBlock Text=" | " Margin="5,0" FontSize="17"/>
+                                                <TextBlock Text="{Binding HangHangKhong}" FontSize="16"/>
                                             </StackPanel>
 
                                             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,0">
-                                                <TextBlock Text="{Binding GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
-                                                <TextBlock Text=" - " Margin="5,0"/>
-                                                <TextBlock Text="{Binding GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold"/>
-                                                <TextBlock Text=" | " Margin="5,0"/>
-                                                <TextBlock Text="{Binding ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666"/>
-                                                <TextBlock Text=" | " Margin="5,0"/>
+                                                <TextBlock Text="{Binding GioDi, StringFormat=hh\\:mm}" FontWeight="SemiBold" FontSize="14"/>
+                                                <TextBlock Text=" - " Margin="5,0" FontSize="14"/>
+                                                <TextBlock Text="{Binding GioDen, StringFormat=hh\\:mm}" FontWeight="SemiBold" FontSize="14"/>
+                                                <TextBlock Text=" | " Margin="5,0" FontSize="14"/>
+                                                <TextBlock Text="{Binding ThoiGianBay, StringFormat=hh\\:mm}" Foreground="#666666" FontSize="14"/>
+                                                <TextBlock Text=" | " Margin="5,0" FontSize="14"/>
 
                                                 <!-- Hiển thị loại chuyến bay (thẳng hoặc có điểm dừng) -->
                                                 <Grid>
@@ -465,33 +465,33 @@
                                 Visibility="{Binding SoSanBayTrungGian, Converter={StaticResource ZeroToVisibleConverter}}"/>
                                                     <StackPanel Orientation="Horizontal" 
                                 Visibility="{Binding SoSanBayTrungGian, Converter={StaticResource NonZeroToVisibleConverter}}">
-                                                        <TextBlock Text="{Binding SoSanBayTrungGian}" Foreground="#FF6600"/>
-                                                        <TextBlock Text=" điểm dừng" Foreground="#FF6600" Margin="3,0,0,0"/>
+                                                        <TextBlock Text="{Binding SoSanBayTrungGian}" Foreground="#FF6600" FontSize="14"/>
+                                                        <TextBlock Text=" điểm dừng" Foreground="#FF6600" Margin="3,0,0,0" FontSize="14"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </StackPanel>
 
                                             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
                                                 <materialDesign:PackIcon Kind="Airplane" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                                <TextBlock Text="{Binding MayBay}" Foreground="#666666"/>
-                                                <TextBlock Text=" | " Margin="5,0"/>
+                                                <TextBlock Text="{Binding MayBay}" Foreground="#666666" FontSize="14"/>
+                                                <TextBlock Text=" | " Margin="5,0" FontSize="14"/>
                                                 <materialDesign:PackIcon Kind="SeatPassenger" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                                <TextBlock Text="15kg hành lý" Foreground="#666666"/>
+                                                <TextBlock Text="15kg hành lý" Foreground="#666666" FontSize="14"/>
                                             </StackPanel>
                                         </Grid>
 
                                         <!-- Giá cơ bản -->
                                         <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                                            <TextBlock Text="Giá từ:" FontSize="12" Foreground="#666666" HorizontalAlignment="Right"/>
+                                            <TextBlock Text="Giá từ:" FontSize="14" Foreground="#666666" HorizontalAlignment="Right" />
                                             <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0} VND}" 
                               FontWeight="Bold" FontSize="18" 
                               Foreground="#FF6600" HorizontalAlignment="Right"/>
-                                            <TextBlock Text="/khách" Foreground="#666666" HorizontalAlignment="Right"/>
+                                            <TextBlock Text="/khách" Foreground="#666666" HorizontalAlignment="Right" FontSize="14"/>
                                         </StackPanel>
                                     </Grid>
 
                                     <!-- Ticket Classes Section -->
-                                    <Grid Grid.Row="1" Margin="0,15,0,0">
+                                    <Grid Grid.Row="1" Margin="0,5,0,0">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
@@ -521,10 +521,10 @@
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Border Width="180" Height="150" 
-            Background="{Binding BackgroundColor}" 
-            CornerRadius="8" 
-            Margin="5,0">
+                                                        <Border Width="180" Height="140" 
+                                                            Background="{Binding BackgroundColor}" 
+                                                            CornerRadius="8" 
+                                                            Margin="5,0">
                                                             <Grid Margin="12">
                                                                 <Grid.RowDefinitions>
                                                                     <RowDefinition Height="Auto"/>
@@ -534,48 +534,45 @@
                                                                 </Grid.RowDefinitions>
 
                                                                 <!-- Tên hạng vé -->
-                                                                <TextBlock Grid.Row="0" 
-                       Text="{Binding TenHangVe}" 
-                       FontWeight="Bold" 
-                       FontSize="15" 
-                       Margin="0,0,0,5"
-                       Foreground="{Binding HeaderColor}"/>
+                                                                <TextBlock Grid.Row="0"                    
+                                                                           Text="{Binding TenHangVe}"                    
+                                                                           FontWeight="Bold"                    
+                                                                           FontSize="15"                  
+                                                                           Margin="0,0,0,5"                     
+                                                                           Foreground="{Binding HeaderColor}"/>
 
                                                                 <!-- Số ghế còn lại -->
-                                                                <Border Grid.Row="1" 
-                    Background="#80000000" 
-                    CornerRadius="4" 
-                    Margin="0,0,0,10" 
-                    Padding="6,3"
-                    HorizontalAlignment="Left">
-                                                                    <TextBlock Text="{Binding SoGheConLai, StringFormat={}{0} ghế còn lại}" 
-                           FontSize="11" 
-                           Foreground="White"/>
+                                                                <Border Grid.Row="1"                     
+                                                                        Background="#80000000"            
+                                                                        CornerRadius="4"            
+                                                                        Padding="6,3"               
+                                                                        HorizontalAlignment="Left">
+                                                                    <TextBlock Text="{Binding SoGheConLai, StringFormat={}{0} ghế còn lại}"                        
+                                                                               FontSize="12"                         
+                                                                               Foreground="White"/>
                                                                 </Border>
 
                                                                 <!-- Giá vé -->
-                                                                <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="0,5,0,10">
-                                                                    <TextBlock Text="từ" FontSize="11" Foreground="#333" Margin="0,0,0,3"/>
-                                                                    <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0}}" 
-                           FontWeight="Bold" 
-                           FontSize="18"
-                           Margin="0,0,0,3"/>
-                                                                    <TextBlock Text="VND" FontSize="12"/>
+                                                                <StackPanel Grid.Row="2" VerticalAlignment="Center">
+                                                                    <TextBlock Text="{Binding GiaVe, StringFormat={}{0:N0} VND}"                           
+                                                                               FontWeight="Bold"                         
+                                                                               FontSize="16"                        
+                                                                               Margin="0,0,0,3"/>
                                                                 </StackPanel>
 
                                                                 <!-- Nút chọn -->
-                                                                <Button Grid.Row="3"
-                    Content="CHỌN"
-                    Command="{Binding DataContext.SelectTicketClassCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    Background="White"
-                    Foreground="{Binding ButtonColor}"
-                    Height="30"
-                    FontSize="12"
-                    FontWeight="Medium"
-                    materialDesign:ButtonAssist.CornerRadius="5"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Bottom">
+                                                                <Button Grid.Row="3"                
+                                                                        Content="CHỌN"                 
+                                                                        Command="{Binding DataContext.SelectTicketClassCommand, RelativeSource={RelativeSource AncestorType=ListView}}"                
+                                                                        Style="{StaticResource MaterialDesignRaisedButton}"                   
+                                                                        Background="White"                   
+                                                                        Foreground="{Binding ButtonColor}"                   
+                                                                        Height="30"                 
+                                                                        FontSize="12"                 
+                                                                        FontWeight="Medium"                 
+                                                                        materialDesign:ButtonAssist.CornerRadius="5"                 
+                                                                        HorizontalAlignment="Stretch"                  
+                                                                        VerticalAlignment="Bottom">
                                                                     <Button.CommandParameter>
                                                                         <MultiBinding Converter="{StaticResource TicketSelectionConverter}">
                                                                             <!-- HangVe (hạng vé) từ chính item hiện tại -->

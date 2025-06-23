@@ -45,33 +45,38 @@ namespace AirTicketSalesManagement.View.Customer
             });
         }
 
-        private void WebView_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
+        private async void WebView_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
         {
             if (e.Uri.StartsWith("https://localhost:1234/api/Vnpay/Callback"))
             {
                 var query = new Uri(e.Uri).Query;
-                try
-                {
-                    var result = HandlePaymentResult(query);
-                    if (result.IsSuccess)
-                    {
-                        WebView.Visibility = Visibility.Collapsed;
-                        MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                        WeakReferenceMessenger.Default.Send(new PaymentSuccessMessage());
-                    }
-                    else
-                    {
-                        WebView.Visibility = Visibility.Collapsed;
-                        MessageBox.Show("Thanh toán thất bại: " + result.ToString(), "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    WebView.Visibility = Visibility.Collapsed;
-                    MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
                 e.Cancel = true;
+
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    var viewModel = DataContext as CustomerViewModel;
+
+                    try
+                    {
+                        var result = HandlePaymentResult(query);
+                        if (result.IsSuccess)
+                        {
+                            if (viewModel != null) viewModel.IsWebViewVisible = false;
+                            MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                            WeakReferenceMessenger.Default.Send(new PaymentSuccessMessage());
+                        }
+                        else
+                        {
+                            if (viewModel != null) viewModel.IsWebViewVisible = false;
+                            MessageBox.Show("Thanh toán thất bại: " + result.ToString(), "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (viewModel != null) viewModel.IsWebViewVisible = false;
+                        MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
             }
         }
 

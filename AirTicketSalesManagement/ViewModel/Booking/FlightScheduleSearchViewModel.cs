@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
- 
+
 namespace AirTicketSalesManagement.ViewModel.Booking
 {
     public partial class FlightScheduleSearchViewModel : BaseViewModel
@@ -123,10 +123,35 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
             if (selection == null || selection.TicketClass == null || selection.Flight == null)
                 return;
+            int idDatVe;
 
+            using (var context = new AirTicketDbContext())
+            {
+                var datVe = new Datve
+                {
+                    MaLb = selection.Flight.MaLichBay,
+                    MaKh = UserSession.Current.CustomerId,
+                    MaNv = UserSession.Current.StaffId,
+                    Slve = TotalPassengers,
+                    TongTienTt = TotalPassengers * selection.TicketClass.GiaVe,
+                    TtdatVe = "Giữ chỗ",
+                    ThoiGianDv = DateTime.Now
+                };
+                context.Datves.Add(datVe);
+                context.SaveChanges();
+
+                // Giảm vé
+                var hangVe = context.Hangvetheolichbays.First(h => h.MaHvLb == selection.TicketClass.MaHangVe);
+                hangVe.SlveConLai -= TotalPassengers;
+
+                context.SaveChanges();
+                idDatVe = datVe.MaDv;
+                // Lưu lại datVe.MaDV vào session để sử dụng sau
+            }
             // Tạo đối tượng chứa thông tin chuyến bay và hạng vé đã chọn
             var selectedFlightInfo = new ThongTinChuyenBayDuocChon
             {
+                Id = idDatVe,
                 Flight = selection.Flight,
                 TicketClass = selection.TicketClass,
             };
@@ -141,7 +166,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private void OpenPassengerSelector()
         {
 
-            IsPassengerSelectorOpen = true;
+            IsPassengerSelectorOpen = !IsPassengerSelectorOpen;
         }
 
         // Áp dụng lựa chọn hành khách
@@ -258,6 +283,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         [RelayCommand]
         private void SearchFlight()
         {
+            ClearExpiredHolds();
+
             SearchedAdultCount = AdultCount;
             SearchedChildCount = ChildCount;
             SearchedInfantCount = InfantCount;
@@ -272,7 +299,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 // Truy vấn danh sách chuyến bay
                 var flights = context.Lichbays
                     .Include(lb => lb.SoHieuCbNavigation) // Bao gồm thông tin chuyến bay
-                    .ThenInclude(cb => cb.SbdiNavigation) // Bao gồm thông tin sân bay đi
+                        .ThenInclude(cb => cb.SbdiNavigation) // Bao gồm thông tin sân bay đi
                     .Include(lb => lb.SoHieuCbNavigation.SbdenNavigation) // Bao gồm thông tin sân bay đến
                     .Include(lb => lb.SoHieuCbNavigation.Sanbaytrunggians) // Bao gồm thông tin sân bay trung gian
                     .Where(lb =>
@@ -284,12 +311,18 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 foreach (var flight in flights)
                 {
                     // Lấy danh sách hạng vé
-                    var ticketClasses = context.Hangvetheolichbays
+                    var availableTicketClasses = context.Hangvetheolichbays
                         .Include(hvlb => hvlb.MaHvNavigation)
-                        .Where(hvlb => hvlb.MaLb == flight.MaLb)
+                        .Where(hvlb => hvlb.MaLb == flight.MaLb && (hvlb.SlveConLai ?? 0) >= TotalPassengers)
+                        .ToList();
+
+                    if (!availableTicketClasses.Any())
+                        continue;
+
+                    var ticketClassList = availableTicketClasses
                         .Select(hvlb => new HangVe
                         {
-                            MaHangVe = hvlb.MaHv.Value,
+                            MaHangVe = hvlb.MaHvLb,
                             TenHangVe = hvlb.MaHvNavigation.TenHv,
                             GiaVe = flight.GiaVe.Value * (decimal)hvlb.MaHvNavigation.HeSoGia,
                             SoGheConLai = hvlb.SlveConLai ?? 0,
@@ -313,8 +346,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                         MayBay = flight.LoaiMb,
                         GiaVe = flight.GiaVe.Value,
                         SoSanBayTrungGian = flight.SoHieuCbNavigation.Sanbaytrunggians.Count,
-                        LogoUrl = "/Images/DefaultAirlineLogo.png", // Thay bằng logo thực tế nếu có
-                        TicketClasses = ticketClasses
+                        LogoUrl = GetAirlineLogo(flight.SoHieuCbNavigation.HangHangKhong), // Thay bằng logo thực tế nếu có
+                        TicketClasses = ticketClassList
                     });
                 }
             }
@@ -390,7 +423,57 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             };
         }
 
+        public void ClearExpiredHolds()
+        {
+            using (var context = new AirTicketDbContext())
+            {
+                var expiredDatVes = context.Datves
+                    .Where(dv => (dv.TtdatVe == "Chưa thanh toán (Online)" || dv.TtdatVe == "Giữ chỗ") &&
+                                 dv.ThoiGianDv < DateTime.Now.AddMinutes(-20))
+                    .ToList();
 
+                foreach (var datVe in expiredDatVes)
+                {
+                    var chiTiets = context.Ctdvs.Where(ct => ct.MaDv == datVe.MaDv).ToList();
+
+                    var maHvLb = chiTiets.FirstOrDefault()?.MaHvLb;
+
+                    if (maHvLb != null)
+                    {
+                        var hangVe = context.Hangvetheolichbays
+                            .FirstOrDefault(h => h.MaHvLb == maHvLb);
+
+                        if (hangVe != null)
+                        {
+                            hangVe.SlveConLai += chiTiets.Count;
+                        }
+                    }
+
+                    context.Ctdvs.RemoveRange(chiTiets);
+                    context.Datves.Remove(datVe);
+                }
+
+                context.SaveChanges();
+            }
+        }
+
+        private string GetAirlineLogo(string airlineName)
+        {
+            if (string.IsNullOrWhiteSpace(airlineName))
+                return "/Resources/Images/default.png";
+
+
+            if (airlineName == "Vietnam Airlines")
+                return "/Resources/Images/vietnamair.png";
+            if (airlineName == "Vietjet Air")
+                return "/Resources/Images/vietjet.png";
+            if (airlineName == "Bamboo Airways")
+                return "/Resources/Images/bamboo.jpg";
+            if (airlineName == "Vietravel Airlines")
+                return "/Resources/Images/vietravel.png";
+
+            return "/Images/default.png";
+        }
     }
 
     public static class ObservableCollectionExtensions
