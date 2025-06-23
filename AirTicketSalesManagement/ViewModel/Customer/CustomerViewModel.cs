@@ -5,6 +5,8 @@ using AirTicketSalesManagement.ViewModel.Booking;
 using AirTicketSalesManagement.ViewModel.Login;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,9 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private string hoTen;
 
+        [ObservableProperty]
+        private bool isWebViewVisible;
+
         public int? IdCustomer { get; set; }
         public CustomerViewModel()
         {
@@ -30,6 +35,13 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
             //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
             hoTen = UserSession.Current.CustomerName;
+
+            WeakReferenceMessenger.Default.Register<PaymentRequestedMessage>(this, (r, m) =>
+            {
+                IsWebViewVisible = true;
+                WeakReferenceMessenger.Default.Send(new WebViewNavigationMessage(m.Value));
+            });
+
 
             NavigationService.NavigateToAction = (viewModelType, parameter) =>
             {
@@ -58,7 +70,14 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                     CurrentViewModel = new PassengerInformationViewModel((ThongTinHanhKhachVaChuyenBay)previousParameter);
                 }
             };
+
+            WeakReferenceMessenger.Default.Register<PaymentSuccessMessage>(this, (r, m) =>
+            {
+                // Chuyển sang màn hình Booking History
+                CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
+            });
         }
+
 
         [RelayCommand]
         private void NavigateToCustomerProfile()
@@ -100,5 +119,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             authWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
         }
 
+    }
+
+    public class WebViewNavigationMessage : ValueChangedMessage<string>
+    {
+        public WebViewNavigationMessage(string url) : base(url) { }
     }
 }
