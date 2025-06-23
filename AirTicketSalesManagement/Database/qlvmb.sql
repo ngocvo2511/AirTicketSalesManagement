@@ -42,6 +42,11 @@ CREATE TABLE LICHBAY
 	TTLichBay NVARCHAR(30)
 )
 select * from LICHBAY
+select * from HANGVETHEOLICHBAY
+select * from CHUYENBAY
+select * from DATVE
+select * from CTDV
+select * from TAIKHOAN
 CREATE TABLE HANGVE
 (
 	MaHV INT IDENTITY(1,1) PRIMARY KEY,
@@ -192,11 +197,11 @@ select * from HANGVETHEOLICHBAY
 INSERT INTO HANGVETHEOLICHBAY(MaLB, MaHV, SLVeToiDa, SLVeConLai)
 VALUES
 (1, 1, 100, 100),
-(1, 2, 200, 200),
+(1, 2, 100, 100),
 (2, 1, 50, 50),
-(2, 1, 150, 100),
-(3, 1, 100, 100),
-(4, 2, 200, 100)
+(2, 1, 100, 100),
+(3, 1, 180, 180),
+(4, 2, 120, 120)
 
 
 
