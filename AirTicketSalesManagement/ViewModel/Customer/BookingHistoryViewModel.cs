@@ -31,10 +31,13 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private string? hangHangKhongFilter;
         [ObservableProperty]
+        private string bookingStatusFilter;
+        [ObservableProperty]
         private ObservableCollection<string> hangHangKhongList = new();
         [ObservableProperty]
         private ObservableCollection<string> sanBayList = new();
-
+        [ObservableProperty]
+        private ObservableCollection<string> bookingStatusList;
         public ObservableCollection<string> DiemDiList =>
             new(SanBayList.Where(s => s != NoiDenFilter));
 
@@ -59,57 +62,57 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent)
         {
             this.parent = parent;
-            //LoadData(UserSession.Current.CustomerId);
-            rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
-                {
-                    new KQLichSuDatVe
-                    {
-                        MaVe = 1,
-                        MaDiemDi = "HAN",
-                        MaDiemDen = "SGN",
-                        HangHangKhong = "Vietnam Airlines",
-                        GioDi = new DateTime(2025, 5, 10, 8, 30, 0),
-                        GioDen = new DateTime(2025, 5, 10, 10, 45, 0),
-                        LoaiMayBay = "Airbus A321",
-                        NgayDat = new DateTime(2025, 4, 20),
-                        TrangThai = "Đã thanh toán",
-                        SoLuongKhach = 5
-                    },
-                    new KQLichSuDatVe
-                    {
-                        MaVe = 2,
-                        MaDiemDi = "DAT",
-                MaDiemDen = "HAN",
-                DiemDi = "Đà Nẵng(DAT), Việt Nam",
-                DiemDen = "Hà Nội(HAN), Việt Nam",
-                HangHangKhong = "Bamboo Airways",
-                GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
-                GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
-                LoaiMayBay = "Embraer E190",
-                NgayDat = new DateTime(2025, 4, 21),
-                TrangThai = "Chờ thanh toán",
-                SoLuongKhach = 4
-                    },
-                    new KQLichSuDatVe
-            {
-                MaVe = 3,
-                MaDiemDi = "CAN",
-                MaDiemDen = "DAL",
-                HangHangKhong = "VietJet Air",
-                GioDi = new DateTime(2025, 5, 15, 6, 45, 0),
-                GioDen = new DateTime(2025, 5, 15, 7, 50, 0),
-                LoaiMayBay = "Airbus A320",
-                NgayDat = new DateTime(2025, 4, 22),
-                TrangThai = "Đã hủy",
-                SoLuongKhach = 3
-            },
-                };
-            HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
-            foreach (var ve in HistoryBooking)
-            {
-                Debug.WriteLine($"{ve.MaVe}: {ve.TrangThai} -> CanCancel = {ve.CanCancel}");
-            }
-            IsEmpty = HistoryBooking.Count == 0;
+            LoadData(UserSession.Current.CustomerId);
+            //rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
+            //    {
+            //        new KQLichSuDatVe
+            //        {
+            //            MaVe = 1,
+            //            MaDiemDi = "HAN",
+            //            MaDiemDen = "SGN",
+            //            HangHangKhong = "Vietnam Airlines",
+            //            GioDi = new DateTime(2025, 5, 10, 8, 30, 0),
+            //            GioDen = new DateTime(2025, 5, 10, 10, 45, 0),
+            //            LoaiMayBay = "Airbus A321",
+            //            NgayDat = new DateTime(2025, 4, 20),
+            //            TrangThai = "Đã thanh toán",
+            //            SoLuongKhach = 5
+            //        },
+            //        new KQLichSuDatVe
+            //        {
+            //            MaVe = 2,
+            //            MaDiemDi = "DAT",
+            //    MaDiemDen = "HAN",
+            //    DiemDi = "Đà Nẵng(DAT), Việt Nam",
+            //    DiemDen = "Hà Nội(HAN), Việt Nam",
+            //    HangHangKhong = "Bamboo Airways",
+            //    GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
+            //    GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
+            //    LoaiMayBay = "Embraer E190",
+            //    NgayDat = new DateTime(2025, 4, 21),
+            //    TrangThai = "Chờ thanh toán",
+            //    SoLuongKhach = 4
+            //        },
+            //        new KQLichSuDatVe
+            //{
+            //    MaVe = 3,
+            //    MaDiemDi = "CAN",
+            //    MaDiemDen = "DAL",
+            //    HangHangKhong = "VietJet Air",
+            //    GioDi = new DateTime(2025, 5, 15, 6, 45, 0),
+            //    GioDen = new DateTime(2025, 5, 15, 7, 50, 0),
+            //    LoaiMayBay = "Airbus A320",
+            //    NgayDat = new DateTime(2025, 4, 22),
+            //    TrangThai = "Đã hủy",
+            //    SoLuongKhach = 3
+            //},
+            //    };
+            //HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
+            //foreach (var ve in HistoryBooking)
+            //{
+            //    Debug.WriteLine($"{ve.MaVe}: {ve.TrangThai} -> CanCancel = {ve.CanCancel}");
+            //}
+            //IsEmpty = HistoryBooking.Count == 0;
         }
         public async Task LoadData(int? idCustomer)
         {
@@ -153,6 +156,14 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                     .OrderBy(display => display)
                     .ToList();
                     SanBayList = new ObservableCollection<string>(danhSach);
+                    BookingStatusList = new ObservableCollection<string>
+                    {
+                        "Tất cả",
+                        "Đã thanh toán",
+                        "Chờ thanh toán",
+                        "Đã hủy"
+                    };
+                    BookingStatusFilter = "Tất cả";
                 }                
             }
             catch(Exception e)
@@ -188,10 +199,52 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 {
                     filter = filter.Where(v => v.NgayDat?.Date == NgayDatFilter.Value.Date);
                 }
+                if (!string.IsNullOrWhiteSpace(BookingStatusFilter))
+                {
+                    filter = filter.Where(v => v.TrangThai == BookingStatusFilter || BookingStatusFilter == "Tất cả");
+                }
                 HistoryBooking = new ObservableCollection<KQLichSuDatVe>(filter);
                 IsEmpty = HistoryBooking.Count == 0;
             }
         }
+        [RelayCommand]
+        private async Task CancelTicket(KQLichSuDatVe ve)
+        {
+            if (ve == null) return;
+            if (ve.TrangThai == "Đã hủy")
+            {
+                MessageBox.Show("Vé đã được hủy trước đó.");
+                return;
+            }
+            if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    using (var context = new AirTicketDbContext())
+                    {
+                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
+                        if (booking != null)
+                        {
+                            booking.TtdatVe = "Đã hủy";
+                            await context.SaveChangesAsync();
+                            ve.TrangThai = "Đã hủy";
+                            OnPropertyChanged(nameof(HistoryBooking));
+                            MessageBox.Show("Hủy vé thành công.");
+                            await LoadData(UserSession.Current.CustomerId);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy vé để hủy.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi hủy vé: {ex.Message}");
+                }
+            }
+        }
+
 
         [RelayCommand]
         private void ClearFilter()

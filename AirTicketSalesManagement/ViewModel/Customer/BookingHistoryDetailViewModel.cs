@@ -71,7 +71,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         }
 
         [RelayCommand]
-        private async Task CancleTicket()
+        private async Task CancelTicket()
         {
             if (LichSuDatVe.TrangThai == "Đã hủy")
             {
@@ -90,7 +90,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                             booking.TtdatVe = "Đã hủy";
                             await context.SaveChangesAsync();
                             MessageBox.Show("Hủy vé thành công.");
-                            _ = LoadData();
+                            LichSuDatVe.TrangThai = "Đã hủy";
+                            OnPropertyChanged(nameof(LichSuDatVe));
                         }
                         else
                         {

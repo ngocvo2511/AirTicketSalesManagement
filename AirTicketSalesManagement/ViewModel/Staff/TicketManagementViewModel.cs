@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {
@@ -198,8 +199,91 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 {
                     filter = filter.Where(v => v.NgayDat?.Date == NgayDatFilter.Value.Date);
                 }
+                if (!string.IsNullOrWhiteSpace(BookingStatusFilter))
+                {
+                    filter = filter.Where(v=>v.TrangThai == BookingStatusFilter || BookingStatusFilter == "Tất cả");
+                }
+                if(!string.IsNullOrWhiteSpace(EmailFilter))
+                {
+                    filter = filter.Where(v => v.EmailNguoiDat != null && v.EmailNguoiDat.Contains(EmailFilter, StringComparison.OrdinalIgnoreCase));
+                }                   
                 HistoryBooking = new ObservableCollection<QuanLiDatVe>(filter);
                 IsEmpty = HistoryBooking.Count == 0;
+            }
+        }
+        [RelayCommand]
+        private async Task CancelTicket(QuanLiDatVe ve)
+        {
+            if (ve == null) return;
+            if (ve.TrangThai == "Đã hủy")
+            {
+                MessageBox.Show("Vé đã được hủy trước đó.");
+                return;
+            }
+            if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    using (var context = new AirTicketDbContext())
+                    {
+                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
+                        if (booking != null)
+                        {
+                            booking.TtdatVe = "Đã hủy";
+                            await context.SaveChangesAsync();
+                            ve.TrangThai = "Đã hủy";
+                            OnPropertyChanged(nameof(HistoryBooking));
+                            MessageBox.Show("Hủy vé thành công.");
+                            await LoadData();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy vé để hủy.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi hủy vé: {ex.Message}");
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task ConfirmPayment(QuanLiDatVe ve)
+        {
+            if (ve == null) return;
+            if (ve.TrangThai != "Chờ thanh toán")
+            {
+                MessageBox.Show("Không thể xác nhận thanh toán.");
+                return;
+            }
+            if (MessageBox.Show("Bạn có chắc chắn muốn xác nhận thanh toán vé này không?", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    using (var context = new AirTicketDbContext())
+                    {
+                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
+                        if (booking != null)
+                        {
+                            booking.TtdatVe = "Đã thanh toán";
+                            await context.SaveChangesAsync();
+                            ve.TrangThai = "Đã thanh toán";
+                            OnPropertyChanged(nameof(HistoryBooking));
+                            MessageBox.Show("Xác nhận thanh toán thành công.");
+                            await LoadData();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy vé để xác nhận thanh toán.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi xác nhận thanh toán: {ex.Message}");
+                }
             }
         }
 

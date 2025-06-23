@@ -21,7 +21,8 @@ namespace AirTicketSalesManagement.Models.UIModels
         public int? SoLuongKhach { get; set; }
         public string? HoTenNguoiDat { get; set; }
         public string? EmailNguoiDat { get; set; }
-
+        public int? QdDatVe { get; set; }
+        public int? QdHuyVe { get; set; }
         public DateTime? NgayDat { get; set; }
         private string? _trangThai;
         public string? TrangThai
@@ -32,6 +33,7 @@ namespace AirTicketSalesManagement.Models.UIModels
                 if (SetProperty(ref _trangThai, value))
                 {
                     OnPropertyChanged(nameof(CanCancel));
+                    OnPropertyChanged(nameof(CanConfirm));
                 }
             }
         }
@@ -41,8 +43,17 @@ namespace AirTicketSalesManagement.Models.UIModels
             get
             {
                 if (TrangThai == "Đã hủy") return false;
-                // thêm kiểm tra qui định
+                
                 return true;
+            }
+        }
+        public bool CanConfirm
+        {
+            get
+            {
+                if (TrangThai == "Chờ thanh toán") return true;
+                
+                return false;
             }
         }
     }

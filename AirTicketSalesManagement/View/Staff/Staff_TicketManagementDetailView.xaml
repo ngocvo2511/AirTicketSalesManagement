@@ -256,15 +256,15 @@
 
                         <!-- Action Buttons -->
                         <StackPanel Orientation="Horizontal" 
-                    HorizontalAlignment="Center" 
-                    Margin="0,20,0,0">
+    HorizontalAlignment="Center" 
+    Margin="0,20,0,0">
                             <!-- Back Button -->
                             <Button Style="{StaticResource MaterialDesignFlatButton}"
-                    Command="{Binding GoBackCommand}"
-                    Background="#EEF2FF"
-                    Foreground="#6366F1"
-                    Margin="0,0,5,0"
-                    materialDesign:ButtonAssist.CornerRadius="8">
+        Command="{Binding GoBackCommand}"
+        Background="#EEF2FF"
+        Foreground="#6366F1"
+        Margin="0,0,5,0"
+        materialDesign:ButtonAssist.CornerRadius="8">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,8,0">
                                     <materialDesign:PackIcon Kind="ArrowLeft"/>
                                     <TextBlock Text="Quay lại"/>
@@ -273,18 +273,34 @@
 
                             <!-- Cancel Button -->
                             <Button Style="{StaticResource MaterialDesignFlatButton}"
-                    Command="{Binding CancelTicketCommand}"
-                    Background="#FEE2E2"
-                    Foreground="#DC2626"
-                    materialDesign:ButtonAssist.CornerRadius="8"
-                    Visibility="{Binding ChiTietVe.CanCancel, 
-                              Converter={StaticResource BoolToVisibilityConverter}}">
+                            Command="{Binding CancelTicketCommand}"
+                            Background="#FEE2E2"
+                            Foreground="#DC2626"
+                            Margin="0,0,8,0"
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            Visibility="{Binding ChiTietVe.CanCancel, 
+                                      Converter={StaticResource BoolToVisibilityConverter}}">
+                                                    <StackPanel Orientation="Horizontal" Margin="0,0,8,0">
+                                                        <materialDesign:PackIcon Kind="Cancel"/>
+                                                        <TextBlock Text="Huỷ vé"/>
+                                                    </StackPanel>
+                            </Button>
+
+                            <!-- Confirm Payment Button -->
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                            Command="{Binding ConfirmPaymentCommand}"
+                            Background="#D1FAE5"
+                            Foreground="#059669"
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            Margin="0,0,0,0"
+                            Visibility="{Binding ChiTietVe.TrangThai, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter='Chờ thanh toán'}">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,8,0">
-                                    <materialDesign:PackIcon Kind="Cancel"/>
-                                    <TextBlock Text="Huỷ vé"/>
+                                    <materialDesign:PackIcon Kind="CreditCardCheckOutline"/>
+                                    <TextBlock Text="Xác nhận thanh toán"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
+
                     </StackPanel>
                 </materialDesign:Card>
             </StackPanel>

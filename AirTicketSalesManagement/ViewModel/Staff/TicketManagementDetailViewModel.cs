@@ -108,9 +108,9 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private async Task ConfirmPayment()
         {
-            if (ChiTietVe.TrangThai == "Đã thanh toán")
+            if (ChiTietVe.TrangThai != "Chờ thanh toán")
             {
-                MessageBox.Show("Vé đã được thanh toán trước đó.");
+                MessageBox.Show("Không thể xác nhận thanh toán.");
                 return;
             }
             if (MessageBox.Show("Bạn có chắc chắn muốn xác nhận thanh toán vé này không?", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -125,7 +125,8 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                             booking.TtdatVe = "Đã thanh toán";
                             await context.SaveChangesAsync();
                             MessageBox.Show("Xác nhận thanh toán thành công.");
-                            _ = LoadData();
+                            ChiTietVe.TrangThai = "Đã thanh toán";
+                            OnPropertyChanged(nameof(ChiTietVe));
                         }
                         else
                         {
