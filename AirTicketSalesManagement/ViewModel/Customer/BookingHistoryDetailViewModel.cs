@@ -36,7 +36,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         }
         private async Task LoadData()
         {
-            CanCancle = true;
+            CanCancle = lichSuDatVe.CanCancel;
            
             try
             {
@@ -90,7 +90,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                             booking.TtdatVe = "Đã hủy";
                             await context.SaveChangesAsync();
                             MessageBox.Show("Hủy vé thành công.");
-                            parent.CurrentViewModel = new BookingHistoryViewModel(UserSession.Current.CustomerId, parent);
+                            _ = LoadData();
                         }
                         else
                         {

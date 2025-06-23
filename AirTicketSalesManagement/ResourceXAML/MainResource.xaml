@@ -42,6 +42,7 @@
     <viewmodelSTAFF:StaffProfileViewModel x:Key="StaffProfileVM"/>
     <viewmodelSTAFF:TicketManagementViewModel x:Key="TicketManagementVM"/>
     <viewmodelSTAFF:CustomerManagementViewModel x:Key="CustomerManagementVM"/>
+    <viewmodelSTAFF:TicketManagementDetailViewModel x:Key="TicketManagementDetailVM"/>
 
 
     <!-- Admin -->
@@ -120,6 +121,10 @@
 
     <DataTemplate DataType="{x:Type viewmodelSTAFF:TicketManagementViewModel}">
         <viewsSTAFF:Staff_TicketManagementView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelSTAFF:TicketManagementDetailViewModel}">
+        <viewsSTAFF:Staff_TicketManagementDetailView />
     </DataTemplate>
 
     <!-- Admin -->

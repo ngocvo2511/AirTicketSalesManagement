@@ -1,12 +1,143 @@
-﻿using System;
+﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.Models.UIModels;
+using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.ViewModel.Customer;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {
-    class TicketManagementDetailViewModel
+    public partial class TicketManagementDetailViewModel : BaseViewModel
     {
+        private readonly StaffViewModel parent;
+        [ObservableProperty]
+        private QuanLiDatVe chiTietVe;
+        [ObservableProperty]
+        private int tongTien;
+        [ObservableProperty]
+        private ObservableCollection<Ctdv>? ctdvList;
+        [ObservableProperty]
+        private bool canCancle;
+        public TicketManagementDetailViewModel() { }
+        public TicketManagementDetailViewModel(QuanLiDatVe chiTietVe, StaffViewModel parent)
+        {
+            this.ChiTietVe = chiTietVe;
+            this.parent = parent;
+            LoadData();
+        }
+        private async Task LoadData()
+        {
+            CanCancle = ChiTietVe.CanCancel;
+
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    var result = await context.Ctdvs
+                        .Where(ctdv => ctdv.MaDv == ChiTietVe.MaVe)
+                        .Select(ctdv => new Ctdv
+                        {
+                            MaDv = ctdv.MaDv,
+                            MaCtdv = ctdv.MaCtdv,
+                            HoTenHk = ctdv.HoTenHk,
+                            GioiTinh = ctdv.GioiTinh,
+                            NgaySinh = ctdv.NgaySinh,
+                            Cccd = ctdv.Cccd,
+                            HoTenNguoiGiamHo = ctdv.HoTenNguoiGiamHo,
+                            MaHvLb = ctdv.MaHvLb,
+                            GiaVeTt = ctdv.GiaVeTt
+                        })
+                        .ToListAsync();
+                    CtdvList = new ObservableCollection<Ctdv>(result);
+                }
+            }
+            catch (Exception e)
+            {
+                // Handle exception (optional logging or user notification)
+            }
+        }
+        [RelayCommand]
+        private void GoBack()
+        {
+            parent.CurrentViewModel = new TicketManagementViewModel(parent);
+        }
+        [RelayCommand]
+        private async Task CancelTicket()
+        {
+            if (ChiTietVe.TrangThai == "Đã hủy")
+            {
+                MessageBox.Show("Vé đã được hủy trước đó.");
+                return;
+            }
+            if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    using (var context = new AirTicketDbContext())
+                    {
+                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ChiTietVe.MaVe);
+                        if (booking != null)
+                        {
+                            booking.TtdatVe = "Đã hủy";
+                            await context.SaveChangesAsync();
+                            MessageBox.Show("Hủy vé thành công.");
+                            ChiTietVe.TrangThai = "Đã hủy";
+                            OnPropertyChanged(nameof(ChiTietVe));
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy vé để hủy.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi hủy vé: {ex.Message}");
+                }
+            }
+        }
+        [RelayCommand]
+        private async Task ConfirmPayment()
+        {
+            if (ChiTietVe.TrangThai == "Đã thanh toán")
+            {
+                MessageBox.Show("Vé đã được thanh toán trước đó.");
+                return;
+            }
+            if (MessageBox.Show("Bạn có chắc chắn muốn xác nhận thanh toán vé này không?", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    using (var context = new AirTicketDbContext())
+                    {
+                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ChiTietVe.MaVe);
+                        if (booking != null)
+                        {
+                            booking.TtdatVe = "Đã thanh toán";
+                            await context.SaveChangesAsync();
+                            MessageBox.Show("Xác nhận thanh toán thành công.");
+                            _ = LoadData();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy vé để xác nhận thanh toán.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi xác nhận thanh toán: {ex.Message}");
+                }
+            }
+        }
     }
 }
