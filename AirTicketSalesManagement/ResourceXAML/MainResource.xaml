@@ -127,6 +127,10 @@
         <viewsSTAFF:Staff_TicketManagementDetailView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewmodelSTAFF:CustomerManagementViewModel}">
+        <viewsSTAFF:StaffCustomerManagementView />
+    </DataTemplate>
+
     <!-- Admin -->
     <DataTemplate DataType="{x:Type viewmodelADMIN:HomePageViewModel}">
         <viewsADMIN:HomePageView />          
@@ -150,6 +154,10 @@
 
     <DataTemplate DataType="{x:Type viewmodelADMIN:AccountManagementViewModel}">
         <viewsADMIN:AccountManagementView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelADMIN:ReportViewModel}">
+        <viewsADMIN:ReportView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">
