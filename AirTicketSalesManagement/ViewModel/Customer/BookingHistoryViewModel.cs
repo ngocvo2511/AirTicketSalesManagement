@@ -120,27 +120,29 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             {
                 using (var context = new AirTicketDbContext())
                 {
+                    var HuyVe = await context.Quydinhs.FirstOrDefaultAsync();
                     var query = (from datve in context.Datves
-                                  where datve.MaKh == idCustomer
-                                  join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
-                                  join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
-                                  join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
-                                  join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
-                                  select new KQLichSuDatVe
-                                  {
-                                      MaVe = datve.MaDv,
-                                      MaDiemDi = chuyenbay.Sbdi,
-                                      MaDiemDen = chuyenbay.Sbden,
-                                      DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
-                                      DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
-                                      HangHangKhong = chuyenbay.HangHangKhong,
-                                      GioDi = lichbay.GioDi,
-                                      GioDen = lichbay.GioDen,
-                                      LoaiMayBay = lichbay.LoaiMb,
-                                      NgayDat = datve.ThoiGianDv,
-                                      TrangThai = datve.TtdatVe,
-                                      SoLuongKhach = datve.Ctdvs.Count
-                                  });
+                                 where datve.MaKh == idCustomer
+                                 join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
+                                 join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
+                                 join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
+                                 join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
+                                 select new KQLichSuDatVe
+                                 {
+                                     MaVe = datve.MaDv,
+                                     MaDiemDi = chuyenbay.Sbdi,
+                                     MaDiemDen = chuyenbay.Sbden,
+                                     DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
+                                     DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
+                                     HangHangKhong = chuyenbay.HangHangKhong,
+                                     GioDi = lichbay.GioDi,
+                                     GioDen = lichbay.GioDen,
+                                     LoaiMayBay = lichbay.LoaiMb,
+                                     NgayDat = datve.ThoiGianDv,
+                                     TrangThai = datve.TtdatVe,
+                                     SoLuongKhach = datve.Ctdvs.Count,
+                                     QdHuyVe = (HuyVe != null) ? HuyVe.TghuyDatVe : null
+                                 });
                     var result = await query.OrderByDescending(x => x.NgayDat).ToListAsync();
                     rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
                     HistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
@@ -211,6 +213,11 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private async Task CancelTicket(KQLichSuDatVe ve)
         {
             if (ve == null) return;
+            if(ve.CanCancel == false)
+            {
+                MessageBox.Show("Vé không thể hủy vì đã quá thời hạn hủy vé.");
+                return;
+            }
             if (ve.TrangThai == "Đã hủy")
             {
                 MessageBox.Show("Vé đã được hủy trước đó.");

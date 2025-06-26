@@ -451,7 +451,7 @@
                                    Text="{Binding BookingTime}" TextAlignment="Right"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingBookingTime, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                                   Text="giờ"/>
+                                   Text="ngày"/>
 
                                 <!-- Edit Mode -->
                                 <TextBox x:Name="BookingTimeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
@@ -459,7 +459,7 @@
                                  Visibility="{Binding IsEditingBookingTime, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingBookingTime, Converter={StaticResource BoolToVisibilityConverter}}"
-                                   Text="giờ"/>
+                                   Text="ngày"/>
 
                                 <!-- Action Buttons -->
                                 <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
@@ -504,7 +504,7 @@
                                    Text="{Binding CancelTime}" TextAlignment="Right"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingCancelTime, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                                   Text="giờ"/>
+                                   Text="ngày"/>
 
                                 <!-- Edit Mode -->
                                 <TextBox x:Name="CancelTimeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
@@ -512,7 +512,7 @@
                                  Visibility="{Binding IsEditingCancelTime, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingCancelTime, Converter={StaticResource BoolToVisibilityConverter}}"
-                                   Text="giờ"/>
+                                   Text="ngày"/>
 
                                 <!-- Action Buttons -->
                                 <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">

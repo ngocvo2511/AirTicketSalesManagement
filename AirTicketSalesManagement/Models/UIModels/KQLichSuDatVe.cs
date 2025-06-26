@@ -20,7 +20,7 @@ namespace AirTicketSalesManagement.Models
         public DateTime? GioDen { get; set; }
         public string? LoaiMayBay { get; set; }
         public int? SoLuongKhach { get; set; }
-
+        public int? QdHuyVe { get; set; }
         public DateTime? NgayDat { get; set; }
         private string? _trangThai;
         public string? TrangThai
@@ -38,10 +38,11 @@ namespace AirTicketSalesManagement.Models
         public bool CanCancel
         {
             get
-            {              
+            {
                 if (TrangThai == "Đã hủy") return false;
-                // thêm kiểm tra qui định
-                return true;
+                if (GioDi == null || NgayDat == null || QdHuyVe == null) return false;
+                DateTime thoiDiemToiDaHuy = GioDi.Value.AddDays(-QdHuyVe.Value);
+                return DateTime.Now <= thoiDiemToiDaHuy;
             }
         }
     }

@@ -105,16 +105,16 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     MaxStopover = regulation.SoSanBayTgtoiDa ?? 2;
                     MinStopTime = regulation.TgdungMin ?? 10;
                     MaxStopTime = regulation.TgdungMax ?? 20;
-                    BookingTime = regulation.TgdatVeChamNhat ?? 24;
-                    CancelTime = regulation.TghuyDatVe ?? 24;
+                    BookingTime = regulation.TgdatVeChamNhat ?? 1;
+                    CancelTime = regulation.TghuyDatVe ?? 1;
                     TicketClassCount = regulation.SoHangVe ?? 2;
                 }
                 else
                 {
                     // gán mặc định
                     MaxAirports = 10; MinFlightTime = 30; MaxStopover = 2;
-                    MinStopTime = 10; MaxStopTime = 20; BookingTime = 24;
-                    CancelTime = 24; TicketClassCount = 2;
+                    MinStopTime = 10; MaxStopTime = 20; BookingTime = 1;
+                    CancelTime = 1; TicketClassCount = 2;
 
                     // thêm bản ghi mặc định
                     regulation = new Quydinh

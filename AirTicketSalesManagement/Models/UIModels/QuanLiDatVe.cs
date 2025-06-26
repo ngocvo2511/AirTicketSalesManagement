@@ -43,8 +43,9 @@ namespace AirTicketSalesManagement.Models.UIModels
             get
             {
                 if (TrangThai == "Đã hủy") return false;
-                
-                return true;
+                if (GioDi == null || NgayDat == null || QdHuyVe == null) return false;
+                DateTime thoiDiemToiDaHuy = GioDi.Value.AddDays(-QdHuyVe.Value);
+                return DateTime.Now <= thoiDiemToiDaHuy;
             }
         }
         public bool CanConfirm
@@ -52,8 +53,9 @@ namespace AirTicketSalesManagement.Models.UIModels
             get
             {
                 if (TrangThai == "Chờ thanh toán") return true;
-                
-                return false;
+                if (GioDi == null || NgayDat == null || QdDatVe == null) return false;
+                DateTime thoiDiemToiDaXacNhan = GioDi.Value.AddDays(-QdDatVe.Value);
+                return DateTime.Now <= thoiDiemToiDaXacNhan;
             }
         }
     }

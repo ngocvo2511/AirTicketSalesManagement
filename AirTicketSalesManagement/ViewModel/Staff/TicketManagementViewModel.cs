@@ -117,6 +117,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             {
                 using (var context = new AirTicketDbContext())
                 {
+                    var quiDinh = await context.Quydinhs.FirstOrDefaultAsync();
                     var query = from datve in context.Datves
                                  join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
                                  join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
@@ -145,7 +146,9 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                                      EmailNguoiDat = tkKh != null ? tkKh.Email : (tkNv != null ? tkNv.Email : ""),
                                      NgayDat = datve.ThoiGianDv,
                                      TrangThai = datve.TtdatVe,
-                                     SoLuongKhach = datve.Ctdvs.Count
+                                     SoLuongKhach = datve.Ctdvs.Count,
+                                     QdDatVe = (quiDinh != null) ? quiDinh.TgdatVeChamNhat : null,
+                                     QdHuyVe = (quiDinh != null) ? quiDinh.TghuyDatVe : null
                                  };
                     var result = await query.OrderByDescending(x=>x.NgayDat).ToListAsync();
                     rootHistoryBooking = new ObservableCollection<QuanLiDatVe>(result);
@@ -223,6 +226,11 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private async Task CancelTicket(QuanLiDatVe ve)
         {
             if (ve == null) return;
+            if (ve.CanCancel == false)
+            {
+                MessageBox.Show("Không thể hủy vé này do đã quá thời hạn hủy.");
+                return;
+            }
             if (ve.TrangThai == "Đã hủy")
             {
                 MessageBox.Show("Vé đã được hủy trước đó.");
@@ -261,6 +269,11 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private async Task ConfirmPayment(QuanLiDatVe ve)
         {
             if (ve == null) return;
+            if (ve.CanConfirm == false)
+            {
+                MessageBox.Show("Không thể xác nhận thanh toán vé này do đã quá thời hạn đặt vé.");
+                return;
+            }
             if (ve.TrangThai != "Chờ thanh toán")
             {
                 MessageBox.Show("Không thể xác nhận thanh toán.");
