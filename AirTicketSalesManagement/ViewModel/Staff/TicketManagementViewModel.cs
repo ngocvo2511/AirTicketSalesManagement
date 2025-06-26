@@ -2,6 +2,7 @@
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Models.UIModels;
 using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.ViewModel.Admin;
 using AirTicketSalesManagement.ViewModel.Customer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -18,7 +19,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
 {
     public partial class TicketManagementViewModel : BaseViewModel
     {
-        private readonly StaffViewModel parent;
+        private readonly BaseViewModel parent;
         private ObservableCollection<QuanLiDatVe> rootHistoryBooking;
         [ObservableProperty]
         private DateTime? ngayDatFilter;
@@ -60,56 +61,10 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private bool isEmpty;
         //private ObservableCollection<string>
         public TicketManagementViewModel() { }
-        public TicketManagementViewModel(StaffViewModel parent)
+        public TicketManagementViewModel(BaseViewModel parent)
         {
             this.parent = parent;
-            _ = LoadData();
-            // rootHistoryBooking = new ObservableCollection<QuanLiDatVe>
-            //{
-            //    new QuanLiDatVe
-            //    {
-            //        MaVe = 1,
-            //        MaDiemDi = "HAN",
-            //        MaDiemDen = "SGN",
-            //        HangHangKhong = "Vietnam Airlines",
-            //        GioDi = new DateTime(2025, 5, 10, 8, 30, 0),
-            //        GioDen = new DateTime(2025, 5, 10, 10, 45, 0),
-            //        LoaiMayBay = "Airbus A321",
-            //        NgayDat = new DateTime(2025, 4, 20),
-            //        TrangThai = "Đã thanh toán",
-            //        SoLuongKhach = 5
-            //    },
-            //    new QuanLiDatVe
-            //    {
-            //        MaVe = 2,
-            //        MaDiemDi = "DAT",
-            //        MaDiemDen = "HAN",
-            //        DiemDi = "Đà Nẵng(DAT), Việt Nam",
-            //        DiemDen = "Hà Nội(HAN), Việt Nam",
-            //        HangHangKhong = "Bamboo Airways",
-            //        GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
-            //        GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
-            //        LoaiMayBay = "Embraer E190",
-            //        NgayDat = new DateTime(2025, 4, 21),
-            //        TrangThai = "Chờ thanh toán",
-            //        SoLuongKhach = 4
-            //    },
-            //    new QuanLiDatVe
-            //    {
-            //        MaVe = 3,
-            //        MaDiemDi = "CAN",
-            //        MaDiemDen = "DAL",
-            //        HangHangKhong = "VietJet Air",
-            //        GioDi = new DateTime(2025, 5, 15, 6, 45, 0),
-            //        GioDen = new DateTime(2025, 5, 15, 7, 50, 0),
-            //        LoaiMayBay = "Airbus A320",
-            //        NgayDat = new DateTime(2025, 4, 22),
-            //        TrangThai = "Đã hủy",
-            //        SoLuongKhach = 3
-            //    },
-            //};
-            // HistoryBooking = new ObservableCollection<QuanLiDatVe>(rootHistoryBooking);
-            // IsEmpty = HistoryBooking.Count == 0;
+            _ = LoadData();            
         }
         public async Task LoadData()
         {
@@ -185,7 +140,14 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private void ShowDetailHistory(QuanLiDatVe chiTietVe)
         {
-            parent.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent);
+            if (parent is StaffViewModel staffViewModel)
+            {
+                staffViewModel.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent);
+            }
+            else if(parent is AdminViewModel adminViewModel)
+            {
+                adminViewModel.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent);
+            }
         }
         [RelayCommand]
         private void SearchHistory()

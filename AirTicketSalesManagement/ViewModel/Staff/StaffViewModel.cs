@@ -14,6 +14,7 @@ using AirTicketSalesManagement.ViewModel.Booking;
 using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.Messaging;
 using AirTicketSalesManagement.ViewModel.Customer;
+using AirTicketSalesManagement.ViewModel.CustomerManagement;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {

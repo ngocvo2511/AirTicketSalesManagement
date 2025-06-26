@@ -78,6 +78,11 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 MessageBox.Show("Vé đã được hủy trước đó.");
                 return;
             }
+            if (LichSuDatVe.CanCancel == false)
+            {
+                MessageBox.Show("Vé không thể hủy do đã quá thời gian hủy.");
+                return;
+            }
             if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 try

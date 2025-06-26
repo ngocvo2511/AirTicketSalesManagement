@@ -9,8 +9,8 @@
                     xmlns:viewsSTAFF="clr-namespace:AirTicketSalesManagement.View.Staff"
                     xmlns:viewmodelBOOKING="clr-namespace:AirTicketSalesManagement.ViewModel.Booking"
                     xmlns:viewmodelADMIN="clr-namespace:AirTicketSalesManagement.ViewModel.Admin"
+                    xmlns:viewmodelMANAGE="clr-namespace:AirTicketSalesManagement.ViewModel.CustomerManagement"
                     xmlns:viewsADMIN="clr-namespace:AirTicketSalesManagement.View.Admin"                    
-                    
                     xmlns:viewsNotify="clr-namespace:AirTicketSalesManagement.View.Notification">
     
     <!-- Login -->
@@ -41,7 +41,6 @@
     <viewmodelSTAFF:HomePageViewModel x:Key="StaffHomePageVM"/>
     <viewmodelSTAFF:StaffProfileViewModel x:Key="StaffProfileVM"/>
     <viewmodelSTAFF:TicketManagementViewModel x:Key="TicketManagementVM"/>
-    <viewmodelSTAFF:CustomerManagementViewModel x:Key="CustomerManagementVM"/>
     <viewmodelSTAFF:TicketManagementDetailViewModel x:Key="TicketManagementDetailVM"/>
 
 
@@ -55,11 +54,11 @@
     <viewmodelADMIN:ScheduleManagementViewModel x:Key="ScheduleManagementVM"/>
     <viewmodelADMIN:AccountManagementViewModel x:Key="AccountManagementVM"/>
     
-    
+    <!-- Cutomer Management -->
+    <viewmodelMANAGE:CustomerManagementViewModel x:Key="CustomerManagementVM"/>
 
 
-
-
+    <!-- Notification -->
     <viewmodel:ToastViewModel x:Key="ToastVM"/>
 
 
@@ -127,9 +126,6 @@
         <viewsSTAFF:Staff_TicketManagementDetailView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewmodelSTAFF:CustomerManagementViewModel}">
-        <viewsSTAFF:StaffCustomerManagementView />
-    </DataTemplate>
 
     <!-- Admin -->
     <DataTemplate DataType="{x:Type viewmodelADMIN:HomePageViewModel}">
@@ -164,4 +160,9 @@
         <viewsNotify:ToastView/>
     </DataTemplate>
     
+    <!-- Customer Management -->
+    <DataTemplate DataType="{x:Type viewmodelMANAGE:CustomerManagementViewModel}">
+        <viewsSTAFF:CustomerManagementView/>
+    </DataTemplate>
+
 </ResourceDictionary>

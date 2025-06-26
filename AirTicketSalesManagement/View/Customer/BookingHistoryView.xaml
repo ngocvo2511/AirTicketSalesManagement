@@ -109,6 +109,7 @@
                            FontSize="14"
                            SelectedDate="{Binding NgayDatFilter, Mode=TwoWay}"
                            materialDesign:HintAssist.Hint="Ngày đặt"
+                           materialDesign:TextFieldAssist.HasClearButton="True"
                            behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
                     </Grid>
                 </Grid>
@@ -199,13 +200,28 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Grid.Row="3">
             <StackPanel>
-                <TextBlock Text="Không có lượt đặt vé nào" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center" 
-                    FontSize="16" 
-                    FontWeight="Bold"
-                    Foreground="Gray" 
-                    Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                Margin="40"
+                Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                    <Border Background="#F3F4F6" CornerRadius="50"
+                        Width="50" Height="50" Margin="0,0,0,24">
+                        <Icon:PackIconMaterial Kind="TicketAccount" 
+                           Width="48" Height="48"
+                           Foreground="#9CA3AF"/>
+                    </Border>
+
+                    <TextBlock Text="Không có lượt đặt vé nào"
+                       FontSize="20" FontWeight="SemiBold"
+                       Foreground="#374151"
+                       HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="Thử thay đổi bộ lọc tìm kiếm hoặc thêm lượt đặt vé mới"
+                       FontSize="14"
+                       Foreground="#6B7280"
+                       HorizontalAlignment="Center"
+                       Margin="0,8,0,0"/>
+                </StackPanel>
                 <ItemsControl ItemsSource="{Binding HistoryBooking}"
                           Visibility="{Binding IsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                     <ItemsControl.ItemsPanel>

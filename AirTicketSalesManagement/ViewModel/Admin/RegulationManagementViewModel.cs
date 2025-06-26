@@ -199,6 +199,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 await context.SaveChangesAsync(); 
                 MaxAirports = EditMaxAirports;
+                IsEditingMaxAirports = false;
             }
             catch (Exception ex)
             {
@@ -206,10 +207,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                                 "Lỗi CSDL",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
                 Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsEditingMaxAirports = false;
             }
         }
         [RelayCommand]
@@ -235,8 +232,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 IsEditingMinFlightTime = false;
                 return;
             }
-            MinFlightTime = EditMinFlightTime;
-            IsEditingMinFlightTime = false;
 
             try
             {
@@ -254,6 +249,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
 
                 await context.SaveChangesAsync();
+                MinFlightTime = EditMinFlightTime;
+                IsEditingMinFlightTime = false;
             }
             catch (Exception ex)
             {
@@ -286,8 +283,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 IsEditingMaxStopover = false;
                 return;
             }
-            MaxStopover = EditMaxStopover;
-            IsEditingMaxStopover = false;
             
             try
             {
@@ -305,6 +300,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
 
                 await context.SaveChangesAsync();
+                MaxStopover = EditMaxStopover;
+                IsEditingMaxStopover = false;
             }
             catch (Exception ex)
             {
@@ -336,9 +333,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 IsEditingMinStopTime = false;
                 return;
-            }
-            MinStopTime = EditMinStopTime;
-            IsEditingMinStopTime = false;           
+            }        
             try
             {
                 await using var context = new AirTicketDbContext();
@@ -355,6 +350,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
 
                 await context.SaveChangesAsync();
+                MinStopTime = EditMinStopTime;
+                IsEditingMinStopTime = false;
             }
             catch (Exception ex)
             {
@@ -387,8 +384,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 IsEditingMaxStopTime = false;
                 return;
             }
-            MaxStopTime = EditMaxStopTime;
-            IsEditingMaxStopTime = false;
             try
             {
                 await using var context = new AirTicketDbContext();
@@ -405,6 +400,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
 
                 await context.SaveChangesAsync();
+                MaxStopTime = EditMaxStopTime;
+                IsEditingMaxStopTime = false;
             }
             catch (Exception ex)
             {
@@ -437,9 +434,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 IsEditingBookingTime = false;
                 return;
-            }
-            BookingTime = EditBookingTime;
-            IsEditingBookingTime = false;            
+            }           
             try
             {
                 await using var context = new AirTicketDbContext();
@@ -456,6 +451,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
 
                 await context.SaveChangesAsync();
+                BookingTime = EditBookingTime;
+                IsEditingBookingTime = false;
             }
             catch (Exception ex)
             {
@@ -488,8 +485,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 IsEditingCancelTime = false;
                 return;
             }
-            CancelTime = EditCancelTime;
-            IsEditingCancelTime = false;
             
             try
             {
@@ -507,6 +502,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
 
                 await context.SaveChangesAsync();
+                CancelTime = EditCancelTime;
+                IsEditingCancelTime = false;
             }
             catch (Exception ex)
             {
@@ -537,8 +534,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 IsEditingTicketClassCount = false;
                 return;
             }
-            TicketClassCount = EditTicketClassCount;
-            IsEditingTicketClassCount = false;
             
 
             try
@@ -557,6 +552,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
 
                 await context.SaveChangesAsync();
+                TicketClassCount = EditTicketClassCount;
+                IsEditingTicketClassCount = false;
             }
             catch (Exception ex)
             {

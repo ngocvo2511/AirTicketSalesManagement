@@ -2,6 +2,7 @@
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Models.UIModels;
 using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.ViewModel.Admin;
 using AirTicketSalesManagement.ViewModel.Customer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -18,7 +19,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
 {
     public partial class TicketManagementDetailViewModel : BaseViewModel
     {
-        private readonly StaffViewModel parent;
+        private readonly BaseViewModel parent;
         [ObservableProperty]
         private QuanLiDatVe chiTietVe;
         [ObservableProperty]
@@ -28,7 +29,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [ObservableProperty]
         private bool canCancle;
         public TicketManagementDetailViewModel() { }
-        public TicketManagementDetailViewModel(QuanLiDatVe chiTietVe, StaffViewModel parent)
+        public TicketManagementDetailViewModel(QuanLiDatVe chiTietVe, BaseViewModel parent)
         {
             this.ChiTietVe = chiTietVe;
             this.parent = parent;
@@ -68,7 +69,14 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private void GoBack()
         {
-            parent.CurrentViewModel = new TicketManagementViewModel(parent);
+            if(parent is StaffViewModel staffViewModel)
+            {
+                staffViewModel.CurrentViewModel = new TicketManagementViewModel(parent);
+            }
+            else if (parent is AdminViewModel adminViewModel)
+            {
+                adminViewModel.CurrentViewModel = new TicketManagementViewModel(parent);
+            }
         }
         [RelayCommand]
         private async Task CancelTicket()
@@ -76,6 +84,11 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             if (ChiTietVe.TrangThai == "Đã hủy")
             {
                 MessageBox.Show("Vé đã được hủy trước đó.");
+                return;
+            }
+            if(ChiTietVe.CanCancel == false)
+            {
+                MessageBox.Show("Vé không thể hủy do đã quá thời gian hủy.");
                 return;
             }
             if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -111,6 +124,11 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             if (ChiTietVe.TrangThai != "Chờ thanh toán")
             {
                 MessageBox.Show("Không thể xác nhận thanh toán.");
+                return;
+            }
+            if(ChiTietVe.CanConfirm == false)
+            {
+                MessageBox.Show("Vé không thể thanh toán do đã quá thời gian đặt vé.");
                 return;
             }
             if (MessageBox.Show("Bạn có chắc chắn muốn xác nhận thanh toán vé này không?", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
