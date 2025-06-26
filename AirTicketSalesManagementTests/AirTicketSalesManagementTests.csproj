@@ -1,0 +1,19 @@
+<Project Sdk="MSTest.Sdk/3.6.1">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseVSTest>true</UseVSTest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModel\Admin\" />
+    <Folder Include="ViewModel\Booking\" />
+    <Folder Include="ViewModel\Customer\" />
+    <Folder Include="ViewModel\Login\" />
+    <Folder Include="ViewModel\Staff\" />
+  </ItemGroup>
+
+</Project>
