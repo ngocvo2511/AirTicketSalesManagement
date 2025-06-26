@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace AirTicketSalesManagement.ViewModel
 {
-    public class BaseViewModel : ObservableObject
+    public class BaseViewModel : ObservableValidator
     {
         
     }

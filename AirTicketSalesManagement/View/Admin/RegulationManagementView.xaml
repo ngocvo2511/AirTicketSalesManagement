@@ -168,8 +168,8 @@
                                    Text="sân bay"/>
 
                                 <!-- Edit Mode -->
-                                <TextBox Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                                 Text="{Binding EditMaxAirports, UpdateSourceTrigger=PropertyChanged}" Width="120"
+                                <TextBox x:Name="MaxAirportsBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                                 Text="{Binding EditMaxAirports, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120" 
                                  Visibility="{Binding IsEditingMaxAirports, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center"
                                    Margin="5,0,0,0"
@@ -187,6 +187,7 @@
                                     <Button Style="{StaticResource SaveButtonStyle}" 
                                     Command="{Binding SaveMaxAirportsCommand}"
                                     Visibility="{Binding IsEditingMaxAirports, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    IsEnabled="{Binding ElementName=MaxAirportsBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
                                     ToolTip="Lưu">
                                         <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
                                     </Button>
@@ -227,8 +228,8 @@
                                    Text="phút"/>
 
                                 <!-- Edit Mode -->
-                                <TextBox Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                                 Text="{Binding EditMinFlightTime, UpdateSourceTrigger=PropertyChanged}" Width="120"
+                                <TextBox x:Name="MinFlightTimeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                                 Text="{Binding EditMinFlightTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
                                  Visibility="{Binding IsEditingMinFlightTime, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingMinFlightTime, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -245,6 +246,7 @@
                                     <Button Style="{StaticResource SaveButtonStyle}" 
                                     Command="{Binding SaveMinFlightTimeCommand}"
                                     Visibility="{Binding IsEditingMinFlightTime, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    IsEnabled="{Binding ElementName=MinFlightTimeBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
                                     ToolTip="Lưu">
                                         <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
                                     </Button>
@@ -286,8 +288,8 @@
                                    Text="sân bay"/>
 
                                 <!-- Edit Mode -->
-                                <TextBox Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                                 Text="{Binding EditMaxStopover, UpdateSourceTrigger=PropertyChanged}" Width="120"
+                                <TextBox x:Name="MaxStopoverBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                                 Text="{Binding EditMaxStopover, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
                                  Visibility="{Binding IsEditingMaxStopover, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingMaxStopover, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -304,6 +306,7 @@
                                     <Button Style="{StaticResource SaveButtonStyle}" 
                                     Command="{Binding SaveMaxStopoverCommand}"
                                     Visibility="{Binding IsEditingMaxStopover, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    IsEnabled="{Binding ElementName=MaxStopoverBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
                                     ToolTip="Lưu">
                                         <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
                                     </Button>
@@ -338,8 +341,8 @@
                                    Text="phút"/>
 
                                 <!-- Edit Mode -->
-                                <TextBox Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                                 Text="{Binding EditMinStopTime, UpdateSourceTrigger=PropertyChanged}" Width="120"
+                                <TextBox x:Name="MinStopTimeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                                 Text="{Binding EditMinStopTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
                                  Visibility="{Binding IsEditingMinStopTime, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingMinStopTime, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -356,6 +359,7 @@
                                     <Button Style="{StaticResource SaveButtonStyle}" 
                                     Command="{Binding SaveMinStopTimeCommand}"
                                     Visibility="{Binding IsEditingMinStopTime, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    IsEnabled="{Binding ElementName=MinStopTimeBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
                                     ToolTip="Lưu">
                                         <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
                                     </Button>
@@ -390,8 +394,8 @@
                                    Text="phút"/>
 
                                 <!-- Edit Mode -->
-                                <TextBox Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                                 Text="{Binding EditMaxStopTime, UpdateSourceTrigger=PropertyChanged}" Width="120"
+                                <TextBox x:Name="MaxStopTimeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                                 Text="{Binding EditMaxStopTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
                                  Visibility="{Binding IsEditingMaxStopTime, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingMaxStopTime, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -408,6 +412,7 @@
                                     <Button Style="{StaticResource SaveButtonStyle}" 
                                     Command="{Binding SaveMaxStopTimeCommand}"
                                     Visibility="{Binding IsEditingMaxStopTime, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    IsEnabled="{Binding ElementName=MaxStopTimeBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
                                     ToolTip="Lưu">
                                         <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
                                     </Button>
@@ -449,8 +454,8 @@
                                    Text="giờ"/>
 
                                 <!-- Edit Mode -->
-                                <TextBox Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                                 Text="{Binding EditBookingTime, UpdateSourceTrigger=PropertyChanged}" Width="120"
+                                <TextBox x:Name="BookingTimeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                                 Text="{Binding EditBookingTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
                                  Visibility="{Binding IsEditingBookingTime, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingBookingTime, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -467,6 +472,7 @@
                                     <Button Style="{StaticResource SaveButtonStyle}" 
                                     Command="{Binding SaveBookingTimeCommand}"
                                     Visibility="{Binding IsEditingBookingTime, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    IsEnabled="{Binding ElementName=BookingTimeBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
                                     ToolTip="Lưu">
                                         <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
                                     </Button>
@@ -501,8 +507,8 @@
                                    Text="giờ"/>
 
                                 <!-- Edit Mode -->
-                                <TextBox Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                                 Text="{Binding EditCancelTime, UpdateSourceTrigger=PropertyChanged}" Width="120"
+                                <TextBox x:Name="CancelTimeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                                 Text="{Binding EditCancelTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
                                  Visibility="{Binding IsEditingCancelTime, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                                    Visibility="{Binding IsEditingCancelTime, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -519,6 +525,7 @@
                                     <Button Style="{StaticResource SaveButtonStyle}" 
                                     Command="{Binding SaveCancelTimeCommand}"
                                     Visibility="{Binding IsEditingCancelTime, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    IsEnabled="{Binding ElementName=CancelTimeBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
                                     ToolTip="Lưu">
                                         <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
                                     </Button>
@@ -533,8 +540,64 @@
                         </Border>
                     </StackPanel>
                 </Border>
+                <!-- Quy định Số hạng vé -->
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="🏷️ Quy định hạng vé" Style="{StaticResource SectionHeaderStyle}"/>
+                        <Border Style="{StaticResource InfoRowStyle}" BorderThickness="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="Số lượng hạng vé" Style="{StaticResource LabelStyle}" VerticalAlignment="Center" MinWidth="180"/>
+
+                                <!-- Display Mode -->
+                                <TextBlock Grid.Column="1" Style="{StaticResource ValueStyle}" VerticalAlignment="Center"
+                                   Visibility="{Binding IsEditingTicketClassCount, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                   Text="{Binding TicketClassCount}" TextAlignment="Right"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
+                                   Visibility="{Binding IsEditingTicketClassCount, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                   Text="hạng"/>
+
+                                <!-- Edit Mode -->
+                                <TextBox x:Name="TicketClassCountBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                                   Text="{Binding EditTicketClassCount, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
+                                   Visibility="{Binding IsEditingTicketClassCount, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
+                                   Visibility="{Binding IsEditingTicketClassCount, Converter={StaticResource BoolToVisibilityConverter}}"
+                                   Text="hạng"/>
+
+                                <!-- Action Buttons -->
+                                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Button Style="{StaticResource IconButtonStyle}" 
+                                        Command="{Binding _EditTicketClassCountCommand}"
+                                        Visibility="{Binding IsEditingTicketClassCount, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                        ToolTip="Chỉnh sửa">
+                                        <TextBlock Text="✏️" FontSize="12"/>
+                                    </Button>
+                                    <Button Style="{StaticResource SaveButtonStyle}" 
+                                        Command="{Binding SaveTicketClassCountCommand}"
+                                        Visibility="{Binding IsEditingTicketClassCount, Converter={StaticResource BoolToVisibilityConverter}}"
+                                        IsEnabled="{Binding ElementName=TicketClassCountBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
+                                        ToolTip="Lưu">
+                                        <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
+                                    </Button>
+                                    <Button Style="{StaticResource CancelButtonStyle}" 
+                                        Command="{Binding CancelTicketClassCountCommand}"
+                                        Visibility="{Binding IsEditingTicketClassCount, Converter={StaticResource BoolToVisibilityConverter}}"
+                                        ToolTip="Hủy">
+                                        <TextBlock Text="❌" FontSize="12" Foreground="#EF4444"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
-
     </Grid>
 </UserControl>
