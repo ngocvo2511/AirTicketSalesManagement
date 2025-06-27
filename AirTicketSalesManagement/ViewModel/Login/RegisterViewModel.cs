@@ -55,7 +55,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
             if (string.IsNullOrWhiteSpace(Password))
                 AddError(nameof(Password), "Mật khẩu không được để trống.");
             else if (Password.Length > 100)
-                AddError(nameof(Name), "Mật khẩu vượt quá giới hạn cho phép");
+                AddError(nameof(Password), "Mật khẩu vượt quá giới hạn cho phép");
             if (ConfirmPassword != Password)
             {
                 AddError(nameof(ConfirmPassword), "Xác nhận mật khẩu không khớp với mật khẩu.");

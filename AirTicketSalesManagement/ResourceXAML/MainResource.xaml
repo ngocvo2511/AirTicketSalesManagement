@@ -19,6 +19,7 @@
     <viewmodelLG:RegisterViewModel x:Key="RegisterVM"/>
     <viewmodelLG:ForgotPasswordViewModel x:Key="ForgotPasswordVM"/>
     <viewmodel:MainViewModel x:Key="MainVM"/>
+    <viewmodelLG:ResetPasswordViewModel x:Key="ResetPasswordVM"/>
 
     <!-- Customer -->
 
@@ -77,6 +78,10 @@
 
     <DataTemplate DataType="{x:Type viewmodelLG:ForgotPasswordViewModel}">
         <viewsLG:ForgotPasswordView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelLG:ResetPasswordViewModel}">
+        <viewsLG:ResetPasswordView />
     </DataTemplate>
 
 
