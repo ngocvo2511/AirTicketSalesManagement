@@ -1,0 +1,605 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Staff.CustomerManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AirTicketSalesManagement.View.Staff"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:behaviors="clr-namespace:AirTicketSalesManagement.Behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <!-- Custom Card Style -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="2" 
+                                Opacity="0.08" BlurRadius="8"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Search Card Style -->
+        <Style x:Key="SearchCardStyle" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#F8FAFC" Offset="0"/>
+                        <GradientStop Color="#F1F5F9" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="1" 
+                                Opacity="0.05" BlurRadius="4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Header Style -->
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#6366F1" Offset="0"/>
+                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Role Badge Styles -->
+        <Style x:Key="RoleAdminStyle" TargetType="Border">
+            <Setter Property="Background" Value="#EEF2FF"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <Style x:Key="RoleManagerStyle" TargetType="Border">
+            <Setter Property="Background" Value="#F0FDF4"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <Style x:Key="RoleStaffStyle" TargetType="Border">
+            <Setter Property="Background" Value="#FEF3C7"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <Style x:Key="RoleCustomerStyle" TargetType="Border">
+            <Setter Property="Background" Value="#F3F4F6"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+        <!-- DataGrid Styles -->
+        <Style x:Key="DataGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E5E7EB"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#DBEAFE"/>
+                    <Setter Property="Foreground" Value="#1E40AF"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="True"/>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#BFDBFE"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Popup Styles -->
+        <Style x:Key="PopupCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="0" BlurRadius="20"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Input Styles -->
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#3B82F6"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#3B82F6"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header Section -->
+        <Grid Grid.Row="0" Margin="15,15,15,15">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Icon:PackIconMaterial Kind="AccountGroup" Width="32" Height="32" 
+                                     Foreground="#6366F1" Margin="0,0,12,0"/>
+                <TextBlock Text="QUẢN LÝ KHÁCH HÀNG" Style="{StaticResource HeaderTextStyle}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Search Section -->
+        <Border Grid.Row="1" Style="{StaticResource SearchCardStyle}" Padding="22" Margin="15,0,15,24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Search Header -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,18">
+                    <Icon:PackIconMaterial Kind="Magnify" Width="20" Height="20" 
+                                         Foreground="#64748B" Margin="0,0,8,0"/>
+                    <TextBlock Text="Tìm kiếm khách hàng" FontSize="16" FontWeight="SemiBold" 
+                             Foreground="#334155"/>
+                </StackPanel>
+
+                <!-- Search Fields -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="Tên khách hàng" FontWeight="Medium" 
+                                 Foreground="#374151" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding SearchName, UpdateSourceTrigger=PropertyChanged}"
+                                materialDesign:HintAssist.Hint="Nhập tên khách hàng..."
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                Height="52" FontSize="14"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="6,0,6,0">
+                        <TextBlock Text="CCCD" FontWeight="Medium" 
+                                 Foreground="#374151" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding SearchCccd, UpdateSourceTrigger=PropertyChanged}"
+                                materialDesign:HintAssist.Hint="Nhập CCCD..."
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                Height="52" FontSize="14"/>
+                    </StackPanel>
+
+                    <!-- Search Buttons -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" 
+                              VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="12,0,0,0">
+                        <Button Command="{Binding SearchCommand}"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#6366F1"
+                                BorderBrush="#6366F1"
+                                Margin="0,0,8,0" Width="130" Height="50">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="Magnify" Width="16" Height="16" Margin="0,0,6,0"/>
+                                <TextBlock Text="Tìm kiếm" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding ClearSearchCommand}"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                BorderBrush="#E5E7EB"
+                                Width="90" Height="50">
+                            <StackPanel Orientation="Horizontal">
+                                <Icon:PackIconMaterial Kind="FilterRemove" Width="16" Height="16" Margin="0,0,6,0"/>
+                                <TextBlock Text="Xóa" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Customer DataGrid -->
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Margin="15,0,15,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- DataGrid Header -->
+                <Border Grid.Row="0" Background="#F8FAFC" CornerRadius="12,12,0,0" 
+                       BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Padding="20,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="AccountMultiple" Width="20" Height="20" 
+                                                 Foreground="#374151" Margin="0,0,8,0"/>
+                            <TextBlock Text="DANH SÁCH KHÁCH HÀNG" FontWeight="Bold" 
+                                     FontSize="16" Foreground="#374151"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- DataGrid -->
+                <DataGrid Grid.Row="1" 
+                          ItemsSource="{Binding Customers}"
+                          SelectedItem="{Binding SelectedCustomer}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          IsReadOnly="True"
+                          GridLinesVisibility="None"
+                          BorderThickness="0"
+                          Background="Transparent"
+                          ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                          CellStyle="{StaticResource DataGridCellStyle}"
+                          RowStyle="{StaticResource DataGridRowStyle}">
+
+                    <DataGrid.Columns>
+                        <!-- Mã khách hàng -->
+                        <DataGridTextColumn Header="Mã KH" 
+                                          Binding="{Binding MaKh}" 
+                                          Width="Auto">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="Foreground" Value="#4B5563"/>
+                                    <Setter Property="Padding" Value="15,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                            <!-- Họ tên -->
+                        <DataGridTextColumn Header="Họ tên" 
+                                          Binding="{Binding HoTenKh, TargetNullValue=(Trống)}"
+                                          Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="Foreground" Value="#1D4ED8"/>
+                                    <Setter Property="Padding" Value="15,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Giới tính -->
+                        <DataGridTextColumn Header="Giới tính" 
+                                          Binding="{Binding GioiTinh, TargetNullValue=(Trống)}" 
+                                          Width="100">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="Padding" Value="15,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Ngày sinh -->
+                        <DataGridTextColumn Header="Ngày sinh" 
+                                          Binding="{Binding NgaySinh, StringFormat=dd/MM/yyyy, TargetNullValue=(Trống)}" 
+                                          Width="120">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="Padding" Value="15,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Số điện thoại -->
+                        <DataGridTextColumn Header="Số điện thoại" 
+                                          Binding="{Binding SoDt, TargetNullValue=(Trống)}" 
+                                          Width="150">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="Padding" Value="15,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- CCCD -->
+                        <DataGridTextColumn Header="CCCD" 
+                                          Binding="{Binding Cccd, TargetNullValue=(Trống)}" 
+                                          Width="150">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="Padding" Value="15,0,0,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Actions -->
+                        <DataGridTemplateColumn Header="Thao tác" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="Chỉnh sửa khách hàng"
+                                                Command="{Binding DataContext.EditCustomerCommand, 
+                                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Width="32" Height="32" Margin="2">
+                                            <Border CornerRadius="6" Background="#EEF2FF" Padding="6">
+                                                <Icon:PackIconMaterial Kind="Pencil" Width="14" Height="14" 
+                                                                     Foreground="#3B82F6"/>
+                                            </Border>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                    <!-- Empty State Template -->
+                    <DataGrid.Style>
+                        <Style TargetType="DataGrid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Customers.Count}" Value="0">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Border Background="White" CornerRadius="0,0,12,12">
+                                                    <StackPanel HorizontalAlignment="Center" 
+                                                              VerticalAlignment="Center" Margin="40">
+                                                        <Border Background="#F3F4F6" CornerRadius="50" 
+                                                               Width="50" Height="50" Margin="0,0,0,24">
+                                                            <Icon:PackIconMaterial Kind="AccountGroup" 
+                                                                                 Width="48" Height="48" 
+                                                                                 Foreground="#9CA3AF"/>
+                                                        </Border>
+                                                        <TextBlock Text="Không tìm thấy khách hàng nào" 
+                                                                 FontSize="20" FontWeight="SemiBold" 
+                                                                 Foreground="#374151" 
+                                                                 HorizontalAlignment="Center"/>
+                                                        <TextBlock Text="Thử thay đổi bộ lọc tìm kiếm hoặc thêm khách hàng mới" 
+                                                                 FontSize="14" Foreground="#6B7280" 
+                                                                 HorizontalAlignment="Center" 
+                                                                 Margin="0,8,0,0"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Style>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Action Buttons -->
+        <Grid Grid.Row="3" Margin="15">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Command="{Binding RefreshCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        BorderBrush="#E5E7EB"
+                        Width="120" Height="40">
+                    <StackPanel Orientation="Horizontal">
+                        <Icon:PackIconMaterial Kind="Refresh" Width="18" Height="18" Margin="0,0,8,0"/>
+                        <TextBlock Text="Làm mới" FontWeight="Medium"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Edit Customer Popup -->
+        <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" 
+              Visibility="{Binding IsEditPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border Style="{StaticResource PopupCardStyle}" 
+                    Width="600" Height="Auto" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="#F8FAFC" 
+                            CornerRadius="16,16,0,0" 
+                            BorderBrush="#E5E7EB" 
+                            BorderThickness="0,0,0,1" 
+                            Padding="24,20"
+                            Margin="0,0,0,20">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#EEF2FF" CornerRadius="8" 
+                                        Width="40" Height="40" Margin="0,0,12,0">
+                                    <Icon:PackIconMaterial Kind="AccountEdit" 
+                                                         Width="24" Height="24" 
+                                                         Foreground="#3B82F6"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="CHỈNH SỬA KHÁCH HÀNG" 
+                                             FontSize="18" FontWeight="Bold" 
+                                             Foreground="#1F2937"/>
+                                    <TextBlock Text="Cập nhật thông tin khách hàng" 
+                                             FontSize="13" Foreground="#6B7280"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <StackPanel Grid.Row="1" Margin="24,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Họ tên -->
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,16">
+                                <TextBox Text="{Binding EditName}"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         Height="53" FontSize="14"
+                                         materialDesign:HintAssist.Hint="Họ tên"/>
+                            </StackPanel>
+
+                            <!-- Giới tính -->
+                            <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,16">
+                                <ComboBox Text="{Binding EditGender}"
+                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                          Height="53" FontSize="14"
+                                          materialDesign:HintAssist.Hint="Giới tính">
+                                    <ComboBoxItem Content="Nam"/>
+                                    <ComboBoxItem Content="Nữ"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Ngày sinh -->
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,16">
+                                <DatePicker SelectedDate="{Binding EditBirthDate}"
+                                           Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                           Height="53" FontSize="14"
+                                           materialDesign:HintAssist.Hint="Ngày sinh"
+                                           materialDesign:TextFieldAssist.HasClearButton="True"
+                                           behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
+                            </StackPanel>
+
+                            <!-- Số điện thoại -->
+                            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,16">
+                                <TextBox Text="{Binding EditPhone}"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         Height="53" FontSize="14"
+                                         materialDesign:HintAssist.Hint="Số điện thoại"/>
+                            </StackPanel>
+
+                            <!-- CCCD -->
+                            <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,16">
+                                <TextBox Text="{Binding EditCccd}"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         Height="53" FontSize="14"
+                                         materialDesign:HintAssist.Hint="CCCD"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Footer -->
+                    <Border Grid.Row="2" Background="#F8FAFC" 
+                            CornerRadius="0,0,16,16" 
+                            BorderBrush="#E5E7EB" 
+                            BorderThickness="0,1,0,0" 
+                            Padding="24,16">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding CancelEditCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    BorderBrush="#E5E7EB"
+                                    Width="100" Height="40" 
+                                    Margin="0,0,12,0">
+                                <TextBlock Text="Hủy" FontWeight="Medium"/>
+                            </Button>
+
+                            <Button Command="{Binding SaveEditCustomerCommand}"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="#10B981"
+                                    BorderBrush="#10B981"
+                                    Width="120" Height="40">
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="Check" Width="16" Height="16" 
+                                                         Margin="0,0,6,0"/>
+                                    <TextBlock Text="Lưu" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

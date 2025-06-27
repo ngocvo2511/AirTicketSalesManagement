@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -24,78 +25,44 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [ObservableProperty]
         private DateTime? ngayDatFilter;
         [ObservableProperty]
-        private string? noiDiFilter;
+        private string noiDiFilter;
         [ObservableProperty]
-        private string? noiDenFilter;
+        private string noiDenFilter;
         [ObservableProperty]
         private string? hangHangKhongFilter;
+        [ObservableProperty]
+        private string bookingStatusFilter;
         [ObservableProperty]
         private ObservableCollection<string> hangHangKhongList = new();
         [ObservableProperty]
         private ObservableCollection<string> sanBayList = new();
-
+        [ObservableProperty]
+        private ObservableCollection<string> bookingStatusList;
         public ObservableCollection<string> DiemDiList =>
             new(SanBayList.Where(s => s != NoiDenFilter));
 
         public ObservableCollection<string> DiemDenList =>
             new(SanBayList.Where(s => s != NoiDiFilter));
+
+        partial void OnNoiDiFilterChanged(string value)
+        {
+            OnPropertyChanged(nameof(DiemDenList));
+        }
+
+        partial void OnNoiDenFilterChanged(string value)
+        {
+            OnPropertyChanged(nameof(DiemDiList));
+        }
         [ObservableProperty]
         private ObservableCollection<KQLichSuDatVe>? historyBooking = new();
         [ObservableProperty]
         private bool isEmpty;
-
         //private ObservableCollection<string>
         public BookingHistoryViewModel() { }
         public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent)
         {
             this.parent = parent;
-            LoadData(UserSession.Current.CustomerId);
-            //rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>
-            //    {
-            //        new KQLichSuDatVe
-            //        {
-            //            MaVe = "MV01",
-            //            MaDiemDi = "HAN",
-            //            MaDiemDen = "SGN",
-            //            HangHangKhong = "Vietnam Airlines",
-            //            GioDi = new DateTime(2025, 5, 10, 8, 30, 0),
-            //            GioDen = new DateTime(2025, 5, 10, 10, 45, 0),
-            //            LoaiMayBay = "Airbus A321",
-            //            NgayDat = new DateTime(2025, 4, 20),
-            //            TrangThai = "Đã thanh toán",
-            //            SoLuongKhach = 5
-            //        },
-            //        new KQLichSuDatVe
-            //        {
-            //            MaVe = "MV02",
-            //            MaDiemDi = "DAT",
-            //    MaDiemDen = "HAN",
-            //    DiemDi = "Đà Nẵng(DAT), Việt Nam",
-            //    DiemDen = "Hà Nội(HAN), Việt Nam",
-            //    HangHangKhong = "Bamboo Airways",
-            //    GioDi = new DateTime(2025, 5, 12, 14, 0, 0),
-            //    GioDen = new DateTime(2025, 5, 12, 15, 30, 0),
-            //    LoaiMayBay = "Embraer E190",
-            //    NgayDat = new DateTime(2025, 4, 21),
-            //    TrangThai = "Chờ thanh toán",
-            //    SoLuongKhach = 4
-            //        },
-            //        new KQLichSuDatVe
-            //{
-            //    MaVe = "MV03",
-            //    MaDiemDi = "CAN",
-            //    MaDiemDen = "DAL",
-            //    HangHangKhong = "VietJet Air",
-            //    GioDi = new DateTime(2025, 5, 15, 6, 45, 0),
-            //    GioDen = new DateTime(2025, 5, 15, 7, 50, 0),
-            //    LoaiMayBay = "Airbus A320",
-            //    NgayDat = new DateTime(2025, 4, 22),
-            //    TrangThai = "Đã hủy",
-            //    SoLuongKhach = 3
-            //},
-            //    };
-            //HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
-            //IsEmpty = HistoryBooking.Count == 0;
+            LoadData(UserSession.Current.CustomerId);           
         }
         public async Task LoadData(int? idCustomer)
         {
@@ -103,27 +70,30 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var result = await (from datve in context.Datves
-                                  where datve.MaKh == idCustomer
-                                  join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
-                                  join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
-                                  join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
-                                  join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
-                                  select new KQLichSuDatVe
-                                  {
-                                      MaVe = datve.MaDv,
-                                      MaDiemDi = chuyenbay.Sbdi,
-                                      MaDiemDen = chuyenbay.Sbden,
-                                      DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
-                                      DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
-                                      HangHangKhong = chuyenbay.HangHangKhong,
-                                      GioDi = lichbay.GioDi,
-                                      GioDen = lichbay.GioDen,
-                                      LoaiMayBay = lichbay.LoaiMb,
-                                      NgayDat = datve.ThoiGianDv,
-                                      TrangThai = datve.TtdatVe,
-                                      SoLuongKhach = datve.Ctdvs.Count
-                                  }).ToListAsync();
+                    var HuyVe = await context.Quydinhs.FirstOrDefaultAsync();
+                    var query = (from datve in context.Datves
+                                 where datve.MaKh == idCustomer
+                                 join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
+                                 join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
+                                 join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
+                                 join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
+                                 select new KQLichSuDatVe
+                                 {
+                                     MaVe = datve.MaDv,
+                                     MaDiemDi = chuyenbay.Sbdi,
+                                     MaDiemDen = chuyenbay.Sbden,
+                                     DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
+                                     DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
+                                     HangHangKhong = chuyenbay.HangHangKhong,
+                                     GioDi = lichbay.GioDi,
+                                     GioDen = lichbay.GioDen,
+                                     LoaiMayBay = lichbay.LoaiMb,
+                                     NgayDat = datve.ThoiGianDv,
+                                     TrangThai = datve.TtdatVe,
+                                     SoLuongKhach = datve.Ctdvs.Count,
+                                     QdHuyVe = (HuyVe != null) ? HuyVe.TghuyDatVe : null
+                                 });
+                    var result = await query.OrderByDescending(x => x.NgayDat).ToListAsync();
                     rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
                     HistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
                     IsEmpty = HistoryBooking.Count == 0;
@@ -138,6 +108,14 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                     .OrderBy(display => display)
                     .ToList();
                     SanBayList = new ObservableCollection<string>(danhSach);
+                    BookingStatusList = new ObservableCollection<string>
+                    {
+                        "Tất cả",
+                        "Đã thanh toán",
+                        "Chờ thanh toán",
+                        "Đã hủy"
+                    };
+                    BookingStatusFilter = "Tất cả";
                 }                
             }
             catch(Exception e)
@@ -173,14 +151,73 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 {
                     filter = filter.Where(v => v.NgayDat?.Date == NgayDatFilter.Value.Date);
                 }
+                if (!string.IsNullOrWhiteSpace(BookingStatusFilter))
+                {
+                    filter = filter.Where(v => v.TrangThai == BookingStatusFilter || BookingStatusFilter == "Tất cả");
+                }
                 HistoryBooking = new ObservableCollection<KQLichSuDatVe>(filter);
                 IsEmpty = HistoryBooking.Count == 0;
             }
         }
         [RelayCommand]
-        private void DeleteDate()
+        private async Task CancelTicket(KQLichSuDatVe ve)
+        {
+            if (ve == null) return;
+            if(ve.CanCancel == false)
+            {
+                MessageBox.Show("Vé không thể hủy vì đã quá thời hạn hủy vé.");
+                return;
+            }
+            if (ve.TrangThai == "Đã hủy")
+            {
+                MessageBox.Show("Vé đã được hủy trước đó.");
+                return;
+            }
+            if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    using (var context = new AirTicketDbContext())
+                    {
+                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
+                        if (booking != null)
+                        {
+                            booking.TtdatVe = "Đã hủy";
+                            await context.SaveChangesAsync();
+                            ve.TrangThai = "Đã hủy";
+                            OnPropertyChanged(nameof(HistoryBooking));
+                            MessageBox.Show("Hủy vé thành công.");
+                            await LoadData(UserSession.Current.CustomerId);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy vé để hủy.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi hủy vé: {ex.Message}");
+                }
+            }
+        }
+
+
+        [RelayCommand]
+        private void ClearFilter()
         {
             NgayDatFilter = null;
+            NoiDiFilter = null;
+            NoiDenFilter = null;
+            HangHangKhongFilter = null;
+            HistoryBooking = new ObservableCollection<KQLichSuDatVe>(rootHistoryBooking);
+            IsEmpty = HistoryBooking.Count == 0;
+        }
+
+        partial void OnSanBayListChanged(ObservableCollection<string> value)
+        {
+            OnPropertyChanged(nameof(DiemDiList));
+            OnPropertyChanged(nameof(DiemDenList));
         }
     }
 }

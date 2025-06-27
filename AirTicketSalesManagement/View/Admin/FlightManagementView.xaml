@@ -418,11 +418,12 @@
                         <DataGridTemplateColumn Header="Sân bay đi" Width="*" MinWidth="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock FontWeight="Medium"
-                       FontSize="13"
-                       Foreground="#374151"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left">
+                                    <TextBlock FontWeight="Medium"                      
+                                               FontSize="13"                   
+                                               Foreground="#374151"                      
+                                               VerticalAlignment="Center"  
+                                               Padding="10,0,0,0"
+                                               HorizontalAlignment="Left">
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource AirportDisplayConverter}">
                                                 <Binding Path="SbdiNavigation.TenSb"/>
@@ -434,17 +435,16 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-
-
                         <!-- Destination Airport Column -->
                         <DataGridTemplateColumn Header="Sân bay đến" Width="*" MinWidth="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock FontWeight="Medium"
-FontSize="13"
-Foreground="#374151"
-VerticalAlignment="Center"
-HorizontalAlignment="Left">
+                                               FontSize="13"
+                                               Foreground="#374151"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Padding="10,0,0,0">
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource AirportDisplayConverter}">
                                                 <Binding Path="SbdenNavigation.TenSb"/>
@@ -568,9 +568,9 @@ HorizontalAlignment="Left">
                                             <ControlTemplate>
                                                 <Border Background="White" CornerRadius="0,0,12,12">
                                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                                               Margin="60">
+                                                               Margin="40">
                                                         <Border Background="#F3F4F6" CornerRadius="50" 
-                                                               Width="100" Height="100" Margin="0,0,0,24">
+                                                               Width="50" Height="50" Margin="0,0,0,24">
                                                             <Icon:PackIconMaterial Kind="AirplaneTakeoff" 
                                                                                  Width="48" Height="48" 
                                                                                  Foreground="#9CA3AF"/>
@@ -660,7 +660,7 @@ HorizontalAlignment="Left">
         <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" Visibility="{Binding IsAddPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
             <!-- Popup Container -->
             <Border Style="{StaticResource PopupCardStyle}" 
-                Width="700" Height="550" 
+                Width="750" Height="600" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center"
                     >
@@ -1139,7 +1139,7 @@ HorizontalAlignment="Left">
                                 </Grid>
 
                                 <!-- Intermediate Airports List -->
-                                <ItemsControl Grid.Row="1" ItemsSource="{Binding DanhSachEditSBTG}">
+                                <ItemsControl Grid.Row="1" ItemsSource="{Binding DanhSachSBTG}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Background="#F9FAFB" 

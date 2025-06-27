@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows;
+using AirTicketSalesManagement.ViewModel.CustomerManagement;
 
 namespace AirTicketSalesManagement.ViewModel.Admin
 {
@@ -49,7 +50,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [RelayCommand]
         private void NavigateToTicketManagement()
         {
-            CurrentViewModel = new TicketManagementViewModel();
+            CurrentViewModel = new TicketManagementViewModel(this);
         }
 
         [RelayCommand]

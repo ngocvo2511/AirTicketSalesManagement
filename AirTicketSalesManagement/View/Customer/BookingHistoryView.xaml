@@ -28,7 +28,7 @@
             <TextBlock Text="Lịch sử đặt vé" 
                    FontSize="30" FontWeight="Bold"
                    Margin="30 0 0 0"
-                   Foreground="#2C3E50"
+                   Foreground="#6366F1"
                    VerticalAlignment="Center" />
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <ToggleButton Template="{StaticResource ProfilePopupTemplate}" 
@@ -38,66 +38,161 @@
             </StackPanel>
 
         </Grid>
-        <!-- Search Bar -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10" VerticalAlignment="Center" HorizontalAlignment="Left">
-            <!-- ComboBox nơi đi -->
-            <ComboBox Width="250" Margin="20"
-              FontSize="16"
-              IsEditable="True"
-              ItemsSource="{Binding SanBayList}"
-              Text="{Binding NoiDiFilter, Mode=TwoWay}"
-              materialDesign:HintAssist.Hint="Nơi đi"/>
+        <!-- Search Section -->
+        <materialDesign:Card Grid.Row="1" Grid.RowSpan="2" Margin="20,0,20,30" 
+                     UniformCornerRadius="15" Background="White"
+                     materialDesign:ElevationAssist.Elevation="Dp1">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <!-- ComboBox nơi đến -->
-            <ComboBox Width="250" Margin="20"
-              IsEditable="True"
-              FontSize="16"
-              ItemsSource="{Binding DiemDenList}"
-              Text="{Binding NoiDenFilter, Mode=TwoWay}"
-              materialDesign:HintAssist.Hint="Nơi đến"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,30" VerticalAlignment="Center" HorizontalAlignment="Left">
-            <!-- ComboBox hãng hàng không -->
-            <ComboBox Width="250" Margin="20"
-              FontSize="16"
-              IsEditable="True"
-              ItemsSource="{Binding HangHangKhongList}"
-              Text="{Binding HangHangKhongFilter, Mode=TwoWay}"
-              materialDesign:HintAssist.Hint="Hãng hàng không"/>
+                <!-- Row 1: Departure and Arrival -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-            <!-- DatePicker ngày đặt -->
-            <DatePicker Width="250" Margin="20,20,0,20"
-            FontSize="16"           
-            SelectedDate="{Binding NgayDatFilter, Mode=TwoWay}"
-            materialDesign:HintAssist.Hint="Ngày đặt"
-            behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
-            <Button
-            Margin="0,20,20,20"
-            BorderThickness="0"
-            Width="41"
-            FontSize="16"
-            ToolTip="Xóa ngày"
-            Background="Red"
-            Command="{Binding DeleteDateCommand}" Height="28">
-                <materialDesign:PackIcon Kind="Delete" 
-                                         Width="16"
-                                         Height="16"
-                                         VerticalAlignment="Center"
-                                         HorizontalAlignment="Center"/>
-            </Button>
+                    <!-- Departure -->
+                    <ComboBox Grid.Column="0"
+                     Margin="0,0,10,0"
+                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                     Height="53"
+                     FontSize="14"
+                     IsEditable="True"
+                     ItemsSource="{Binding DiemDiList}"
+                     Text="{Binding NoiDiFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Nơi đi"
+                     materialDesign:TextFieldAssist.HasClearButton="True">
+                    </ComboBox>
+                    <!-- Arrival -->
+                    <ComboBox Grid.Column="2"
+                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                     Height="53"
+                     FontSize="14"
+                     IsEditable="True"
+                     ItemsSource="{Binding DiemDenList}"
+                     Text="{Binding NoiDenFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Nơi đến"
+                     materialDesign:TextFieldAssist.HasClearButton="True">
+                    </ComboBox>
+                </Grid>
+
+                <!-- Row 2: Airline and Date -->
+                <Grid Grid.Row="1" Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Airline -->
+                    <ComboBox Grid.Column="0"
+                     Margin="0,0,10,0"
+                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                     Height="53"
+                     FontSize="14"
+                     IsEditable="True"
+                     ItemsSource="{Binding HangHangKhongList}"
+                     Text="{Binding HangHangKhongFilter, Mode=TwoWay}"
+                     materialDesign:HintAssist.Hint="Hãng hàng không"
+                     materialDesign:TextFieldAssist.HasClearButton="True">
+                    </ComboBox>
+
+                    <!-- Date Picker with Clear Button -->
+                    <Grid Grid.Column="1">
+                        <DatePicker Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                           Height="53"
+                           FontSize="14"
+                           SelectedDate="{Binding NgayDatFilter, Mode=TwoWay}"
+                           materialDesign:HintAssist.Hint="Ngày đặt"
+                           materialDesign:TextFieldAssist.HasClearButton="True"
+                           behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
+                    </Grid>
+                </Grid>
+
+                <!-- Row 3: Booking Status, Search, and Clear Filter Buttons -->
+                <Grid Grid.Row="2" Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Grid.Column="0"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Height="53"
+                      FontSize="14"
+                      Margin="0,0,10,0"
+                      ItemsSource="{Binding BookingStatusList}"
+                      SelectedItem="{Binding BookingStatusFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      materialDesign:HintAssist.Hint="Trạng thái đặt vé"
+                      materialDesign:TextFieldAssist.HasClearButton="True"/>
 
 
-            <!-- Nút tìm kiếm -->
-            <Button Content="Tìm kiếm"
-            FontSize="16"
-            BorderThickness="0"   
-            Command="{Binding SearchHistoryCommand}"
-            Padding="10,4"
-            Background="#007ACC"
-            Foreground="White"
-            FontWeight="SemiBold"
-            Cursor="Hand"/>
-        </StackPanel>
+                    <!-- Clear Filter Button -->
+                    <Button Grid.Column="2"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding ClearFilterCommand}"
+                        Height="45"
+                        Margin="0,0,10,0"
+                        BorderBrush="#6366F1"
+                        Foreground="#6366F1"
+                        materialDesign:ButtonAssist.CornerRadius="8">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FilterOff" 
+                                                    Width="20" 
+                                                    Height="20" 
+                                                    Margin="0,0,8,0"
+                                                    VerticalAlignment="Center"/>
+                            <TextBlock Text="Xoá bộ lọc" 
+                                       FontSize="14" 
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Search Button -->
+                    <Button Grid.Column="3"
+                        Height="45"
+                        MinWidth="120"
+                        Command="{Binding SearchHistoryCommand}"
+                        Background="#6366F1"
+                        BorderThickness="0"
+                        Foreground="White"
+                        materialDesign:ButtonAssist.CornerRadius="8">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                <Setter Property="Background" Value="#6366F1"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#4F46E5"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Search" 
+                                                    Width="20" 
+                                                    Height="20" 
+                                                    Margin="0,0,8,0"
+                                                    VerticalAlignment="Center"/>
+                            <TextBlock Text="Tìm kiếm" 
+                                       FontSize="14" 
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
+        </materialDesign:Card>
+
+
 
 
         <!-- Content -->
@@ -105,13 +200,28 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Grid.Row="3">
             <StackPanel>
-                <TextBlock Text="Không có chuyến bay nào" 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center" 
-            FontSize="16" 
-            FontWeight="Bold"
-            Foreground="Gray" 
-            Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                Margin="40"
+                Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                    <Border Background="#F3F4F6" CornerRadius="50"
+                        Width="50" Height="50" Margin="0,0,0,24">
+                        <Icon:PackIconMaterial Kind="TicketAccount" 
+                           Width="48" Height="48"
+                           Foreground="#9CA3AF"/>
+                    </Border>
+
+                    <TextBlock Text="Không có lượt đặt vé nào"
+                       FontSize="20" FontWeight="SemiBold"
+                       Foreground="#374151"
+                       HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="Thử thay đổi bộ lọc tìm kiếm hoặc thêm lượt đặt vé mới"
+                       FontSize="14"
+                       Foreground="#6B7280"
+                       HorizontalAlignment="Center"
+                       Margin="0,8,0,0"/>
+                </StackPanel>
                 <ItemsControl ItemsSource="{Binding HistoryBooking}"
                           Visibility="{Binding IsEmpty, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                     <ItemsControl.ItemsPanel>
@@ -121,87 +231,160 @@
                     </ItemsControl.ItemsPanel>
 
                     <ItemsControl.ItemTemplate>
+                        <!-- ItemTemplate cho mỗi vé -->
                         <DataTemplate>
-                            <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="8" Padding="10" Margin="10,10,10,10">
-                                <Grid>
+                            <materialDesign:Card Margin="10" UniformCornerRadius="15" Background="White" 
+                            materialDesign:ElevationAssist.Elevation="Dp2">
+                                <Grid Margin="15">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
-                                        <!-- Nội dung chính -->
                                         <RowDefinition Height="Auto"/>
-                                        <!-- Ngày đặt -->
                                     </Grid.RowDefinitions>
 
-                                    <Grid Grid.Row="0">
+                                    <!-- Main Content -->
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="3*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <!-- Cột 1: Điểm đi -> Điểm đến -->
-                                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding MaDiemDi}" FontSize="22" FontWeight="Bold"/>
-                                            <materialDesign:PackIcon Kind="ArrowRight" Margin="10,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding MaDiemDen}" FontSize="22" FontWeight="Bold"/>
+                                        <!-- Flight Route -->
+                                        <Border Grid.Column="0" Background="#F8F9FA" CornerRadius="10" 
+                            Padding="15" MinWidth="180">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding MaDiemDi}" FontSize="24" 
+                                     FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <Border Width="40" Height="40" Background="Transparent" 
+                                    Margin="0,8">
+                                                    <materialDesign:PackIcon Kind="AirplaneTakeoff" 
+                                        Width="30" Height="30" Foreground="#6366F1"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding MaDiemDen}" FontSize="24" 
+                                     FontWeight="Bold" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Flight Details -->
+                                        <StackPanel Grid.Column="1" Margin="20,0">
+                                            <TextBlock Text="{Binding HangHangKhong}" FontSize="20" 
+                                 FontWeight="SemiBold" Foreground="#6366F1"/>
+
+                                            <Grid Margin="0,10,0,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Flight Times -->
+                                                <materialDesign:PackIcon Kind="Clock" Grid.Row="0" 
+                                    Margin="0,0,10,5" Foreground="#6B7280"/>
+                                                <TextBlock Grid.Row="0" Grid.Column="1" 
+                                     Text="{Binding GioDi, StringFormat='Giờ đi: {0:HH:mm dd/MM/yyyy}'}"
+                                     FontSize="16" Foreground="#374151"/>
+
+                                                <materialDesign:PackIcon Kind="Clock" Grid.Row="1" 
+                                    Margin="0,0,10,5" Foreground="#6B7280"/>
+                                                <TextBlock Grid.Row="1" Grid.Column="1"
+                                     Text="{Binding GioDen, StringFormat='Giờ đến: {0:HH:mm dd/MM/yyyy}'}"
+                                     FontSize="16" Foreground="#374151"/>
+
+                                                <!-- Aircraft Type -->
+                                                <materialDesign:PackIcon Kind="Airplane" Grid.Row="2" 
+                                    Margin="0,0,10,0" Foreground="#6B7280"/>
+                                                <TextBlock Grid.Row="2" Grid.Column="1" FontSize="16" 
+                                     Foreground="#374151">
+                                <Run Text="Loại máy bay: "/>
+                                <Run Text="{Binding LoaiMayBay}"/>
+                                                </TextBlock>
+                                            </Grid>
+
+                                            <!-- Passenger Count -->
+                                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                <materialDesign:PackIcon Kind="AccountMultiple" 
+                                    Margin="0,0,10,0" Foreground="#6B7280"/>
+                                                <TextBlock FontSize="16" Foreground="#374151">
+                                <Run Text="Số lượng khách: "/>
+                                <Run Text="{Binding SoLuongKhach}"/>
+                                                </TextBlock>
+                                            </StackPanel>
                                         </StackPanel>
 
-                                        <!-- Cột 2: Hãng, thời gian, máy bay -->
-                                        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="20,0,0,0">
-                                            <TextBlock Text="{Binding HangHangKhong}"
-                                                FontSize="18"
-                                                FontWeight="SemiBold"
-                                                Foreground="#007ACC"
-                                                Margin="0,5"/>
-                                            <TextBlock Text="{Binding GioDi, StringFormat='🕒 Giờ đi: {0:HH:mm dd/MM/yyyy}'}"
-                                                FontSize="16"
-                                                Margin="0,5"
-                                                />
-                                            <TextBlock Text="{Binding GioDen, StringFormat='🕒 Giờ đến: {0:HH:mm dd/MM/yyyy}'}"
-                                                FontSize="16"
-                                                Margin="0,5"/>
-                                            <TextBlock FontSize="16" Margin="0,5">
-                                            <Run Text="🛩 Loại máy bay: "/>
-                                            <Run Text="{Binding LoaiMayBay}" />
-                                            </TextBlock>
+                                        <!-- Action Buttons -->
+                                        <StackPanel Grid.Column="2" Margin="10,0,0,0" MinWidth="120">
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                Command="{Binding DataContext.ShowDetailHistoryCommand, 
+                                        RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}"
+                                Margin="0,0,0,10"
+                                Background="#EEF2FF"
+                                Foreground="#6366F1"
+                                materialDesign:ButtonAssist.CornerRadius="8">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Information" Margin="0,0,8,0"/>
+                                                    <TextBlock Text="Chi tiết"/>
+                                                </StackPanel>
+                                            </Button>
+
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                Visibility="{Binding CanCancel, 
+                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                                Command="{Binding DataContext.CancelTicketCommand,
+                                        RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}"
+                                Background="#FEE2E2"
+                                Foreground="#DC2626"
+                                materialDesign:ButtonAssist.CornerRadius="8">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Cancel" Margin="0,0,8,0"/>
+                                                    <TextBlock Text="Huỷ vé"/>
+                                                </StackPanel>
+                                            </Button>
                                         </StackPanel>
-
-                                        <!-- Cột 3: Số lượng khách -->
-                                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="15,0,0,0">
-                                            <TextBlock>
-                                              <Run Text="👥 Số lượng khách: " FontSize="16"/>
-                                              <Run Text="{Binding SoLuongKhach}" FontSize="16"/>
-                                            </TextBlock>
-
-                                        </StackPanel>
-
-                                        <!-- Cột 4: Nút Chi tiết -->
-                                        <Button Grid.Column="3"
-                    Content="Chi tiết"
-                    Padding="10,4"
-                    Margin="15,0,0,0"
-                    Command="{Binding DataContext.ShowDetailHistoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                    CommandParameter="{Binding}"
-                    Background="#007ACC"
-                    Foreground="White"
-                    FontWeight="SemiBold"
-                    BorderThickness="0"
-                    Cursor="Hand"
-                    VerticalAlignment="Center"/>
                                     </Grid>
 
-                                    <!-- Ngày đặt - góc dưới trái -->
-                                    <TextBlock Grid.Row="1"
-                   Text="{Binding NgayDat, StringFormat='Ngày đặt: {0:dd/MM/yyyy}'}"
-                   FontStyle="Italic"
-                   FontSize="12"
-                   Foreground="Gray"
-                   Margin="0,5,0,0"
-                   HorizontalAlignment="Left"/>
-                                </Grid>
-                            </Border>
+                                    <!-- Status and Booking Date -->
+                                    <Grid Grid.Row="1" Margin="0,15,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
+                                        <TextBlock Text="{Binding NgayDat, StringFormat='Ngày đặt: {0:dd/MM/yyyy}'}"
+                             FontSize="13" Foreground="#6B7280"/>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <TextBlock Text="Tình trạng: " FontSize="14" 
+                                 FontWeight="Medium" Foreground="#374151"/>
+                                            <TextBlock Text="{Binding TrangThai}" FontSize="14" 
+                                 FontWeight="SemiBold" Margin="4,0,0,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Đã hủy">
+                                                                <Setter Property="Foreground" Value="#DC2626"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Đã thanh toán">
+                                                                <Setter Property="Foreground" Value="#059669"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chờ thanh toán">
+                                                                <Setter Property="Foreground" Value="#2563EB"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </materialDesign:Card>
                         </DataTemplate>
+
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>

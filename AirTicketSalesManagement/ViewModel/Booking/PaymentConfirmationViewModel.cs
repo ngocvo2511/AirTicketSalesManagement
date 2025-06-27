@@ -1,27 +1,35 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
-using AirTicketSalesManagement.ViewModel.Customer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Diagnostics;
 using System.Windows;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AirTicketSalesManagement.ViewModel.Booking
 {
     public partial class PaymentConfirmationViewModel : BaseViewModel
     {
+        private readonly VnpayPayment vnpayPayment;
+
         [ObservableProperty]
         private string flightCode;
+
+        [ObservableProperty]
+        private string logoUrl;
+
+        [ObservableProperty]
+        private bool isVNPaySelected = true;
+
+        [ObservableProperty]
+        private bool isCashSelected = false;
 
         public HangVe SelectedTicketClass { get; set; }
 
         public KQTraCuuChuyenBayMoRong Flight { get; set; }
+
+        public ThongTinChuyenBayDuocChon thongTinChuyenBayDuocChon { get; set; }
 
         public ThongTinHanhKhachVaChuyenBay ThongTinHanhKhachVaChuyenBay { get; set; }
         public string AdultSummary { get; set; }
@@ -41,7 +49,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay)
         {
             ThongTinHanhKhachVaChuyenBay = thongTinHanhKhachVaChuyenBay;
-            ThongTinChuyenBayDuocChon thongTinChuyenBayDuocChon = thongTinHanhKhachVaChuyenBay.FlightInfo;
+            thongTinChuyenBayDuocChon = thongTinHanhKhachVaChuyenBay.FlightInfo;
             FlightCode = $"{thongTinChuyenBayDuocChon.Flight.MaSBDi} - {thongTinChuyenBayDuocChon.Flight.MaSBDen} ({thongTinChuyenBayDuocChon.Flight.HangHangKhong})";
             SelectedTicketClass = thongTinChuyenBayDuocChon.TicketClass;
             Flight = thongTinChuyenBayDuocChon.Flight;
@@ -55,6 +63,26 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             InfantTotalPrice = Flight.NumberInfants * SelectedTicketClass.GiaVe;
             TaxAndFees = 0;
             TotalPrice = (Flight.NumberAdults + Flight.NumberChildren + Flight.NumberInfants) * SelectedTicketClass.GiaVe + TaxAndFees;
+            vnpayPayment = new VnpayPayment();
+            LogoUrl = GetAirlineLogo(Flight.HangHangKhong);
+        }
+
+        private string GetAirlineLogo(string airlineName)
+        {
+            if (string.IsNullOrWhiteSpace(airlineName))
+                return "/Resources/Images/default.png";
+
+
+            if (airlineName == "Vietnam Airlines")
+                return "/Resources/Images/vietnamair.png";
+            if (airlineName == "Vietjet Air")
+                return "/Resources/Images/vietjet.png";
+            if (airlineName == "Bamboo Airways")
+                return "/Resources/Images/bamboo.jpg";
+            if (airlineName == "Vietravel Airlines")
+                return "/Resources/Images/vietravel.png";
+
+            return "/Images/default.png";
         }
 
         [RelayCommand]
@@ -66,39 +94,79 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         [RelayCommand]
         private void ProcessPayment()
         {
+            if (IsVNPaySelected)
+            {
+                ProcessVNPayPayment();
+            }
+            else
+            {
+                ProcessCashPayment();
+            }
+        }
+
+        private void ProcessVNPayPayment()
+        {
+            try
+            {
+                long id = DateTime.Now.Ticks;
+                string orderInfo = $"Thanhtoanvemaybay{id}";
+
+                // Tạo URL thanh toán VNPay
+                string paymentUrl = vnpayPayment.CreatePaymentUrl((double)TotalPrice, orderInfo, id);
+
+                if (!string.IsNullOrEmpty(paymentUrl))
+                {
+                    // Lưu thông tin đặt vé tạm thời với trạng thái "Chờ thanh toán"
+                    SaveBookingWithPendingStatus("Online");
+                    WeakReferenceMessenger.Default.Send(new PaymentRequestedMessage(paymentUrl));
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi xử lý thanh toán VNPay: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        private void SaveBookingWithPendingStatus(string paymentType)
+        {
+            int idDatVe = thongTinChuyenBayDuocChon.Id;
+
             using (var context = new AirTicketDbContext())
             {
-                var datVe = new Datve
-                {
-                    MaLb = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.MaLichBay,
-                    MaKh = UserSession.Current.isStaff ? null : UserSession.Current.CustomerId,
-                    MaNv = UserSession.Current.isStaff ? UserSession.Current.StaffId : null,
-                    ThoiGianDv = DateTime.Now,
-                    Slve = ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberAdults +
-                           ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberChildren +
-                           ThongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NumberInfants,
-                    SoDtlienLac = ThongTinHanhKhachVaChuyenBay.ContactPhone,
-                    Email = ThongTinHanhKhachVaChuyenBay.ContactEmail,
-                    TongTienTt = TotalPrice,
-                    TtdatVe = "Đã thanh toán"
-                };
+                var datVe = context.Datves.FirstOrDefault(dv => dv.MaDv == idDatVe);
+                if (datVe == null)
+                    return; // hoặc xử lý lỗi
 
-                context.Datves.Add(datVe);
-                context.SaveChanges(); // BẮT BUỘC: để MaDv được gán giá trị từ DB
+                // Cập nhật thông tin liên lạc
+                datVe.SoDtlienLac = ThongTinHanhKhachVaChuyenBay.ContactPhone;
+                datVe.Email = ThongTinHanhKhachVaChuyenBay.ContactEmail;
+                datVe.TongTienTt = TotalPrice;
+                datVe.TtdatVe = $"Chưa thanh toán ({paymentType})"; // chuyển trạng thái
+                datVe.ThoiGianDv = DateTime.Now; // cập nhật lại thời gian giữ chỗ
 
-                int maDatVe = datVe.MaDv;
+                context.SaveChanges();
+
+                // Lưu hành khách
+                // Lấy đúng MaHV_LB từ DB
+                int maHV_LB = context.Hangvetheolichbays
+                    .Where(hv => hv.MaHvLb == ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.MaHangVe)
+                    .Select(hv => hv.MaHvLb)
+                    .FirstOrDefault();
+
 
                 foreach (var passenger in ThongTinHanhKhachVaChuyenBay.PassengerList)
                 {
                     var ctdv = new Ctdv
                     {
-                        MaDv = maDatVe,
+                        MaDv = datVe.MaDv,
                         HoTenHk = passenger.HoTen,
                         GioiTinh = passenger.GioiTinh,
                         NgaySinh = DateOnly.FromDateTime(passenger.NgaySinh),
                         Cccd = passenger.CCCD,
                         HoTenNguoiGiamHo = passenger.HoTenNguoiGiamHo,
-                        MaLv = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.MaHangVe,
+                        MaHvLb = maHV_LB,
                         GiaVeTt = ThongTinHanhKhachVaChuyenBay.FlightInfo.TicketClass.GiaVe
                     };
 
@@ -107,14 +175,73 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
                 context.SaveChanges();
             }
+        }
 
-            MessageBox.Show("Đặt vé thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        private void ProcessCashPayment()
+        {
+            try
+            {
+                SaveBookingWithPendingStatus("Tiền mặt");
+                MessageBox.Show("Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
+                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                NavigateToHomePage();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi xử lý thanh toán tiền mặt: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void NavigateToHomePage()
+        {
             if (UserSession.Current.isStaff)
                 NavigationService.NavigateTo<Staff.HomePageViewModel>();
             else
                 NavigationService.NavigateTo<Customer.HomePageViewModel>();
         }
 
+        public void HandlePaymentSuccess()
+        {
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    Datve datVe = null;
 
+                    if (!UserSession.Current.isStaff) //khach hang
+                    {
+                        // Trường hợp khách hàng
+                        int customerId = UserSession.Current.CustomerId.Value;
+                        datVe = context.Datves
+                            .Where(dv => dv.MaKh == customerId &&
+                                         dv.ThoiGianDv >= DateTime.Now.AddMinutes(-20))
+                            .OrderByDescending(dv => dv.ThoiGianDv)
+                            .FirstOrDefault();
+                    }
+                    else 
+                    {
+                        // Trường hợp nhân viên
+                        int employeeId = UserSession.Current.StaffId.Value;
+                        datVe = context.Datves
+                            .Where(dv => dv.MaNv == employeeId &&
+                                         dv.ThoiGianDv >= DateTime.Now.AddMinutes(-20))
+                            .OrderByDescending(dv => dv.ThoiGianDv)
+                            .FirstOrDefault();
+                    }
+
+                    if (datVe != null && datVe.TtdatVe == "Chưa thanh toán (Online)")
+                    {
+                        datVe.TtdatVe = "Đã thanh toán";
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[HandlePaymentSuccess] Lỗi cập nhật thanh toán: {ex.Message}");
+            }
+        }
     }
 }

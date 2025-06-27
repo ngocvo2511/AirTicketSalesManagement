@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AirTicketSalesManagement.ViewModel.Staff
+namespace AirTicketSalesManagement.Services
 {
-    public partial class CustomerManagementViewModel : BaseViewModel
+    public class PaymentSuccessMessage
     {
     }
 }

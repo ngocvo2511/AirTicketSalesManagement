@@ -1,7 +1,7 @@
-﻿<Project Sdk="MSTest.Sdk/3.6.1">
+<Project Sdk="MSTest.Sdk/3.6.1">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -12,10 +12,11 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AirTicketSalesManagement\AirTicketSalesManagement.csproj" />
+    <Folder Include="ViewModel\Admin\" />
+    <Folder Include="ViewModel\Booking\" />
+    <Folder Include="ViewModel\Customer\" />
+    <Folder Include="ViewModel\Login\" />
+    <Folder Include="ViewModel\Staff\" />
   </ItemGroup>
-
 </Project>

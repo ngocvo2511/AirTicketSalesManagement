@@ -23,7 +23,7 @@ public partial class Lichbay
 
     public virtual ICollection<Datve> Datves { get; set; } = new List<Datve>();
 
-    public virtual ICollection<Loaive> Loaives { get; set; } = new List<Loaive>();
+    public virtual ICollection<Hangvetheolichbay> Hangvetheolichbays { get; set; } = new List<Hangvetheolichbay>();
 
     public virtual Chuyenbay? SoHieuCbNavigation { get; set; }
 }

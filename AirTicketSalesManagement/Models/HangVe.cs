@@ -1,33 +1,15 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AirTicketSalesManagement.Models
+namespace AirTicketSalesManagement.Models;
+
+public partial class Hangve
 {
-    public partial class HangVe : ObservableObject
-    {
-        [ObservableProperty]
-        private int maHangVe;
+    public int MaHv { get; set; }
 
-        [ObservableProperty]
-        private string tenHangVe;
+    public string? TenHv { get; set; }
 
-        [ObservableProperty]
-        private decimal giaVe;
+    public double? HeSoGia { get; set; }
 
-        [ObservableProperty]
-        private int soGheConLai;
-
-        [ObservableProperty]
-        private string backgroundColor;
-
-        [ObservableProperty]
-        private string headerColor;
-
-        [ObservableProperty]
-        private string buttonColor;
-    }
+    public virtual ICollection<Hangvetheolichbay> Hangvetheolichbays { get; set; } = new List<Hangvetheolichbay>();
 }

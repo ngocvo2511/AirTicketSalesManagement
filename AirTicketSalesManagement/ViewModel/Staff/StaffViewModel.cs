@@ -12,6 +12,9 @@ using System.Windows.Media.Animation;
 using System.Windows;
 using AirTicketSalesManagement.ViewModel.Booking;
 using AirTicketSalesManagement.Models;
+using CommunityToolkit.Mvvm.Messaging;
+using AirTicketSalesManagement.ViewModel.Customer;
+using AirTicketSalesManagement.ViewModel.CustomerManagement;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {
@@ -23,12 +26,31 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [ObservableProperty]
         private string hoTen;
 
+        [ObservableProperty]
+        private bool isWebViewVisible;
+
         public StaffViewModel()
         {
             CurrentViewModel = new HomePageViewModel();
 
             //MessageBox.Show(UserSession.Current.CustomerId + " " + UserSession.Current.CustomerName);
             hoTen = UserSession.Current.CustomerName;
+
+            WeakReferenceMessenger.Default.Register<PaymentRequestedMessage>(this, (r, m) =>
+            {
+                IsWebViewVisible = true;
+                WeakReferenceMessenger.Default.Send(new WebViewNavigationMessage(m.Value));
+            });
+
+            WeakReferenceMessenger.Default.Register<PaymentSuccessMessage>(this, (r, m) =>
+            {
+                // Chuyển sang màn hình Booking History
+                if (CurrentViewModel is PaymentConfirmationViewModel paymentConfirmationViewModel)
+                {
+                    paymentConfirmationViewModel.HandlePaymentSuccess();
+                }
+                CurrentViewModel = new TicketManagementViewModel(this);
+            });
 
             NavigationService.NavigateToAction = (viewModelType, parameter) =>
             {
@@ -80,7 +102,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private void NavigateToTicketManagement()
         {
-            CurrentViewModel = new TicketManagementViewModel();
+            CurrentViewModel = new TicketManagementViewModel(this);
         }
 
         [RelayCommand]

@@ -2,6 +2,7 @@
 using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,12 +73,14 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var khachHang = context.Khachhangs.FirstOrDefault(kh => kh.MaKh == UserSession.Current.CustomerId);
+                    var khachHang = context.Khachhangs
+                        .Include(kh => kh.Taikhoans)
+                        .FirstOrDefault(kh => kh.MaKh == UserSession.Current.CustomerId);
                     if (khachHang != null)
                     {
                         HoTen = khachHang.HoTenKh;
                         SoDienThoai = khachHang.SoDt;
-                        Email = khachHang.Email;
+                        Email = khachHang.Taikhoans.FirstOrDefault().Email;
                         MaKhachHang = khachHang.MaKh.ToString();
                         CanCuoc = khachHang.Cccd;
                         GioiTinh = khachHang.GioiTinh;
@@ -129,8 +132,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var khachHang = context.Khachhangs.FirstOrDefault(kh => kh.MaKh == UserSession.Current.CustomerId);
-                    if (khachHang != null)
+                    var khachhang = context.Khachhangs
+                        .Include(nv => nv.Taikhoans)
+                        .FirstOrDefault(kh => kh.MaKh == UserSession.Current.CustomerId);
+                    if (khachhang != null)
                     {
                         // Họ tên: bắt buộc phải nhập
                         if (string.IsNullOrWhiteSpace(EditHoTen))
@@ -139,26 +144,35 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                             EditHoTen = HoTen;
                             return;
                         }
-                        khachHang.HoTenKh = EditHoTen;
+                        khachhang.HoTenKh = EditHoTen;
 
                         // Email: nếu có nhập thì phải đúng định dạng
                         if (string.IsNullOrWhiteSpace(EditEmail))
                         {
                             MessageBox.Show("Email không được để trống!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                             EditEmail = Email;
-
                             return;
                         }
-                        else
+
+                        if (!IsValidEmail(EditEmail))
                         {
-                            if (!IsValidEmail(EditEmail))
-                            {
-                                MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
-                                EditEmail = Email;
-                                return;
-                            }
-                            khachHang.Email = EditEmail;
+                            MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            EditEmail = Email;
+                            return;
                         }
+
+                        bool emailExists = context.Taikhoans
+                            .Any(tk => tk.Email == EditEmail && tk.MaNv != khachhang.MaKh);
+
+                        if (emailExists)
+                        {
+                            MessageBox.Show("Email đã được sử dụng bởi tài khoản khác!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            EditEmail = Email;
+                            return;
+                        }
+
+                        khachhang.Taikhoans.FirstOrDefault().Email = EditEmail;
+
 
                         // Số điện thoại: nếu có nhập thì kiểm tra định dạng
                         if (!string.IsNullOrWhiteSpace(EditSoDienThoai))
@@ -166,28 +180,30 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                             if (!IsValidPhone(EditSoDienThoai))
                             {
                                 MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                EditSoDienThoai = SoDienThoai;
                                 return;
                             }
                         }
-                        khachHang.SoDt = EditSoDienThoai;
+                        khachhang.SoDt = EditSoDienThoai;
 
 
                         // Căn cước: nếu có nhập thì kiểm tra độ dài hợp lệ (ví dụ 9 hoặc 12 số)
                         if (!string.IsNullOrWhiteSpace(EditCanCuoc))
                         {
-                            if (EditCanCuoc.Length != 12)
+                            if (EditCanCuoc.Length != 12 || !EditCanCuoc.All(char.IsDigit))
                             {
-                                MessageBox.Show("Số căn cước phải có 12 chữ số!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                MessageBox.Show("Số căn cước không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                EditCanCuoc = CanCuoc;
                                 return;
                             }
                         }
-                        khachHang.Cccd = EditCanCuoc;
+                        khachhang.Cccd = EditCanCuoc;
 
 
                         // Giới tính: nếu có nhập thì lưu
                         if (!string.IsNullOrWhiteSpace(EditGioiTinh))
                         {
-                            khachHang.GioiTinh = EditGioiTinh;
+                            khachhang.GioiTinh = EditGioiTinh;
                         }
 
                         // Ngày sinh: nếu có nhập thì phải nhỏ hơn ngày hiện tại
@@ -196,13 +212,14 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                             if (EditNgaySinh.Value.Date >= DateTime.Today)
                             {
                                 MessageBox.Show("Ngày sinh không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                EditNgaySinh = NgaySinh;
                                 return;
                             }
-                            khachHang.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);
+                            khachhang.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);
                         }
                         else
                         {
-                            khachHang.NgaySinh = null;
+                            khachhang.NgaySinh = null;
                         }
 
 

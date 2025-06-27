@@ -39,7 +39,9 @@
             <converters:SeatAvailabilityColorConverter x:Key="SeatAvailabilityColorConverter" />
             <converters:CurrencyConverter x:Key="CurrencyConverter" />
             <converters:FlightDurationConverter x:Key="FlightDurationConverter" />
-
+            <converters:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter"/>
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+            <converters:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

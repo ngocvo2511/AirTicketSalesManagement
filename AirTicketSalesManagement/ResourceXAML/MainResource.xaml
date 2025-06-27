@@ -9,8 +9,8 @@
                     xmlns:viewsSTAFF="clr-namespace:AirTicketSalesManagement.View.Staff"
                     xmlns:viewmodelBOOKING="clr-namespace:AirTicketSalesManagement.ViewModel.Booking"
                     xmlns:viewmodelADMIN="clr-namespace:AirTicketSalesManagement.ViewModel.Admin"
+                    xmlns:viewmodelMANAGE="clr-namespace:AirTicketSalesManagement.ViewModel.CustomerManagement"
                     xmlns:viewsADMIN="clr-namespace:AirTicketSalesManagement.View.Admin"                    
-                    
                     xmlns:viewsNotify="clr-namespace:AirTicketSalesManagement.View.Notification">
     
     <!-- Login -->
@@ -41,7 +41,7 @@
     <viewmodelSTAFF:HomePageViewModel x:Key="StaffHomePageVM"/>
     <viewmodelSTAFF:StaffProfileViewModel x:Key="StaffProfileVM"/>
     <viewmodelSTAFF:TicketManagementViewModel x:Key="TicketManagementVM"/>
-    <viewmodelSTAFF:CustomerManagementViewModel x:Key="CustomerManagementVM"/>
+    <viewmodelSTAFF:TicketManagementDetailViewModel x:Key="TicketManagementDetailVM"/>
 
 
     <!-- Admin -->
@@ -54,10 +54,11 @@
     <viewmodelADMIN:ScheduleManagementViewModel x:Key="ScheduleManagementVM"/>
     <viewmodelADMIN:AccountManagementViewModel x:Key="AccountManagementVM"/>
     
+    <!-- Cutomer Management -->
+    <viewmodelMANAGE:CustomerManagementViewModel x:Key="CustomerManagementVM"/>
 
 
-
-
+    <!-- Notification -->
     <viewmodel:ToastViewModel x:Key="ToastVM"/>
 
 
@@ -117,6 +118,14 @@
         <viewsSTAFF:StaffProfileView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewmodelSTAFF:TicketManagementViewModel}">
+        <viewsSTAFF:Staff_TicketManagementView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelSTAFF:TicketManagementDetailViewModel}">
+        <viewsSTAFF:Staff_TicketManagementDetailView />
+    </DataTemplate>
+
 
     <!-- Admin -->
     <DataTemplate DataType="{x:Type viewmodelADMIN:HomePageViewModel}">
@@ -130,14 +139,30 @@
     <DataTemplate DataType="{x:Type viewmodelADMIN:FlightManagementViewModel}">
         <viewsADMIN:FlightManagementView />
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type viewmodelADMIN:ScheduleManagementViewModel}">
         <viewsADMIN:ScheduleManagementView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewmodelADMIN:RegulationManagementViewModel}">
+        <viewsADMIN:RegulationManagementView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelADMIN:AccountManagementViewModel}">
+        <viewsADMIN:AccountManagementView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodelADMIN:ReportViewModel}">
+        <viewsADMIN:ReportView />
+    </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewmodel:ToastViewModel}">
         <viewsNotify:ToastView/>
+    </DataTemplate>
+    
+    <!-- Customer Management -->
+    <DataTemplate DataType="{x:Type viewmodelMANAGE:CustomerManagementViewModel}">
+        <viewsSTAFF:CustomerManagementView/>
     </DataTemplate>
 
 </ResourceDictionary>

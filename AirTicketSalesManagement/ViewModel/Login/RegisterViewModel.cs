@@ -127,13 +127,12 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     string hashPass = BCrypt.Net.BCrypt.HashPassword(Password);
                     var customer = new Khachhang
                     {
-                        Email = Email,
                         HoTenKh = Name
                     };
                     var customerAccount = new Taikhoan
                     {
                         Email = Email,
-                        VaiTro = "KhachHang",
+                        VaiTro = "Khách hàng",
                         MatKhau = hashPass,
                         MaKhNavigation = customer
                     };

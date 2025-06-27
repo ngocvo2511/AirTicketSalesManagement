@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
     public partial class BookingHistoryDetailViewModel : BaseViewModel
@@ -35,32 +36,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         }
         private async Task LoadData()
         {
-            CanCancle = true;
-            //CtdvList = new ObservableCollection<Ctdv>
-            //{
-            //    new Ctdv
-            //    {
-            //        HoTenHk = "Nguyễn Văn A",
-            //        GiayToTuyThan = "012345678",
-            //        NgaySinh = new DateOnly(1995, 5, 20),
-            //        GioiTinh = "Nam",
-            //    },
-            //    new Ctdv
-            //    {
-            //        HoTenHk = "Trần Thị B",
-            //        GiayToTuyThan = "987654321",
-            //        NgaySinh = new DateOnly(2000, 10, 15),
-            //        GioiTinh = "Nữ",
-            //    },
-            //    new Ctdv
-            //    {
-            //        HoTenHk = "Lê Minh C",
-            //        GiayToTuyThan = null, // Không có giấy tờ
-            //        NgaySinh = new DateOnly(2015, 8, 12),
-            //        GioiTinh = "Nam",
-            //        HoTenNguoiGiamHo = "Nguyễn Thị D",
-            //    }
-            //};
+            CanCancle = lichSuDatVe.CanCancel;
+           
             try
             {
                 using (var context = new AirTicketDbContext())
@@ -76,7 +53,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                       NgaySinh = ctdv.NgaySinh,
                                       Cccd = ctdv.Cccd,
                                       HoTenNguoiGiamHo = ctdv.HoTenNguoiGiamHo,
-                                      MaLv = ctdv.MaLv,
+                                      MaHvLb = ctdv.MaHvLb,
                                       GiaVeTt = ctdv.GiaVeTt
                                   }).ToList();
                     CtdvList = new ObservableCollection<Ctdv>(result);
@@ -87,81 +64,50 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
             }
         }
-            [RelayCommand]
+        [RelayCommand]
         private void GoBack()
         {
             parent.CurrentViewModel = new BookingHistoryViewModel(UserSession.Current.CustomerId, parent);
         }
+
         [RelayCommand]
-        private async Task CancelPassenger(Ctdv ctdv)
+        private async Task CancelTicket()
         {
-            var result = MessageBox.Show("Bạn có chắc chắn muốn huỷ hành khách này?", "Xác nhận huỷ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Yes)
+            if (LichSuDatVe.TrangThai == "Đã hủy")
             {
-                await RemovePassenger(ctdv);
+                MessageBox.Show("Vé đã được hủy trước đó.");
+                return;
             }
-        }
-        private async Task RemovePassenger(Ctdv ctdv)
-        {
-            try
+            if (LichSuDatVe.CanCancel == false)
             {
-                using (var context = new AirTicketDbContext())
+                MessageBox.Show("Vé không thể hủy do đã quá thời gian hủy.");
+                return;
+            }
+            if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
                 {
-                    var khachHang = context.Ctdvs.FirstOrDefault(v => v.MaCtdv == ctdv.MaCtdv);
-                    if (khachHang != null)
+                    using (var context = new AirTicketDbContext())
                     {
-                        context.Ctdvs.Remove(khachHang);
-                        await context.SaveChangesAsync();
-                        if (CtdvList != null)
+                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == LichSuDatVe.MaVe);
+                        if (booking != null)
                         {
-                            CtdvList.Remove(ctdv);
+                            booking.TtdatVe = "Đã hủy";
+                            await context.SaveChangesAsync();
+                            MessageBox.Show("Hủy vé thành công.");
+                            LichSuDatVe.TrangThai = "Đã hủy";
+                            OnPropertyChanged(nameof(LichSuDatVe));
                         }
-                        if (CtdvList == null || CtdvList.Count == 0)
+                        else
                         {
-                            var datVe = context.Datves.FirstOrDefault(v => v.MaDv == ctdv.MaDv);
-                            if (datVe != null)
-                            {
-                                context.Datves.Remove(datVe);
-                                await context.SaveChangesAsync();
-                            }
-                            GoBack();
+                            MessageBox.Show("Không tìm thấy vé để hủy.");
                         }
                     }
                 }
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-        [RelayCommand]
-        private async Task CancelAllPassenger()
-        {
-            var result = MessageBox.Show("Bạn có chắc chắn muốn huỷ tất cả hành khách?", "Xác nhận huỷ", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Yes)
-            {
-                await RemoveAllPassenger();
-            }
-        }
-        private async Task RemoveAllPassenger()
-        {
-            try
-            {
-                using (var context = new AirTicketDbContext())
+                catch (Exception ex)
                 {
-                    var Ve = context.Datves.FirstOrDefault(v=> v.MaDv == LichSuDatVe.MaVe);
-                    if (Ve != null)
-                    {
-                        context.Datves.Remove(Ve);
-                        await context.SaveChangesAsync();
-                    }
-                    GoBack();
+                    MessageBox.Show($"Lỗi khi hủy vé: {ex.Message}");
                 }
-            }
-            catch (Exception ex)
-            {
-
             }
         }
     }

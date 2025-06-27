@@ -4,7 +4,7 @@
         xmlns:uc="clr-namespace:AirTicketSalesManagement.Resources.User_Controls"
         xmlns:body="clr-namespace:AirTicketSalesManagement.View.Staff"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         Title="FlyTogether" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
         Background="White"
@@ -318,5 +318,7 @@
                             Content="{Binding CurrentViewModel}"/>
             </Grid>
         </Grid>
+        <wpf:WebView2 x:Name="WebView"
+                      Visibility="{Binding IsWebViewVisible, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="1"/>
     </Grid>
 </Window>

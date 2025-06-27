@@ -3,6 +3,7 @@ using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,12 +74,14 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var nhanVien = context.Nhanviens.FirstOrDefault(nv => nv.MaNv == UserSession.Current.StaffId);
+                    var nhanVien = context.Nhanviens
+                        .Include(nv => nv.Taikhoans)
+                        .FirstOrDefault(nv => nv.MaNv == UserSession.Current.StaffId);
                     if (nhanVien != null)
                     {
                         HoTen = nhanVien.HoTenNv;
                         SoDienThoai = nhanVien.SoDt;
-                        Email = nhanVien.Email;
+                        Email = nhanVien.Taikhoans.FirstOrDefault().Email;
                         MaNhanVien = nhanVien.MaNv.ToString();
                         CanCuoc = nhanVien.Cccd;
                         GioiTinh = nhanVien.GioiTinh;
@@ -130,7 +133,9 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var nhanVien = context.Nhanviens.FirstOrDefault(kh => kh.MaNv == UserSession.Current.StaffId);
+                    var nhanVien = context.Nhanviens
+                        .Include(nv => nv.Taikhoans)
+                        .FirstOrDefault(kh => kh.MaNv == UserSession.Current.StaffId);
                     if (nhanVien != null)
                     {
                         // Họ tên: bắt buộc phải nhập
@@ -147,19 +152,28 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         {
                             MessageBox.Show("Email không được để trống!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
                             EditEmail = Email;
-
                             return;
                         }
-                        else
+
+                        if (!IsValidEmail(EditEmail))
                         {
-                            if (!IsValidEmail(EditEmail))
-                            {
-                                MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
-                                EditEmail = Email;
-                                return;
-                            }
-                            nhanVien.Email = EditEmail;
+                            MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            EditEmail = Email;
+                            return;
                         }
+
+                        bool emailExists = context.Taikhoans
+                            .Any(tk => tk.Email == EditEmail && tk.MaNv != nhanVien.MaNv);
+
+                        if (emailExists)
+                        {
+                            MessageBox.Show("Email đã được sử dụng bởi tài khoản khác!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            EditEmail = Email;
+                            return;
+                        }
+
+                        nhanVien.Taikhoans.FirstOrDefault().Email = EditEmail;
+
 
                         // Số điện thoại: nếu có nhập thì kiểm tra định dạng
                         if (!string.IsNullOrWhiteSpace(EditSoDienThoai))
@@ -167,6 +181,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                             if (!IsValidPhone(EditSoDienThoai))
                             {
                                 MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                EditSoDienThoai = SoDienThoai;
                                 return;
                             }
                         }
@@ -176,9 +191,10 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         // Căn cước: nếu có nhập thì kiểm tra độ dài hợp lệ (ví dụ 9 hoặc 12 số)
                         if (!string.IsNullOrWhiteSpace(EditCanCuoc))
                         {
-                            if (EditCanCuoc.Length != 12)
+                            if (EditCanCuoc.Length != 12 || !EditCanCuoc.All(char.IsDigit))
                             {
-                                MessageBox.Show("Số căn cước phải có 12 chữ số!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                MessageBox.Show("Số căn cước không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                EditCanCuoc = CanCuoc;
                                 return;
                             }
                         }
@@ -197,6 +213,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                             if (EditNgaySinh.Value.Date >= DateTime.Today)
                             {
                                 MessageBox.Show("Ngày sinh không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                EditNgaySinh = NgaySinh;
                                 return;
                             }
                             nhanVien.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);

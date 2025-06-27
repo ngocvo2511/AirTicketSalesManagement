@@ -19,11 +19,11 @@ public partial class Ctdv
 
     public string? HoTenNguoiGiamHo { get; set; }
 
-    public int? MaLv { get; set; }
+    public int? MaHvLb { get; set; }
 
     public decimal? GiaVeTt { get; set; }
 
     public virtual Datve? MaDvNavigation { get; set; }
 
-    public virtual Loaive? MaLvNavigation { get; set; }
+    public virtual Hangvetheolichbay? MaHvLbNavigation { get; set; }
 }

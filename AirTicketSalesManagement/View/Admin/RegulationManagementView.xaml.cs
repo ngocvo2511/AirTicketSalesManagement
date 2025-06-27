@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AirTicketSalesManagement.View.Staff
+namespace AirTicketSalesManagement.View.Admin
 {
     /// <summary>
-    /// Interaction logic for Staff_BookingHistorySearch.xaml
+    /// Interaction logic for RegulationManagementView.xaml
     /// </summary>
-    public partial class Staff_BookingHistorySearch : UserControl
+    public partial class RegulationManagementView : UserControl
     {
-        public Staff_BookingHistorySearch()
+        public RegulationManagementView()
         {
             InitializeComponent();
         }
