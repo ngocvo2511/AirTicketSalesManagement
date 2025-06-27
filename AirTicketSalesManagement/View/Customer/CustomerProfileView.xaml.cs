@@ -41,5 +41,9 @@ namespace AirTicketSalesManagement.View.Customer
             TongQuanContent.Visibility = Visibility.Collapsed;
         }
 
+        private void TabBaoMat_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
