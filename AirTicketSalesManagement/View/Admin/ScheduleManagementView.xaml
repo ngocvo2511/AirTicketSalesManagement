@@ -764,7 +764,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                 <Button x:Name="btnAddFlight"
                 Command="{Binding AddScheduleCommand}"
                 Style="{StaticResource MaterialDesignRaisedButton}"
-                Background="#10B981"
+                Background="#6366F1"
                 BorderBrush="#10B981"
                 Width="140" Height="40" Margin="0,0,12,0">
                     <Button.Content>
@@ -779,7 +779,8 @@ RowStyle="{StaticResource DataGridRowStyle}"
                 <Button x:Name="btnImportExcel"
                 Command="{Binding ImportFromExcelCommand}"
                 Style="{StaticResource MaterialDesignOutlinedButton}"
-                BorderBrush="#E5E7EB"
+                Background="#10B981"
+                BorderBrush="#10B981"
                 Width="140" Height="40" Margin="0,0,12,0">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
