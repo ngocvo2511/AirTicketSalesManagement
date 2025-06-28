@@ -17,7 +17,7 @@ using System.Windows.Threading;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
-    public partial class ResetPasswordViewModel : BaseViewModel
+    public partial class ResetPasswordViewModel : BaseViewModel, INotifyDataErrorInfo
     {
         private AuthViewModel _auth;
         private readonly IPasswordResetService _resetService;
@@ -54,22 +54,45 @@ namespace AirTicketSalesManagement.ViewModel.Login
             StartCountdown();
             this._auth = _auth;
             this.Email = Email;
+            _resetService.RequestResetAsync(Email).ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    _=_toast.ShowToastAsync("Không thể gửi mã xác nhận. Vui lòng thử lại sau.", Brushes.OrangeRed);
+                }
+                else
+                {
+                    _=_toast.ShowToastAsync("Mã xác nhận đã được gửi đến email của bạn.", Brushes.Green);
+                }
+            });
         }
+        [RelayCommand]        
         
-        [RelayCommand]
-        private void CheckCode()
+        private async Task CheckCode()
         {
+            ClearErrors(nameof(Code));
             if (IsCodeExpired)
             {
                 AddError(nameof(Code), "Mã xác nhận đã hết hạn. Vui lòng gửi lại mã mới.");
                 return;
             }
 
-            // Tạm giả định mã là "123456"
-            if (Code == "123456")
+            if (Email == null)
+            {
+                AddError(nameof(Email), "Email không được để trống.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Code))
+            {
+                AddError(nameof(Code), "Mã xác nhận không được để trống.");
+                return;
+            }
+
+            bool isValid = await _resetService.VerifyResetCodeAsync(Email, Code);
+            if (isValid)
             {
                 IsCodeValid = true;
-                ClearErrors(nameof(Code));
             }
             else
             {
@@ -144,6 +167,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                     user.MatKhau = hashPass;
                     await context.SaveChangesAsync();
                 }
+                _auth.CurrentViewModel = new LoginViewModel(_auth);
             }
             catch
             {
