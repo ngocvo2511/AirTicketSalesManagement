@@ -81,7 +81,5 @@
 
 	<ItemGroup>
 	  <Folder Include="View\Booking\" />
-	  <Folder Include="View\Notification\Fail\" />
-	  <Folder Include="View\Notification\Success\Admin\" />
 	</ItemGroup>
 </Project>
