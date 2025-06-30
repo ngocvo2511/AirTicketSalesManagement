@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:helper="clr-namespace:AirTicketSalesManagement.Helper" 
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Admin"
+             xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980">
 
@@ -1318,5 +1319,10 @@
                 </Grid>
             </Border>
         </Grid>
+        <notification:NotificationControl x:Name="NotificationControl"
+                                DataContext="{Binding Notification}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Panel.ZIndex="1000"/>
     </Grid>
 </UserControl>

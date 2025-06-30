@@ -182,13 +182,13 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void SaveAddAccount()
+        public async void SaveAddAccount()
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(AddEmail) || string.IsNullOrWhiteSpace(AddRole) || string.IsNullOrWhiteSpace(AddPassword) || string.IsNullOrWhiteSpace(AddFullName))
                 {
-                    Notification.ShowNotification("Vui lòng điền đầy đủ thông tin tài khoản.", NotificationType.Warning);
+                    await Notification.ShowNotificationAsync("Vui lòng điền đầy đủ thông tin tài khoản.", NotificationType.Warning);
                     return;
                 }
 
@@ -197,7 +197,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     // Check if email already exists
                     if (context.Taikhoans.Any(tk => tk.Email == AddEmail))
                     {
-                        Notification.ShowNotification("Email này đã được sử dụng.", NotificationType.Warning);
+                        await Notification.ShowNotificationAsync("Email này đã được sử dụng.", NotificationType.Warning);
                         return;
                     }
 
@@ -240,7 +240,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     context.Taikhoans.Add(newAccount);
                     context.SaveChanges();
 
-                    Notification.ShowNotification("Tài khoản đã được thêm thành công!", NotificationType.Information);
+                    await Notification.ShowNotificationAsync("Tài khoản đã được thêm thành công!", NotificationType.Information);
                     IsAddPopupOpen = false;
                     LoadAccounts();
                     LoadUserList();
@@ -248,7 +248,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                Notification.ShowNotification("Đã xảy ra lỗi khi thêm tài khoản: " + ex.Message, NotificationType.Error);
+                await Notification.ShowNotificationAsync("Đã xảy ra lỗi khi thêm tài khoản: " + ex.Message, NotificationType.Error);
             }
         }
 
@@ -257,7 +257,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             if (SelectedAccount == null)
             {
-                Notification.ShowNotification("Vui lòng chọn một tài khoản để chỉnh sửa.", NotificationType.Warning);
+                Notification.ShowNotificationAsync("Vui lòng chọn một tài khoản để chỉnh sửa.", NotificationType.Warning);
                 return;
             }
 
@@ -297,13 +297,13 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void SaveEditAccount()
+        public async void SaveEditAccount()
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(EditEmail) || string.IsNullOrWhiteSpace(EditRole) || string.IsNullOrWhiteSpace(EditFullName))
                 {
-                    Notification.ShowNotification("Vui lòng điền đầy đủ thông tin tài khoản.", NotificationType.Warning);
+                    await Notification.ShowNotificationAsync("Vui lòng điền đầy đủ thông tin tài khoản.", NotificationType.Warning);
                     return;
                 }
 
@@ -314,20 +314,20 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     if (existingAccount == null)
                     {
-                        Notification.ShowNotification("Không tìm thấy tài khoản để chỉnh sửa.", NotificationType.Error);
+                        await Notification.ShowNotificationAsync("Không tìm thấy tài khoản để chỉnh sửa.", NotificationType.Error);
                         return;
                     }
 
                     if (!IsValidEmail(EditEmail))
                     {
-                        Notification.ShowNotification("Email không hợp lệ!", NotificationType.Warning);
+                        await Notification.ShowNotificationAsync("Email không hợp lệ!", NotificationType.Warning);
                         return;
                     }
                     if (existingAccount.Email != EditEmail)
                     {
                         if (context.Taikhoans.Any(tk => tk.Email == EditEmail))
                         {
-                            Notification.ShowNotification("Email này đã được sử dụng.", NotificationType.Warning);
+                            await Notification.ShowNotificationAsync("Email này đã được sử dụng.", NotificationType.Warning);
                             return;
                         }
                         existingAccount.Email = EditEmail;
@@ -340,7 +340,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     if (existingAccount.MaTk == UserSession.Current.AccountId && existingAccount.VaiTro != EditRole)
                     {
-                        Notification.ShowNotification("Không thể chỉnh sửa vai trò tài khoản của bạn.", NotificationType.Warning);
+                        await Notification.ShowNotificationAsync("Không thể chỉnh sửa vai trò tài khoản của bạn.", NotificationType.Warning);
                         return;
                     }
                     existingAccount.VaiTro = EditRole;
@@ -404,28 +404,58 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     context.SaveChanges();
 
-                    Notification.ShowNotification("Tài khoản đã được cập nhật thành công!", NotificationType.Information);
+                    await Notification.ShowNotificationAsync("Tài khoản đã được cập nhật thành công!", NotificationType.Information);
                     IsEditPopupOpen = false;
                     LoadAccounts();
                 }
             }
             catch (Exception ex)
             {
-                Notification.ShowNotification("Đã xảy ra lỗi khi cập nhật tài khoản: " + ex.Message, NotificationType.Error);
+                await Notification.ShowNotificationAsync("Đã xảy ra lỗi khi cập nhật tài khoản: " + ex.Message, NotificationType.Error);
             }
         }
 
         [RelayCommand]
-        public void DeleteAccount()
+        public async void DeleteAccount()
         {
             if (SelectedAccount == null)
             {
-                Notification.ShowNotification("Vui lòng chọn một tài khoản để xóa.", NotificationType.Warning);
+                await Notification.ShowNotificationAsync("Vui lòng chọn một tài khoản để xóa.", NotificationType.Warning);
                 return;
             }
 
-            Notification.ShowNotification($"Bạn có chắc chắn muốn xóa tài khoản {SelectedAccount.Email}?", NotificationType.Warning);
-            // Note: Yes/No confirmation requires additional logic, explained below
+            bool confirmed = await Notification.ShowNotificationAsync(
+                $"Bạn có chắc chắn muốn xóa tài khoản {SelectedAccount.Email}?",
+                NotificationType.Warning,
+                isConfirmation: true);
+
+            if (!confirmed)
+                return;
+
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    var account = context.Taikhoans
+                        .FirstOrDefault(tk => tk.Email == SelectedAccount.Email);
+
+                    if (account == null)
+                    {
+                        await Notification.ShowNotificationAsync("Không tìm thấy tài khoản trong cơ sở dữ liệu.", NotificationType.Error);
+                        return;
+                    }
+
+                    context.Taikhoans.Remove(account);
+                    context.SaveChanges();
+
+                    await Notification.ShowNotificationAsync("Đã xóa tài khoản thành công!", NotificationType.Information);
+                    LoadAccounts();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Notification.ShowNotificationAsync("Đã xảy ra lỗi khi xóa tài khoản: " + ex.Message, NotificationType.Error);
+            }
         }
 
         private bool IsValidEmail(string email)

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace AirTicketSalesManagement.ViewModel
@@ -25,18 +26,44 @@ namespace AirTicketSalesManagement.ViewModel
         [ObservableProperty]
         private Brush background;
 
+        [ObservableProperty]
+        private bool showYesNo;
+
+        private TaskCompletionSource<bool> _tcs;
+
         public NotificationViewModel(){}
+
+        [RelayCommand]
+        private void Yes()
+        {
+            Close(true);
+        }
+
+        [RelayCommand]
+        private void No()
+        {
+            Close(false);
+        }
 
         [RelayCommand]
         private void Close()
         {
-            IsVisible = false;
+            Close(false);
         }
 
-        public void ShowNotification(string message, NotificationType type)
+        private void Close(bool result)
+        {
+            IsVisible = false;
+            _tcs?.SetResult(result);
+            _tcs = null;
+        }
+
+        public Task<bool> ShowNotificationAsync(string message, NotificationType type, bool isConfirmation = false)
         {
             Message = message;
+            ShowYesNo = isConfirmation;
             IsVisible = true;
+            _tcs = new TaskCompletionSource<bool>();
 
             switch (type)
             {
@@ -53,6 +80,8 @@ namespace AirTicketSalesManagement.ViewModel
                     Background = Brushes.Crimson;
                     break;
             }
+
+            return _tcs.Task;
         }
     }
 }

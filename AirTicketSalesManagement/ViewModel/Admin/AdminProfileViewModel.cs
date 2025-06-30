@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,7 +50,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty]
         private DateTime? editNgaySinh;
 
-
         [ObservableProperty]
         private string currentPassword;
         [ObservableProperty]
@@ -61,11 +61,15 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty]
         private string passwordErrorMessage;
 
-
+        // Notification
+        public NotificationViewModel Notification { get; } = new NotificationViewModel();
 
         public AdminProfileViewModel()
         {
-            LoadData();
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                LoadData();
+            }
         }
 
         private void LoadData()
@@ -127,7 +131,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        private void SaveProfile()
+        private async void SaveProfile()
         {
             try
             {
@@ -141,7 +145,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         // Họ tên: bắt buộc phải nhập
                         if (string.IsNullOrWhiteSpace(EditHoTen))
                         {
-                            MessageBox.Show("Họ tên không được để trống!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            await Notification.ShowNotificationAsync("Họ tên không được để trống!", NotificationType.Warning);
                             EditHoTen = HoTen;
                             return;
                         }
@@ -150,14 +154,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         // Email: nếu có nhập thì phải đúng định dạng
                         if (string.IsNullOrWhiteSpace(EditEmail))
                         {
-                            MessageBox.Show("Email không được để trống!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            await Notification.ShowNotificationAsync("Email không được để trống!", NotificationType.Warning);
                             EditEmail = Email;
                             return;
                         }
 
                         if (!IsValidEmail(EditEmail))
                         {
-                            MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            await Notification.ShowNotificationAsync("Email không hợp lệ!", NotificationType.Warning);
                             EditEmail = Email;
                             return;
                         }
@@ -167,39 +171,36 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                         if (emailExists)
                         {
-                            MessageBox.Show("Email đã được sử dụng bởi tài khoản khác!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            await Notification.ShowNotificationAsync("Email đã được sử dụng bởi tài khoản khác!", NotificationType.Warning);
                             EditEmail = Email;
                             return;
                         }
 
                         nhanVien.Taikhoans.FirstOrDefault().Email = EditEmail;
 
-
                         // Số điện thoại: nếu có nhập thì kiểm tra định dạng
                         if (!string.IsNullOrWhiteSpace(EditSoDienThoai))
                         {
                             if (!IsValidPhone(EditSoDienThoai))
                             {
-                                MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                await Notification.ShowNotificationAsync("Số điện thoại không hợp lệ!", NotificationType.Warning);
                                 EditSoDienThoai = SoDienThoai;
                                 return;
                             }
                         }
                         nhanVien.SoDt = EditSoDienThoai;
 
-
                         // Căn cước: nếu có nhập thì kiểm tra độ dài hợp lệ (ví dụ 9 hoặc 12 số)
                         if (!string.IsNullOrWhiteSpace(EditCanCuoc))
                         {
                             if (EditCanCuoc.Length != 12 || !EditCanCuoc.All(char.IsDigit))
                             {
-                                MessageBox.Show("Số căn cước không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                await Notification.ShowNotificationAsync("Số căn cước không hợp lệ!", NotificationType.Warning);
                                 EditCanCuoc = CanCuoc;
                                 return;
                             }
                         }
                         nhanVien.Cccd = EditCanCuoc;
-
 
                         // Giới tính: nếu có nhập thì lưu
                         if (!string.IsNullOrWhiteSpace(EditGioiTinh))
@@ -212,7 +213,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         {
                             if (EditNgaySinh.Value.Date >= DateTime.Today)
                             {
-                                MessageBox.Show("Ngày sinh không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                await Notification.ShowNotificationAsync("Ngày sinh không hợp lệ!", NotificationType.Warning);
                                 EditNgaySinh = NgaySinh;
                                 return;
                             }
@@ -223,9 +224,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                             nhanVien.NgaySinh = null;
                         }
 
-
                         context.SaveChanges();
-                        MessageBox.Show("Cập nhật thông tin thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        await Notification.ShowNotificationAsync("Cập nhật thông tin thành công!", NotificationType.Information);
                         LoadData();
                         IsEditPopupOpen = false; // Đóng popup sau khi lưu thành công
                     }
@@ -233,9 +233,10 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync($"Đã xảy ra lỗi: {ex.Message}", NotificationType.Error);
             }
         }
+
         private bool IsValidEmail(string email)
         {
             try
@@ -269,18 +270,17 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        private void ChangePassword()
+        private async void ChangePassword()
         {
             HideError();
             try
             {
                 using (var context = new AirTicketDbContext())
                 {
-
                     var account = context.Taikhoans.FirstOrDefault(tk => tk.MaNv == UserSession.Current.StaffId);
                     if (account == null)
                     {
-                        MessageBox.Show("Không tìm thấy tài khoản.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await Notification.ShowNotificationAsync("Không tìm thấy tài khoản.", NotificationType.Error);
                         return;
                     }
 
@@ -294,7 +294,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     // Kiểm tra xác nhận mật khẩu mới
                     if (string.IsNullOrWhiteSpace(newPassword) || newPassword != confirmPassword)
                     {
-                        MessageBox.Show("Mật khẩu mới không khớp hoặc trống.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        await Notification.ShowNotificationAsync("Mật khẩu mới không khớp hoặc trống.", NotificationType.Warning);
                         return;
                     }
 
@@ -304,7 +304,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     context.SaveChanges();
 
-                    MessageBox.Show("Đổi mật khẩu thành công.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Notification.ShowNotificationAsync("Đổi mật khẩu thành công.", NotificationType.Information);
 
                     // Xóa các trường để tránh lộ mật khẩu
                     CurrentPassword = string.Empty;
@@ -315,7 +315,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Có lỗi xảy ra khi đổi mật khẩu: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync($"Có lỗi xảy ra khi đổi mật khẩu: {ex.Message}", NotificationType.Error);
             }
         }
 
@@ -339,6 +339,5 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             HasPasswordError = false;
             PasswordErrorMessage = string.Empty;
         }
-
     }
 }
