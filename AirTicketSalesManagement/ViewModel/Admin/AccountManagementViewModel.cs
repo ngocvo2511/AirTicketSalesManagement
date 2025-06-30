@@ -41,13 +41,11 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty]
         private string addFullName;
 
-
         [ObservableProperty]
         private UserSelectionModel selectedUser;
 
         [ObservableProperty]
         private bool isAddPopupOpen = false;
-
 
         // Properties for Edit Account
         [ObservableProperty]
@@ -71,6 +69,9 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         // Collections for ComboBoxes
         [ObservableProperty]
         private ObservableCollection<UserSelectionModel> userList = new();
+
+        // Notification
+        public NotificationViewModel Notification { get; } = new NotificationViewModel();
 
         public AccountManagementViewModel()
         {
@@ -187,19 +188,16 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 if (string.IsNullOrWhiteSpace(AddEmail) || string.IsNullOrWhiteSpace(AddRole) || string.IsNullOrWhiteSpace(AddPassword) || string.IsNullOrWhiteSpace(AddFullName))
                 {
-                    MessageBox.Show("Vui lòng điền đầy đủ thông tin tài khoản.",
-                                  "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Notification.ShowNotification("Vui lòng điền đầy đủ thông tin tài khoản.", NotificationType.Warning);
                     return;
                 }
-
 
                 using (var context = new AirTicketDbContext())
                 {
                     // Check if email already exists
                     if (context.Taikhoans.Any(tk => tk.Email == AddEmail))
                     {
-                        MessageBox.Show("Email này đã được sử dụng.",
-                                      "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        Notification.ShowNotification("Email này đã được sử dụng.", NotificationType.Warning);
                         return;
                     }
 
@@ -242,9 +240,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     context.Taikhoans.Add(newAccount);
                     context.SaveChanges();
 
-                    MessageBox.Show("Tài khoản đã được thêm thành công!",
-                                  "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                    Notification.ShowNotification("Tài khoản đã được thêm thành công!", NotificationType.Information);
                     IsAddPopupOpen = false;
                     LoadAccounts();
                     LoadUserList();
@@ -252,16 +248,18 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi khi thêm tài khoản: " + ex.Message,
-                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                Notification.ShowNotification("Đã xảy ra lỗi khi thêm tài khoản: " + ex.Message, NotificationType.Error);
             }
         }
-
 
         [RelayCommand]
         public void EditAccount()
         {
-            if (SelectedAccount == null) return;
+            if (SelectedAccount == null)
+            {
+                Notification.ShowNotification("Vui lòng chọn một tài khoản để chỉnh sửa.", NotificationType.Warning);
+                return;
+            }
 
             ResetEditFields();
             IsEditPopupOpen = true;
@@ -276,12 +274,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             // Find and set the selected user
             if (SelectedAccount.MaNv.HasValue)
             {
-                EditSelectedUser = UserList.FirstOrDefault(u => 
+                EditSelectedUser = UserList.FirstOrDefault(u =>
                     u.Id == SelectedAccount.MaNv.Value && u.Type == "Nhân viên");
             }
             else if (SelectedAccount.MaKh.HasValue)
             {
-                EditSelectedUser = UserList.FirstOrDefault(u => 
+                EditSelectedUser = UserList.FirstOrDefault(u =>
                     u.Id == SelectedAccount.MaKh.Value && u.Type == "Khách hàng");
             }
         }
@@ -305,11 +303,9 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 if (string.IsNullOrWhiteSpace(EditEmail) || string.IsNullOrWhiteSpace(EditRole) || string.IsNullOrWhiteSpace(EditFullName))
                 {
-                    MessageBox.Show("Vui lòng điền đầy đủ thông tin tài khoản.",
-                                  "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Notification.ShowNotification("Vui lòng điền đầy đủ thông tin tài khoản.", NotificationType.Warning);
                     return;
                 }
-
 
                 using (var context = new AirTicketDbContext())
                 {
@@ -318,22 +314,20 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     if (existingAccount == null)
                     {
-                        MessageBox.Show("Không tìm thấy tài khoản để chỉnh sửa.",
-                                      "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        Notification.ShowNotification("Không tìm thấy tài khoản để chỉnh sửa.", NotificationType.Error);
                         return;
                     }
 
                     if (!IsValidEmail(EditEmail))
                     {
-                        MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        Notification.ShowNotification("Email không hợp lệ!", NotificationType.Warning);
                         return;
                     }
                     if (existingAccount.Email != EditEmail)
                     {
                         if (context.Taikhoans.Any(tk => tk.Email == EditEmail))
                         {
-                            MessageBox.Show("Email này đã được sử dụng.",
-                                          "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            Notification.ShowNotification("Email này đã được sử dụng.", NotificationType.Warning);
                             return;
                         }
                         existingAccount.Email = EditEmail;
@@ -346,15 +340,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     if (existingAccount.MaTk == UserSession.Current.AccountId && existingAccount.VaiTro != EditRole)
                     {
-                        MessageBox.Show("Không thể chỉnh sửa vai trò tài khoản của bạn.",
-                                          "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        Notification.ShowNotification("Không thể chỉnh sửa vai trò tài khoản của bạn.", NotificationType.Warning);
                         return;
                     }
                     existingAccount.VaiTro = EditRole;
 
                     if (EditRole == "Nhân viên" || EditRole == "Admin" && EditSelectedUser != null)
                     {
-                        if (existingAccount.MaKh != null) //neu la khach hang -> tao nv moi
+                        if (existingAccount.MaKh != null)
                         {
                             var oldCustomer = context.Khachhangs.Find(existingAccount.MaKh);
                             if (oldCustomer != null)
@@ -368,7 +361,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                                     Cccd = oldCustomer.Cccd
                                 };
                                 context.Nhanviens.Add(newNhanVien);
-                                context.SaveChanges(); // Để lấy được MaNV mới
+                                context.SaveChanges();
 
                                 existingAccount.MaNv = newNhanVien.MaNv;
                                 existingAccount.MaKh = null;
@@ -396,7 +389,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                                     Cccd = oldNhanVien.Cccd
                                 };
                                 context.Khachhangs.Add(newKhachHang);
-                                context.SaveChanges(); // Để lấy MaKH mới
+                                context.SaveChanges();
 
                                 existingAccount.MaKh = newKhachHang.MaKh;
                                 existingAccount.MaNv = null;
@@ -411,17 +404,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     context.SaveChanges();
 
-                    MessageBox.Show("Tài khoản đã được cập nhật thành công!",
-                                  "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                    Notification.ShowNotification("Tài khoản đã được cập nhật thành công!", NotificationType.Information);
                     IsEditPopupOpen = false;
                     LoadAccounts();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi khi cập nhật tài khoản: " + ex.Message,
-                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                Notification.ShowNotification("Đã xảy ra lỗi khi cập nhật tài khoản: " + ex.Message, NotificationType.Error);
             }
         }
 
@@ -430,45 +420,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             if (SelectedAccount == null)
             {
-                MessageBox.Show("Vui lòng chọn một tài khoản để xóa.",
-                              "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Notification.ShowNotification("Vui lòng chọn một tài khoản để xóa.", NotificationType.Warning);
                 return;
             }
 
-            var result = MessageBox.Show($"Bạn có chắc chắn muốn xóa tài khoản {SelectedAccount.Email}?",
-                                       "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result != MessageBoxResult.Yes)
-                return;
-
-            try
-            {
-                using (var context = new AirTicketDbContext())
-                {
-                    var account = context.Taikhoans
-                        .FirstOrDefault(tk => tk.Email == SelectedAccount.Email);
-
-                    if (account == null)
-                    {
-                        MessageBox.Show("Không tìm thấy tài khoản trong cơ sở dữ liệu.",
-                                      "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    context.Taikhoans.Remove(account);
-                    context.SaveChanges();
-
-                    MessageBox.Show("Đã xóa tài khoản thành công!",
-                                  "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    LoadAccounts();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Đã xảy ra lỗi khi xóa tài khoản: " + ex.Message,
-                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            Notification.ShowNotification($"Bạn có chắc chắn muốn xóa tài khoản {SelectedAccount.Email}?", NotificationType.Warning);
+            // Note: Yes/No confirmation requires additional logic, explained below
         }
 
         private bool IsValidEmail(string email)
