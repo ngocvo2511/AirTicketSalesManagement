@@ -1,5 +1,4 @@
-﻿// ScheduleManagementViewModel.cs - Tối ưu hoá và fix LicenseContext conflict
-using AirTicketSalesManagement.Data;
+﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -94,13 +93,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty]
         private string editTTLichBay;
 
-
-
         public ObservableCollection<string> DiemDiList => new(SanBayList.Where(s => s != DiemDen));
         public ObservableCollection<string> DiemDenList => new(SanBayList.Where(s => s != DiemDi));
 
         partial void OnDiemDiChanged(string value) => OnPropertyChanged(nameof(DiemDenList));
         partial void OnDiemDenChanged(string value) => OnPropertyChanged(nameof(DiemDiList));
+
+        // Notification
+        public NotificationViewModel Notification { get; } = new NotificationViewModel();
 
         public ScheduleManagementViewModel()
         {
@@ -247,7 +247,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void ImportFromExcel()
+        public async void ImportFromExcel()
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -287,12 +287,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         context.Lichbays.Add(lichBay);
                     }
                     context.SaveChanges();
-                    MessageBox.Show("Nhập lịch bay từ Excel thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Notification.ShowNotificationAsync("Nhập lịch bay từ Excel thành công!", NotificationType.Information);
                     LoadFlightSchedule();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi đọc file Excel: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    await Notification.ShowNotificationAsync($"Lỗi khi đọc file Excel: {ex.Message}", NotificationType.Error);
                 }
             }
         }
@@ -332,7 +332,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void SaveAddSchedule()
+        public async void SaveAddSchedule()
         {
             try
             {
@@ -342,14 +342,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     string.IsNullOrWhiteSpace(AddLoaiMB) || string.IsNullOrWhiteSpace(AddSLVeKT) ||
                     string.IsNullOrWhiteSpace(AddGiaVe) || string.IsNullOrWhiteSpace(AddTTLichBay))
                 {
-                    MessageBox.Show("Vui lòng điền đầy đủ thông tin lịch bay.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Vui lòng điền đầy đủ thông tin lịch bay.", NotificationType.Warning);
                     return;
                 }
 
                 // Ghép giờ đi và ngày đi thành DateTime
                 if (!TimeSpan.TryParse(AddGioDi, out TimeSpan gioDi) || !TimeSpan.TryParse(AddGioDen, out TimeSpan gioDen))
                 {
-                    MessageBox.Show("Định dạng giờ không hợp lệ. Vui lòng nhập theo định dạng HH:mm.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    await Notification.ShowNotificationAsync("Định dạng giờ không hợp lệ. Vui lòng nhập theo định dạng HH:mm.", NotificationType.Error);
                     return;
                 }
 
@@ -398,7 +398,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     context.SaveChanges();
 
-                    MessageBox.Show("Lịch bay đã được thêm thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Notification.ShowNotificationAsync("Lịch bay đã được thêm thành công!", NotificationType.Information);
 
                     // Đóng popup, reset dữ liệu, refresh lại danh sách
                     IsAddSchedulePopupOpen = false;
@@ -407,12 +407,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Có lỗi xảy ra khi thêm lịch bay: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Có lỗi xảy ra khi thêm lịch bay: " + ex.Message, NotificationType.Error);
             }
         }
 
         [RelayCommand]
-        public void AddTicketClass()
+        public async void AddTicketClass()
         {
             LoadHangVe();
             try
@@ -436,8 +436,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             catch (Exception ex)
             {
                 // Xử lý lỗi
-                MessageBox.Show($"Lỗi khi thêm sân bay trung gian: {ex.Message}",
-                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync($"Lỗi khi thêm sân bay trung gian: {ex.Message}", NotificationType.Error);
             }
         }
 
@@ -468,25 +467,23 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void RemoveAddTicketClass(HangVeTheoLichBay ticketClass)
+        public async void RemoveAddTicketClass(HangVeTheoLichBay ticketClass)
         {
             try
             {
                 if (ticketClass == null)
                 {
-                    MessageBox.Show("Không tìm thấy hạng ghế để xóa!",
-                                  "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Không tìm thấy hạng ghế để xóa!", NotificationType.Warning);
                     return;
                 }
 
                 // Hiển thị hộp thoại xác nhận
-                var result = MessageBox.Show(
+                bool confirmed = await Notification.ShowNotificationAsync(
                     $"Bạn có chắc chắn muốn xóa hạng ghế?",
-                    "Xác nhận xóa",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
+                    NotificationType.Warning,
+                    isConfirmation: true);
 
-                if (result == MessageBoxResult.Yes)
+                if (confirmed)
                 {
                     // Lưu STT của sân bay bị xóa
                     int removedSTT = ticketClass.STT;
@@ -496,15 +493,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     // Cập nhật lại STT cho các sân bay sau sân bay bị xóa
                     UpdateSTTAfterRemoval(removedSTT);
-
-
                 }
             }
             catch (Exception ex)
             {
                 // Xử lý lỗi
-                MessageBox.Show($"Lỗi khi xóa sân bay trung gian: {ex.Message}",
-                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync($"Lỗi khi xóa sân bay trung gian: {ex.Message}", NotificationType.Error);
             }
         }
 
@@ -534,7 +528,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void EditSchedule(Lichbay selectedLichBay)
+        public async void EditSchedule(Lichbay selectedLichBay)
         {
             EditID = selectedLichBay?.MaLb ?? 0;
 
@@ -547,27 +541,23 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 if (schedule == null)
                 {
-                    MessageBox.Show("Không tìm thấy lịch bay trong cơ sở dữ liệu.",
-                                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    await Notification.ShowNotificationAsync("Không tìm thấy lịch bay trong cơ sở dữ liệu.", NotificationType.Error);
                     return;
                 }
 
                 if (schedule.Datves.Any())
                 {
-                    MessageBox.Show("Không thể sửa lịch bay đã có người đặt vé.",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Không thể sửa lịch bay đã có người đặt vé.", NotificationType.Warning);
                     return;
                 }
                 else if (schedule.TtlichBay == "Đã cất cánh")
                 {
-                    MessageBox.Show("Không thể sửa lịch bay đã cất cánh.",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Không thể sửa lịch bay đã cất cánh.", NotificationType.Warning);
                     return;
                 }
                 else if (schedule.TtlichBay == "Hoàn thành")
                 {
-                    MessageBox.Show("Không thể sửa lịch bay đã hoàn thành.",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Không thể sửa lịch bay đã hoàn thành.", NotificationType.Warning);
                     return;
                 }
             }
@@ -578,19 +568,20 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void DeleteSchedule(Lichbay SelectedLichBay)
+        public async void DeleteSchedule(Lichbay selectedLichBay)
         {
-            if (SelectedLichBay == null)
+            if (selectedLichBay == null)
             {
-                MessageBox.Show("Vui lòng chọn một lịch bay để xóa.",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                await Notification.ShowNotificationAsync("Vui lòng chọn một lịch bay để xóa.", NotificationType.Warning);
                 return;
             }
 
-            var result = MessageBox.Show($"Bạn có chắc chắn muốn xóa lịch bay {SelectedLichBay.SoHieuCb} (Mã: {SelectedLichBay.MaLb})?",
-                                         "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            bool confirmed = await Notification.ShowNotificationAsync(
+                $"Bạn có chắc chắn muốn xóa lịch bay {selectedLichBay.SoHieuCb} (Mã: {selectedLichBay.MaLb})?",
+                NotificationType.Warning,
+                isConfirmation: true);
 
-            if (result != MessageBoxResult.Yes)
+            if (!confirmed)
                 return;
 
             try
@@ -600,31 +591,27 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     var schedule = context.Lichbays
                         .Include(lb => lb.Datves)
                         .Include(lb => lb.Hangvetheolichbays)
-                        .FirstOrDefault(lb => lb.MaLb == SelectedLichBay.MaLb);
+                        .FirstOrDefault(lb => lb.MaLb == selectedLichBay.MaLb);
 
                     if (schedule == null)
                     {
-                        MessageBox.Show("Không tìm thấy lịch bay trong cơ sở dữ liệu.",
-                                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await Notification.ShowNotificationAsync("Không tìm thấy lịch bay trong cơ sở dữ liệu.", NotificationType.Error);
                         return;
                     }
 
                     if (schedule.Datves.Any())
                     {
-                        MessageBox.Show("Không thể xóa lịch bay đã có người đặt vé.",
-                                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        await Notification.ShowNotificationAsync("Không thể xóa lịch bay đã có người đặt vé.", NotificationType.Warning);
                         return;
                     }
                     else if (schedule.TtlichBay == "Đã cất cánh")
                     {
-                        MessageBox.Show("Không thể xóa lịch bay đã cất cánh.",
-                                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        await Notification.ShowNotificationAsync("Không thể xóa lịch bay đã cất cánh.", NotificationType.Warning);
                         return;
                     }
                     else if (schedule.TtlichBay == "Hoàn thành")
                     {
-                        MessageBox.Show("Không thể xóa lịch bay đã hoàn thành.",
-                                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        await Notification.ShowNotificationAsync("Không thể xóa lịch bay đã hoàn thành.", NotificationType.Warning);
                         return;
                     }
 
@@ -635,17 +622,15 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     context.Lichbays.Remove(schedule);
                     context.SaveChanges();
 
-                    MessageBox.Show("Đã xóa lịch bay thành công!",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Notification.ShowNotificationAsync("Đã xóa lịch bay thành công!", NotificationType.Information);
 
                     // Làm mới danh sách
-                    LoadFlightSchedule(); // 👈 thay bằng tên hàm bạn dùng để reload danh sách lịch bay
+                    LoadFlightSchedule();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi khi xóa lịch bay: " + ex.Message,
-                                "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Đã xảy ra lỗi khi xóa lịch bay: " + ex.Message, NotificationType.Error);
             }
         }
 
@@ -674,7 +659,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     OnTenHangVeChangedCallback = UpdateTicketClassList
                 });
             }
-            UpdateTicketClassList();         
+            UpdateTicketClassList();
         }
 
         [RelayCommand]
@@ -690,7 +675,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void SaveEditSchedule()
+        public async void SaveEditSchedule()
         {
             try
             {
@@ -700,14 +685,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     string.IsNullOrWhiteSpace(EditLoaiMB) || string.IsNullOrWhiteSpace(EditSLVeKT) ||
                     string.IsNullOrWhiteSpace(EditGiaVe) || string.IsNullOrWhiteSpace(EditTTLichBay))
                 {
-                    MessageBox.Show("Vui lòng điền đầy đủ thông tin lịch bay.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Vui lòng điền đầy đủ thông tin lịch bay.", NotificationType.Warning);
                     return;
                 }
 
                 // Ghép giờ đi và ngày đi thành DateTime
                 if (!TimeSpan.TryParse(EditGioDi, out TimeSpan gioDi) || !TimeSpan.TryParse(EditGioDen, out TimeSpan gioDen))
                 {
-                    MessageBox.Show("Định dạng giờ không hợp lệ. Vui lòng nhập theo định dạng HH:mm.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    await Notification.ShowNotificationAsync("Định dạng giờ không hợp lệ. Vui lòng nhập theo định dạng HH:mm.", NotificationType.Error);
                     return;
                 }
 
@@ -719,8 +704,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     if (schedule == null)
                     {
-                        MessageBox.Show("Không tìm thấy lịch bay để chỉnh sửa.",
-                                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await Notification.ShowNotificationAsync("Không tìm thấy lịch bay để chỉnh sửa.", NotificationType.Error);
                         return;
                     }
 
@@ -755,8 +739,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     }
 
                     context.SaveChanges();
-                    MessageBox.Show("Lịch bay đã được cập nhật thành công!",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Notification.ShowNotificationAsync("Lịch bay đã được cập nhật thành công!", NotificationType.Information);
 
                     // Đóng popup và reload danh sách lịch bay
                     IsEditSchedulePopupOpen = false;
@@ -765,8 +748,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi khi cập nhật lịch bay: " + ex.Message,
-                                "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Đã xảy ra lỗi khi cập nhật lịch bay: " + ex.Message, NotificationType.Error);
             }
         }
 
@@ -781,6 +763,5 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
 
         }
-
     }
 }
