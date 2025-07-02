@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
+             xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
              d:DesignHeight="650" d:DesignWidth="980">
     <Grid>
         <!-- Header -->
@@ -289,5 +290,10 @@
                 </materialDesign:Card>
             </StackPanel>
         </ScrollViewer>
+        <notification:NotificationControl x:Name="NotificationControl"
+                                        DataContext="{Binding Notification}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Panel.ZIndex="1000"/>
     </Grid>
 </UserControl>

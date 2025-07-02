@@ -83,11 +83,15 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [NotifyDataErrorInfo]
         private int editTicketClassCount;
 
+        // Notification
+        public NotificationViewModel Notification { get; } = new NotificationViewModel();
+
         public RegulationManagementViewModel()
         {
             // Giả lập dữ liệu, thực tế nên load từ DB
             _ = LoadRegulationAsync();
         }
+
         private async Task LoadRegulationAsync()
         {
             try
@@ -135,23 +139,20 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                // Bạn có thể hiển thị lỗi lên giao diện:
-                MessageBox.Show("Không thể kết nối đến cơ sở dữ liệu.\n" + ex.Message,
-                                "Lỗi kết nối",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                // Hiển thị lỗi lên giao diện
+                await Notification.ShowNotificationAsync("Không thể kết nối đến cơ sở dữ liệu.\n" + ex.Message, NotificationType.Error);
 
-                // Hoặc log lỗi
+                // Log lỗi
                 Debug.WriteLine("Lỗi khi load regulation: " + ex);
             }
         }
-
 
         private bool CanSave()
         {
             ValidateAllProperties();
             return !HasErrors;
         }
+
         // --- MaxAirports ---
         [RelayCommand]
         private void _EditMaxAirports()
@@ -160,7 +161,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingMaxAirports = true;
         }
         [RelayCommand]
-        private async Task SaveMaxAirportsAsync()
+        private async void SaveMaxAirportsAsync()
         {
             if (!CanSave()) return;
             if (MaxAirports == EditMaxAirports)
@@ -175,13 +176,10 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 int currentAirportCount = await context.Sanbays.CountAsync();
                 if (currentAirportCount > EditMaxAirports)
                 {
-                    MessageBox.Show(
+                    await Notification.ShowNotificationAsync(
                         $"Hiện có {currentAirportCount} sân bay, lớn hơn giới hạn mới ({EditMaxAirports}).\n" +
                         "Vui lòng xóa bớt sân bay hoặc đặt giới hạn lớn hơn.",
-                        "Giới hạn không hợp lệ",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-
+                        NotificationType.Warning);
                     return;
                 }
 
@@ -197,15 +195,13 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     regulation.SoSanBay = EditMaxAirports;
                 }
 
-                await context.SaveChangesAsync(); 
+                await context.SaveChangesAsync();
                 MaxAirports = EditMaxAirports;
                 IsEditingMaxAirports = false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không lưu được quy định.\n" + ex.Message,
-                                "Lỗi CSDL",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
         }
@@ -223,7 +219,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingMinFlightTime = true;
         }
         [RelayCommand]
-        private async Task SaveMinFlightTime()
+        private async void SaveMinFlightTime()
         {
             if (!CanSave()) return;
 
@@ -240,12 +236,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 if (regulation is null)
                 {
-                    regulation = new Quydinh { ThoiGianBayToiThieu = MinFlightTime };
+                    regulation = new Quydinh { ThoiGianBayToiThieu = EditMinFlightTime };
                     context.Quydinhs.Add(regulation);
                 }
                 else
                 {
-                    regulation.ThoiGianBayToiThieu = MinFlightTime;
+                    regulation.ThoiGianBayToiThieu = EditMinFlightTime;
                 }
 
                 await context.SaveChangesAsync();
@@ -254,9 +250,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không lưu được quy định.\n" + ex.Message,
-                                "Lỗi CSDL",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
         }
@@ -274,7 +268,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingMaxStopover = true;
         }
         [RelayCommand]
-        private async Task SaveMaxStopover()
+        private async void SaveMaxStopover()
         {
             if (!CanSave()) return;
 
@@ -283,7 +277,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 IsEditingMaxStopover = false;
                 return;
             }
-            
+
             try
             {
                 await using var context = new AirTicketDbContext();
@@ -291,12 +285,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 if (regulation is null)
                 {
-                    regulation = new Quydinh { SoSanBayTgtoiDa = MaxStopover };
+                    regulation = new Quydinh { SoSanBayTgtoiDa = EditMaxStopover };
                     context.Quydinhs.Add(regulation);
                 }
                 else
                 {
-                    regulation.SoSanBayTgtoiDa = MaxStopover;
+                    regulation.SoSanBayTgtoiDa = EditMaxStopover;
                 }
 
                 await context.SaveChangesAsync();
@@ -305,12 +299,9 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không lưu được quy định.\n" + ex.Message,
-                                "Lỗi CSDL",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
-            
         }
         [RelayCommand]
         private void CancelMaxStopover()
@@ -326,14 +317,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingMinStopTime = true;
         }
         [RelayCommand]
-        private async Task SaveMinStopTime()
+        private async void SaveMinStopTime()
         {
             if (!CanSave()) return;
             if (MinStopTime == EditMinStopTime)
             {
                 IsEditingMinStopTime = false;
                 return;
-            }        
+            }
             try
             {
                 await using var context = new AirTicketDbContext();
@@ -341,12 +332,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 if (regulation is null)
                 {
-                    regulation = new Quydinh { TgdungMin = MinStopTime };
+                    regulation = new Quydinh { TgdungMin = EditMinStopTime };
                     context.Quydinhs.Add(regulation);
                 }
                 else
                 {
-                    regulation.TgdungMin = MinStopTime;
+                    regulation.TgdungMin = EditMinStopTime;
                 }
 
                 await context.SaveChangesAsync();
@@ -355,9 +346,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không lưu được quy định.\n" + ex.Message,
-                                "Lỗi CSDL",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
         }
@@ -375,7 +364,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingMaxStopTime = true;
         }
         [RelayCommand]
-        private async Task SaveMaxStopTime()
+        private async void SaveMaxStopTime()
         {
             if (!CanSave()) return;
 
@@ -391,12 +380,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 if (regulation is null)
                 {
-                    regulation = new Quydinh { TgdungMax = MaxStopTime };
+                    regulation = new Quydinh { TgdungMax = EditMaxStopTime };
                     context.Quydinhs.Add(regulation);
                 }
                 else
                 {
-                    regulation.TgdungMax = MaxStopTime;
+                    regulation.TgdungMax = EditMaxStopTime;
                 }
 
                 await context.SaveChangesAsync();
@@ -405,12 +394,9 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không lưu được quy định.\n" + ex.Message,
-                                "Lỗi CSDL",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
-
         }
         [RelayCommand]
         private void CancelMaxStopTime()
@@ -426,7 +412,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingBookingTime = true;
         }
         [RelayCommand]
-        private async Task SaveBookingTime()
+        private async void SaveBookingTime()
         {
             if (!CanSave()) return;
 
@@ -434,7 +420,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 IsEditingBookingTime = false;
                 return;
-            }           
+            }
             try
             {
                 await using var context = new AirTicketDbContext();
@@ -442,12 +428,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 if (regulation is null)
                 {
-                    regulation = new Quydinh { TgdatVeChamNhat = BookingTime };
+                    regulation = new Quydinh { TgdatVeChamNhat = EditBookingTime };
                     context.Quydinhs.Add(regulation);
                 }
                 else
                 {
-                    regulation.TgdatVeChamNhat = BookingTime;
+                    regulation.TgdatVeChamNhat = EditBookingTime;
                 }
 
                 await context.SaveChangesAsync();
@@ -456,9 +442,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không lưu được quy định.\n" + ex.Message,
-                                "Lỗi CSDL",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
         }
@@ -476,7 +460,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingCancelTime = true;
         }
         [RelayCommand]
-        private async Task SaveCancelTime()
+        private async void SaveCancelTime()
         {
             if (!CanSave()) return;
 
@@ -485,7 +469,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 IsEditingCancelTime = false;
                 return;
             }
-            
             try
             {
                 await using var context = new AirTicketDbContext();
@@ -493,12 +476,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 if (regulation is null)
                 {
-                    regulation = new Quydinh { TghuyDatVe = CancelTime };
+                    regulation = new Quydinh { TghuyDatVe = EditCancelTime };
                     context.Quydinhs.Add(regulation);
                 }
                 else
                 {
-                    regulation.TghuyDatVe = CancelTime;
+                    regulation.TghuyDatVe = EditCancelTime;
                 }
 
                 await context.SaveChangesAsync();
@@ -507,9 +490,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không lưu được quy định.\n" + ex.Message,
-                                "Lỗi CSDL",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
         }
@@ -518,6 +499,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             IsEditingCancelTime = false;
         }
+
         [RelayCommand]
         private void _EditTicketClassCount()
         {
@@ -525,7 +507,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingTicketClassCount = true;
         }
         [RelayCommand]
-        private async Task SaveTicketClassCount()
+        private async void SaveTicketClassCount()
         {
             if (!CanSave()) return;
 
@@ -534,8 +516,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 IsEditingTicketClassCount = false;
                 return;
             }
-            
-
             try
             {
                 await using var context = new AirTicketDbContext();
@@ -543,12 +523,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 if (regulation is null)
                 {
-                    regulation = new Quydinh { SoHangVe = TicketClassCount };
+                    regulation = new Quydinh { SoHangVe = EditTicketClassCount };
                     context.Quydinhs.Add(regulation);
                 }
                 else
                 {
-                    regulation.SoHangVe = TicketClassCount;
+                    regulation.SoHangVe = EditTicketClassCount;
                 }
 
                 await context.SaveChangesAsync();
@@ -557,9 +537,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không lưu được quy định.\n" + ex.Message,
-                                "Lỗi CSDL",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
         }
