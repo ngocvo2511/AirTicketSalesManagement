@@ -83,7 +83,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         public ObservableCollection<string> AddDiemDenList =>
             new(SanBayList.Where(s => s != AddDiemDi));
 
-
         public ObservableCollection<string> SBTGList =>
             new(SanBayList.Where(s => s != AddDiemDi && s != AddDiemDen));
 
@@ -100,7 +99,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             OnPropertyChanged(nameof(SBTGList));
             CapNhatSBTGList();
         }
-
 
         [ObservableProperty]
         private bool isAddPopupOpen = false;
@@ -144,7 +142,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             CapNhatSBTGList();
         }
 
-
+        // Notification
+        public NotificationViewModel Notification { get; } = new NotificationViewModel();
 
         public void LoadSanBay()
         {
@@ -199,7 +198,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             DiemDi = string.Empty;
             DiemDen = string.Empty;
-
             SoHieuCB = string.Empty;
             TrangThai = string.Empty;
             HangHangKhong = string.Empty;
@@ -300,13 +298,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void AddIntermediateAirport()
+        public async void AddIntermediateAirport()
         {
-            //CanADD?
             try
             {
                 // Tạo sân bay trung gian mới với STT tự động tăng
-                var SBTG = new SBTG()
+                var sbtg = new SBTG()
                 {
                     STT = DanhSachSBTG.Count + 1, // Tự động tăng STT
                     MaSBTG = string.Empty, // Mã sân bay trung gian sẽ được nhập sau
@@ -317,39 +314,34 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 };
 
                 // Thêm vào collection
-                DanhSachSBTG.Add(SBTG);
+                DanhSachSBTG.Add(sbtg);
                 CapNhatSBTGList();
-                // Log hoặc thông báo thành công (tùy chọn)
-                System.Diagnostics.Debug.WriteLine($"Đã thêm sân bay trung gian thứ {SBTG.STT}");
+                System.Diagnostics.Debug.WriteLine($"Đã thêm sân bay trung gian thứ {sbtg.STT}");
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi
-                MessageBox.Show($"Lỗi khi thêm sân bay trung gian: {ex.Message}",
-                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync($"Lỗi khi thêm sân bay trung gian: {ex.Message}", NotificationType.Error);
             }
         }
 
         [RelayCommand]
-        public void RemoveIntermediateAirport(SBTG addSBTG)
+        public async void RemoveIntermediateAirport(SBTG addSBTG)
         {
             try
             {
                 if (addSBTG == null)
                 {
-                    MessageBox.Show("Không tìm thấy sân bay trung gian để xóa!",
-                                  "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Không tìm thấy sân bay trung gian để xóa!", NotificationType.Warning);
                     return;
                 }
 
                 // Hiển thị hộp thoại xác nhận
-                var result = MessageBox.Show(
+                bool confirmed = await Notification.ShowNotificationAsync(
                     $"Bạn có chắc chắn muốn xóa sân bay trung gian thứ {addSBTG.STT}?",
-                    "Xác nhận xóa",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
+                    NotificationType.Warning,
+                    isConfirmation: true);
 
-                if (result == MessageBoxResult.Yes)
+                if (confirmed)
                 {
                     // Lưu STT của sân bay bị xóa
                     int removedSTT = addSBTG.STT;
@@ -362,16 +354,11 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     // Log hoặc thông báo thành công
                     System.Diagnostics.Debug.WriteLine($"Đã xóa sân bay trung gian thứ {removedSTT}");
-
-                    // Có thể hiển thị thông báo toast (tùy chọn)
-                    // ShowToastMessage("Đã xóa sân bay trung gian thành công!");
                 }
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi
-                MessageBox.Show($"Lỗi khi xóa sân bay trung gian: {ex.Message}",
-                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync($"Lỗi khi xóa sân bay trung gian: {ex.Message}", NotificationType.Error);
             }
         }
 
@@ -428,7 +415,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void SaveFlight()
+        public async void SaveFlight()
         {
             try
             {
@@ -436,8 +423,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     string.IsNullOrWhiteSpace(AddSoHieuCB) || string.IsNullOrWhiteSpace(AddHangHangKhong) ||
                     string.IsNullOrWhiteSpace(AddTTKhaiThac) || string.IsNullOrWhiteSpace(AddThoiGianBay))
                 {
-                    MessageBox.Show("Vui lòng điền đầy đủ thông tin chuyến bay.",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Vui lòng điền đầy đủ thông tin chuyến bay.", NotificationType.Warning);
                     return;
                 }
                 using (var context = new AirTicketDbContext())
@@ -476,10 +462,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         }
                     }
                     // Lưu vào cơ sở dữ liệu
-
                     context.SaveChanges();
-                    MessageBox.Show("Chuyến bay đã được thêm thành công!",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Notification.ShowNotificationAsync("Chuyến bay đã được thêm thành công!", NotificationType.Information);
                     // Đóng popup và làm mới danh sách chuyến bay
                     IsAddPopupOpen = false;
                     LoadFlights();
@@ -487,7 +471,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-
+                await Notification.ShowNotificationAsync("Đã xảy ra lỗi khi thêm chuyến bay: " + ex.Message, NotificationType.Error);
             }
         }
 
@@ -527,19 +511,20 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void DeleteFlight()
+        public async void DeleteFlight()
         {
             if (SelectedFlight == null)
             {
-                MessageBox.Show("Vui lòng chọn một chuyến bay để xóa.",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                await Notification.ShowNotificationAsync("Vui lòng chọn một chuyến bay để xóa.", NotificationType.Warning);
                 return;
             }
 
-            var result = MessageBox.Show($"Bạn có chắc chắn muốn xóa chuyến bay {SelectedFlight.SoHieuCb}?",
-                                         "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            bool confirmed = await Notification.ShowNotificationAsync(
+                $"Bạn có chắc chắn muốn xóa chuyến bay {SelectedFlight.SoHieuCb}?",
+                NotificationType.Warning,
+                isConfirmation: true);
 
-            if (result != MessageBoxResult.Yes)
+            if (!confirmed)
                 return;
 
             try
@@ -553,15 +538,13 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     if (flight == null)
                     {
-                        MessageBox.Show("Không tìm thấy chuyến bay trong cơ sở dữ liệu.",
-                                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await Notification.ShowNotificationAsync("Không tìm thấy chuyến bay trong cơ sở dữ liệu.", NotificationType.Error);
                         return;
                     }
 
                     if (flight.Lichbays.Any())
                     {
-                        MessageBox.Show("Không thể xóa chuyến bay đã có lịch bay.",
-                                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        await Notification.ShowNotificationAsync("Không thể xóa chuyến bay đã có lịch bay.", NotificationType.Warning);
                         return;
                     }
 
@@ -572,8 +555,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     context.Chuyenbays.Remove(flight);
                     context.SaveChanges();
 
-                    MessageBox.Show("Đã xóa chuyến bay thành công!",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Notification.ShowNotificationAsync("Đã xóa chuyến bay thành công!", NotificationType.Information);
 
                     // Làm mới danh sách
                     LoadFlights();
@@ -581,8 +563,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi khi xóa chuyến bay: " + ex.Message,
-                                "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Đã xảy ra lỗi khi xóa chuyến bay: " + ex.Message, NotificationType.Error);
             }
         }
 
@@ -599,7 +580,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void SaveEditFlight()
+        public async void SaveEditFlight()
         {
             try
             {
@@ -607,8 +588,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     string.IsNullOrWhiteSpace(EditSoHieuCB) || string.IsNullOrWhiteSpace(EditHangHangKhong) ||
                     string.IsNullOrWhiteSpace(EditTTKhaiThac) || string.IsNullOrWhiteSpace(EditThoiGianBay))
                 {
-                    MessageBox.Show("Vui lòng điền đầy đủ thông tin chuyến bay.",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Vui lòng điền đầy đủ thông tin chuyến bay.", NotificationType.Warning);
                     return;
                 }
 
@@ -622,15 +602,13 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     if (existingFlight == null)
                     {
-                        MessageBox.Show("Không tìm thấy chuyến bay để chỉnh sửa.",
-                                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await Notification.ShowNotificationAsync("Không tìm thấy chuyến bay để chỉnh sửa.", NotificationType.Error);
                         return;
                     }
 
                     if (existingFlight.Lichbays.Any())
                     {
-                        MessageBox.Show("Không thể chỉnh sửa chuyến bay đã có lịch bay.",
-                                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        await Notification.ShowNotificationAsync("Không thể chỉnh sửa chuyến bay đã có lịch bay.", NotificationType.Warning);
                         return;
                     }
 
@@ -669,8 +647,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     context.SaveChanges();
 
-                    MessageBox.Show("Chuyến bay đã được cập nhật thành công!",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Notification.ShowNotificationAsync("Chuyến bay đã được cập nhật thành công!", NotificationType.Information);
 
                     // Đóng popup và làm mới danh sách
                     IsEditPopupOpen = false;
@@ -679,37 +656,34 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi khi cập nhật chuyến bay: " + ex.Message,
-                                "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync("Đã xảy ra lỗi khi cập nhật chuyến bay: " + ex.Message, NotificationType.Error);
             }
         }
 
         [RelayCommand]
         public void EditIntermediateAirport()
         {
-            
+
         }
 
         [RelayCommand]
-        public void RemoveEditIntermediateAirport(SBTG editSBTG)
+        public async void RemoveEditIntermediateAirport(SBTG editSBTG)
         {
             try
             {
                 if (editSBTG == null)
                 {
-                    MessageBox.Show("Không tìm thấy sân bay trung gian để xóa!",
-                                  "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await Notification.ShowNotificationAsync("Không tìm thấy sân bay trung gian để xóa!", NotificationType.Warning);
                     return;
                 }
 
                 // Hiển thị hộp thoại xác nhận
-                var result = MessageBox.Show(
+                bool confirmed = await Notification.ShowNotificationAsync(
                     $"Bạn có chắc chắn muốn xóa sân bay trung gian thứ {editSBTG.STT}?",
-                    "Xác nhận xóa",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
+                    NotificationType.Warning,
+                    isConfirmation: true);
 
-                if (result == MessageBoxResult.Yes)
+                if (confirmed)
                 {
                     // Lưu STT của sân bay bị xóa
                     int removedSTT = editSBTG.STT;
@@ -722,16 +696,11 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     // Log hoặc thông báo thành công
                     System.Diagnostics.Debug.WriteLine($"Đã xóa sân bay trung gian thứ {removedSTT}");
-
-                    // Có thể hiển thị thông báo toast (tùy chọn)
-                    // ShowToastMessage("Đã xóa sân bay trung gian thành công!");
                 }
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi
-                MessageBox.Show($"Lỗi khi xóa sân bay trung gian: {ex.Message}",
-                              "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Notification.ShowNotificationAsync($"Lỗi khi xóa sân bay trung gian: {ex.Message}", NotificationType.Error);
             }
         }
     }

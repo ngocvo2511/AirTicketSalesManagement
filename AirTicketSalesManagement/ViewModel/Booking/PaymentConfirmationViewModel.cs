@@ -12,6 +12,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
     public partial class PaymentConfirmationViewModel : BaseViewModel
     {
         private readonly VnpayPayment vnpayPayment;
+        private readonly NotificationViewModel notification;
 
         [ObservableProperty]
         private string flightCode;
@@ -42,12 +43,17 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         public decimal InfantTotalPrice { get; set; }
         public decimal TaxAndFees { get; set; }
         public decimal TotalPrice { get; set; }
+
+        public NotificationViewModel Notification => notification;
+
         public PaymentConfirmationViewModel()
         {
+            notification = new NotificationViewModel();
         }
 
         public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay)
         {
+            notification = new NotificationViewModel();
             ThongTinHanhKhachVaChuyenBay = thongTinHanhKhachVaChuyenBay;
             thongTinChuyenBayDuocChon = thongTinHanhKhachVaChuyenBay.FlightInfo;
             FlightCode = $"{thongTinChuyenBayDuocChon.Flight.MaSBDi} - {thongTinChuyenBayDuocChon.Flight.MaSBDen} ({thongTinChuyenBayDuocChon.Flight.HangHangKhong})";
@@ -92,19 +98,19 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         }
 
         [RelayCommand]
-        private void ProcessPayment()
+        private async Task ProcessPayment()
         {
             if (IsVNPaySelected)
             {
-                ProcessVNPayPayment();
+                await ProcessVNPayPayment();
             }
             else
             {
-                ProcessCashPayment();
+                await ProcessCashPayment();
             }
         }
 
-        private void ProcessVNPayPayment()
+        private async Task ProcessVNPayPayment()
         {
             try
             {
@@ -124,7 +130,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi xử lý thanh toán VNPay: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await notification.ShowNotificationAsync(
+                    $"Lỗi xử lý thanh toán VNPay: {ex.Message}",
+                    NotificationType.Error);
             }
         }
 
@@ -178,19 +186,22 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         }
 
 
-        private void ProcessCashPayment()
+        private async Task ProcessCashPayment()
         {
             try
             {
                 SaveBookingWithPendingStatus("Tiền mặt");
-                MessageBox.Show("Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
-                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                await notification.ShowNotificationAsync(
+                    "Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
+                    NotificationType.Information);
 
                 NavigateToHomePage();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi xử lý thanh toán tiền mặt: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                await notification.ShowNotificationAsync(
+                    $"Lỗi xử lý thanh toán tiền mặt: {ex.Message}",
+                    NotificationType.Error);
             }
         }
 
@@ -220,7 +231,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                             .OrderByDescending(dv => dv.ThoiGianDv)
                             .FirstOrDefault();
                     }
-                    else 
+                    else
                     {
                         // Trường hợp nhân viên
                         int employeeId = UserSession.Current.StaffId.Value;

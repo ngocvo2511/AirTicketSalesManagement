@@ -280,10 +280,10 @@
                             materialDesign:ButtonAssist.CornerRadius="8"
                             Visibility="{Binding ChiTietVe.CanCancel, 
                                       Converter={StaticResource BoolToVisibilityConverter}}">
-                                                    <StackPanel Orientation="Horizontal" Margin="0,0,8,0">
-                                                        <materialDesign:PackIcon Kind="Cancel"/>
-                                                        <TextBlock Text="Huỷ vé"/>
-                                                    </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,8,0">
+                                    <materialDesign:PackIcon Kind="Cancel"/>
+                                    <TextBlock Text="Huỷ vé"/>
+                                </StackPanel>
                             </Button>
 
                             <!-- Confirm Payment Button -->

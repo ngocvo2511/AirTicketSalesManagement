@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="AirTicketSalesManagement.View.Notification.NotificationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AirTicketSalesManagement.View.Notification"
+             xmlns:converter="clr-namespace:AirTicketSalesManagement.Converters"
+             mc:Ignorable="d"
+             Height="Auto" Width="Auto"
+             MaxWidth="400">
+
+    <UserControl.Resources>
+        <Style x:Key="NotificationBorderStyle" TargetType="Border">
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVisible}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                               To="1" Duration="0:0:0.3"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                               To="1" Duration="0:0:0.3"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                               To="1" Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                               To="0" Duration="0:0:0.3"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                               To="0.8" Duration="0:0:0.3"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                               To="0.8" Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NotificationButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#0099cc"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Margin" Value="5,10,5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#007A9E"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CancelButtonStyle" TargetType="Button" BasedOn="{StaticResource NotificationButtonStyle}">
+            <Setter Property="Background" Value="#6B7280"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#4B5563"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid Background="#80000000">
+        <Border Style="{StaticResource NotificationBorderStyle}"
+                Background="{Binding Background}"
+                CornerRadius="10"
+                Padding="20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                MinWidth="300">
+            <StackPanel>
+                <TextBlock Text="{Binding Title}" 
+                          FontSize="18" 
+                          FontWeight="Bold" 
+                          Foreground="White"
+                          Margin="0,0,0,10"/>
+                <TextBlock Text="{Binding Message}" 
+                          FontSize="14" 
+                          Foreground="White"
+                          TextWrapping="Wrap"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Yes" 
+                            Style="{StaticResource NotificationButtonStyle}"
+                            Command="{Binding YesCommand}"
+                            Visibility="{Binding ShowYesNo, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Button Content="No" 
+                            Style="{StaticResource CancelButtonStyle}"
+                            Command="{Binding NoCommand}"
+                            Visibility="{Binding ShowYesNo, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Button Content="OK" 
+                            Style="{StaticResource NotificationButtonStyle}"
+                            Command="{Binding CloseCommand}"
+                            Visibility="{Binding ShowYesNo, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
