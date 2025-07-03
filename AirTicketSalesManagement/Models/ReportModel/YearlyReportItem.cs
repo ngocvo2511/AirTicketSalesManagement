@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AirTicketSalesManagement.Models.ReportModel
+{
+    public class YearlyReportItem
+    {
+        public string MonthName { get; set; } = "";
+        public decimal Revenue { get; set; }
+        public int TotalFlights { get; set; }
+        public float RevenueRate { get; set; }
+    }
+}
