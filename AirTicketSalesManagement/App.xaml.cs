@@ -11,6 +11,8 @@ using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.View.Customer;
 using System.Globalization;
+using QuestPDF.Infrastructure;
+using QuestPDF.Fluent;
 
 namespace AirTicketSalesManagement
 {
@@ -26,8 +28,7 @@ FrameworkElement.LanguageProperty.OverrideMetadata(
             new FrameworkPropertyMetadata(
                 System.Windows.Markup.XmlLanguage.GetLanguage("en-GB"))); // British culture for dd/MM/yyyy
             base.OnStartup(e);
-
-
+            QuestPDF.Settings.License = LicenseType.Community;
         }
 
     }

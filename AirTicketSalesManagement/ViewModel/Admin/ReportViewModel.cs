@@ -1,7 +1,15 @@
-﻿using AirTicketSalesManagement.Models.ReportModel;
+﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Models.ReportModel;
+using AirTicketSalesManagement.PDF;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Media;
 
 namespace AirTicketSalesManagement.ViewModel.Admin
@@ -10,10 +18,29 @@ namespace AirTicketSalesManagement.ViewModel.Admin
     {
         [ObservableProperty] private bool isYearlyReport = true;
         [ObservableProperty] private bool isMonthlyReport;
+        partial void OnIsYearlyReportChanged(bool oldValue, bool newValue)
+        {
+            if (newValue)         
+            {
+                IsMonthlyReport = false;   
+                Refresh();         
+            }
+        }
+
+        // Khi IsMonthlyReport đổi
+        partial void OnIsMonthlyReportChanged(bool oldValue, bool newValue)
+        {
+            if (newValue)
+            {
+                IsYearlyReport = false;
+                Refresh();
+            }
+        }
+
         [ObservableProperty] private IEnumerable<int> years;
         [ObservableProperty] private int selectedYear;
-        [ObservableProperty] private IEnumerable<MonthItem> months;
         [ObservableProperty] private int selectedMonth;
+        [ObservableProperty] private IEnumerable<MonthItem> months;
         [ObservableProperty] private bool isLoading;
         [ObservableProperty] private ReportSummaryModel? reportSummary;
         [ObservableProperty] private ObservableCollection<YearlyReportItem> yearlyReportData = new();
@@ -21,8 +48,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
         public ReportViewModel()
         {
-            // Khởi tạo dữ liệu mẫu
-            Years = Enumerable.Range(2020, 6).ToList();
+            Years = Enumerable.Range(DateTime.Now.Year-10, 11).Reverse().ToList();
             SelectedYear = Years.FirstOrDefault();
             Months = Enumerable.Range(1, 12)
                 .Select(i => new MonthItem { Name = $"Tháng {i}", Value = i }).ToList();
@@ -32,46 +58,107 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        private void GenerateReport()
+        private async void GenerateReportAsync()
         {
+            Debug.Print("Generating report...");
             IsLoading = true;
-            // TODO: Load dữ liệu thật từ DB
-            if (IsYearlyReport)
+            using(var context = new AirTicketDbContext())
             {
-                // Giả lập dữ liệu
-                YearlyReportData = new ObservableCollection<YearlyReportItem>
+                CultureInfo culture = CultureInfo.GetCultureInfo("vi-VN");
+                if (IsYearlyReport)
                 {
-                    new YearlyReportItem { MonthName = "Tháng 1", Revenue = 10000000, TotalFlights = 12, RevenueRate = 55.6f },
-                    // ...
-                };
-                ReportSummary = new ReportSummaryModel
-                {
-                    TotalRevenue = YearlyReportData.Sum(x => x.Revenue),
-                    TotalFlights = YearlyReportData.Sum(x => x.TotalFlights)
-                };
-            }
-            else
-            {
-                MonthlyReportData = new ObservableCollection<MonthlyReportItem>
-                {
-                    new MonthlyReportItem
+                    var revenueQuery =
+                       from dv in context.Datves
+                       where dv.TtdatVe == "Đã thanh toán"
+                             && dv.MaLbNavigation != null
+                             && dv.MaLbNavigation.GioDi.Value.Year == SelectedYear
+                       group dv by dv.MaLbNavigation.GioDi.Value.Month into g
+                       select new
+                       {
+                           Month = g.Key,                     
+                           Revenue = g.Sum(x => x.TongTienTt ?? 0)
+                       };
+
+                    var flightQuery =
+                       from lb in context.Lichbays
+                       where lb.GioDi.Value.Year == selectedYear
+                       group lb by lb.GioDi.Value.Month into g
+                       select new
+                       {
+                           Month = g.Key,
+                           Flights = g.Count()
+                       };
+                    var revenue = await revenueQuery.ToListAsync();
+                    var flights = await flightQuery.ToListAsync();
+
+                    var report = Enumerable.Range(1, 12)
+                        .Select(m =>
+                        {
+                            var r = revenue.FirstOrDefault(x => x.Month == m);
+                            var fl = flights.FirstOrDefault(x => x.Month == m);
+
+                            return new YearlyReportItem
+                            {
+                                MonthName = culture.DateTimeFormat.GetMonthName(m),
+                                Revenue = r?.Revenue ?? 0,
+                                TotalFlights = fl?.Flights ?? 0
+                            };
+                        })
+                        .ToList();
+                    YearlyReportData = new ObservableCollection<YearlyReportItem>(report);
+                    var totalRevenue = report.Sum(r => r.Revenue);
+                    var totalFlights = report.Sum(r => r.TotalFlights);
+                    foreach (var item in report)
                     {
-                        FlightNumber = "VN123",
-                        Airline = "Vietnam Airlines",
-                        DepartureTime = DateTime.Now,
-                        TicketsSold = 150,
-                        Revenue = 50000000,
-                        RevenueRate = 77.8f
+                        item.RevenueRate = totalRevenue == 0 ? 0 : Math.Round(item.Revenue / totalRevenue * 100, 2);
                     }
-                    // ...
-                };
-                ReportSummary = new ReportSummaryModel
+                    ReportSummary = new ReportSummaryModel
+                    {
+                        TotalRevenue = totalRevenue,
+                        TotalFlights = totalFlights
+                    };
+                }
+                else
                 {
-                    TotalRevenue = MonthlyReportData.Sum(x => x.Revenue),
-                    TotalFlights = MonthlyReportData.Count,
-                    TotalTicketsSold = MonthlyReportData.Sum(x => x.TicketsSold)
-                };
-            }
+                    var query =
+                    from lb in context.Lichbays
+                    where lb.GioDi.Value.Year == SelectedYear && lb.GioDi.Value.Month == SelectedMonth
+                    join cb in context.Chuyenbays on lb.SoHieuCb equals cb.SoHieuCb
+                    join dv in context.Datves on lb.MaLb equals dv.MaLb into datvesGroup
+                    select new
+                    {
+                        FlightNumber = lb.SoHieuCb ?? "",
+                        Airline = lb.SoHieuCbNavigation.HangHangKhong ?? "",
+                        DepartureTime = lb.GioDi,
+                        TicketsSold = datvesGroup
+                            .Where(dv => dv.TtdatVe == "Đã thanh toán")
+                            .Count(),
+                        Revenue = datvesGroup
+                            .Where(dv => dv.TtdatVe == "Đã thanh toán")
+                            .Sum(dv => dv.TongTienTt ?? 0)
+                    };
+
+                    var rawResult = await query.ToListAsync();
+                    decimal totalRevenue = rawResult.Sum(r => r.Revenue);
+                    var report = rawResult.Select(r => new MonthlyReportItem
+                    {
+                        FlightNumber = r.FlightNumber,
+                        Airline = r.Airline,
+                        DepartureTime = r.DepartureTime.Value,
+                        TicketsSold = r.TicketsSold,
+                        Revenue = r.Revenue,
+                        RevenueRate = totalRevenue == 0 ? 0 : Math.Round(r.Revenue / totalRevenue * 100, 2)
+                    }).ToList();
+
+                    MonthlyReportData = new ObservableCollection<MonthlyReportItem>(report);
+                    ReportSummary = new ReportSummaryModel
+                    {
+                        TotalRevenue = totalRevenue,
+                        TotalFlights = report.Count,
+                        TotalTicketsSold = report.Sum(x => x.TicketsSold)
+                    };
+                }
+            }           
             IsLoading = false;
         }
 
@@ -86,7 +173,44 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [RelayCommand]
         private void ExportReport()
         {
-            // TODO: Xuất báo cáo ra file
+            string filename;
+            IReportDocument reportDocument;
+            if (IsYearlyReport)
+            {
+                if(YearlyReportData.IsNullOrEmpty())
+                {
+                    return;
+                }
+                filename = $"Báo cáo năm {SelectedYear}";
+                reportDocument = new YearlyReportDocument(YearlyReportData, SelectedYear,
+                                                          "FLY TOGETHER",
+                                                          "/Resources/Images/removebg.png");
+            }
+            else
+            {
+                if(MonthlyReportData.IsNullOrEmpty())
+                {
+                    return;
+                }
+                filename = $"Báo cáo tháng {SelectedMonth} năm {SelectedYear}";
+                reportDocument = new MonthlyReportDocument(MonthlyReportData, SelectedMonth, SelectedYear,
+                                                           "FLY TOGETHER",
+                                                           "/Resources/Images/removebg.png");
+            }
+            var dialog = new SaveFileDialog
+            {
+                FileName = filename,
+                DefaultExt = ".pdf",
+                Filter = "PDF files (*.pdf)|*.pdf",
+                Title = "Chọn nơi lưu báo cáo"
+            };
+
+            bool? result = dialog.ShowDialog();
+            if (result == true)
+            {
+                string filePath = dialog.FileName;
+                reportDocument.Generate(filePath);               
+            }
         }
     }
 }

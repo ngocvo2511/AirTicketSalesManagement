@@ -11,6 +11,6 @@ namespace AirTicketSalesManagement.Models.ReportModel
         public string MonthName { get; set; } = "";
         public decimal Revenue { get; set; }
         public int TotalFlights { get; set; }
-        public float RevenueRate { get; set; }
+        public decimal RevenueRate { get; set; }
     }
 }

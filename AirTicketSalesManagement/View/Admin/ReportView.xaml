@@ -125,7 +125,7 @@
 
                         <!-- Action Buttons - Right Side -->
                         <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <Button Command="{Binding GenerateReportCommand}"
+                            <Button Command="{Binding GenerateReportAsyncCommand}"
                                     Style="{DynamicResource MaterialDesignFilledButton}"
                                     Height="36" Width="140"
                                     materialDesign:ButtonAssist.CornerRadius="6"

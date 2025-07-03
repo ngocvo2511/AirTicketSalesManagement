@@ -11,6 +11,5 @@ namespace AirTicketSalesManagement.Models.ReportModel
         public decimal TotalRevenue { get; set; }
         public int TotalFlights { get; set; }
         public int TotalTicketsSold { get; set; }
-        public double AverageOccupancyRate { get; set; }
     }
 }
