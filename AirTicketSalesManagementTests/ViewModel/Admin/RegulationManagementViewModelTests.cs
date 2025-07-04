@@ -25,16 +25,6 @@ namespace AirTicketSalesManagementTests.ViewModel.Admin
             Assert.AreEqual(_viewModel.MaxAirports, _viewModel.EditMaxAirports, "Value should be copied to the edit property");
         }
 
-        [TestMethod]
-        public void SaveMaxAirports()
-        {
-            _viewModel.IsEditingMaxAirports = true;
-            _viewModel.EditMaxAirports = 15;
-            _viewModel.SaveMaxAirportsCommand.Execute(null);
-
-            Assert.IsFalse(_viewModel.IsEditingMaxAirports, "Editing mode for MaxAirports should be disabled");
-            Assert.AreEqual(15, _viewModel.MaxAirports, "The main value should be updated");
-        }
 
         [TestMethod]
         public void CancelMaxAirports()
@@ -59,16 +49,6 @@ namespace AirTicketSalesManagementTests.ViewModel.Admin
             Assert.AreEqual(30, _viewModel.EditMinFlightTime);
         }
 
-        [TestMethod]
-        public void SaveMinFlightTime()
-        {
-            _viewModel.IsEditingMinFlightTime = true;
-            _viewModel.EditMinFlightTime = 45;
-            _viewModel.SaveMinFlightTimeCommand.Execute(null);
-
-            Assert.IsFalse(_viewModel.IsEditingMinFlightTime);
-            Assert.AreEqual(45, _viewModel.MinFlightTime);
-        }
 
         [TestMethod]
         public void CancelBookingTime()

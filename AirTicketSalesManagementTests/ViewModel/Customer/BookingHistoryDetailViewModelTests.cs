@@ -43,7 +43,10 @@ namespace AirTicketSalesManagementTests.ViewModel.Customer
             var mockBookingHistory = new KQLichSuDatVe
             {
                 MaVe = 102,
-                TrangThai = status
+                TrangThai = status,
+                QdHuyVe = 1,
+                NgayDat = DateTime.Now.AddDays(-1), // Past date to allow cancellation
+                GioDi = DateTime.Now.AddDays(2), // Future date to allow cancellation
             };
             var viewModel = new BookingHistoryDetailViewModel(mockBookingHistory, _mockParentViewModel);
 

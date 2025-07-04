@@ -2,6 +2,7 @@
 using AirTicketSalesManagement.ViewModel.Admin;
 using AirTicketSalesManagement.ViewModel.Staff; 
 using AirTicketSalesManagement.ViewModel.Booking;
+using AirTicketSalesManagement.ViewModel.CustomerManagement;
 
 namespace AirTicketSalesManagementTests.ViewModel.Admin
 {

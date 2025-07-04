@@ -1,15 +1,9 @@
 ﻿using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.View.Login;
-using AirTicketSalesManagement.ViewModel.Booking;
 using AirTicketSalesManagement.ViewModel.Login;
 using AirTicketSalesManagement.ViewModel.Staff;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows;
 using AirTicketSalesManagement.ViewModel.CustomerManagement;

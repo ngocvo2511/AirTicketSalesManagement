@@ -161,7 +161,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingMaxAirports = true;
         }
         [RelayCommand]
-        private async void SaveMaxAirportsAsync()
+        public async void SaveMaxAirportsAsync()
         {
             if (!CanSave()) return;
             if (MaxAirports == EditMaxAirports)

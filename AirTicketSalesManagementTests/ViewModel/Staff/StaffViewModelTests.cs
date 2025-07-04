@@ -5,6 +5,7 @@ using AirTicketSalesManagement.ViewModel.Customer;
 using System.Windows;
 using CommunityToolkit.Mvvm.Messaging;
 using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.ViewModel.CustomerManagement;
 
 namespace AirTicketSalesManagementTests.ViewModel.Staff
 {
