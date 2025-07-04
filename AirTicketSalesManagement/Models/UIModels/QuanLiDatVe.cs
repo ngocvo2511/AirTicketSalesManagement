@@ -52,7 +52,7 @@ namespace AirTicketSalesManagement.Models.UIModels
         {
             get
             {
-                if (TrangThai == "Chờ thanh toán") return true;
+                if (TrangThai == "Chưa thanh toán (tiền mặt)") return true;
                 if (GioDi == null || NgayDat == null || QdDatVe == null) return false;
                 DateTime thoiDiemToiDaXacNhan = GioDi.Value.AddDays(-QdDatVe.Value);
                 return DateTime.Now <= thoiDiemToiDaXacNhan;

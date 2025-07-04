@@ -61,6 +61,18 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#6366F1" Offset="0"/>
+                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -82,8 +94,7 @@
 
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="📊 BÁO CÁO THỐNG KÊ" 
-                                 FontSize="22" FontWeight="SemiBold" 
-                                 Foreground="#111827"/>
+                                 Style="{StaticResource HeaderTextStyle}"/>
                         <TextBlock Text="Xem báo cáo doanh thu và thống kê chuyến bay" 
                                  Foreground="#6B7280" 
                                  FontSize="12" Margin="0,2,0,0"/>
@@ -373,7 +384,7 @@
 
                             <TextBlock Grid.Column="1"
                                      Text="{Binding IsYearlyReport, Converter={StaticResource BooleanToStringConverter}, 
-                                     ConverterParameter='DANH SÁCH THỐNG KÊ THEO THÁNG|DANH SÁCH CHUYẾN BAY'}"
+                                     ConverterParameter='DANH SÁCH THỐNG KÊ NĂM|DANH SÁCH THỐNG KÊ THÁNG'}"
                                      FontWeight="SemiBold"
                                      FontSize="16"
                                      Foreground="White"

@@ -8,6 +8,7 @@ namespace AirTicketSalesManagement.Models.ReportModel
 {
     public class YearlyReportItem
     {
+        public int Year { get; set; }
         public string MonthName { get; set; } = "";
         public decimal Revenue { get; set; }
         public int TotalFlights { get; set; }

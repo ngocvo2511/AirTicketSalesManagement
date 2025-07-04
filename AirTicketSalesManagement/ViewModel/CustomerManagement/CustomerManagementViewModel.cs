@@ -116,15 +116,6 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
         [RelayCommand]
         public async Task SaveEditCustomer()
         {
-            if (string.IsNullOrWhiteSpace(EditName) &&
-               string.IsNullOrWhiteSpace(EditCccd) &&
-               string.IsNullOrWhiteSpace(EditPhone) &&
-               string.IsNullOrWhiteSpace(EditGender) &&
-               EditBirthDate == null)
-            {
-                MessageBox.Show("Vui lòng điền thông tin", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
             if (string.IsNullOrWhiteSpace(EditName))
             {
                 MessageBox.Show("Tên không được để trống", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);

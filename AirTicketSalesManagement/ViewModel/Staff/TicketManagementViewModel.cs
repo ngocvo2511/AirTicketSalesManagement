@@ -20,7 +20,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
     public partial class TicketManagementViewModel : BaseViewModel
     {
         private readonly BaseViewModel parent;
-        private ObservableCollection<QuanLiDatVe> rootHistoryBooking;
+        private ObservableCollection<QuanLiDatVe> rootHistoryBooking = new();
         [ObservableProperty]
         private DateTime? ngayDatFilter;
         [ObservableProperty]
@@ -64,7 +64,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         public TicketManagementViewModel(BaseViewModel parent)
         {
             this.parent = parent;
-            _ = LoadData();            
+            _ = LoadData();
         }
         public async Task LoadData()
         {
@@ -134,7 +134,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             }
             catch (Exception e)
             {
-
+                throw new Exception("Lỗi kết nối cơ sở dữ liệu",e);
             }
         }
         [RelayCommand]
@@ -236,7 +236,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 MessageBox.Show("Không thể xác nhận thanh toán vé này do đã quá thời hạn đặt vé.");
                 return;
             }
-            if (ve.TrangThai != "Chờ thanh toán")
+            if (ve.TrangThai != "Chưa thanh toán (tiền mặt)")
             {
                 MessageBox.Show("Không thể xác nhận thanh toán.");
                 return;

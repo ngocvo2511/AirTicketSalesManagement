@@ -1,6 +1,5 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Models.ReportModel;
-using AirTicketSalesManagement.PDF;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -99,6 +98,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                             return new YearlyReportItem
                             {
+                                Year = SelectedYear,
                                 MonthName = culture.DateTimeFormat.GetMonthName(m),
                                 Revenue = r?.Revenue ?? 0,
                                 TotalFlights = fl?.Flights ?? 0
@@ -142,6 +142,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     decimal totalRevenue = rawResult.Sum(r => r.Revenue);
                     var report = rawResult.Select(r => new MonthlyReportItem
                     {
+                        Month = SelectedMonth,
+                        Year = selectedYear,
                         FlightNumber = r.FlightNumber,
                         Airline = r.Airline,
                         DepartureTime = r.DepartureTime.Value,
@@ -174,17 +176,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private void ExportReport()
         {
             string filename;
-            IReportDocument reportDocument;
             if (IsYearlyReport)
             {
                 if(YearlyReportData.IsNullOrEmpty())
                 {
                     return;
                 }
-                filename = $"Báo cáo năm {SelectedYear}";
-                reportDocument = new YearlyReportDocument(YearlyReportData, SelectedYear,
-                                                          "FLY TOGETHER",
-                                                          "/Resources/Images/removebg.png");
+                filename = $"Báo cáo năm {YearlyReportData.First().Year}";
+                
             }
             else
             {
@@ -192,16 +191,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 {
                     return;
                 }
-                filename = $"Báo cáo tháng {SelectedMonth} năm {SelectedYear}";
-                reportDocument = new MonthlyReportDocument(MonthlyReportData, SelectedMonth, SelectedYear,
-                                                           "FLY TOGETHER",
-                                                           "/Resources/Images/removebg.png");
+                filename = $"Báo cáo tháng {MonthlyReportData.First().Month} năm {MonthlyReportData.First().Year}";
+                
             }
             var dialog = new SaveFileDialog
             {
                 FileName = filename,
                 DefaultExt = ".pdf",
-                Filter = "PDF files (*.pdf)|*.pdf",
+                Filter = "PDF files (*.xlsx)|*.xlsx",
                 Title = "Chọn nơi lưu báo cáo"
             };
 
@@ -209,7 +206,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             if (result == true)
             {
                 string filePath = dialog.FileName;
-                reportDocument.Generate(filePath);               
+                if(IsMonthlyReport)
+                {
+                    ExcelExporter.ExportMonthlyReportToExcel(MonthlyReportData, MonthlyReportData.First().Month, MonthlyReportData.First().Year, filePath);
+                }
+                else
+                {
+                    ExcelExporter.ExportYearlyReportToExcel(YearlyReportData, YearlyReportData.First().Year, filePath);
+                }
             }
         }
     }

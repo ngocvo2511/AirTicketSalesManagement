@@ -8,6 +8,8 @@ namespace AirTicketSalesManagement.Models.ReportModel
 {
     public class MonthlyReportItem
     {
+        public int Month { get; set; }
+        public int Year { get; set; }
         public string FlightNumber { get; set; } = "";
         public string Airline { get; set; } = "";
         public DateTime DepartureTime { get; set; }

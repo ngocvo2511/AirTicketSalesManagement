@@ -11,6 +11,20 @@
              mc:Ignorable="d" 
              xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
              d:DesignHeight="650" d:DesignWidth="980">
+    <UserControl.Resources>
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#6366F1" Offset="0"/>
+                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,18 +40,18 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Lịch sử đặt vé" 
-                   FontSize="30" FontWeight="Bold"
-                   Margin="30 0 0 0"
-                   Foreground="#6366F1"
-                   VerticalAlignment="Center" />
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <ToggleButton Template="{StaticResource ProfilePopupTemplate}" 
-              Width="60"
-              Height="60"
-              Margin="0 0 40 0"/>
+            <StackPanel
+             Orientation="Horizontal"
+             VerticalAlignment="Center" Margin="20,20,0,0">
+                <Icon:PackIconMaterial Kind="Ticket"
+                         Width="32"
+                         Height="32"
+                         VerticalAlignment="Stretch"
+                         Margin="0,0,8,0"
+                         Foreground="#6366F1"/>
+                <TextBlock Text="Lịch sử đặt vé"
+                Style="{StaticResource HeaderTextStyle}"/>
             </StackPanel>
-
         </Grid>
         <!-- Search Section -->
         <materialDesign:Card Grid.Row="1" Grid.RowSpan="2" Margin="20,0,20,30" 
