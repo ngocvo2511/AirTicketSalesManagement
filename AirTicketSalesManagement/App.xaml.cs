@@ -10,10 +10,10 @@ namespace AirTicketSalesManagement
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-FrameworkElement.LanguageProperty.OverrideMetadata(
-            typeof(FrameworkElement),
-            new FrameworkPropertyMetadata(
-                System.Windows.Markup.XmlLanguage.GetLanguage("en-GB"))); // British culture for dd/MM/yyyy
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+                        typeof(FrameworkElement),
+                        new FrameworkPropertyMetadata(
+                            System.Windows.Markup.XmlLanguage.GetLanguage("en-GB"))); // British culture for dd/MM/yyyy
             base.OnStartup(e);
             QuestPDF.Settings.License = LicenseType.Community;
         }
@@ -21,4 +21,4 @@ FrameworkElement.LanguageProperty.OverrideMetadata(
     }
 }
 
-    
+

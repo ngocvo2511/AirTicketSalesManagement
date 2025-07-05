@@ -78,10 +78,10 @@
         </Style>
 
         <Style x:Key="CustomPasswordBoxStyle" TargetType="{x:Type PasswordBox}">
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="45"/>
             <Setter Property="Padding" Value="10,0,0,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="15"/>
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
             <Setter Property="Background" Value="White"/>
             <Setter Property="Template">
@@ -133,13 +133,13 @@
                 <!-- Phần đầu -->
                 <StackPanel Grid.Row="0">
                     <TextBlock Text="Tạo tài khoản mới" 
-                       FontSize="28" 
+                       FontSize="30" 
                        FontWeight="SemiBold" 
                        Foreground="#333333" 
                        HorizontalAlignment="Center"
                        Margin="0,20,0,10"/>
                     <TextBlock Text="Nhanh chóng và dễ dàng" 
-                       FontSize="14" 
+                       FontSize="15" 
                        Foreground="#777777" 
                        HorizontalAlignment="Center"
                        Margin="0,0,0,20"/>
@@ -194,7 +194,7 @@
                 </StackPanel>
 
                 <!-- Phần footer -->
-                <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,10">
                     <TextBlock HorizontalAlignment="Center">
                 <Run Text="Đã có tài khoản? " Foreground="#777777" FontSize="14"/>
                 <Hyperlink x:Name="lnkLogin" 
