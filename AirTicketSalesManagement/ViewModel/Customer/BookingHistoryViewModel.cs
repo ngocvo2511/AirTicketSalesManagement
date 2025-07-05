@@ -219,5 +219,18 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             OnPropertyChanged(nameof(DiemDiList));
             OnPropertyChanged(nameof(DiemDenList));
         }
+
+        [ObservableProperty]
+        private bool isSearchExpanded = true;
+
+        [ObservableProperty]
+        private double searchContentHeight = double.NaN;
+
+        [RelayCommand]
+        private void ToggleSearch()
+        {
+            IsSearchExpanded = !IsSearchExpanded;
+        }
+
     }
 }

@@ -474,6 +474,18 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
             return "/Images/default.png";
         }
+
+        [ObservableProperty]
+        private bool isSearchExpanded = true;
+
+        [ObservableProperty]
+        private double searchContentHeight = double.NaN;
+
+        [RelayCommand]
+        private void ToggleSearch()
+        {
+            IsSearchExpanded = !IsSearchExpanded;
+        }
     }
 
     public static class ObservableCollectionExtensions
