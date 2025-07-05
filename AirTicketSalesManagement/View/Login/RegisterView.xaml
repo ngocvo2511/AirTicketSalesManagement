@@ -12,9 +12,9 @@
         <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#0099cc"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="45"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -35,10 +35,10 @@
         </Style>
 
         <Style x:Key="CustomTextBoxStyle" TargetType="{x:Type TextBox}">
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="45"/>
             <Setter Property="Padding" Value="10,0,0,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="17"/>
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
             <Setter Property="Background" Value="White"/>
             <Setter Property="Template">
@@ -116,9 +116,9 @@
         </Style>
 
         <Style x:Key="CustomLabelStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="15"/>
             <Setter Property="Foreground" Value="#555555"/>
-            <Setter Property="Margin" Value="0,12,0,5"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
             <Setter Property="FontWeight" Value="Medium"/>
         </Style>
     </UserControl.Resources>
@@ -196,12 +196,12 @@
                 <!-- Phần footer -->
                 <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,20">
                     <TextBlock HorizontalAlignment="Center">
-                <Run Text="Đã có tài khoản? " Foreground="#777777"/>
+                <Run Text="Đã có tài khoản? " Foreground="#777777" FontSize="14"/>
                 <Hyperlink x:Name="lnkLogin" 
                          TextDecorations="None" 
                          Foreground="#0099cc" 
                          Command="{Binding ShowLoginCommand}">
-                    <TextBlock Text="Đăng nhập" FontWeight="SemiBold"/>
+                    <TextBlock Text="Đăng nhập" FontWeight="SemiBold" FontSize="14"/>
                 </Hyperlink>
             </TextBlock>
                 </StackPanel>
