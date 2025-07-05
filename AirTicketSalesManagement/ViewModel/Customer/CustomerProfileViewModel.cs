@@ -162,7 +162,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         }
 
                         bool emailExists = context.Taikhoans
-                            .Any(tk => tk.Email == EditEmail && tk.MaNv != khachhang.MaKh);
+                            .Any(tk => tk.Email == EditEmail && tk.MaKh != khachhang.MaKh);
 
                         if (emailExists)
                         {
@@ -220,7 +220,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         }
 
                         context.SaveChanges();
-                        await Notification.ShowNotificationAsync("Cập nhật thông tin thành công!", NotificationType.Information);
+                        //await Notification.ShowNotificationAsync("Cập nhật thông tin thành công!", NotificationType.Information);
                         LoadData();
                         IsEditPopupOpen = false; // Đóng popup sau khi lưu thành công
                     }

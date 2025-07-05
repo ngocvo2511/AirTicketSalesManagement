@@ -353,6 +353,7 @@
                                     <Setter Property="FontWeight" Value="Medium"/>
                                     <Setter Property="Foreground" Value="#1D4ED8"/>
                                     <Setter Property="Padding" Value="15,0,0,0"/>
+                                    <Setter Property="FontSize" Value="14"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -365,15 +366,16 @@
                                     <Setter Property="FontWeight" Value="Medium"/>
                                     <Setter Property="Foreground" Value="#374151"/>
                                     <Setter Property="Padding" Value="15,0,0,0"/>
+                                    <Setter Property="FontSize" Value="14"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
                         <!-- Role Column -->
-                        <DataGridTemplateColumn Header="Vai trò" Width="120" MinWidth="120">
+                        <DataGridTemplateColumn Header="Vai trò" Width="110" MinWidth="110">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Border CornerRadius="16" Padding="12,6" HorizontalAlignment="Center">
+                                    <Border CornerRadius="16" Padding="12,6" HorizontalAlignment="Left" Margin="5,0,0,0" Width="95">
                                         <Border.Style>
                                             <Style TargetType="Border">
                                                 <Style.Triggers>
@@ -389,7 +391,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
-                                        <TextBlock Text="{Binding VaiTro}" FontSize="11" FontWeight="SemiBold">
+                                        <TextBlock Text="{Binding VaiTro}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
@@ -412,10 +414,10 @@
                         </DataGridTemplateColumn>
 
                         <!-- Actions Column -->
-                        <DataGridTemplateColumn Header="Thao tác" Width="120" MinWidth="120">
+                        <DataGridTemplateColumn Header="Thao tác" Width="110" MinWidth="110">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
                                                 ToolTip="Chỉnh sửa tài khoản"
                                                 Command="{Binding DataContext.EditAccountCommand, 
@@ -861,10 +863,6 @@
                 </Grid>
             </Border>
         </Grid>
-        <views:NotificationControl x:Name="NotificationControl"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
+
     </Grid>
 </UserControl>
