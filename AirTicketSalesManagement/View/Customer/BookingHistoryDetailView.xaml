@@ -219,43 +219,43 @@
                                                 <StackPanel>
                                                     <!-- Giới tính -->
                                                     <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="Giới tính:" 
+                                                        <TextBlock Text="Giới tính:" FontSize="14"
                                                            FontWeight="Medium" 
                                                            Foreground="#374151" 
                                                            Width="140"/>
-                                                        <TextBlock Text="{Binding GioiTinh}" 
+                                                        <TextBlock Text="{Binding GioiTinh}"  FontSize="14"
                                                            Foreground="#6B7280"/>
                                                     </StackPanel>
 
                                                     <!-- Ngày sinh -->
                                                     <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="Ngày sinh:" 
+                                                        <TextBlock Text="Ngày sinh:" FontSize="14"
                                                            FontWeight="Medium" 
                                                            Foreground="#374151" 
                                                            Width="140"/>
-                                                        <TextBlock Text="{Binding NgaySinh, StringFormat='{}{0:dd/MM/yyyy}'}" 
+                                                        <TextBlock Text="{Binding NgaySinh, StringFormat='{}{0:dd/MM/yyyy}'}" FontSize="14"
                                                            Foreground="#6B7280"/>
                                                     </StackPanel>
 
                                                     <!-- CCCD -->
                                                     <StackPanel Orientation="Horizontal"
                                                         Visibility="{Binding Cccd, Converter={StaticResource NonNullToVisibilityConverter}}">
-                                                        <TextBlock Text="CCCD:" 
+                                                        <TextBlock Text="CCCD:" FontSize="14"
                                                            FontWeight="Medium" 
                                                            Foreground="#374151" 
                                                            Width="140"/>
-                                                        <TextBlock Text="{Binding Cccd}" 
+                                                        <TextBlock Text="{Binding Cccd}" FontSize="14"
                                                         Foreground="#6B7280"/>
                                                     </StackPanel>
 
                                                     <!-- Người giám hộ -->
                                                     <StackPanel Orientation="Horizontal"
                                                         Visibility="{Binding HoTenNguoiGiamHo, Converter={StaticResource NonNullToVisibilityConverter}}">
-                                                        <TextBlock Text="Người giám hộ:" 
+                                                        <TextBlock Text="Người giám hộ:" FontSize="14"
                                                            FontWeight="Medium" 
                                                            Foreground="#374151" 
                                                            Width="140"/>
-                                                        <TextBlock Text="{Binding HoTenNguoiGiamHo}" 
+                                                        <TextBlock Text="{Binding HoTenNguoiGiamHo}" FontSize="14"
                                                            Foreground="#6B7280"/>
                                                     </StackPanel>
                                                 </StackPanel>
