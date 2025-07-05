@@ -52,7 +52,7 @@
                                Width="50" Height="50" />  -->
                     </Border>
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Xin chào, Nhân viên ..." FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="Bold" />
                         <TextBlock Text="Chúc bạn một ngày làm việc hiệu quả!" Foreground="Gray" FontSize="14"/>
                     </StackPanel>
                 </StackPanel>
@@ -62,21 +62,21 @@
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 0 0 20">
                     <Border Background="#FFE3F2FD" CornerRadius="15" Padding="20" Margin="0 0 20 0" Width="200">
                         <StackPanel>
-                            <TextBlock Text="120" FontSize="36" FontWeight="Bold" Foreground="#2196F3" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding TicketSold}" FontSize="36" FontWeight="Bold" Foreground="#2196F3" TextAlignment="Center"/>
                             <TextBlock Text="Vé đã bán hôm nay" TextAlignment="Center" Foreground="Black"/>
                         </StackPanel>
                     </Border>
 
                     <Border Background="#FFF1F8E9" CornerRadius="15" Padding="20" Margin="0 0 20 0" Width="200">
                         <StackPanel>
-                            <TextBlock Text="15" FontSize="36" FontWeight="Bold" Foreground="#8BC34A" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Flights}" FontSize="36" FontWeight="Bold" Foreground="#8BC34A" TextAlignment="Center"/>
                             <TextBlock Text="Chuyến bay hôm nay" TextAlignment="Center" Foreground="Black"/>
                         </StackPanel>
                     </Border>
 
                     <Border Background="#FFFFEBEE" CornerRadius="15" Padding="20" Width="200">
                         <StackPanel>
-                            <TextBlock Text="3" FontSize="36" FontWeight="Bold" Foreground="#E91E63" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding TicketCancel}" FontSize="36" FontWeight="Bold" Foreground="#E91E63" TextAlignment="Center"/>
                             <TextBlock Text="Vé bị hủy" TextAlignment="Center" Foreground="Black"/>
                         </StackPanel>
                     </Border>
@@ -84,17 +84,13 @@
 
                 <!-- Biểu đồ -->
                 <Border Grid.Row="2" Background="White" CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
-                    <lvc:CartesianChart>
-                        <lvc:CartesianChart.Series>
-                            <lvc:LineSeries Title="Doanh thu" Values="10, 50, 70, 30, 90, 120, 100" PointGeometrySize="10"/>
-                        </lvc:CartesianChart.Series>
-
+                    <lvc:CartesianChart Series="{Binding RevenueSeries}">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Ngày" Labels="Thứ 2,Thứ 3,Thứ 4,Thứ 5,Thứ 6,Thứ 7,CN" />
+                            <lvc:Axis Labels="{Binding RevenueLabels}"
+                          Title="Ngày" />
                         </lvc:CartesianChart.AxisX>
-
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Doanh thu (triệu VND)" />
+                            <lvc:Axis Title="Doanh thu (triệu VND)" />
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
                 </Border>

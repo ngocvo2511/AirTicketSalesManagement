@@ -216,60 +216,49 @@
                                                          Foreground="#6366F1"
                                                          Margin="0,0,0,10"/>
 
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="140"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition/>
-                                                        <RowDefinition/>
-                                                        <RowDefinition/>
-                                                        <RowDefinition/>
-                                                    </Grid.RowDefinitions>
-
+                                                <StackPanel>
                                                     <!-- Giới tính -->
-                                                    <TextBlock Text="Giới tính:" 
-                                                             FontWeight="Medium" FontSize="14"
-                                                             Foreground="#374151"/>
-                                                    <TextBlock Text="{Binding GioiTinh}" 
-                                                             Grid.Column="1" FontSize="14"
-                                                             Foreground="#6B7280"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Giới tính:" 
+                                                           FontWeight="Medium" 
+                                                           Foreground="#374151" 
+                                                           Width="140"/>
+                                                        <TextBlock Text="{Binding GioiTinh}" 
+                                                           Foreground="#6B7280"/>
+                                                    </StackPanel>
 
                                                     <!-- Ngày sinh -->
-                                                    <TextBlock Text="Ngày sinh:" FontSize="14"
-                                                             Grid.Row="1"
-                                                             FontWeight="Medium" 
-                                                             Foreground="#374151"/>
-                                                    <TextBlock Text="{Binding NgaySinh, StringFormat='{}{0:dd/MM/yyyy}'}" 
-                                                             Grid.Row="1" FontSize="14"
-                                                             Grid.Column="1"
-                                                             Foreground="#6B7280"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Ngày sinh:" 
+                                                           FontWeight="Medium" 
+                                                           Foreground="#374151" 
+                                                           Width="140"/>
+                                                        <TextBlock Text="{Binding NgaySinh, StringFormat='{}{0:dd/MM/yyyy}'}" 
+                                                           Foreground="#6B7280"/>
+                                                    </StackPanel>
 
                                                     <!-- CCCD -->
-                                                    <TextBlock Text="CCCD:" 
-                                                             Grid.Row="2" FontSize="14"
-                                                             FontWeight="Medium" 
-                                                             Foreground="#374151"
-                                                             Visibility="{Binding Cccd, 
-                                                             Converter={StaticResource NonNullToVisibilityConverter}}"/>
-                                                    <TextBlock Text="{Binding Cccd}" 
-                                                             Grid.Row="2" FontSize="14"
-                                                             Grid.Column="1"
-                                                             Foreground="#6B7280"/>
+                                                    <StackPanel Orientation="Horizontal"
+                                                        Visibility="{Binding Cccd, Converter={StaticResource NonNullToVisibilityConverter}}">
+                                                        <TextBlock Text="CCCD:" 
+                                                           FontWeight="Medium" 
+                                                           Foreground="#374151" 
+                                                           Width="140"/>
+                                                        <TextBlock Text="{Binding Cccd}" 
+                                                        Foreground="#6B7280"/>
+                                                    </StackPanel>
 
                                                     <!-- Người giám hộ -->
-                                                    <TextBlock Text="Người giám hộ:" 
-                                                             Grid.Row="3" FontSize="14"
-                                                             FontWeight="Medium" 
-                                                             Foreground="#374151"
-                                                             Visibility="{Binding HoTenNguoiGiamHo, 
-                                                             Converter={StaticResource NonNullToVisibilityConverter}}"/>
-                                                    <TextBlock Text="{Binding HoTenNguoiGiamHo}" 
-                                                             Grid.Row="3"  FontSize="14"
-                                                             Grid.Column="1"
-                                                             Foreground="#6B7280"/>
-                                                </Grid>
+                                                    <StackPanel Orientation="Horizontal"
+                                                        Visibility="{Binding HoTenNguoiGiamHo, Converter={StaticResource NonNullToVisibilityConverter}}">
+                                                        <TextBlock Text="Người giám hộ:" 
+                                                           FontWeight="Medium" 
+                                                           Foreground="#374151" 
+                                                           Width="140"/>
+                                                        <TextBlock Text="{Binding HoTenNguoiGiamHo}" 
+                                                           Foreground="#6B7280"/>
+                                                    </StackPanel>
+                                                </StackPanel>
                                             </StackPanel>
                                         </Grid>
                                     </materialDesign:Card>
