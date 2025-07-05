@@ -9,6 +9,20 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Staff"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="980">
+    <UserControl.Resources>
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#6366F1" Offset="0"/>
+                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -23,13 +37,20 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Trang chủ" 
-                       FontSize="30" FontWeight="Bold"
-                       Margin="30 0 0 0"
-                       Foreground="#2C3E50"
-                       VerticalAlignment="Center" />
+                <StackPanel
+                 Orientation="Horizontal"
+                 VerticalAlignment="Center" Margin="20,0,0,0">
+                    <Icon:PackIconMaterial Kind="Home"
+                     Width="32"
+                     Height="32"
+                     VerticalAlignment="Stretch"
+                     Margin="0,0,8,0"
+                     Foreground="#6366F1"/>
+                    <TextBlock Text="Trang chủ"
+                    Style="{StaticResource HeaderTextStyle}"/>
+                </StackPanel>
 
-                
+
             </Grid>
 
             <!-- Content -->
@@ -62,21 +83,21 @@
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0 0 0 20">
                     <Border Background="#FFE3F2FD" CornerRadius="15" Padding="20" Margin="0 0 20 0" Width="200">
                         <StackPanel>
-                            <TextBlock Text="{Binding TicketSold}" FontSize="36" FontWeight="Bold" Foreground="#2196F3" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding TicketsSoldToday}" FontSize="36" FontWeight="Bold" Foreground="#2196F3" TextAlignment="Center"/>
                             <TextBlock Text="Vé đã bán hôm nay" TextAlignment="Center" Foreground="Black"/>
                         </StackPanel>
                     </Border>
 
                     <Border Background="#FFF1F8E9" CornerRadius="15" Padding="20" Margin="0 0 20 0" Width="200">
                         <StackPanel>
-                            <TextBlock Text="{Binding Flights}" FontSize="36" FontWeight="Bold" Foreground="#8BC34A" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding FlightsDepartedToday}" FontSize="36" FontWeight="Bold" Foreground="#8BC34A" TextAlignment="Center"/>
                             <TextBlock Text="Chuyến bay hôm nay" TextAlignment="Center" Foreground="Black"/>
                         </StackPanel>
                     </Border>
 
                     <Border Background="#FFFFEBEE" CornerRadius="15" Padding="20" Width="200">
                         <StackPanel>
-                            <TextBlock Text="{Binding TicketCancel}" FontSize="36" FontWeight="Bold" Foreground="#E91E63" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding TicketsCanceledToday}" FontSize="36" FontWeight="Bold" Foreground="#E91E63" TextAlignment="Center"/>
                             <TextBlock Text="Vé bị hủy" TextAlignment="Center" Foreground="Black"/>
                         </StackPanel>
                     </Border>
@@ -86,11 +107,15 @@
                 <Border Grid.Row="2" Background="White" CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
                     <lvc:CartesianChart Series="{Binding RevenueSeries}">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding RevenueLabels}"
-                          Title="Ngày" />
+                            <lvc:Axis  Title="{Binding RevenueAxisX.Title}"
+                                       Labels="{Binding RevenueAxisX.Labels}"
+                                       Separator="{Binding RevenueAxisX.Separator}"/>
                         </lvc:CartesianChart.AxisX>
+
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Doanh thu (triệu VND)" />
+                            <lvc:Axis Title="Doanh thu (triệu VND)"
+                                      MinValue="0"
+                                      LabelFormatter="{Binding YFormatter}"/>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
                 </Border>
