@@ -33,7 +33,7 @@
 
         <StackPanel Grid.Row="0"
             Orientation="Horizontal"
-            VerticalAlignment="Center" Margin="20,20,0,0">
+            VerticalAlignment="Center" Margin="15,15,0,0">
             <Icon:PackIconMaterial Kind="Ticket"
                                 Width="32"
                                 Height="32"
@@ -45,7 +45,7 @@
         </StackPanel>
 
         <!-- Search Section -->
-        <materialDesign:Card Grid.Row="1" Grid.RowSpan="2" Margin="20,0,20,30" 
+        <materialDesign:Card Grid.Row="1" Grid.RowSpan="2" Margin="15,0,15,20" 
                      UniformCornerRadius="15" Background="White"
                      materialDesign:ElevationAssist.Elevation="Dp1">
             <Grid Margin="20">
