@@ -215,6 +215,9 @@ namespace AirTicketSalesManagement.ViewModel.Login
         }
 
         #endregion
+
+        [RelayCommand]
+        private void ShowLogin() => _auth.NavigateToLogin();
     }
 
 }
