@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 
 namespace AirTicketSalesManagement.ViewModel.Booking
@@ -44,6 +45,17 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         public decimal TaxAndFees { get; set; }
         public decimal TotalPrice { get; set; }
 
+        [ObservableProperty]
+        public string diemDi;
+
+        [ObservableProperty]
+        public string diemDen;
+        [ObservableProperty]
+        public DateTime thoiGian;
+        [ObservableProperty]
+        public string flightSummary;
+
+
         public NotificationViewModel Notification => notification;
 
         public PaymentConfirmationViewModel()
@@ -71,6 +83,11 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             TotalPrice = (Flight.NumberAdults + Flight.NumberChildren + Flight.NumberInfants) * SelectedTicketClass.GiaVe + TaxAndFees;
             vnpayPayment = new VnpayPayment();
             LogoUrl = GetAirlineLogo(Flight.HangHangKhong);
+
+            DiemDi = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.DiemDi;
+            DiemDen = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.DiemDen;
+            thoiGian = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NgayDi;
+            FlightSummary = $"{DiemDi} đến {DiemDen} - {ThoiGian.ToString("dddd, dd 'tháng' MM, yyyy", new CultureInfo("vi-VN"))}";
         }
 
         private string GetAirlineLogo(string airlineName)

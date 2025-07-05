@@ -37,22 +37,33 @@
                                    Opacity="0.9" 
                                    Margin="0,5,0,0"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Chuyến bay: " 
-                                   FontSize="14" 
-                                   Foreground="White"/>
-                        <TextBlock Text="{Binding FlightCode}" 
-                                   FontSize="14" 
-                                   FontWeight="SemiBold" 
-                                   Foreground="White"/>
-                        <TextBlock Text=" | Hạng vé: " 
-                                   FontSize="14" 
-                                   Foreground="White"/>
-                        <TextBlock Text="{Binding SelectedTicketClass.TenHangVe}" 
-                                   FontSize="14" 
-                                   FontWeight="SemiBold" 
-                                   Foreground="White"/>
+                    <StackPanel Grid.Column="1" >
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10,0,5">
+                            <TextBlock Text="Chuyến bay: " 
+    FontSize="14" 
+    Foreground="White"/>
+                            <TextBlock Text="{Binding FlightCode}" 
+    FontSize="14" 
+    FontWeight="SemiBold" 
+    Foreground="White"/>
+                            <TextBlock Text=" | Hạng vé: " 
+                   FontSize="14" 
+                   Foreground="White"/>
+                            <TextBlock Text="{Binding SelectedTicketClass.TenHangVe}" 
+                   FontSize="14" 
+                   FontWeight="SemiBold" 
+                   Foreground="White"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding FlightSummary}"          
+                   FontSize="14"     
+                   FontWeight="SemiBold"     
+                   Foreground="White"    
+                   TextWrapping="Wrap"/>
+                        </StackPanel>
                     </StackPanel>
+
                 </Grid>
             </Border>
 
@@ -342,11 +353,7 @@
                     </Button.Effect>
                 </Button>
             </Grid>
-            <notification:NotificationControl x:Name="NotificationControl"
-                                            DataContext="{Binding Notification}"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Panel.ZIndex="1000"/>
+
         </Grid>
     </ScrollViewer>
 </UserControl>

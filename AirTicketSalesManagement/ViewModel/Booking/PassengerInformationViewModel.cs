@@ -1,22 +1,14 @@
 ﻿using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Globalization;
 
 namespace AirTicketSalesManagement.ViewModel.Booking
 {
     public partial class PassengerInformationViewModel : BaseViewModel
     {
-
         public string FlightCode { get; set; }
 
         [ObservableProperty]
@@ -29,6 +21,16 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private string contactPhone;
 
         public HangVe SelectedTicketClass { get; set; }
+
+        [ObservableProperty]
+        public string diemDi;
+
+        [ObservableProperty]
+        public string diemDen;
+        [ObservableProperty]
+        public DateTime thoiGian;
+        [ObservableProperty]
+        public string flightSummary;
 
         public ThongTinChuyenBayDuocChon ThongTinChuyenBayDuocChon { get; set; }
 
@@ -46,6 +48,10 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             // Lưu thông tin chuyến bay và hạng vé
             FlightCode = $"{selectedFlightInfo.Flight.MaSBDi} - {selectedFlightInfo.Flight.MaSBDen} ({selectedFlightInfo.Flight.HangHangKhong})";
             SelectedTicketClass = selectedFlightInfo.TicketClass;
+            DiemDi = selectedFlightInfo.Flight.DiemDi;
+            DiemDen = selectedFlightInfo.Flight.DiemDen;
+            thoiGian = selectedFlightInfo.Flight.NgayDi;
+            FlightSummary = $"{DiemDi} đến {DiemDen} - {ThoiGian.ToString("dddd, dd 'tháng' MM, yyyy", new CultureInfo("vi-VN"))}";
             // Khởi tạo danh sách hành khách dựa trên số lượng người lớn, trẻ em, em bé
             InitializePassengerList(selectedFlightInfo.Flight.NumberAdults, selectedFlightInfo.Flight.NumberChildren, selectedFlightInfo.Flight.NumberInfants); // Thay bằng dữ liệu thực tế nếu cần
         }
