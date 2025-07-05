@@ -19,7 +19,7 @@
             </Grid.RowDefinitions>
 
             <!-- Tiêu đề -->
-            <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+            <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="15 0 15 20">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -56,7 +56,7 @@
             </Border>
 
             <!-- Danh sách hành khách -->
-            <ItemsControl Grid.Row="1" ItemsSource="{Binding PassengerList}" Margin="0,0,0,20">
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding PassengerList}" Margin="15,0,15,20">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Background="#F5F7FA" 
@@ -247,7 +247,7 @@
             </ItemsControl>
 
             <!-- Thông tin liên hệ -->
-            <Border Grid.Row="2" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+            <Border Grid.Row="2" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="15,0,15,20">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -289,7 +289,7 @@
             </Border>
 
             <!-- Nút điều hướng -->
-            <Grid Grid.Row="3" Margin="20,0,20,20">
+            <Grid Grid.Row="3" Margin="30,0,30,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>

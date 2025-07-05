@@ -17,11 +17,11 @@
         </Grid.RowDefinitions>
 
         <!-- Panel tìm kiếm -->
-        <Border Grid.Row="0" Background="#F5F7FA" CornerRadius="10" Padding="23" Margin="0 0 0 20">
+        <Border Grid.Row="0" Background="#F5F7FA" CornerRadius="10" Padding="23" Margin="15 15 15 20">
             <StackPanel>
                 <!-- Tiêu đề -->
                 <TextBlock Text="Nhập thông tin chuyến bay cần tìm" 
-                       FontSize="20" 
+                       FontSize="22" 
                        FontWeight="SemiBold" 
                        Margin="0,0,0,17"
                        Foreground="#2C3E50"/>
@@ -386,7 +386,7 @@
 
         <!-- Phần hiển thị kết quả -->
         <!-- Phần hiển thị kết quả -->
-        <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20" HorizontalAlignment="Stretch">
+        <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20" HorizontalAlignment="Stretch" Margin="15,0,15,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -396,7 +396,7 @@
                 <!-- Tiêu đề kết quả tìm kiếm -->
                 <TextBlock Grid.Row="0" 
                    Text="Kết quả tìm kiếm" 
-                   FontSize="16" 
+                   FontSize="18" 
                    FontWeight="SemiBold" 
                    Margin="8,0,0,15"
                    Foreground="#333333"/>

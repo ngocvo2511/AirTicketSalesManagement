@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
 
             <!-- Tiêu đề -->
-            <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="0 0 0 20">
+            <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="15 0 15 20">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -57,7 +57,7 @@
             </Border>
 
             <!-- Thông tin chuyến bay -->
-            <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+            <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="15,0,15,20">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -122,7 +122,7 @@
             </Border>
 
             <!-- Chi tiết hóa đơn -->
-            <Border Grid.Row="2" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+            <Border Grid.Row="2" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="15,0,15,20">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -227,7 +227,7 @@
             </Border>
 
             <!-- Phương thức thanh toán -->
-            <Border Grid.Row="3" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+            <Border Grid.Row="3" Background="#F5F7FA" CornerRadius="10" Padding="20" Margin="15,0,15,20">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -307,7 +307,7 @@
             </Border>
 
             <!-- Nút điều hướng -->
-            <Grid Grid.Row="4" Margin="20,0,20,20">
+            <Grid Grid.Row="4" Margin="30,0,30,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
