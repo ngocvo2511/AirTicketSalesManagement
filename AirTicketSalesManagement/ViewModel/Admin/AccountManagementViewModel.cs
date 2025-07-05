@@ -253,17 +253,18 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void EditAccount()
+        public async Task EditAccount()
         {
             if (SelectedAccount == null)
             {
-                Notification.ShowNotificationAsync("Vui lòng chọn một tài khoản để chỉnh sửa.", NotificationType.Warning);
+                await Notification.ShowNotificationAsync("Vui lòng chọn một tài khoản để chỉnh sửa.", NotificationType.Warning);
                 return;
             }
 
             ResetEditFields();
             IsEditPopupOpen = true;
         }
+
 
         private void ResetEditFields()
         {

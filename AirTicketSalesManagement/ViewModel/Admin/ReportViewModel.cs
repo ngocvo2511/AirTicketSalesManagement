@@ -17,6 +17,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
     {
         [ObservableProperty] private bool isYearlyReport = true;
         [ObservableProperty] private bool isMonthlyReport;
+
+        public NotificationViewModel Notification { get; } = new NotificationViewModel();
         partial void OnIsYearlyReportChanged(bool oldValue, bool newValue)
         {
             if (newValue)         
@@ -173,32 +175,33 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        private void ExportReport()
+        private async void ExportReport()
         {
             string filename;
             if (IsYearlyReport)
             {
-                if(YearlyReportData.IsNullOrEmpty())
+                if (YearlyReportData.IsNullOrEmpty())
                 {
+                    await Notification.ShowNotificationAsync("Không có dữ liệu để xuất báo cáo năm!", NotificationType.Warning);
                     return;
                 }
                 filename = $"Báo cáo năm {YearlyReportData.First().Year}";
-                
             }
             else
             {
-                if(MonthlyReportData.IsNullOrEmpty())
+                if (MonthlyReportData.IsNullOrEmpty())
                 {
+                    await Notification.ShowNotificationAsync("Không có dữ liệu để xuất báo cáo tháng!", NotificationType.Warning);
                     return;
                 }
                 filename = $"Báo cáo tháng {MonthlyReportData.First().Month} năm {MonthlyReportData.First().Year}";
-                
             }
+
             var dialog = new SaveFileDialog
             {
                 FileName = filename,
-                DefaultExt = ".pdf",
-                Filter = "PDF files (*.xlsx)|*.xlsx",
+                DefaultExt = ".xlsx",
+                Filter = "Excel files (*.xlsx)|*.xlsx",
                 Title = "Chọn nơi lưu báo cáo"
             };
 
@@ -206,7 +209,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             if (result == true)
             {
                 string filePath = dialog.FileName;
-                if(IsMonthlyReport)
+                if (IsMonthlyReport)
                 {
                     ExcelExporter.ExportMonthlyReportToExcel(MonthlyReportData, MonthlyReportData.First().Month, MonthlyReportData.First().Year, filePath);
                 }
@@ -214,7 +217,10 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 {
                     ExcelExporter.ExportYearlyReportToExcel(YearlyReportData, YearlyReportData.First().Year, filePath);
                 }
+
+                await Notification.ShowNotificationAsync("Xuất báo cáo thành công!", NotificationType.Information);
             }
         }
+
     }
 }

@@ -538,7 +538,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                     if (flight == null)
                     {
-                        await Notification.ShowNotificationAsync("Không tìm thấy chuyến bay trong cơ sở dữ liệu.", NotificationType.Error);
+                        await Notification.ShowNotificationAsync("Không tìm thấy chuyến bay trong hệ thống.", NotificationType.Error);
                         return;
                     }
 

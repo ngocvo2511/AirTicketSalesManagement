@@ -88,7 +88,7 @@
         <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid Background="#80000000">
+    <Grid>
         <Border Style="{StaticResource NotificationBorderStyle}"
                 Background="{Binding Background}"
                 CornerRadius="10"
