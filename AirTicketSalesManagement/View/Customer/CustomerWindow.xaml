@@ -25,6 +25,37 @@
                               BlurRadius="8" 
                               Opacity="0.3"/>
 
+            <!-- Toggle Button Style -->
+            <Style x:Key="ToggleSidebarButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" 
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="8">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="White" Opacity="0.2"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <!-- Enhanced Sidebar Button Style -->
             <Style x:Key="ModernSidebarButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
@@ -91,7 +122,8 @@
         <uc:CustomTitleBar Grid.Row="0"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="240"/>
+                <!-- Sidebar Column - Sử dụng binding để thay đổi width -->
+                <ColumnDefinition Width="{Binding SidebarWidth}"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -115,6 +147,17 @@
 
                     <DockPanel Margin="15" LastChildFill="True">
 
+                        <!-- Toggle Button - Dock Top -->
+                        <Button DockPanel.Dock="Top"   
+                                Style="{StaticResource ToggleSidebarButton}"    
+                                HorizontalAlignment="Right"   
+                                Margin="0,0,0,15"    
+                                Command="{Binding ToggleSidebarCommand}"    
+                                ToolTip="Thu gọn/Mở rộng menu">
+                            <Icon:PackIconMaterial Kind="{Binding ToggleIcon}"                     
+                                                   Width="20" Height="20"/>
+                        </Button>
+                        
                         <!-- Đăng xuất dock bottom -->
                         <Button DockPanel.Dock="Bottom"
                                 Style="{StaticResource ModernSidebarButton}"                      
@@ -123,7 +166,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <Icon:PackIconMaterial Kind="ExitToApp" Width="22" Height="22" 
                                                        Margin="0,0,12,0" />
-                                <TextBlock Text="Đăng xuất" VerticalAlignment="Center"/>
+                                <TextBlock Text="Đăng xuất" VerticalAlignment="Center" Visibility="{Binding TextVisibility}"/>
                             </StackPanel>
                         </Button>
 
@@ -147,7 +190,7 @@
 
                                 <StackPanel Grid.Column="1" 
                                             VerticalAlignment="Center" 
-                                            Margin="15,0,0,0">
+                                            Margin="15,0,0,0" Visibility="{Binding TextVisibility}">
                                     <TextBlock Text="FlyTogether" 
                                                FontWeight="Bold" 
                                                FontSize="18" 
@@ -160,29 +203,29 @@
                             </Grid>
 
                             <!-- User Info Section -->
-                            <Border Background="#2C3E50" 
-        CornerRadius="15" 
-        Padding="15,10" 
-        Margin="0,0,0,20">
+                            <Border Background="#2C3E50"        
+                                    CornerRadius="15"     
+                                    Padding="15,10"       
+                                    Margin="0,0,0,20">
                                 <StackPanel Orientation="Horizontal">
-                                    <Border Background="White" 
-                CornerRadius="20" 
-                Width="40" Height="40">
-                                        <Icon:PackIconMaterial Kind="Account" 
-                                   Width="24" Height="24" 
-                                   Foreground="#667eea"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                                    <Border Background="White"           
+                                            CornerRadius="20"             
+                                            Width="40" Height="40">
+                                        <Icon:PackIconMaterial Kind="Account"                                  
+                                                               Width="24" Height="24"                               
+                                                               Foreground="#667eea"                             
+                                                               HorizontalAlignment="Center"                            
+                                                               VerticalAlignment="Center"/>
                                     </Border>
-                                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
-                                        <TextBlock Text="Xin chào!" 
-                       FontSize="12" 
-                       Foreground="White" 
-                       Opacity="0.9"/>
-                                        <TextBlock Text="{Binding HoTen}" 
-                       FontWeight="SemiBold" 
-                       FontSize="14" 
-                       Foreground="White"/>
+                                    <StackPanel Margin="10,0,0,0" VerticalAlignment="Center" Visibility="{Binding TextVisibility}">
+                                        <TextBlock Text="Xin chào!"                     
+                                                   FontSize="12"                     
+                                                   Foreground="White"                     
+                                                   Opacity="0.9"/>
+                                        <TextBlock Text="{Binding HoTen}"                    
+                                                   FontWeight="SemiBold"                   
+                                                   FontSize="14"                    
+                                                   Foreground="White"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
@@ -194,7 +237,8 @@
                                        FontSize="11" 
                                        Foreground="White" 
                                        Opacity="0.7"
-                                       Margin="10,0,0,10"/>
+                                       Margin="10,0,0,10"
+                                       Visibility="{Binding TextVisibility}"/>
 
                             <!-- Menu Items -->
                             <Button Style="{StaticResource ModernSidebarButton}"
@@ -202,7 +246,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="Home" Width="22" 
                                                            Height="22" Margin="0,0,12,0" />
-                                    <TextBlock Text="Trang chủ" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Trang chủ" VerticalAlignment="Center" Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
 
@@ -211,7 +255,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="AirplaneTakeoff" Width="22" 
                                Height="22" Margin="0,0,12,0"/>
-                                    <TextBlock Text="Đặt vé" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Đặt vé" VerticalAlignment="Center" Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
 
@@ -220,7 +264,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="History" Width="22" 
                                Height="22" Margin="0,0,12,0"/>
-                                    <TextBlock Text="Lịch sử đặt vé" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Lịch sử đặt vé" VerticalAlignment="Center" Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
 
@@ -229,32 +273,15 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="AccountEdit" Width="22" 
                                                            Height="22" Margin="0,0,12,0" />
-                                    <TextBlock Text="Thông tin cá nhân" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Thông tin cá nhân" VerticalAlignment="Center" Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
-
-
 
                             <!-- Divider -->
-                            <Separator Background="White" 
-                                       Opacity="0.3" 
-                                       Margin="0,20,0,15"/>
-
-                            <!-- Support Section -->
-                            <TextBlock Text="HỖ TRỢ" 
-                                       FontWeight="Bold" 
-                                       FontSize="11" 
-                                       Foreground="White" 
-                                       Opacity="0.7"
-                                       Margin="10,0,0,10"/>
-
-                            <Button Style="{StaticResource ModernSidebarButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="Help" Width="22" 
-                                                           Height="22" Margin="0,0,12,0" />
-                                    <TextBlock Text="Trợ giúp" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
+                            <Separator Background="White"       
+                                       Opacity="0.3"      
+                                       Margin="0,20,0,15"      
+                                       Visibility="{Binding TextVisibility}"/>
 
 
                         </StackPanel>

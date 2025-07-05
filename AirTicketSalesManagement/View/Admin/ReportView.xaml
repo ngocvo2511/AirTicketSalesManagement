@@ -76,7 +76,7 @@
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="16">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -84,26 +84,17 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Compact Header -->
-            <Border Grid.Row="0" Background="White" CornerRadius="8" Padding="16,12" Margin="0,0,0,16">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="📊 BÁO CÁO THỐNG KÊ" 
-                                 Style="{StaticResource HeaderTextStyle}"/>
-                        <TextBlock Text="Xem báo cáo doanh thu và thống kê chuyến bay" 
-                                 Foreground="#6B7280" 
-                                 FontSize="12" Margin="0,2,0,0"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
+            <!-- Header Section -->
+            <Grid Grid.Row="0" Margin="15,15,15,15">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Icon:PackIconMaterial Kind="ChartLine" Width="32" Height="32" 
+                                     Foreground="#6366F1" Margin="0,0,12,0"/>
+                    <TextBlock Text="BÁO CÁO THỐNG KÊ" Style="{StaticResource HeaderTextStyle}"/>
+                </StackPanel>
+            </Grid>
 
             <!-- Compact Filter Section -->
-            <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="16" Margin="0,0,0,16"
+            <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="16" Margin="15,0,15,20"
                     BorderBrush="#E5E7EB" BorderThickness="1">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -249,7 +240,7 @@
             </Border>
 
             <!-- Compact Summary Cards -->
-            <Border Grid.Row="2" Margin="0,0,0,16"
+            <Border Grid.Row="2" Margin="15,0,15,20"
                     Visibility="{Binding ReportSummary, Converter={StaticResource NonNullToVisibilityConverter}}">
                 <UniformGrid Columns="4" Margin="-6">
                     <!-- Total Revenue Card -->
@@ -343,7 +334,7 @@
             </Border>
 
             <!-- Enhanced Data Section -->
-            <Border Grid.Row="3" Background="White" 
+            <Border Grid.Row="3" Background="White" Margin="15,0,15,0"
                     CornerRadius="8" Padding="0" 
                     BorderBrush="#3B82F6" BorderThickness="2"                   
                     >

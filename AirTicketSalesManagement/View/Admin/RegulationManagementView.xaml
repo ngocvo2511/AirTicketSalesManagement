@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Admin"
              mc:Ignorable="d" 
              xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="TextBlock" x:Key="HeaderStyle">
@@ -121,6 +122,20 @@
             <Setter Property="BorderBrush" Value="#F3F4F6"/>
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
         </Style>
+
+        <!-- Header Style -->
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#6366F1" Offset="0"/>
+                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -129,14 +144,17 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="White" Padding="30,25">
-            <StackPanel>
-                <TextBlock Text="⚙️ QUẢN LÝ QUY ĐỊNH" Style="{StaticResource HeaderStyle}"/>
-                <TextBlock Text="Xem và quản lý các quy định hệ thống máy bay" 
-                         Style="{StaticResource LabelStyle}"/>
+        <!-- Header Section -->
+        <Grid Grid.Row="0" Margin="15,15,15,15">
+
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Icon:PackIconMaterial Kind="FileDocumentEdit" Width="32" Height="32" 
+                                     Foreground="#6366F1" Margin="0,0,12,0"/>
+                <TextBlock Text="QUẢN LÝ QUY ĐỊNH" Style="{StaticResource HeaderTextStyle}"/>
             </StackPanel>
-        </Border>
+
+        </Grid>
 
         <!-- Content -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="30,20">

@@ -123,6 +123,32 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             authWindow.BeginAnimation(Window.OpacityProperty, fadeIn);
         }
 
+        [ObservableProperty]
+        private bool isSidebarExpanded = true;
+        [ObservableProperty]
+        private GridLength sidebarWidth = new GridLength(240);
+        [ObservableProperty]
+        private Visibility textVisibility = Visibility.Visible;
+        [ObservableProperty]
+        private string toggleIcon = "MenuOpen";
+
+        [RelayCommand]
+        private void ToggleSidebar()
+        {
+            IsSidebarExpanded = !IsSidebarExpanded;
+            if (IsSidebarExpanded)
+            {
+                SidebarWidth = new GridLength(240);
+                TextVisibility = Visibility.Visible;
+                ToggleIcon = "MenuOpen";
+            }
+            else
+            {
+                SidebarWidth = new GridLength(100);
+                TextVisibility = Visibility.Collapsed;
+                ToggleIcon = "Menu";
+            }
+        }
     }
 
     public class WebViewNavigationMessage : ValueChangedMessage<string>

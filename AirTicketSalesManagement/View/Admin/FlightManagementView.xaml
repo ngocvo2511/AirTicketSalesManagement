@@ -204,16 +204,6 @@
                 <TextBlock Text="QUẢN LÝ CHUYẾN BAY" Style="{StaticResource HeaderTextStyle}"/>
             </StackPanel>
 
- <!--           <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Border Background="#EEF2FF" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
-                    <StackPanel Orientation="Horizontal">
-                        <Icon:PackIconMaterial Kind="ClockOutline" Width="16" Height="16" 
-                                             Foreground="#6366F1" Margin="0,0,6,0"/>
-                        <TextBlock Text="{Binding Source={x:Static System:DateTime.Now}, StringFormat='dd/MM/yyyy HH:mm'}" 
-                                 FontSize="12" Foreground="#4F46E5" FontWeight="Medium"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>   -->
         </Grid>
 
         <!-- Search Section -->

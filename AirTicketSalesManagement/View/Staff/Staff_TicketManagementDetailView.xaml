@@ -44,7 +44,7 @@
                                  VerticalAlignment="Stretch"
                                  Margin="0,0,8,0"
                                  Foreground="#6366F1"/>
-                        <TextBlock Text="Chi tiết đặt vé"
+                        <TextBlock Text="CHI TIẾT ĐẶT VÉ"
              Style="{StaticResource HeaderTextStyle}"/>
             </StackPanel>
         </Grid>
