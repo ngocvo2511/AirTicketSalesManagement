@@ -189,122 +189,208 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Search Header -->
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,18">
-                    <Icon:PackIconMaterial Kind="Magnify" Width="20" Height="20" 
-                                         Foreground="#64748B" Margin="0,0,8,0"/>
-                    <TextBlock Text="Tìm kiếm lịch bay" FontSize="16" FontWeight="SemiBold" 
-                             Foreground="#334155"/>
-                </StackPanel>
-
-                <!-- Search Fields Row 1 -->
-                <Grid Grid.Row="1" Margin="0,0,0,16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
-                        <TextBlock Text="Số hiệu chuyến bay" FontWeight="Medium" 
-                                 Foreground="#374151" Margin="0,0,0,6"/>
-                        <TextBox x:Name="txtSearchFlightNumber" 
-                                 Text="{Binding SoHieuCB, UpdateSourceTrigger=PropertyChanged}"
-                                 materialDesign:HintAssist.Hint="VN123, VJ456..."
-                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                 Height="52" FontSize="14"/>
+                <!-- Search Header with Collapse/Expand Button -->
+                <Grid Grid.Row="0" Margin="0,0,0,18">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Icon:PackIconMaterial Kind="Magnify" Width="20" Height="20" 
+                             Foreground="#64748B" Margin="0,0,8,0"/>
+                        <TextBlock Text="Tìm kiếm lịch bay" FontSize="16" FontWeight="SemiBold" 
+                 Foreground="#334155"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1" Margin="6,0,6,0">
-                        <TextBlock Text="Sân bay đi" FontWeight="Medium" 
-                                 Foreground="#374151" Margin="0,0,0,6"/>
-                        <ComboBox x:Name="cboSearchDeparture"
-                                  ItemsSource="{Binding DiemDiList}"
-                                  Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  materialDesign:HintAssist.Hint="Chọn sân bay đi"
-                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                  Height="52" FontSize="14"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="2" Margin="12,0,0,0">
-                        <TextBlock Text="Sân bay đến" FontWeight="Medium" 
-                                 Foreground="#374151" Margin="0,0,0,6"/>
-                        <ComboBox x:Name="cboSearchDestination"
-                                  ItemsSource="{Binding DiemDenList}"
-                                  Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  materialDesign:HintAssist.Hint="Chọn sân bay đến"
-                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                  Height="52" FontSize="14"/>
-                    </StackPanel>
+                    <Button x:Name="btnToggleSearch"
+            Command="{Binding ToggleSearchCommand}"
+            Style="{StaticResource MaterialDesignIconButton}"
+            HorizontalAlignment="Right"
+            Width="32" Height="32"
+            Padding="0"
+            ToolTip="{Binding IsSearchExpanded, Converter={StaticResource BoolToTooltipConverter}}">
+                        <Icon:PackIconMaterial 
+            Kind="{Binding IsSearchExpanded, Converter={StaticResource BoolToIconConverter}}"
+            Width="18" Height="18" 
+            Foreground="#64748B"/>
+                    </Button>
                 </Grid>
 
-                <!-- Search Fields Row 2 -->
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <!-- Search Content with Collapse Animation -->
+                <Grid Grid.Row="1" x:Name="SearchContent" ClipToBounds="True">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="MaxHeight" Value="1000"/>
+                            <Setter Property="Opacity" Value="1"/>
+                            <Setter Property="IsHitTestVisible" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSearchExpanded}" Value="False">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                    Storyboard.TargetProperty="MaxHeight"
+                                    To="0" Duration="0:0:0.3">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="0" Duration="0:0:0.2">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <BooleanAnimationUsingKeyFrames
+                                    Storyboard.TargetProperty="IsHitTestVisible">
+                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.3" Value="False"/>
+                                                </BooleanAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                    Storyboard.TargetProperty="MaxHeight"
+                                    To="1000" Duration="0:0:0.3">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="1" Duration="0:0:0.3" BeginTime="0:0:0.1">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <BooleanAnimationUsingKeyFrames
+                                    Storyboard.TargetProperty="IsHitTestVisible">
+                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                                </BooleanAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
 
-                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
-                        <TextBlock Text="Ngày đi" FontWeight="Medium" 
-                                 Foreground="#374151" Margin="0,0,0,6"/>
-                        <DatePicker Grid.Column="1"
-        Height="52"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                                    FontSize="14"
-        materialDesign:HintAssist.Hint="Ngày đi"
-        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-        SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
-                    </StackPanel>
+                        <!-- Search Fields Row 1 -->
+                        <Grid Grid.Row="0" Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="1" Margin="6,0,6,0">
-                        <TextBlock Text="Tình trạng lịch bay" FontWeight="Medium" 
-                                 Foreground="#374151" Margin="0,0,0,6"/>
-                        <ComboBox x:Name="cboSearchStatus"
-                                  Text="{Binding TinhTrangLichBay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  materialDesign:HintAssist.Hint="Tất cả"
-                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                                  Height="52" FontSize="14">
-                            <ComboBoxItem Content="Tất cả" Tag="Tất cả"/>
-                            <ComboBoxItem Content="Chờ cất cánh" Tag="Chờ cất cánh"/>
-                            <ComboBoxItem Content="Đã cất cánh" Tag="Đã cất cánh"/>
-                            <ComboBoxItem Content="Hoàn thành" Tag="Hoàn thành"/>
-                        </ComboBox>
-                    </StackPanel>
+                            <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                <TextBlock Text="Số hiệu chuyến bay" FontWeight="Medium" 
+                         Foreground="#374151" Margin="0,0,0,6"/>
+                                <TextBox x:Name="txtSearchFlightNumber" 
+                         Text="{Binding SoHieuCB, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="VN123, VJ456..."
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Height="52" FontSize="14"/>
+                            </StackPanel>
 
-                    <!-- Search Buttons -->
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" 
-                               VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="12,0,0,0">
-                        <Button x:Name="btnSearch" 
-                                Command="{Binding SearchCommand}"
-                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                Background="#6366F1"
-                                BorderBrush="#6366F1"
-                                Margin="0,0,8,0" Width="130" Height="50">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="Magnify" Width="16" Height="16" Margin="0,0,6,0"/>
-                                    <TextBlock Text="Tìm kiếm" FontWeight="Medium"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Button x:Name="btnClearSearch"
-                                Command="{Binding ClearSearchCommand}"
-                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                BorderBrush="#E5E7EB"
-                                Width="90" Height="50">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="FilterRemove" Width="16" Height="16" Margin="0,0,6,0"/>
-                                    <TextBlock Text="Xóa" FontWeight="Medium"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="6,0,6,0">
+                                <TextBlock Text="Sân bay đi" FontWeight="Medium" 
+                         Foreground="#374151" Margin="0,0,0,6"/>
+                                <ComboBox x:Name="cboSearchDeparture"
+                          ItemsSource="{Binding DiemDiList}"
+                          Text="{Binding DiemDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          materialDesign:HintAssist.Hint="Chọn sân bay đi"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Height="52" FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="12,0,0,0">
+                                <TextBlock Text="Sân bay đến" FontWeight="Medium" 
+                         Foreground="#374151" Margin="0,0,0,6"/>
+                                <ComboBox x:Name="cboSearchDestination"
+                          ItemsSource="{Binding DiemDenList}"
+                          Text="{Binding DiemDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          materialDesign:HintAssist.Hint="Chọn sân bay đến"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Height="52" FontSize="14"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Search Fields Row 2 -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                <TextBlock Text="Ngày đi" FontWeight="Medium" 
+                         Foreground="#374151" Margin="0,0,0,6"/>
+                                <DatePicker Grid.Column="1"
+Height="52"
+
+                            FontSize="14"
+materialDesign:HintAssist.Hint="Ngày đi"
+Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
+                            </StackPanel>
+
+
+                            <StackPanel Grid.Column="1" Margin="6,0,6,0">
+                                <TextBlock Text="Tình trạng lịch bay" FontWeight="Medium" 
+                         Foreground="#374151" Margin="0,0,0,6"/>
+                                <ComboBox x:Name="cboSearchStatus"
+                          Text="{Binding TinhTrangLichBay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          materialDesign:HintAssist.Hint="Tất cả"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Height="52" FontSize="14">
+                                    <ComboBoxItem Content="Tất cả" Tag="Tất cả"/>
+                                    <ComboBoxItem Content="Chờ cất cánh" Tag="Chờ cất cánh"/>
+                                    <ComboBoxItem Content="Đã cất cánh" Tag="Đã cất cánh"/>
+                                    <ComboBoxItem Content="Hoàn thành" Tag="Hoàn thành"/>
+                                </ComboBox>
+                            </StackPanel>
+
+
+                            <!-- Search Buttons -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" 
+                       VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="12,0,0,0">
+                                <Button x:Name="btnSearch" 
+                        Command="{Binding SearchCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#6366F1"
+                        BorderBrush="#6366F1"
+                        Margin="0,0,8,0" Width="130" Height="50">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Kind="Magnify" Width="16" Height="16" Margin="0,0,6,0"/>
+                                            <TextBlock Text="Tìm kiếm" FontWeight="Medium"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Button x:Name="btnClearSearch"
+                        Command="{Binding ClearSearchCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        BorderBrush="#E5E7EB"
+                        Width="90" Height="50">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Kind="FilterRemove" Width="16" Height="16" Margin="0,0,6,0"/>
+                                            <TextBlock Text="Xóa" FontWeight="Medium"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Border>

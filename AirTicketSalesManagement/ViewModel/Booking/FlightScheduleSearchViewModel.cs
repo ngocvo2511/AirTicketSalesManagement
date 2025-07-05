@@ -337,6 +337,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                     {
                         MaSBDi = flight.SoHieuCbNavigation.SbdiNavigation.MaSb,
                         MaSBDen = flight.SoHieuCbNavigation.SbdenNavigation.MaSb,
+                        DiemDi = flight.SoHieuCbNavigation.SbdiNavigation.ThanhPho,
+                        DiemDen = flight.SoHieuCbNavigation.SbdenNavigation.ThanhPho,
                         MaLichBay = flight.MaLb,
                         HangHangKhong = flight.SoHieuCbNavigation.HangHangKhong,
                         NgayDi = flight.GioDi.Value.Date,
@@ -473,6 +475,18 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 return "/Resources/Images/vietravel.png";
 
             return "/Images/default.png";
+        }
+
+        [ObservableProperty]
+        private bool isSearchExpanded = true;
+
+        [ObservableProperty]
+        private double searchContentHeight = double.NaN;
+
+        [RelayCommand]
+        private void ToggleSearch()
+        {
+            IsSearchExpanded = !IsSearchExpanded;
         }
     }
 

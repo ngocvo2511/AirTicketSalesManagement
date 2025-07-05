@@ -42,6 +42,8 @@
             <converters:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter"/>
             <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
             <converters:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
+            <converters:BoolToIconConverter x:Key="BoolToIconConverter"/>
+            <converters:BoolToTooltipConverter x:Key="BoolToTooltipConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

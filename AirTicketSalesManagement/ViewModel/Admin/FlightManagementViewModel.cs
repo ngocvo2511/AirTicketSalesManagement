@@ -703,5 +703,18 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 await Notification.ShowNotificationAsync($"Lỗi khi xóa sân bay trung gian: {ex.Message}", NotificationType.Error);
             }
         }
+
+        [ObservableProperty]
+        private bool isSearchExpanded = true;
+
+        [ObservableProperty]
+        private double searchContentHeight = double.NaN;
+
+        [RelayCommand]
+        private void ToggleSearch()
+        {
+            IsSearchExpanded = !IsSearchExpanded;
+        }
+
     }
 }

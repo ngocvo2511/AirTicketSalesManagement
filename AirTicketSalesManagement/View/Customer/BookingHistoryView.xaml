@@ -34,7 +34,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" Margin="0 10 0 20">
+        <Grid Grid.Row="0" Margin="15 15 15 15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -42,7 +42,7 @@
 
             <StackPanel
              Orientation="Horizontal"
-             VerticalAlignment="Center" Margin="20,20,0,0">
+             VerticalAlignment="Center" >
                 <Icon:PackIconMaterial Kind="Ticket"
                          Width="32"
                          Height="32"
@@ -54,155 +54,247 @@
             </StackPanel>
         </Grid>
         <!-- Search Section -->
-        <materialDesign:Card Grid.Row="1" Grid.RowSpan="2" Margin="20,0,20,30" 
-                     UniformCornerRadius="15" Background="White"
-                     materialDesign:ElevationAssist.Elevation="Dp1">
+        <materialDesign:Card Grid.Row="1" Grid.RowSpan="2" Margin="15,0,15,15" 
+             UniformCornerRadius="15" Background="White"
+             materialDesign:ElevationAssist.Elevation="Dp1">
             <Grid Margin="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Row 1: Departure and Arrival -->
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <!-- Search Header with Collapse/Expand Button -->
+                <Grid Grid.Row="0" Margin="0,0,0,18">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <materialDesign:PackIcon Kind="Magnify" Width="20" Height="20" 
+                                        Foreground="#64748B" Margin="0,0,8,0"/>
+                        <TextBlock Text="Tìm kiếm lịch sử đặt vé" FontSize="16" FontWeight="SemiBold" 
+                          Foreground="#334155"/>
+                    </StackPanel>
 
-                    <!-- Departure -->
-                    <ComboBox Grid.Column="0"
-                     Margin="0,0,10,0"
-                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                     Height="53"
-                     FontSize="14"
-                     IsEditable="True"
-                     ItemsSource="{Binding DiemDiList}"
-                     Text="{Binding NoiDiFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     materialDesign:HintAssist.Hint="Nơi đi"
-                     materialDesign:TextFieldAssist.HasClearButton="True">
-                    </ComboBox>
-                    <!-- Arrival -->
-                    <ComboBox Grid.Column="2"
-                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                     Height="53"
-                     FontSize="14"
-                     IsEditable="True"
-                     ItemsSource="{Binding DiemDenList}"
-                     Text="{Binding NoiDenFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     materialDesign:HintAssist.Hint="Nơi đến"
-                     materialDesign:TextFieldAssist.HasClearButton="True">
-                    </ComboBox>
+                    <Button x:Name="btnToggleSearch"
+                    Command="{Binding ToggleSearchCommand}"
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    HorizontalAlignment="Right"
+                    Width="32" Height="32"
+                    Padding="0"
+                    ToolTip="{Binding IsSearchExpanded, Converter={StaticResource BoolToTooltipConverter}}">
+                        <Icon:PackIconMaterial
+                    Kind="{Binding IsSearchExpanded, Converter={StaticResource BoolToIconConverter}}"
+                    Width="18" Height="18" 
+                    Foreground="#64748B"/>
+                    </Button>
                 </Grid>
 
-                <!-- Row 2: Airline and Date -->
-                <Grid Grid.Row="1" Margin="0,20,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <!-- Search Content with Collapse Animation -->
+                <Grid Grid.Row="1" x:Name="SearchContent" ClipToBounds="True">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="MaxHeight" Value="1000"/>
+                            <Setter Property="Opacity" Value="1"/>
+                            <Setter Property="IsHitTestVisible" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSearchExpanded}" Value="False">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                            Storyboard.TargetProperty="MaxHeight"
+                                            To="0" Duration="0:0:0.3">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0" Duration="0:0:0.2">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <BooleanAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="IsHitTestVisible">
+                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0.3" Value="False"/>
+                                                </BooleanAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                            Storyboard.TargetProperty="MaxHeight"
+                                            To="1000" Duration="0:0:0.3">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1" Duration="0:0:0.3" BeginTime="0:0:0.1">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuadraticEase EasingMode="EaseInOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <BooleanAnimationUsingKeyFrames
+                                            Storyboard.TargetProperty="IsHitTestVisible">
+                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                                </BooleanAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
 
-                    <!-- Airline -->
-                    <ComboBox Grid.Column="0"
-                     Margin="0,0,10,0"
-                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                     Height="53"
-                     FontSize="14"
-                     IsEditable="True"
-                     ItemsSource="{Binding HangHangKhongList}"
-                     Text="{Binding HangHangKhongFilter, Mode=TwoWay}"
-                     materialDesign:HintAssist.Hint="Hãng hàng không"
-                     materialDesign:TextFieldAssist.HasClearButton="True">
-                    </ComboBox>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                    <!-- Date Picker with Clear Button -->
-                    <Grid Grid.Column="1">
-                        <DatePicker Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                           Height="53"
-                           FontSize="14"
-                           SelectedDate="{Binding NgayDatFilter, Mode=TwoWay}"
-                           materialDesign:HintAssist.Hint="Ngày đặt"
-                           materialDesign:TextFieldAssist.HasClearButton="True"
-                           behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
+                        <!-- Row 1: Departure and Arrival -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Departure -->
+                            <ComboBox Grid.Column="0"
+                              Margin="0,0,10,0"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Height="53"
+                              FontSize="14"
+                              IsEditable="True"
+                              ItemsSource="{Binding DiemDiList}"
+                              Text="{Binding NoiDiFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Nơi đi"
+                              materialDesign:TextFieldAssist.HasClearButton="True">
+                            </ComboBox>
+                            <!-- Arrival -->
+                            <ComboBox Grid.Column="2"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Height="53"
+                              FontSize="14"
+                              IsEditable="True"
+                              ItemsSource="{Binding DiemDenList}"
+                              Text="{Binding NoiDenFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Nơi đến"
+                              materialDesign:TextFieldAssist.HasClearButton="True">
+                            </ComboBox>
+                        </Grid>
+
+                        <!-- Row 2: Airline and Date -->
+                        <Grid Grid.Row="1" Margin="0,20,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Airline -->
+                            <ComboBox Grid.Column="0"
+                              Margin="0,0,10,0"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Height="53"
+                              FontSize="14"
+                              IsEditable="True"
+                              ItemsSource="{Binding HangHangKhongList}"
+                              Text="{Binding HangHangKhongFilter, Mode=TwoWay}"
+                              materialDesign:HintAssist.Hint="Hãng hàng không"
+                              materialDesign:TextFieldAssist.HasClearButton="True">
+                            </ComboBox>
+
+                            <!-- Date Picker with Clear Button -->
+                            <Grid Grid.Column="1">
+                                <DatePicker Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                   Height="53"
+                                   FontSize="14"
+                                   SelectedDate="{Binding NgayDatFilter, Mode=TwoWay}"
+                                   materialDesign:HintAssist.Hint="Ngày đặt"
+                                   materialDesign:TextFieldAssist.HasClearButton="True"
+                                   behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
+                            </Grid>
+                        </Grid>
+
+                        <!-- Row 3: Booking Status, Search, and Clear Filter Buttons -->
+                        <Grid Grid.Row="2" Margin="0,20,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox Grid.Column="0"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Height="53"
+                              FontSize="14"
+                              Margin="0,0,10,0"
+                              ItemsSource="{Binding BookingStatusList}"
+                              SelectedItem="{Binding BookingStatusFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              materialDesign:HintAssist.Hint="Trạng thái đặt vé"
+                              materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+                            <!-- Clear Filter Button -->
+                            <Button Grid.Column="2"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{Binding ClearFilterCommand}"
+                            Height="45"
+                            Margin="0,0,10,0"
+                            BorderBrush="#6366F1"
+                            Foreground="#6366F1"
+                            materialDesign:ButtonAssist.CornerRadius="8">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FilterOff" 
+                                                    Width="20" 
+                                                    Height="20" 
+                                                    Margin="0,0,8,0"
+                                                    VerticalAlignment="Center"/>
+                                    <TextBlock Text="Xoá bộ lọc" 
+                                       FontSize="14" 
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Search Button -->
+                            <Button Grid.Column="3"
+                            Height="45"
+                            MinWidth="120"
+                            Command="{Binding SearchHistoryCommand}"
+                            Background="#6366F1"
+                            BorderThickness="0"
+                            Foreground="White"
+                            materialDesign:ButtonAssist.CornerRadius="8">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                        <Setter Property="Background" Value="#6366F1"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#4F46E5"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Search" 
+                                                    Width="20" 
+                                                    Height="20" 
+                                                    Margin="0,0,8,0"
+                                                    VerticalAlignment="Center"/>
+                                    <TextBlock Text="Tìm kiếm" 
+                                       FontSize="14" 
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-
-                <!-- Row 3: Booking Status, Search, and Clear Filter Buttons -->
-                <Grid Grid.Row="2" Margin="0,20,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <ComboBox Grid.Column="0"
-                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                      Height="53"
-                      FontSize="14"
-                      Margin="0,0,10,0"
-                      ItemsSource="{Binding BookingStatusList}"
-                      SelectedItem="{Binding BookingStatusFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      materialDesign:HintAssist.Hint="Trạng thái đặt vé"
-                      materialDesign:TextFieldAssist.HasClearButton="True"/>
-
-
-                    <!-- Clear Filter Button -->
-                    <Button Grid.Column="2"
-                        Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Command="{Binding ClearFilterCommand}"
-                        Height="45"
-                        Margin="0,0,10,0"
-                        BorderBrush="#6366F1"
-                        Foreground="#6366F1"
-                        materialDesign:ButtonAssist.CornerRadius="8">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FilterOff" 
-                                                    Width="20" 
-                                                    Height="20" 
-                                                    Margin="0,0,8,0"
-                                                    VerticalAlignment="Center"/>
-                            <TextBlock Text="Xoá bộ lọc" 
-                                       FontSize="14" 
-                                       FontWeight="Medium"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
-                    <!-- Search Button -->
-                    <Button Grid.Column="3"
-                        Height="45"
-                        MinWidth="120"
-                        Command="{Binding SearchHistoryCommand}"
-                        Background="#6366F1"
-                        BorderThickness="0"
-                        Foreground="White"
-                        materialDesign:ButtonAssist.CornerRadius="8">
-                        <Button.Style>
-                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
-                                <Setter Property="Background" Value="#6366F1"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#4F46E5"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Search" 
-                                                    Width="20" 
-                                                    Height="20" 
-                                                    Margin="0,0,8,0"
-                                                    VerticalAlignment="Center"/>
-                            <TextBlock Text="Tìm kiếm" 
-                                       FontSize="14" 
-                                       FontWeight="Medium"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
                 </Grid>
             </Grid>
         </materialDesign:Card>
@@ -213,7 +305,7 @@
         <!-- Content -->
 
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Grid.Row="3">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Grid.Row="3" Margin="15,0,15,0">
             <StackPanel>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
                 Margin="40"
@@ -404,5 +496,10 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
+    <!--    <notification:NotificationControl x:Name="NotificationControl"
+                DataContext="{Binding Notification}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Panel.ZIndex="1000"/>  -->
     </Grid>
 </UserControl>

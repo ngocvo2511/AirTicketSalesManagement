@@ -16,6 +16,12 @@ namespace AirTicketSalesManagement.Models
         private string maSBDen;
 
         [ObservableProperty]
+        private string diemDi;
+
+        [ObservableProperty]
+        private string diemDen;
+
+        [ObservableProperty]
         private int maLichBay;
 
         [ObservableProperty]

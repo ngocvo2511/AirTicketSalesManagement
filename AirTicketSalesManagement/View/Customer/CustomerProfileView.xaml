@@ -725,6 +725,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#6366F1" Offset="0"/>
+                        <GradientStop Color="#8B5CF6" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid Background="#f1f5f9">
@@ -734,31 +747,20 @@
         </Grid.RowDefinitions>
 
         <!-- Header với Gradient -->
-        <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" 
-                 Padding="30,25">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Margin="15,15,15,15">
 
-                <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock Text="Hồ Sơ Khách Hàng" 
-                               FontSize="32" FontWeight="Bold"
-                               Foreground="White"/>
 
-                </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Icon:PackIconMaterial Kind="AccountEdit" Width="32" Height="32" 
+                             Foreground="#6366F1" Margin="0,0,12,0"/>
+                <TextBlock Text="HỒ SƠ KHÁCH HÀNG" Style="{StaticResource HeaderTextStyle}"/>
+            </StackPanel>
 
-                <ToggleButton Grid.Column="1" 
-                              Template="{StaticResource ProfilePopupTemplate}" 
-                              Width="50" Height="50"
-                              VerticalAlignment="Center"/>
-            </Grid>
-        </Border>
+        </Grid>
 
         <!-- Main Content -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
-            <Grid MaxWidth="1200">
+            <Grid HorizontalAlignment="Stretch" Margin="15,0,15,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -767,7 +769,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- Profile Header Card -->
-                <Border Grid.Row="0" Style="{StaticResource InfoCard}" Margin="0,20,0,20">
+                <Border Grid.Row="0" Style="{StaticResource InfoCard}" Margin="0,10,0,20">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -829,7 +831,7 @@
                 </Border>
 
                 <!-- ✅ TAB CONTENT - PHẦN MỚI ĐƯỢC THÊM -->
-                <Grid Grid.Row="3" x:Name="TabContent">
+                <Grid Grid.Row="3" x:Name="TabContent" >
                     <!-- ✅ TỔNG QUAN CONTENT -->
                     <Grid x:Name="TongQuanContent" Visibility="Visible">
                         <Grid.RowDefinitions>
@@ -838,7 +840,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- ✅ HEADER VỚI NÚT CẬP NHẬT - PHẦN MỚI -->
-                        <Grid Grid.Row="0" Margin="8,0,8,20">
+                        <Grid Grid.Row="0" Margin="10,0,10,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -851,8 +853,7 @@
                             <TextBlock Grid.Column="0" Text="Thông tin tài khoản" 
                                        FontSize="20" FontWeight="Bold"
                                        Foreground="#1e293b"
-                                       VerticalAlignment="Center"
-                                       Margin="20,0,0,0"/>
+                                       VerticalAlignment="Center"/>
 
                             <Button Grid.Column="1" Content="Cập nhật thông tin"
                                     Style="{StaticResource UpdateButtonStyle}"
@@ -980,7 +981,7 @@
                     </Grid>
 
                     <!-- ✅ BẢO MẬT CONTENT - PHẦN HOÀN TOÀN MỚI -->
-                    <Grid x:Name="BaoMatContent" Visibility="Collapsed">
+                    <Grid x:Name="BaoMatContent" Visibility="Collapsed" Margin="10,0,10,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -992,15 +993,15 @@
                         <TextBlock Grid.Row="0" Text="Bảo mật" 
                                    FontSize="20" FontWeight="Bold"
                                    Foreground="#1e293b"
-                                   Margin="28,8,8,18"/>
+                                   Margin="0,8,0,18"/>
                         <Separator Grid.Row="1" Background="Black" 
                                    Opacity="0.1" 
-                                   Margin="8,0,8,28"/>
+                                   Margin="0,0,0,28"/>
 
 
 
                         <!-- Email Section -->
-                        <Border Grid.Row="2" Style="{StaticResource InfoCard}" Margin="8,0,8,20">
+                        <Border Grid.Row="2" Style="{StaticResource InfoCard}" Margin="0,0,0,15">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -1021,7 +1022,7 @@
                         </Border>
 
                         <!-- Password Section -->
-                        <Border Grid.Row="3" Style="{StaticResource InfoCard}">
+                        <Border Grid.Row="3" Style="{StaticResource InfoCard}" Margin="0,0,0,15">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -1319,10 +1320,10 @@
                 </Grid>
             </Border>
         </Grid>
-        <notification:NotificationControl x:Name="NotificationControl"
+    <!--    <notification:NotificationControl x:Name="NotificationControl"
                         DataContext="{Binding Notification}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Panel.ZIndex="1000"/>
+                        Panel.ZIndex="1000"/>  -->
     </Grid>
 </UserControl>

@@ -763,5 +763,18 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
 
         }
+
+        [ObservableProperty]
+        private bool isSearchExpanded = true;
+
+        [ObservableProperty]
+        private double searchContentHeight = double.NaN;
+
+        [RelayCommand]
+        private void ToggleSearch()
+        {
+            IsSearchExpanded = !IsSearchExpanded;
+        }
+
     }
 }

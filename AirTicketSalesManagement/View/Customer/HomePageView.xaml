@@ -35,12 +35,7 @@
                            Foreground="#2C3E50"
                            VerticalAlignment="Center" />
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <ToggleButton Template="{StaticResource ProfilePopupTemplate}" 
-                                  Width="60"
-                                  Height="60"
-                                  Margin="0 0 40 0"/>
-                </StackPanel>
+              
             </Grid>
 
             <!-- Content -->
@@ -95,18 +90,7 @@
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 0 0 20">
-
-                        <RadioButton Content="MỘT CHIỀU"
-                                     GroupName="TripType"
-                                     Foreground="#353535"
-                                     Margin="0 0 20 0"
-                                     IsChecked="True"/>
-
-                        <RadioButton Content="KHỨ HỒI"
-                                     GroupName="TripType"
-                                     Foreground="#353535"/>
-                    </StackPanel>
+                    
 
                     <Button Content="TÌM NGAY!"
                             Background="#FF7F50"
