@@ -65,6 +65,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         {
             this.parent = parent;
             _ = LoadData();
+            ClearExpiredHolds();
         }
         public async Task LoadData()
         {
@@ -137,6 +138,57 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 throw new Exception("Lỗi kết nối cơ sở dữ liệu",e);
             }
         }
+
+        public void ClearExpiredHolds()
+        {
+            try
+            {
+                using (var context = new AirTicketDbContext())
+                {
+                    var quiDinh = context.Quydinhs.FirstOrDefault();
+                    int tgHuy = quiDinh?.TghuyDatVe ?? 0;
+                    var expiredDatVes = context.Datves
+                        .Where(dv => (dv.TtdatVe == "Chưa thanh toán (Online)" || dv.TtdatVe == "Giữ chỗ") &&
+                                     (dv.ThoiGianDv < DateTime.Now.AddMinutes(-20) || (dv.MaLbNavigation!=null && dv.MaLbNavigation.GioDi!=null && DateTime.Now > dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy))))
+                        .ToList();                    
+                    foreach (var datVe in expiredDatVes)
+                    {
+                        var chiTiets = context.Ctdvs.Where(ct => ct.MaDv == datVe.MaDv).ToList();
+
+                        var maHvLb = chiTiets.FirstOrDefault()?.MaHvLb;
+
+                        if (maHvLb != null)
+                        {
+                            var hangVe = context.Hangvetheolichbays
+                                .FirstOrDefault(h => h.MaHvLb == maHvLb);
+
+                            if (hangVe != null)
+                            {
+                                hangVe.SlveConLai += chiTiets.Count;
+                            }
+                        }
+
+                        context.Ctdvs.RemoveRange(chiTiets);
+                        context.Datves.Remove(datVe);
+                    }
+                    var datVeTienMat = context.Datves.Where(dv => dv.TtdatVe == "Chưa thanh toán (Tiền mặt)" 
+                        && dv.MaLbNavigation!=null && dv.MaLbNavigation.GioDi != null
+                        && DateTime.Now > dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy))
+                        .ToList();
+                    foreach (var ve in datVeTienMat)
+                    {
+                        ve.TtdatVe = "Đã hủy";
+                    }
+                    context.SaveChanges();                                       
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            
+        }
+
         [RelayCommand]
         private void ShowDetailHistory(QuanLiDatVe chiTietVe)
         {

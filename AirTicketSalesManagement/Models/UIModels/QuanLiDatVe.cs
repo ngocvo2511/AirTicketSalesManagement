@@ -42,13 +42,8 @@ namespace AirTicketSalesManagement.Models.UIModels
         {
             get
             {
-                if (TrangThai == "Đã hủy") return false;
-                if (GioDi == null || NgayDat == null || QdHuyVe == null) return false;
-                if (TrangThai == "Đã thanh toán (Online)" || TrangThai == "Giữ chỗ")
-                {
-                    DateTime thoiDiemDuocHuy = NgayDat.Value.AddMinutes(-20);
-                    return DateTime.Now > thoiDiemDuocHuy;
-                }
+                if (TrangThai == "Đã hủy" || TrangThai == "Chưa thanh toán (Online)" || TrangThai == "Giữ chỗ") return false;
+                if (GioDi == null || NgayDat == null || QdHuyVe == null) return false;                
                 DateTime thoiDiemToiDaHuy = GioDi.Value.AddDays(-QdHuyVe.Value);
                 return DateTime.Now <= thoiDiemToiDaHuy;
             }
