@@ -258,18 +258,16 @@
                            Margin="12,8,12,8"
                            Visibility="{Binding IsYearlyReport,
                            Converter={StaticResource BoolToVisibilityConverter}}"/>
-                        <lvc:CartesianChart Grid.Row="1"
-                        Series="{Binding YearlySeries}"
-                        LegendLocation="Right"
-                        Height="230"
-                        Margin="0"
-                        Visibility="{Binding IsYearlyReport,
-                        Converter={StaticResource BoolToVisibilityConverter}}">
-                            <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Labels="{Binding MonthsLabels}"/>
-                            </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart Grid.Row="1" Width="{Binding MonthlyChartWidth}"
+                                Series="{Binding YearlySeries}"
+                                AxisX="{Binding YearlyAxesX}"
+                                Height="230"
+                                LegendLocation="Right"            
+                                Visibility="{Binding IsYearlyReport,
+                                 Converter={StaticResource BoolToVisibilityConverter}}">
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis LabelFormatter="{Binding VndFormatter}" />
+                                <lvc:Axis LabelFormatter="{Binding VndFormatter}" 
+                                          MinValue="0"/>
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
                     </Grid>
@@ -291,19 +289,24 @@
                            Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                         <!-- Biểu đồ -->
-                        <lvc:CartesianChart Grid.Row="1"
-                        Series="{Binding MonthlySeries}"
-                        LegendLocation="Right"
-                        Height="230"
-                        Margin="12,0"
-                        Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Labels="{Binding FlightsLabels}"/>
-                            </lvc:CartesianChart.AxisX>
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis MinValue="0" LabelFormatter="{Binding VndFormatter}" />
-                            </lvc:CartesianChart.AxisY>
-                        </lvc:CartesianChart>
+                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto"
+                                                   VerticalScrollBarVisibility="Disabled">
+                            <lvc:CartesianChart Width="{Binding MonthlyChartWidth}"
+                                    Series="{Binding MonthlySeries}"
+                                    AxisX="{Binding MonthlyAxesX}"
+                                    LegendLocation="Right"
+                                    Height="230"
+                                    MinWidth="800"
+                                    Visibility="{Binding IsMonthlyReport,
+                                    Converter={StaticResource BoolToVisibilityConverter}}">
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis LabelFormatter="{Binding VndFormatter}"
+                                              MinValue="0"/>
+                                </lvc:CartesianChart.AxisY>
+                            </lvc:CartesianChart>
+
+                        </ScrollViewer>
+
                     </Grid>
 
 
@@ -453,16 +456,16 @@
 
                             <!-- Yearly Report DataGrid -->
                             <DataGrid ItemsSource="{Binding YearlyReportData}"
-                  Grid.Row="1"
-                  Visibility="{Binding IsYearlyReport, Converter={StaticResource BoolToVisibilityConverter}}"
-                  Style="{StaticResource DataGridStyle}"
-                  Margin="0"
-                  RowHeaderWidth="0"
-                  VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Auto"
-                  AutoGenerateColumns="False"
-                  HorizontalAlignment="Stretch"
-                  CanUserAddRows="False">
+                              Grid.Row="1"
+                              Visibility="{Binding IsYearlyReport, Converter={StaticResource BoolToVisibilityConverter}}"
+                              Style="{StaticResource DataGridStyle}"
+                              Margin="0"
+                              RowHeaderWidth="0"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto"
+                              AutoGenerateColumns="False"
+                              HorizontalAlignment="Stretch"
+                              CanUserAddRows="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Tháng" Binding="{Binding MonthName}" Width="*" />
                                     <DataGridTextColumn Header="Doanh thu (VNĐ)" Binding="{Binding Revenue, StringFormat=N0}" Width="*" />

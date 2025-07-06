@@ -15,7 +15,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
 {
     public partial class HomePageViewModel : BaseViewModel
     {
-        public Func<double, string> YFormatter { get; } = v => v.ToString("N2");
+        public Func<double, string> YFormatter { get; }
         [ObservableProperty] private int ticketsSoldToday;
         [ObservableProperty] private int ticketsCanceledToday;
         [ObservableProperty] private int flightsDepartedToday;
@@ -28,7 +28,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
 
         public HomePageViewModel()
         {            
-            YFormatter = v => v.ToString("N2");
+            YFormatter = v => v.ToString("N0") + " ₫";
             RevenueAxisX = new Axis
             {
                 Title = "Ngày",
@@ -95,7 +95,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                              && d.ThoiGianDv < end.ToDateTime(TimeOnly.MinValue))
                     .GroupBy(d => DateOnly.FromDateTime(d.ThoiGianDv!.Value))
                     .Select(g => new { g.Key, Sum = g.Sum(d => d.TongTienTt ?? 0) })
-                    .ToDictionaryAsync(x => x.Key, x => x.Sum / 1_000_000m); // triệu VND
+                    .ToDictionaryAsync(x => x.Key, x => x.Sum);
 
                 var labels = new List<string>();
                 var values = new ChartValues<double>();
@@ -123,8 +123,6 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                     {
                         Title = "Doanh thu",
                         Values = values,
-                        DataLabels = true,
-                        LabelPoint = p => $"{p.Y:N1} triệu",
                         Fill = new SolidColorBrush(Color.FromRgb(33, 149, 242)),
                         MaxColumnWidth = 60
                     });

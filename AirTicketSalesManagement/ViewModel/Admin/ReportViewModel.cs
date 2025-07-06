@@ -23,6 +23,16 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         public SeriesCollection YearlySeries { get; set; }
         public SeriesCollection MonthlySeries { get; set; }
 
+        public AxesCollection YearlyAxesX { get; set; }
+        public AxesCollection MonthlyAxesX { get; set; }
+        private double monthlyChartWidth;
+        public double MonthlyChartWidth
+        {
+            get => monthlyChartWidth;
+            set => SetProperty(ref monthlyChartWidth, value);
+        }
+
+
         public string[] MonthsLabels { get; set; }
         public string[] FlightsLabels { get; set; }
 
@@ -66,6 +76,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             SelectedMonth = 1;
             IsYearlyReport = true;
             IsMonthlyReport = false;
+            YearlyAxesX = new AxesCollection();
+            MonthlyAxesX = new AxesCollection();
             YearlySeries = new SeriesCollection
             {
                 new ColumnSeries
@@ -82,8 +94,9 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     Title = "Doanh thu",
                     Values = new ChartValues<double>()
                 }
-            };
+            };           
             FlightsLabels = Array.Empty<string>();
+            MonthlyChartWidth = 800;
         }
 
         [RelayCommand]
@@ -201,8 +214,10 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             YearlyReportData.Clear();
             MonthlyReportData.Clear();
-            MonthlySeries.Clear();
 
+            YearlyAxesX.Clear();
+            MonthlyAxesX.Clear();
+            MonthlySeries.Clear();
             MonthlySeries.Add(new ColumnSeries
             {
                 Title = "Doanh thu",
@@ -220,6 +235,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             });
             MonthsLabels = Array.Empty<string>();
             OnPropertyChanged(nameof(MonthsLabels));
+            MonthlyChartWidth = 800;
             ReportSummary = null;
         }
 
@@ -274,16 +290,41 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
         private void UpdateYearlyChart()
         {
-            YearlySeries[0].Values = new ChartValues<double>(YearlyReportData.Select(r => (double)r.Revenue));
-            MonthsLabels = YearlyReportData.Select(r => r.MonthName).ToArray();
+            MonthsLabels = Enumerable.Range(1, 12)
+                             .Select(i => $"T{i}")
+                             .ToArray();
             OnPropertyChanged(nameof(MonthsLabels));
+            YearlySeries[0].Values = new ChartValues<double>(
+                                         YearlyReportData.Select(r => (double)r.Revenue));
+            YearlyAxesX.Clear();
+            YearlyAxesX.Add(new Axis
+            {
+                Labels = MonthsLabels,
+                Separator = new Separator { Step = 1 },
+                LabelsRotation = 0
+            });
         }
 
         private void UpdateMonthlyChart()
         {
             MonthlySeries[0].Values = new ChartValues<double>(MonthlyReportData.Select(r => (double)r.Revenue));
+
             FlightsLabels = MonthlyReportData.Select(r => r.FlightNumber).ToArray();
             OnPropertyChanged(nameof(FlightsLabels));
+            int numFlights = MonthlyReportData.Count;
+            int widthPerBar = 80;
+            MonthlyChartWidth = Math.Max(800, numFlights * widthPerBar);
+
+            MonthlyAxesX.Clear();
+            MonthlyAxesX.Add(new Axis
+            {
+                Labels = FlightsLabels,
+                Separator = new Separator
+                {
+                    Step = 1
+                },
+                LabelsRotation = 0
+            });
         }
 
     }

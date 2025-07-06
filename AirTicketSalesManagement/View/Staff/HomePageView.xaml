@@ -113,7 +113,7 @@
                         </lvc:CartesianChart.AxisX>
 
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Doanh thu (triệu VND)"
+                            <lvc:Axis Title="Doanh thu"
                                       MinValue="0"
                                       LabelFormatter="{Binding YFormatter}"/>
                         </lvc:CartesianChart.AxisY>
