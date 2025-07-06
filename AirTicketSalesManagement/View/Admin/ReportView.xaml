@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Admin"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
              xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
              Background="#F9FAFB">
@@ -78,356 +79,424 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <!-- Header Section -->
-            <Grid Grid.Row="0" Margin="15,15,15,15">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Icon:PackIconMaterial Kind="ChartLine" Width="32" Height="32" 
-                                     Foreground="#6366F1" Margin="0,0,12,0"/>
-                    <TextBlock Text="BÁO CÁO THỐNG KÊ" Style="{StaticResource HeaderTextStyle}"/>
-                </StackPanel>
-            </Grid>
-
-            <!-- Compact Filter Section -->
-            <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="16" Margin="15,0,15,20"
-                    BorderBrush="#E5E7EB" BorderThickness="1">
+            <Grid>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- First Row: Report Type and Action Buttons -->
-                    <Grid Grid.Row="0" Margin="0,0,0,12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Report Type - Left Side -->
-                        <WrapPanel Grid.Column="0" VerticalAlignment="Center">
-                            <TextBlock Text="Loại báo cáo:" FontWeight="SemiBold" 
-                                     Foreground="#374151" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                            <RadioButton Content="Báo cáo năm" 
-                                       IsChecked="{Binding IsYearlyReport}"
-                                       GroupName="ReportType" 
-                                       Style="{StaticResource MaterialDesignChoiceChipRadioButton}"
-                                       Margin="0,0,12,0"/>
-                            <RadioButton Content="Báo cáo tháng" 
-                                       IsChecked="{Binding IsMonthlyReport}"
-                                       GroupName="ReportType"
-                                       Style="{StaticResource MaterialDesignChoiceChipRadioButton}"/>
-                        </WrapPanel>
-
-                        <!-- Action Buttons - Right Side -->
-                        <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <Button Command="{Binding GenerateReportAsyncCommand}"
-                                    Style="{DynamicResource MaterialDesignFilledButton}"
-                                    Height="36" Width="140"
-                                    materialDesign:ButtonAssist.CornerRadius="6"
-                                    Background="#6366F1" BorderThickness="0"
-                                    Margin="0,0,8,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="ChartBar" Foreground="White"
-                                                         Width="16" Height="16" 
-                                                         Margin="0,0,6,0"/>
-                                    <TextBlock Text="Tạo báo cáo" Foreground="White"
-                                             VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button Command="{Binding RefreshCommand}"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                                    Height="36" Width="Auto"
-                                    materialDesign:ButtonAssist.CornerRadius="6"
-                                    Margin="0,0,8,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="Refresh" 
-                                                         Width="16" Height="16" 
-                                                         Margin="0,0,6,0"/>
-                                    <TextBlock Text="Làm mới" 
-                                             VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-
-                            <Button Command="{Binding ExportReportCommand}"
-                                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                                    Height="36" Width="Auto"
-                                    materialDesign:ButtonAssist.CornerRadius="6">
-                                <StackPanel Orientation="Horizontal">
-                                    <Icon:PackIconMaterial Kind="FileExport" 
-                                                         Width="16" Height="16" 
-                                                         Margin="0,0,6,0"/>
-                                    <TextBlock Text="Xuất báo cáo" 
-                                             VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                        </WrapPanel>
-                    </Grid>
-
-                    <!-- Second Row: Time Selection and Loading -->
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Time Selection - Left Side -->
-                        <WrapPanel Grid.Column="0" VerticalAlignment="Center">
-                            <!-- Year Selection -->
-                            <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
-                                <TextBlock Text="Năm:" FontWeight="SemiBold" 
-                                         Foreground="#374151" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <ComboBox ItemsSource="{Binding Years}"
-                                        SelectedItem="{Binding SelectedYear}"
-                                        Width="100" Height="32"/>
-                            </StackPanel>
-
-                            <!-- Month Selection -->
-                            <StackPanel Orientation="Horizontal" 
-                                      Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <TextBlock Text="Tháng:" FontWeight="SemiBold" 
-                                         Foreground="#374151" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <ComboBox ItemsSource="{Binding Months}"
-                                        SelectedValue="{Binding SelectedMonth}"
-                                        SelectedValuePath="Value"
-                                        DisplayMemberPath="Name"
-                                        Width="100" Height="32"/>
-                            </StackPanel>
-                        </WrapPanel>
-
-                        <!-- Loading Indicator - Right Side -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" 
-                                  HorizontalAlignment="Right"
-                                  VerticalAlignment="Center"
-                                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <materialDesign:PackIcon Kind="Loading" 
-                                                   Width="16" Height="16"
-                                                   Foreground="#6B7280"
-                                                   Margin="0,0,6,0">
-                                <materialDesign:PackIcon.RenderTransform>
-                                    <RotateTransform x:Name="LoadingRotation"/>
-                                </materialDesign:PackIcon.RenderTransform>
-                                <materialDesign:PackIcon.Triggers>
-                                    <EventTrigger RoutedEvent="Loaded">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation 
-                                                    Storyboard.TargetName="LoadingRotation"
-                                                    Storyboard.TargetProperty="Angle"
-                                                    From="0" To="360"
-                                                    Duration="0:0:1"
-                                                    RepeatBehavior="Forever"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </materialDesign:PackIcon.Triggers>
-                            </materialDesign:PackIcon>
-                            <TextBlock Text="Đang tạo báo cáo..." 
-                                     Foreground="#6B7280" 
-                                     FontSize="12"
-                                     VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-            </Border>
-
-            <!-- Compact Summary Cards -->
-            <Border Grid.Row="2" Margin="15,0,15,20"
-                    Visibility="{Binding ReportSummary, Converter={StaticResource NonNullToVisibilityConverter}}">
-                <UniformGrid Columns="4" Margin="-6">
-                    <!-- Total Revenue Card -->
-                    <Border Background="White" CornerRadius="8" Margin="6"
-                            BorderBrush="#E5E7EB" BorderThickness="1">
-                        <Grid Margin="12,16">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Border Background="#EEF2FF" Width="36" Height="36"
-                                    CornerRadius="8" Grid.Column="0">
-                                <TextBlock Text="💰" FontSize="18" 
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"/>
-                            </Border>
-
-                            <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="Tổng doanh thu"
-                                         Foreground="#6B7280"
-                                         FontSize="11"/>
-                                <TextBlock Text="{Binding ReportSummary.TotalRevenue, StringFormat='{}{0:N0} VNĐ'}"
-                                         Foreground="#111827"
-                                         FontSize="16"
-                                         FontWeight="SemiBold"
-                                         Margin="0,2,0,0"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- Total Flights -->
-                    <Border Background="White" CornerRadius="8" Margin="6"
-                            BorderBrush="#E5E7EB" BorderThickness="1">
-                        <Grid Margin="12,16">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Border Background="#F0FDF4" Width="36" Height="36"
-                                    CornerRadius="8" Grid.Column="0">
-                                <TextBlock Text="✈️" FontSize="18" 
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"/>
-                            </Border>
-
-                            <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="Tổng chuyến bay"
-                                         Foreground="#6B7280"
-                                         FontSize="11"/>
-                                <TextBlock Text="{Binding ReportSummary.TotalFlights, StringFormat='{}{0:N0}'}"
-                                         Foreground="#111827"
-                                         FontSize="16"
-                                         FontWeight="SemiBold"
-                                         Margin="0,2,0,0"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- Total Tickets -->
-                    <Border Background="White" CornerRadius="8" Margin="6" 
-                            Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}"
-                            BorderBrush="#E5E7EB" BorderThickness="1">
-                        <Grid Margin="12,16">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Border Background="#FFF7ED" Width="36" Height="36"
-                                    CornerRadius="8" Grid.Column="0">
-                                <TextBlock Text="🎫" FontSize="18" 
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"/>
-                            </Border>
-
-                            <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="Tổng vé bán"
-                                         Foreground="#6B7280"
-                                         FontSize="11"/>
-                                <TextBlock Text="{Binding ReportSummary.TotalTicketsSold, StringFormat='{}{0:N0}'}"
-                                         Foreground="#111827"
-                                         FontSize="16"
-                                         FontWeight="SemiBold"
-                                         Margin="0,2,0,0"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </UniformGrid>
-            </Border>
-
-            <!-- Enhanced Data Section -->
-            <Border Grid.Row="3" Background="White" Margin="15,0,15,0"
-                    CornerRadius="8" Padding="0" 
-                    BorderBrush="#3B82F6" BorderThickness="2"                   
-                    >
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="10"
-                          ShadowDepth="2"
-                          Direction="270"
-                          Color="Black"
-                          Opacity="0.2"/>
-                </Border.Effect>
-                <Grid>
-                    <Grid.RowDefinitions>
+                        <RowDefinition Height="280"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Enhanced Header -->
-                    <Border BorderBrush="#E5E7EB" 
-                            BorderThickness="0,0,0,1"
-                            Padding="20,12">
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#667eea" Offset="0"/>
-                                <GradientStop Color="#764ba2" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
+                    <!-- Header Section -->
+                    <Grid Grid.Row="0" Margin="15,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Icon:PackIconMaterial Kind="ChartLine" Width="32" Height="32" 
+                             Foreground="#6366F1" Margin="0,0,12,0"/>
+                            <TextBlock Text="BÁO CÁO THỐNG KÊ" Style="{StaticResource HeaderTextStyle}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Compact Filter Section -->
+                    <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="16" Margin="15,0,15,20"
+            BorderBrush="#E5E7EB" BorderThickness="1">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                            <Icon:PackIconMaterial Kind="TableLarge" 
-                                                 Width="20" Height="20" 
-                                                 Foreground="White"
-                                                 Margin="0,0,8,0"
-                                                 VerticalAlignment="Center"/>
+                            <!-- First Row: Report Type and Action Buttons -->
+                            <Grid Grid.Row="0" Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="1"
-                                     Text="{Binding IsYearlyReport, Converter={StaticResource BooleanToStringConverter}, 
-                                     ConverterParameter='DANH SÁCH THỐNG KÊ NĂM|DANH SÁCH THỐNG KÊ THÁNG'}"
-                                     FontWeight="SemiBold"
-                                     FontSize="16"
-                                     Foreground="White"
+                                <!-- Report Type - Left Side -->
+                                <WrapPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock Text="Loại báo cáo:" FontWeight="SemiBold" 
+                             Foreground="#374151" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                    <RadioButton Content="Báo cáo năm" 
+                               IsChecked="{Binding IsYearlyReport}"
+                               GroupName="ReportType" 
+                               Style="{StaticResource MaterialDesignChoiceChipRadioButton}"
+                               Margin="0,0,12,0"/>
+                                    <RadioButton Content="Báo cáo tháng" 
+                               IsChecked="{Binding IsMonthlyReport}"
+                               GroupName="ReportType"
+                               Style="{StaticResource MaterialDesignChoiceChipRadioButton}"/>
+                                </WrapPanel>
+
+                                <!-- Action Buttons - Right Side -->
+                                <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                    <Button Command="{Binding GenerateReportAsyncCommand}"
+                            Style="{DynamicResource MaterialDesignFilledButton}"
+                            Height="36" Width="140"
+                            materialDesign:ButtonAssist.CornerRadius="6"
+                            Background="#6366F1" BorderThickness="0"
+                            Margin="0,0,8,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Kind="ChartBar" Foreground="White"
+                                                 Width="16" Height="16" 
+                                                 Margin="0,0,6,0"/>
+                                            <TextBlock Text="Tạo báo cáo" Foreground="White"
                                      VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Command="{Binding RefreshCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Height="36" Width="Auto"
+                            materialDesign:ButtonAssist.CornerRadius="6"
+                            Margin="0,0,8,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Kind="Refresh" 
+                                                 Width="16" Height="16" 
+                                                 Margin="0,0,6,0"/>
+                                            <TextBlock Text="Làm mới" 
+                                     VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Command="{Binding ExportReportCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Height="36" Width="Auto"
+                            materialDesign:ButtonAssist.CornerRadius="6">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Icon:PackIconMaterial Kind="FileExport" 
+                                                 Width="16" Height="16" 
+                                                 Margin="0,0,6,0"/>
+                                            <TextBlock Text="Xuất báo cáo" 
+                                     VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </WrapPanel>
+                            </Grid>
+
+                            <!-- Second Row: Time Selection and Loading -->
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Time Selection - Left Side -->
+                                <WrapPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <!-- Year Selection -->
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
+                                        <TextBlock Text="Năm:" FontWeight="SemiBold" 
+                                 Foreground="#374151" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <ComboBox ItemsSource="{Binding Years}"
+                                SelectedItem="{Binding SelectedYear}"
+                                Width="100" Height="32"/>
+                                    </StackPanel>
+
+                                    <!-- Month Selection -->
+                                    <StackPanel Orientation="Horizontal" 
+                              Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <TextBlock Text="Tháng:" FontWeight="SemiBold" 
+                                 Foreground="#374151" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <ComboBox ItemsSource="{Binding Months}"
+                                SelectedValue="{Binding SelectedMonth}"
+                                SelectedValuePath="Value"
+                                DisplayMemberPath="Name"
+                                Width="100" Height="32"/>
+                                    </StackPanel>
+                                </WrapPanel>
+
+                                <!-- Loading Indicator - Right Side -->
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" 
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Center"
+                          Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <materialDesign:PackIcon Kind="Loading" 
+                                           Width="16" Height="16"
+                                           Foreground="#6B7280"
+                                           Margin="0,0,6,0">
+                                        <materialDesign:PackIcon.RenderTransform>
+                                            <RotateTransform x:Name="LoadingRotation"/>
+                                        </materialDesign:PackIcon.RenderTransform>
+                                        <materialDesign:PackIcon.Triggers>
+                                            <EventTrigger RoutedEvent="Loaded">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation 
+                                            Storyboard.TargetName="LoadingRotation"
+                                            Storyboard.TargetProperty="Angle"
+                                            From="0" To="360"
+                                            Duration="0:0:1"
+                                            RepeatBehavior="Forever"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </materialDesign:PackIcon.Triggers>
+                                    </materialDesign:PackIcon>
+                                    <TextBlock Text="Đang tạo báo cáo..." 
+                             Foreground="#6B7280" 
+                             FontSize="12"
+                             VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
                         </Grid>
                     </Border>
 
-                    <!-- Yearly Report DataGrid -->
-                    <DataGrid ItemsSource="{Binding YearlyReportData}"
-                          Grid.Row="1"
-                          Visibility="{Binding IsYearlyReport, Converter={StaticResource BoolToVisibilityConverter}}"
-                          Style="{StaticResource DataGridStyle}"
-                          Margin="0"
-                          RowHeaderWidth="0"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Auto"
-                          AutoGenerateColumns="False"
-                          HorizontalAlignment="Stretch"
-                          CanUserAddRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Tháng" Binding="{Binding MonthName}" Width="*" />
-                            <DataGridTextColumn Header="Doanh thu (VNĐ)" Binding="{Binding Revenue, StringFormat=N0}" Width="*" />
-                            <DataGridTextColumn Header="Số chuyến bay" Binding="{Binding TotalFlights}" Width="*" />
-                            <DataGridTextColumn Header="Tỷ lệ (%)" Binding="{Binding RevenueRate, StringFormat=F1}" Width="*" />
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <!-- BIỂU ĐỒ BÁO CÁO NĂM -->
+                    <Grid Grid.Row="2" Margin="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                           Text="BIỂU ĐỒ DOANH THU NĂM"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="#374151"
+                           Margin="12,8,12,8"
+                           Visibility="{Binding IsYearlyReport,
+                           Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <lvc:CartesianChart Grid.Row="1"
+                        Series="{Binding YearlySeries}"
+                        LegendLocation="Right"
+                        Height="230"
+                        Margin="0"
+                        Visibility="{Binding IsYearlyReport,
+                        Converter={StaticResource BoolToVisibilityConverter}}">
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="{Binding MonthsLabels}"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis LabelFormatter="{Binding VndFormatter}" />
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </Grid>
 
-                    <!-- Monthly Report DataGrid -->
-                    <DataGrid ItemsSource="{Binding MonthlyReportData}"
-                          Grid.Row="1"
-                          Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}"
-                          Style="{StaticResource DataGridStyle}"
-                          Margin="0"
-                          RowHeaderWidth="0"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Auto"
-                          AutoGenerateColumns="False"
-                          HorizontalAlignment="Stretch"
-                          CanUserAddRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Chuyến bay" Binding="{Binding FlightNumber}" Width="*" />
-                            <DataGridTextColumn Header="Hãng hàng không" Binding="{Binding Airline}" Width="*"/>
-                            <DataGridTextColumn Header="Ngày bay" Binding="{Binding DepartureTime, StringFormat=dd/MM/yyyy}" Width="*" />
-                            <DataGridTextColumn Header="Doanh thu (VNĐ)" Binding="{Binding Revenue, StringFormat=N0}" Width="*" />
-                            <DataGridTextColumn Header="Số vé bán" Binding="{Binding TicketsSold}" Width="*" />
-                            <DataGridTextColumn Header="Tỷ lệ (%)" Binding="{Binding RevenueRate, StringFormat=F1}" Width="*" />
-                        </DataGrid.Columns>
-                    </DataGrid>
 
+                    <!-- BIỂU ĐỒ BÁO CÁO THÁNG -->
+                    <Grid Grid.Row="2" Margin="0,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                           Text="BIỂU ĐỒ DOANH THU THÁNG"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="#374151"
+                           Margin="12,8,12,8"
+                           Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <!-- Biểu đồ -->
+                        <lvc:CartesianChart Grid.Row="1"
+                        Series="{Binding MonthlySeries}"
+                        LegendLocation="Right"
+                        Height="230"
+                        Margin="12,0"
+                        Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="{Binding FlightsLabels}"/>
+                            </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis MinValue="0" LabelFormatter="{Binding VndFormatter}" />
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </Grid>
+
+
+                    <!-- Compact Summary Cards -->
+                    <Border Grid.Row="3" Margin="15,0,15,20"
+                        Visibility="{Binding ReportSummary, Converter={StaticResource NonNullToVisibilityConverter}}">
+                        <UniformGrid Columns="4" Margin="-6">
+                            <!-- Total Revenue Card -->
+                            <Border Background="White" CornerRadius="8" Margin="6"
+                            BorderBrush="#E5E7EB" BorderThickness="1">
+                                <Grid Margin="12,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Background="#EEF2FF" Width="36" Height="36"
+                                        CornerRadius="8" Grid.Column="0">
+                                        <TextBlock Text="💰" FontSize="18" 
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Tổng doanh thu"
+                                 Foreground="#6B7280"
+                                 FontSize="11"/>
+                                        <TextBlock Text="{Binding ReportSummary.TotalRevenue, StringFormat='{}{0:N0} VNĐ'}"
+                                 Foreground="#111827"
+                                 FontSize="16"
+                                 FontWeight="SemiBold"
+                                 Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Total Flights -->
+                            <Border Background="White" CornerRadius="8" Margin="6"
+                    BorderBrush="#E5E7EB" BorderThickness="1">
+                                <Grid Margin="12,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Background="#F0FDF4" Width="36" Height="36"
+                            CornerRadius="8" Grid.Column="0">
+                                        <TextBlock Text="✈️" FontSize="18" 
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Tổng chuyến bay"
+                                 Foreground="#6B7280"
+                                 FontSize="11"/>
+                                        <TextBlock Text="{Binding ReportSummary.TotalFlights, StringFormat='{}{0:N0}'}"
+                                 Foreground="#111827"
+                                 FontSize="16"
+                                 FontWeight="SemiBold"
+                                 Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Total Tickets -->
+                            <Border Background="White" CornerRadius="8" Margin="6" 
+                    Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}"
+                    BorderBrush="#E5E7EB" BorderThickness="1">
+                                <Grid Margin="12,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Background="#FFF7ED" Width="36" Height="36"
+                            CornerRadius="8" Grid.Column="0">
+                                        <TextBlock Text="🎫" FontSize="18" 
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Tổng vé bán"
+                                 Foreground="#6B7280"
+                                 FontSize="11"/>
+                                        <TextBlock Text="{Binding ReportSummary.TotalTicketsSold, StringFormat='{}{0:N0}'}"
+                                 Foreground="#111827"
+                                 FontSize="16"
+                                 FontWeight="SemiBold"
+                                 Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </UniformGrid>
+                    </Border>
+
+                    <!-- Enhanced Data Section -->
+                    <Border Grid.Row="4" Background="White" Margin="15,0,15,0"
+            CornerRadius="8" Padding="0" 
+            BorderBrush="#3B82F6" BorderThickness="2"                   
+            >
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10"
+                  ShadowDepth="2"
+                  Direction="270"
+                  Color="Black"
+                  Opacity="0.2"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Enhanced Header -->
+                            <Border BorderBrush="#E5E7EB" 
+                    BorderThickness="0,0,0,1"
+                    Padding="20,12">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#667eea" Offset="0"/>
+                                        <GradientStop Color="#764ba2" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Icon:PackIconMaterial Kind="TableLarge" 
+                                         Width="20" Height="20" 
+                                         Foreground="White"
+                                         Margin="0,0,8,0"
+                                         VerticalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="1"
+                             Text="{Binding IsYearlyReport, Converter={StaticResource BooleanToStringConverter}, 
+                             ConverterParameter='DANH SÁCH THỐNG KÊ NĂM|DANH SÁCH THỐNG KÊ THÁNG'}"
+                             FontWeight="SemiBold"
+                             FontSize="16"
+                             Foreground="White"
+                             VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Yearly Report DataGrid -->
+                            <DataGrid ItemsSource="{Binding YearlyReportData}"
+                  Grid.Row="1"
+                  Visibility="{Binding IsYearlyReport, Converter={StaticResource BoolToVisibilityConverter}}"
+                  Style="{StaticResource DataGridStyle}"
+                  Margin="0"
+                  RowHeaderWidth="0"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto"
+                  AutoGenerateColumns="False"
+                  HorizontalAlignment="Stretch"
+                  CanUserAddRows="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Tháng" Binding="{Binding MonthName}" Width="*" />
+                                    <DataGridTextColumn Header="Doanh thu (VNĐ)" Binding="{Binding Revenue, StringFormat=N0}" Width="*" />
+                                    <DataGridTextColumn Header="Số chuyến bay" Binding="{Binding TotalFlights}" Width="*" />
+                                    <DataGridTextColumn Header="Tỷ lệ (%)" Binding="{Binding RevenueRate, StringFormat=F1}" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <!-- Monthly Report DataGrid -->
+                            <DataGrid ItemsSource="{Binding MonthlyReportData}"
+                  Grid.Row="1"
+                  Visibility="{Binding IsMonthlyReport, Converter={StaticResource BoolToVisibilityConverter}}"
+                  Style="{StaticResource DataGridStyle}"
+                  Margin="0"
+                  RowHeaderWidth="0"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto"
+                  AutoGenerateColumns="False"
+                  HorizontalAlignment="Stretch"
+                  CanUserAddRows="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Chuyến bay" Binding="{Binding FlightNumber}" Width="*" />
+                                    <DataGridTextColumn Header="Hãng hàng không" Binding="{Binding Airline}" Width="*"/>
+                                    <DataGridTextColumn Header="Ngày bay" Binding="{Binding DepartureTime, StringFormat=dd/MM/yyyy}" Width="*" />
+                                    <DataGridTextColumn Header="Doanh thu (VNĐ)" Binding="{Binding Revenue, StringFormat=N0}" Width="*" />
+                                    <DataGridTextColumn Header="Số vé bán" Binding="{Binding TicketsSold}" Width="*" />
+                                    <DataGridTextColumn Header="Tỷ lệ (%)" Binding="{Binding RevenueRate, StringFormat=F1}" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </Grid>
+                    </Border>
                 </Grid>
-            </Border>
+            </Grid>
             <notification:NotificationControl x:Name="NotificationControl"
                 DataContext="{Binding Notification}"
                 HorizontalAlignment="Center"
@@ -436,4 +505,3 @@
         </Grid>
     </ScrollViewer>
 </UserControl>
-

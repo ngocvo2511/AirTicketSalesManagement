@@ -27,7 +27,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         
 
         public HomePageViewModel()
-        {
+        {            
             YFormatter = v => v.ToString("N2");
             RevenueAxisX = new Axis
             {

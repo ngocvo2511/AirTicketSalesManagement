@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LiveCharts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace AirTicketSalesManagement.View.Staff
         public HomePageView()
         {
             InitializeComponent();
+            RevenueChart.Hoverable = true;
         }
     }
 }

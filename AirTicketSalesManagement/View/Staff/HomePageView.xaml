@@ -105,7 +105,7 @@
 
                 <!-- Biểu đồ -->
                 <Border Grid.Row="2" Background="White" CornerRadius="10" Padding="10" BorderBrush="#DDD" BorderThickness="1">
-                    <lvc:CartesianChart Series="{Binding RevenueSeries}">
+                    <lvc:CartesianChart x:Name="RevenueChart" Series="{Binding RevenueSeries}">
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis  Title="{Binding RevenueAxisX.Title}"
                                        Labels="{Binding RevenueAxisX.Labels}"

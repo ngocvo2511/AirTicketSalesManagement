@@ -10,6 +10,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
+using LiveCharts;
+using LiveCharts.Wpf;
+using LiveCharts.Defaults;
 
 namespace AirTicketSalesManagement.ViewModel.Admin
 {
@@ -17,14 +20,21 @@ namespace AirTicketSalesManagement.ViewModel.Admin
     {
         [ObservableProperty] private bool isYearlyReport = true;
         [ObservableProperty] private bool isMonthlyReport;
+        public SeriesCollection YearlySeries { get; set; }
+        public SeriesCollection MonthlySeries { get; set; }
+
+        public string[] MonthsLabels { get; set; }
+        public string[] FlightsLabels { get; set; }
+
+        public Func<double, string> VndFormatter => v => v.ToString("N0") + " ₫";
 
         public NotificationViewModel Notification { get; } = new NotificationViewModel();
         partial void OnIsYearlyReportChanged(bool oldValue, bool newValue)
         {
-            if (newValue)         
+            if (newValue)
             {
-                IsMonthlyReport = false;   
-                Refresh();         
+                IsMonthlyReport = false;
+                Refresh();
             }
         }
 
@@ -49,13 +59,31 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
         public ReportViewModel()
         {
-            Years = Enumerable.Range(DateTime.Now.Year-10, 11).Reverse().ToList();
+            Years = Enumerable.Range(DateTime.Now.Year - 10, 11).Reverse().ToList();
             SelectedYear = Years.FirstOrDefault();
             Months = Enumerable.Range(1, 12)
                 .Select(i => new MonthItem { Name = $"Tháng {i}", Value = i }).ToList();
             SelectedMonth = 1;
             IsYearlyReport = true;
             IsMonthlyReport = false;
+            YearlySeries = new SeriesCollection
+            {
+                new ColumnSeries
+                {
+                    Title = "Doanh thu",
+                    Values = new ChartValues<double>()
+                }
+            };
+            MonthsLabels = Array.Empty<string>();
+            MonthlySeries = new SeriesCollection
+            {
+                new ColumnSeries
+                {
+                    Title = "Doanh thu",
+                    Values = new ChartValues<double>()
+                }
+            };
+            FlightsLabels = Array.Empty<string>();
         }
 
         [RelayCommand]
@@ -63,7 +91,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             Debug.Print("Generating report...");
             IsLoading = true;
-            using(var context = new AirTicketDbContext())
+            using (var context = new AirTicketDbContext())
             {
                 CultureInfo culture = CultureInfo.GetCultureInfo("vi-VN");
                 if (IsYearlyReport)
@@ -76,7 +104,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                        group dv by dv.MaLbNavigation.GioDi.Value.Month into g
                        select new
                        {
-                           Month = g.Key,                     
+                           Month = g.Key,
                            Revenue = g.Sum(x => x.TongTienTt ?? 0)
                        };
 
@@ -108,6 +136,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         })
                         .ToList();
                     YearlyReportData = new ObservableCollection<YearlyReportItem>(report);
+                    UpdateYearlyChart();
                     var totalRevenue = report.Sum(r => r.Revenue);
                     var totalFlights = report.Sum(r => r.TotalFlights);
                     foreach (var item in report)
@@ -155,6 +184,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     }).ToList();
 
                     MonthlyReportData = new ObservableCollection<MonthlyReportItem>(report);
+                    UpdateMonthlyChart();
                     ReportSummary = new ReportSummaryModel
                     {
                         TotalRevenue = totalRevenue,
@@ -162,7 +192,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         TotalTicketsSold = report.Sum(x => x.TicketsSold)
                     };
                 }
-            }           
+            }
             IsLoading = false;
         }
 
@@ -171,6 +201,25 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         {
             YearlyReportData.Clear();
             MonthlyReportData.Clear();
+            MonthlySeries.Clear();
+
+            MonthlySeries.Add(new ColumnSeries
+            {
+                Title = "Doanh thu",
+                Values = new ChartValues<double>()
+            });
+
+            FlightsLabels = Array.Empty<string>();
+            OnPropertyChanged(nameof(FlightsLabels));
+
+            YearlySeries.Clear();
+            YearlySeries.Add(new ColumnSeries
+            {
+                Title = "Doanh thu",
+                Values = new ChartValues<double>()
+            });
+            MonthsLabels = Array.Empty<string>();
+            OnPropertyChanged(nameof(MonthsLabels));
             ReportSummary = null;
         }
 
@@ -220,6 +269,21 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 await Notification.ShowNotificationAsync("Xuất báo cáo thành công!", NotificationType.Information);
             }
+        }
+        // Add these methods to ReportViewModel
+
+        private void UpdateYearlyChart()
+        {
+            YearlySeries[0].Values = new ChartValues<double>(YearlyReportData.Select(r => (double)r.Revenue));
+            MonthsLabels = YearlyReportData.Select(r => r.MonthName).ToArray();
+            OnPropertyChanged(nameof(MonthsLabels));
+        }
+
+        private void UpdateMonthlyChart()
+        {
+            MonthlySeries[0].Values = new ChartValues<double>(MonthlyReportData.Select(r => (double)r.Revenue));
+            FlightsLabels = MonthlyReportData.Select(r => r.FlightNumber).ToArray();
+            OnPropertyChanged(nameof(FlightsLabels));
         }
 
     }
