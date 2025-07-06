@@ -15,13 +15,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
     public partial class BookingHistoryViewModel : BaseViewModel
-    {       
+    {
         private readonly CustomerViewModel parent;
-        private ObservableCollection<KQLichSuDatVe> rootHistoryBooking; 
+        private ObservableCollection<KQLichSuDatVe> rootHistoryBooking;
         [ObservableProperty]
         private DateTime? ngayDatFilter;
         [ObservableProperty]
@@ -57,12 +58,15 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private ObservableCollection<KQLichSuDatVe>? historyBooking = new();
         [ObservableProperty]
         private bool isEmpty;
-        //private ObservableCollection<string>
+
+        [ObservableProperty]
+        private NotificationViewModel notification = new();
+
         public BookingHistoryViewModel() { }
         public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent)
         {
             this.parent = parent;
-            LoadData(UserSession.Current.CustomerId);           
+            LoadData(UserSession.Current.CustomerId);
         }
         public async Task LoadData(int? idCustomer)
         {
@@ -116,9 +120,9 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         "Đã hủy"
                     };
                     BookingStatusFilter = "Tất cả";
-                }                
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
@@ -163,17 +167,27 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private async Task CancelTicket(KQLichSuDatVe ve)
         {
             if (ve == null) return;
-            if(ve.CanCancel == false)
+            if (ve.CanCancel == false)
             {
-                MessageBox.Show("Vé không thể hủy vì đã quá thời hạn hủy vé.");
+                await notification.ShowNotificationAsync(
+                    "Vé không thể hủy vì đã quá thời hạn hủy vé.",
+                    NotificationType.Error);
                 return;
             }
             if (ve.TrangThai == "Đã hủy")
             {
-                MessageBox.Show("Vé đã được hủy trước đó.");
+                await notification.ShowNotificationAsync(
+                    "Vé đã được hủy trước đó.",
+                    NotificationType.Warning);
                 return;
             }
-            if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+
+            bool confirm = await notification.ShowNotificationAsync(
+                "Bạn có chắc chắn muốn hủy vé này không?",
+                NotificationType.Information,
+                true);
+
+            if (confirm)
             {
                 try
                 {
@@ -186,22 +200,27 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                             await context.SaveChangesAsync();
                             ve.TrangThai = "Đã hủy";
                             OnPropertyChanged(nameof(HistoryBooking));
-                            MessageBox.Show("Hủy vé thành công.");
+                            await notification.ShowNotificationAsync(
+                                "Hủy vé thành công.",
+                                NotificationType.Information);
                             await LoadData(UserSession.Current.CustomerId);
                         }
                         else
                         {
-                            MessageBox.Show("Không tìm thấy vé để hủy.");
+                            await notification.ShowNotificationAsync(
+                                "Không tìm thấy vé để hủy.",
+                                NotificationType.Error);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi hủy vé: {ex.Message}");
+                    await notification.ShowNotificationAsync(
+                        $"Lỗi khi hủy vé: {ex.Message}",
+                        NotificationType.Error);
                 }
             }
         }
-
 
         [RelayCommand]
         private void ClearFilter()
@@ -231,6 +250,5 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         {
             IsSearchExpanded = !IsSearchExpanded;
         }
-
     }
 }

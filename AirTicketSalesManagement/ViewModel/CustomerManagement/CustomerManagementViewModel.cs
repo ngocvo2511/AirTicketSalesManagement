@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace AirTicketSalesManagement.ViewModel.CustomerManagement
 {
@@ -39,6 +40,9 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
         private string? editGender;
         [ObservableProperty]
         private DateTime? editBirthDate;
+
+        [ObservableProperty]
+        private NotificationViewModel notification = new();
 
         public CustomerManagementViewModel()
         {
@@ -118,24 +122,32 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
         {
             if (string.IsNullOrWhiteSpace(EditName))
             {
-                MessageBox.Show("Tên không được để trống", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                await notification.ShowNotificationAsync(
+                    "Tên không được để trống",
+                    NotificationType.Warning);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(EditPhone) && !IsValidPhone(EditPhone))
             {
-                MessageBox.Show("Số điện thoại không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                await notification.ShowNotificationAsync(
+                    "Số điện thoại không hợp lệ!",
+                    NotificationType.Warning);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(EditCccd) && (EditCccd.Length != 12 || !EditCccd.All(char.IsDigit)))
             {
-                MessageBox.Show("Số căn cước không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                await notification.ShowNotificationAsync(
+                    "Số căn cước công dân không hợp lệ!",
+                    NotificationType.Warning);
                 return;
             }
             if (EditBirthDate.HasValue)
             {
                 if (EditBirthDate.Value.Date >= DateTime.Today)
                 {
-                    MessageBox.Show("Ngày sinh không hợp lệ!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    await notification.ShowNotificationAsync(
+                        "Ngày sinh không hợp lệ!",
+                        NotificationType.Warning);
                     return;
                 }
             }
@@ -146,7 +158,9 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
 
                 if (customer is null)
                 {
-                    MessageBox.Show("Không tìm thấy khách hàng trong cơ sở dữ liệu.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    await notification.ShowNotificationAsync(
+                        "Không tìm thấy khách hàng trong cơ sở dữ liệu.",
+                        NotificationType.Error);
                     return;
                 }
 
@@ -159,7 +173,9 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
 
                 await context.SaveChangesAsync();
 
-                MessageBox.Show("Cập nhật khách hàng thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                await notification.ShowNotificationAsync(
+                    "Cập nhật khách hàng thành công!",
+                    NotificationType.Information);
 
                 await LoadCustomers();
 
@@ -167,14 +183,14 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi CSDL", MessageBoxButton.OK, MessageBoxImage.Error);
+                await notification.ShowNotificationAsync(
+                    "Lỗi khi lưu dữ liệu: " + ex.Message,
+                    NotificationType.Error);
             }
         }
         private bool IsValidPhone(string phone)
         {
             return System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{8,10}$");
-        }     
+        }
     }
 }
-    
-    
