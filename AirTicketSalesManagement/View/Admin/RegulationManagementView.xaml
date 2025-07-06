@@ -157,7 +157,7 @@
         </Grid>
 
         <!-- Content -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="30,20">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="30,20" Margin="15,0,15,0">
             <StackPanel>
 
                 <!-- Quy định Sân bay -->
@@ -618,10 +618,6 @@
                 </Border>
             </StackPanel>
         </ScrollViewer>
-        <notification:NotificationControl x:Name="NotificationControl"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
+    
     </Grid>
 </UserControl>

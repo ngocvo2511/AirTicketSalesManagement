@@ -47,7 +47,6 @@
 
     <!-- Admin -->
     <viewmodelADMIN:AdminViewModel x:Key="AdminVM"/>
-    <viewmodelADMIN:HomePageViewModel x:Key="AdminHomePageVM"/>
     <viewmodelADMIN:AdminProfileViewModel x:Key="AdminProfileVM"/>
     <viewmodelADMIN:ReportViewModel x:Key="ReportVM"/>
     <viewmodelADMIN:RegulationManagementViewModel x:Key="RegulationManagementVM"/>
@@ -133,10 +132,6 @@
 
 
     <!-- Admin -->
-    <DataTemplate DataType="{x:Type viewmodelADMIN:HomePageViewModel}">
-        <viewsADMIN:HomePageView />          
-    </DataTemplate>                          
-                                             
     <DataTemplate DataType="{x:Type viewmodelADMIN:AdminProfileViewModel}">
         <viewsADMIN:AdminProfileView />
     </DataTemplate>

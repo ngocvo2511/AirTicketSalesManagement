@@ -405,7 +405,7 @@ SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
 
                 <!-- DataGrid Header -->
                 <Border Grid.Row="0" Background="#F8FAFC" CornerRadius="12,12,0,0" 
-                       BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Padding="20,16">
+                       BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Padding="20,16" Height="80">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -453,28 +453,30 @@ RowStyle="{StaticResource DataGridRowStyle}"
                     <DataGrid.Columns>
                         <!-- Flight Number Column -->
                         <DataGridTextColumn Header="Số hiệu CB" Binding="{Binding SoHieuCb}" 
-                          Width="110" MinWidth="110">
+                          Width="100" MinWidth="100">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="FontWeight" Value="Bold"/>
                                     <Setter Property="Foreground" Value="#1D4ED8"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    <Setter Property="FontSize" Value="13"/>
+                                    <Setter Property="Margin" Value="20,0,0,0"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
                         <!-- Route Column (Departure -> Destination) -->
-                        <DataGridTemplateColumn Header="Tuyến bay" Width="180" MinWidth="180">
+                        <DataGridTemplateColumn Header="Tuyến bay" Width="*" MinWidth="180">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding SoHieuCbNavigation.Sbdi}" 
-                                  FontWeight="Medium" FontSize="13" Foreground="#374151"/>
-                                        <Icon:PackIconMaterial Kind="ArrowRight" Width="16" Height="16" 
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
+                                        <TextBlock Text="{Binding SoHieuCbNavigation.SbdiNavigation.TenSb}" 
+                                  FontWeight="Medium" FontSize="14" Foreground="#374151"/>
+                                        <Icon:PackIconMaterial Kind="ArrowRight" Width="15" Height="15" 
                                              Foreground="#9CA3AF" Margin="8,0"/>
-                                        <TextBlock Text="{Binding SoHieuCbNavigation.Sbden}" 
-                                  FontWeight="Medium" FontSize="13" Foreground="#374151"/>
+                                        <TextBlock Text="{Binding SoHieuCbNavigation.SbdenNavigation.TenSb}" 
+                                  FontWeight="Medium" FontSize="14" Foreground="#374151"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -490,6 +492,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="FontWeight" Value="Medium"/>
                                     <Setter Property="Foreground" Value="#374151"/>
+                                    <Setter Property="FontSize" Value="14"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
@@ -498,8 +501,8 @@ RowStyle="{StaticResource DataGridRowStyle}"
                         <DataGridTemplateColumn Header="Thời gian" Width="120" MinWidth="120">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel VerticalAlignment="Center">
-                                        <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#059669"
+                                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="#059669"
                                   HorizontalAlignment="Center">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0:HH:mm}">
@@ -507,9 +510,9 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                                 </MultiBinding>
                                             </TextBlock.Text>
                                         </TextBlock>
-                                        <TextBlock Text="→" FontSize="10" Foreground="#6B7280" 
-                                  HorizontalAlignment="Center" Margin="0,-2"/>
-                                        <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#DC2626"
+                                        <TextBlock Text=" → " FontSize="14" Foreground="#6B7280" 
+                                  HorizontalAlignment="Center" Margin="0,0"/>
+                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="#DC2626"
                                   HorizontalAlignment="Center">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0:HH:mm}">
@@ -524,25 +527,28 @@ RowStyle="{StaticResource DataGridRowStyle}"
 
                         <!-- Aircraft Type Column -->
                         <DataGridTextColumn Header="Loại máy bay" Binding="{Binding LoaiMb}" 
-                          Width="100" MinWidth="100">
+                          Width="110" MinWidth="110">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="FontWeight" Value="Medium"/>
                                     <Setter Property="Foreground" Value="#374151"/>
+                                    <Setter Property="FontSize" Value="14"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
                         <!-- Available Seats Column -->
                         <DataGridTextColumn Header="Chỗ trống" Binding="{Binding SlveKt}" 
-                          Width="80" MinWidth="80">
+                          Width="90" MinWidth="90">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FontSize" Value="14"/>
+
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding SlveKt, Converter={StaticResource GreaterThanConverter}, ConverterParameter=20}" Value="True">
                                             <Setter Property="Foreground" Value="#16A34A"/>
@@ -559,10 +565,10 @@ RowStyle="{StaticResource DataGridRowStyle}"
                         </DataGridTextColumn>
 
                         <!-- Status Column -->
-                        <DataGridTemplateColumn Header="Trạng thái" Width="120" MinWidth="120">
+                        <DataGridTemplateColumn Header="Trạng thái" Width="120" MinWidth="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Border CornerRadius="16" Padding="12,6" HorizontalAlignment="Center">
+                                    <Border CornerRadius="16" Padding="12,6" HorizontalAlignment="Left" Margin="10,0,0,0">
                                         <Border.Style>
                                             <Style TargetType="Border">
                                                 <Style.Triggers>
@@ -578,7 +584,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
-                                        <TextBlock Text="{Binding TtlichBay}" FontSize="11" FontWeight="SemiBold">
+                                        <TextBlock Text="{Binding TtlichBay}" FontSize="13" FontWeight="SemiBold" >
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
@@ -601,10 +607,10 @@ RowStyle="{StaticResource DataGridRowStyle}"
                         </DataGridTemplateColumn>
 
                         <!-- Actions Column -->
-                        <DataGridTemplateColumn Header="Thao tác" Width="83" MinWidth="80">
+                        <DataGridTemplateColumn Header="Thao tác" Width="105" MinWidth="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
                                         <Button Style="{StaticResource MaterialDesignIconButton}"
                                                 ToolTip="Chỉnh sửa lịch bay"
                                                 Command="{Binding DataContext.EditScheduleCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
@@ -1619,10 +1625,6 @@ LostFocus="TimeTextBox_LostFocus"
                 </Grid>
             </Border>
         </Grid>
-        <notification:NotificationControl x:Name="NotificationControl"
-           DataContext="{Binding Notification}"
-           HorizontalAlignment="Center"
-           VerticalAlignment="Center"
-           Panel.ZIndex="1000"/>
+
     </Grid>
 </UserControl>
