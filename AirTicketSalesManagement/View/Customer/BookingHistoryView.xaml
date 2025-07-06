@@ -496,10 +496,10 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
-    <!--    <notification:NotificationControl x:Name="NotificationControl"
+        <notification:NotificationControl x:Name="NotificationControl"
                 DataContext="{Binding Notification}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Panel.ZIndex="1000"/>  -->
+                Panel.ZIndex="1000"/> 
     </Grid>
 </UserControl>

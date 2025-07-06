@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace AirTicketSalesManagement.ViewModel
 {
@@ -25,6 +26,15 @@ namespace AirTicketSalesManagement.ViewModel
 
         [ObservableProperty]
         private Brush background;
+
+        [ObservableProperty]
+        private Brush borderBrush;
+
+        [ObservableProperty]
+        private Brush foreground;
+
+        [ObservableProperty]
+        private DropShadowEffect shadowEffect;
 
         [ObservableProperty]
         private bool showYesNo;
@@ -70,14 +80,43 @@ namespace AirTicketSalesManagement.ViewModel
                 case NotificationType.Information:
                     Title = "Thông báo";
                     Background = Brushes.DodgerBlue;
+                    BorderBrush = Brushes.White;
+                    Foreground = Brushes.White;
+                    ShadowEffect = new DropShadowEffect
+                    {
+                        Color = Colors.Black,
+                        BlurRadius = 20,
+                        ShadowDepth = 5,
+                        Opacity = 0.4
+                    };
                     break;
+
                 case NotificationType.Warning:
                     Title = "Cảnh báo";
                     Background = Brushes.Orange;
+                    BorderBrush = Brushes.White;
+                    Foreground = Brushes.White;
+                    ShadowEffect = new DropShadowEffect
+                    {
+                        Color = Colors.DarkOrange,
+                        BlurRadius = 25,
+                        ShadowDepth = 4,
+                        Opacity = 0.5
+                    };
                     break;
+
                 case NotificationType.Error:
                     Title = "Lỗi";
                     Background = Brushes.Crimson;
+                    BorderBrush = Brushes.White;
+                    Foreground = Brushes.White;
+                    ShadowEffect = new DropShadowEffect
+                    {
+                        Color = Colors.Red,
+                        BlurRadius = 30,
+                        ShadowDepth = 6,
+                        Opacity = 0.6
+                    };
                     break;
             }
 
