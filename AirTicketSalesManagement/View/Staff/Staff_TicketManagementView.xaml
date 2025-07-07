@@ -537,6 +537,7 @@ Foreground="#64748B"/>
         <notification:NotificationControl x:Name="NotificationControl"
             DataContext="{Binding Notification}"
             HorizontalAlignment="Center"
+            Grid.RowSpan="4"
             VerticalAlignment="Center"
             Panel.ZIndex="1000"/>
     </Grid>

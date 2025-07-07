@@ -319,6 +319,7 @@
                 <wpf:WebView2 x:Name="WebView"
                               Visibility="{Binding IsWebViewVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <notification:NotificationControl Grid.ZIndex="100" 
+                                                  Grid.RowSpan="2"
                                                  DataContext="{Binding NotificationViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
             </Grid>
         </Grid>
