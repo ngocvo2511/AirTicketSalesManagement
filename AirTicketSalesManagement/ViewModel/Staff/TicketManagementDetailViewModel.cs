@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {
@@ -28,6 +29,9 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private ObservableCollection<Ctdv>? ctdvList;
         [ObservableProperty]
         private bool canCancle;
+        [ObservableProperty]
+        private NotificationViewModel notification = new();
+
         public TicketManagementDetailViewModel() { }
         public TicketManagementDetailViewModel(QuanLiDatVe chiTietVe, BaseViewModel parent)
         {
@@ -69,7 +73,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private void GoBack()
         {
-            if(parent is StaffViewModel staffViewModel)
+            if (parent is StaffViewModel staffViewModel)
             {
                 staffViewModel.CurrentViewModel = new TicketManagementViewModel(parent);
             }
@@ -83,15 +87,23 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         {
             if (ChiTietVe.TrangThai == "Đã hủy")
             {
-                MessageBox.Show("Vé đã được hủy trước đó.");
+                await notification.ShowNotificationAsync(
+                    "Vé đã được hủy trước đó.",
+                    NotificationType.Warning);
                 return;
             }
-            if(ChiTietVe.CanCancel == false)
+            if (ChiTietVe.CanCancel == false)
             {
-                MessageBox.Show("Vé không thể hủy do đã quá thời gian hủy.");
+                await notification.ShowNotificationAsync(
+                    "Vé không thể hủy do đã quá thời gian hủy.",
+                    NotificationType.Warning);
                 return;
             }
-            if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            bool confirm = await notification.ShowNotificationAsync(
+                "Bạn có chắc chắn muốn hủy vé này không?",
+                NotificationType.Information,
+                true);
+            if (confirm)
             {
                 try
                 {
@@ -102,19 +114,25 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         {
                             booking.TtdatVe = "Đã hủy";
                             await context.SaveChangesAsync();
-                            MessageBox.Show("Hủy vé thành công.");
+                            await notification.ShowNotificationAsync(
+                                "Hủy vé thành công.",
+                                NotificationType.Information);
                             ChiTietVe.TrangThai = "Đã hủy";
                             OnPropertyChanged(nameof(ChiTietVe));
                         }
                         else
                         {
-                            MessageBox.Show("Không tìm thấy vé để hủy.");
+                            await notification.ShowNotificationAsync(
+                                "Không tìm thấy vé để hủy.",
+                                NotificationType.Error);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi hủy vé: {ex.Message}");
+                    await notification.ShowNotificationAsync(
+                        $"Lỗi khi hủy vé: {ex.Message}",
+                        NotificationType.Error);
                 }
             }
         }
@@ -123,15 +141,23 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         {
             if (ChiTietVe.TrangThai != "Chờ thanh toán")
             {
-                MessageBox.Show("Không thể xác nhận thanh toán.");
+                await notification.ShowNotificationAsync(
+                    "Không thể xác nhận thanh toán.",
+                    NotificationType.Warning);
                 return;
             }
-            if(ChiTietVe.CanConfirm == false)
+            if (ChiTietVe.CanConfirm == false)
             {
-                MessageBox.Show("Vé không thể thanh toán do đã quá thời gian đặt vé.");
+                await notification.ShowNotificationAsync(
+                    "Vé không thể thanh toán do đã quá thời gian đặt vé.",
+                    NotificationType.Warning);
                 return;
             }
-            if (MessageBox.Show("Bạn có chắc chắn muốn xác nhận thanh toán vé này không?", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            bool confirm = await notification.ShowNotificationAsync(
+                "Bạn có chắc chắn muốn xác nhận thanh toán vé này không?",
+                NotificationType.Information,
+                true);
+            if (confirm)
             {
                 try
                 {
@@ -142,19 +168,25 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         {
                             booking.TtdatVe = "Đã thanh toán";
                             await context.SaveChangesAsync();
-                            MessageBox.Show("Xác nhận thanh toán thành công.");
+                            await notification.ShowNotificationAsync(
+                                "Xác nhận thanh toán thành công.",
+                                NotificationType.Information);
                             ChiTietVe.TrangThai = "Đã thanh toán";
                             OnPropertyChanged(nameof(ChiTietVe));
                         }
                         else
                         {
-                            MessageBox.Show("Không tìm thấy vé để xác nhận thanh toán.");
+                            await notification.ShowNotificationAsync(
+                                "Không tìm thấy vé để xác nhận thanh toán.",
+                                NotificationType.Error);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi xác nhận thanh toán: {ex.Message}");
+                    await notification.ShowNotificationAsync(
+                        $"Lỗi khi xác nhận thanh toán: {ex.Message}",
+                        NotificationType.Error);
                 }
             }
         }

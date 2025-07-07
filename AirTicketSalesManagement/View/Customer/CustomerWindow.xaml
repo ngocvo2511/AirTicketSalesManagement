@@ -3,14 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:uc="clr-namespace:AirTicketSalesManagement.Resources.User_Controls"
         xmlns:body="clr-namespace:AirTicketSalesManagement.View.Customer"
+        xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
+        xmlns:converter="clr-namespace:AirTicketSalesManagement.Converters"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         Title="FlyTogether" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
         Background="White"
         WindowStyle="None"
-        AllowsTransparency="True"
-        >
+        AllowsTransparency="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,11 +21,11 @@
 
             <!-- Drop Shadow Effect -->
             <DropShadowEffect x:Key="DropShadowEffect" 
-                              Color="Black" 
-                              Direction="270" 
-                              ShadowDepth="2" 
-                              BlurRadius="8" 
-                              Opacity="0.3"/>
+                             Color="Black" 
+                             Direction="270" 
+                             ShadowDepth="2" 
+                             BlurRadius="8" 
+                             Opacity="0.3"/>
 
             <!-- Toggle Button Style -->
             <Style x:Key="ToggleSidebarButton" TargetType="Button">
@@ -37,10 +39,10 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" 
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="8">
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="8">
                                 <ContentPresenter HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"/>
+                                                 VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
@@ -76,7 +78,7 @@
                                     CornerRadius="12"
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="Center"/>
+                                                 VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
@@ -135,9 +137,7 @@
                   TextOptions.TextFormattingMode="Ideal"
                   TextOptions.TextRenderingMode="Auto"
                   TextElement.FontFamily="{DynamicResource MaterialDesignFont}">
-
-                <Border 
-                        Effect="{StaticResource DropShadowEffect}">
+                <Border Effect="{StaticResource DropShadowEffect}">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                             <GradientStop Color="#667eea" Offset="0"/>
@@ -146,7 +146,6 @@
                     </Border.Background>
 
                     <DockPanel Margin="15" LastChildFill="True">
-
                         <!-- Toggle Button - Dock Top -->
                         <Button DockPanel.Dock="Top"   
                                 Style="{StaticResource ToggleSidebarButton}"    
@@ -157,7 +156,7 @@
                             <Icon:PackIconMaterial Kind="{Binding ToggleIcon}"                     
                                                    Width="20" Height="20"/>
                         </Button>
-                        
+
                         <!-- Đăng xuất dock bottom -->
                         <Button DockPanel.Dock="Bottom"
                                 Style="{StaticResource ModernSidebarButton}"                      
@@ -230,7 +229,6 @@
                                 </StackPanel>
                             </Border>
 
-
                             <!-- Navigation Menu -->
                             <TextBlock Text="MENU CHÍNH" 
                                        FontWeight="Bold" 
@@ -254,7 +252,7 @@
                                     Command="{Binding NavigateToFlightTicketBookingCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="AirplaneTakeoff" Width="22" 
-                               Height="22" Margin="0,0,12,0"/>
+                                                           Height="22" Margin="0,0,12,0"/>
                                     <TextBlock Text="Đặt vé" VerticalAlignment="Center" Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
@@ -263,7 +261,7 @@
                                     Command="{Binding NavigateToBookingHistoryCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="History" Width="22" 
-                               Height="22" Margin="0,0,12,0"/>
+                                                           Height="22" Margin="0,0,12,0"/>
                                     <TextBlock Text="Lịch sử đặt vé" VerticalAlignment="Center" Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
@@ -282,19 +280,17 @@
                                        Opacity="0.3"      
                                        Margin="0,20,0,15"      
                                        Visibility="{Binding TextVisibility}"/>
-
-
                         </StackPanel>
                     </DockPanel>
                 </Border>
             </Grid>
 
-            <Grid Grid.Column="1">
-                <ContentControl x:Name="MainContent" Grid.Row="1" 
-                                Content="{Binding CurrentViewModel}"/>
+            <Grid Grid.Column="1" Grid.Row="1">
+                <ContentControl x:Name="MainContent" Content="{Binding CurrentViewModel}"/>
+                <wpf:WebView2 x:Name="WebView"
+                              Visibility="{Binding IsWebViewVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <notification:NotificationControl DataContext="{Binding NotificationViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
             </Grid>
         </Grid>
-        <wpf:WebView2 x:Name="WebView"
-                      Visibility="{Binding IsWebViewVisible, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="1"/>
     </Grid>
 </Window>

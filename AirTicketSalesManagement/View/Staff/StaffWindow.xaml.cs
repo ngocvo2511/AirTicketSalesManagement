@@ -1,5 +1,6 @@
 ﻿using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.ViewModel.Customer;
+using AirTicketSalesManagement.ViewModel.Staff;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Web.WebView2.Core;
 using System;
@@ -17,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using VNPAY.NET.Models;
 using VNPAY.NET;
-using AirTicketSalesManagement.ViewModel.Staff;
+using AirTicketSalesManagement.ViewModel;
 
 namespace AirTicketSalesManagement.View.Staff
 {
@@ -26,6 +27,13 @@ namespace AirTicketSalesManagement.View.Staff
     /// </summary>
     public partial class StaffWindow : Window
     {
+        private readonly NotificationViewModel notification = new();
+
+        public NotificationViewModel NotificationViewModel
+        {
+            get => notification;
+        }
+
         public StaffWindow()
         {
             InitializeComponent();
@@ -40,7 +48,6 @@ namespace AirTicketSalesManagement.View.Staff
                 WebView.NavigationStarting += WebView_NavigationStarting;
 
                 WebView.Source = new Uri(m.Value);
-
             });
         }
 
@@ -51,7 +58,7 @@ namespace AirTicketSalesManagement.View.Staff
                 var query = new Uri(e.Uri).Query;
                 e.Cancel = true;
 
-                await Dispatcher.InvokeAsync(() =>
+                await Dispatcher.InvokeAsync(async () =>
                 {
                     var viewModel = DataContext as StaffViewModel;
 
@@ -61,19 +68,25 @@ namespace AirTicketSalesManagement.View.Staff
                         if (result.IsSuccess)
                         {
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
-                            MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                            await notification.ShowNotificationAsync(
+                                "Thanh toán thành công!",
+                                NotificationType.Information);
                             WeakReferenceMessenger.Default.Send(new PaymentSuccessMessage());
                         }
                         else
                         {
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
-                            MessageBox.Show("Thanh toán thất bại: " + result.ToString(), "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                            await notification.ShowNotificationAsync(
+                                "Thanh toán thất bại: " + result.ToString(),
+                                NotificationType.Error);
                         }
                     }
                     catch (Exception ex)
                     {
                         if (viewModel != null) viewModel.IsWebViewVisible = false;
-                        MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await notification.ShowNotificationAsync(
+                            "Đã xảy ra lỗi: " + ex.Message,
+                            NotificationType.Error);
                     }
                 });
             }

@@ -3,8 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:uc="clr-namespace:AirTicketSalesManagement.Resources.User_Controls"
         xmlns:body="clr-namespace:AirTicketSalesManagement.View.Staff"
+        xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
+        xmlns:converter="clr-namespace:AirTicketSalesManagement.Converters"
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         Title="FlyTogether" Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
         Background="White"
@@ -18,11 +21,11 @@
 
             <!-- Drop Shadow Effect -->
             <DropShadowEffect x:Key="DropShadowEffect" 
-                          Color="Black" 
-                          Direction="270" 
-                          ShadowDepth="2" 
-                          BlurRadius="8" 
-                          Opacity="0.3"/>
+                             Color="Black" 
+                             Direction="270" 
+                             ShadowDepth="2" 
+                             BlurRadius="8" 
+                             Opacity="0.3"/>
 
             <!-- Enhanced Sidebar Button Style -->
             <Style x:Key="ModernSidebarButton" TargetType="Button">
@@ -40,11 +43,11 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" 
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="12"
-                                Padding="{TemplateBinding Padding}">
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="12"
+                                    Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="Center"/>
+                                                 VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
@@ -79,10 +82,10 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" 
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="8">
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="8">
                                 <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
+                                                 VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
@@ -117,7 +120,7 @@
             <!-- Nội dung chính -->
         </Grid.RowDefinitions>
 
-        <!-- 💠 Thanh tiêu đề -->
+        <!-- Thanh tiêu đề -->
         <uc:CustomTitleBar Grid.Row="0"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -128,13 +131,12 @@
 
             <!-- Enhanced Sidebar -->
             <Grid Grid.Column="0"
-              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-              TextElement.FontWeight="Regular"
-              TextElement.FontSize="13"
-              TextOptions.TextFormattingMode="Ideal"
-              TextOptions.TextRenderingMode="Auto"
-              TextElement.FontFamily="{DynamicResource MaterialDesignFont}">
-
+                  TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+                  TextElement.FontWeight="Regular"
+                  TextElement.FontSize="13"
+                  TextOptions.TextFormattingMode="Ideal"
+                  TextOptions.TextRenderingMode="Auto"
+                  TextElement.FontFamily="{DynamicResource MaterialDesignFont}">
                 <Border Effect="{StaticResource DropShadowEffect}">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -144,29 +146,28 @@
                     </Border.Background>
 
                     <DockPanel Margin="15" LastChildFill="True">
-
                         <!-- Toggle Button - Dock Top -->
                         <Button DockPanel.Dock="Top"
-                            Style="{StaticResource ToggleSidebarButton}"
-                            HorizontalAlignment="Right"
-                            Margin="0,0,0,15"
-                            Command="{Binding ToggleSidebarCommand}"
-                            ToolTip="Thu gọn/Mở rộng menu">
+                                Style="{StaticResource ToggleSidebarButton}"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,0,15"
+                                Command="{Binding ToggleSidebarCommand}"
+                                ToolTip="Thu gọn/Mở rộng menu">
                             <Icon:PackIconMaterial Kind="{Binding ToggleIcon}" 
-                                               Width="20" Height="20"/>
+                                                   Width="20" Height="20"/>
                         </Button>
 
                         <!-- Đăng xuất dock bottom -->
                         <Button DockPanel.Dock="Bottom"
-                            Style="{StaticResource ModernSidebarButton}"                      
-                            Margin="0,30,0,20"
-                            Command="{Binding LogoutCommand}">
+                                Style="{StaticResource ModernSidebarButton}"                      
+                                Margin="0,30,0,20"
+                                Command="{Binding LogoutCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <Icon:PackIconMaterial Kind="ExitToApp" Width="22" Height="22" 
-                                                   Margin="0,0,12,0" />
+                                                       Margin="0,0,12,0" />
                                 <TextBlock Text="Đăng xuất" 
-                                       VerticalAlignment="Center"
-                                       Visibility="{Binding TextVisibility}"/>
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding TextVisibility}"/>
                             </StackPanel>
                         </Button>
 
@@ -180,145 +181,146 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Border Grid.Column="0" 
-                                    Background="White" 
-                                    CornerRadius="15"
-                                    Padding="8"
-                                    Effect="{StaticResource DropShadowEffect}">
+                                        Background="White" 
+                                        CornerRadius="15"
+                                        Padding="8"
+                                        Effect="{StaticResource DropShadowEffect}">
                                     <Image Source="pack://application:,,,/Resources/Images/logo.png"
-                                       Height="50" Width="50"/>
+                                           Height="50" Width="50"/>
                                 </Border>
 
                                 <StackPanel Grid.Column="1" 
-                                        VerticalAlignment="Center" 
-                                        Margin="15,0,0,0"
-                                        Visibility="{Binding TextVisibility}">
+                                            VerticalAlignment="Center" 
+                                            Margin="15,0,0,0"
+                                            Visibility="{Binding TextVisibility}">
                                     <TextBlock Text="FlyTogether" 
-                                           FontWeight="Bold" 
-                                           FontSize="18" 
-                                           Foreground="White"/>
+                                               FontWeight="Bold" 
+                                               FontSize="18" 
+                                               Foreground="White"/>
                                     <TextBlock Text="Staff Portal" 
-                                           FontSize="12" 
-                                           Foreground="White" 
-                                           Opacity="0.8"/>
+                                               FontSize="12" 
+                                               Foreground="White" 
+                                               Opacity="0.8"/>
                                 </StackPanel>
                             </Grid>
 
                             <!-- User Info Section -->
                             <Border Background="#2C3E50" 
-                                CornerRadius="15" 
-                                Padding="15,10" 
-                                Margin="0,0,0,20">
+                                    CornerRadius="15" 
+                                    Padding="15,10" 
+                                    Margin="0,0,0,20">
                                 <StackPanel Orientation="Horizontal">
                                     <Border Background="White" 
-                                        CornerRadius="20" 
-                                        Width="40" Height="40">
+                                            CornerRadius="20" 
+                                            Width="40" Height="40">
                                         <Icon:PackIconMaterial Kind="Account" 
-                                                           Width="24" Height="24" 
-                                                           Foreground="#667eea"
-                                                           HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"/>
+                                                               Width="24" Height="24" 
+                                                               Foreground="#667eea"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
                                     </Border>
                                     <StackPanel Margin="10,0,0,0" 
-                                            VerticalAlignment="Center"
-                                            Visibility="{Binding TextVisibility}">
+                                                VerticalAlignment="Center"
+                                                Visibility="{Binding TextVisibility}">
                                         <TextBlock Text="Xin chào!" 
-                                               FontSize="12" 
-                                               Foreground="White" 
-                                               Opacity="0.9"/>
+                                                   FontSize="12" 
+                                                   Foreground="White" 
+                                                   Opacity="0.9"/>
                                         <TextBlock Text="{Binding HoTen}" 
-                                               FontWeight="SemiBold" 
-                                               FontSize="14" 
-                                               Foreground="White"/>
+                                                   FontWeight="SemiBold" 
+                                                   FontSize="14" 
+                                                   Foreground="White"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
 
                             <!-- Navigation Menu -->
                             <TextBlock Text="MENU CHÍNH" 
-                                   FontWeight="Bold" 
-                                   FontSize="11" 
-                                   Foreground="White" 
-                                   Opacity="0.7"
-                                   Margin="10,0,0,10"
-                                   Visibility="{Binding TextVisibility}"/>
+                                       FontWeight="Bold" 
+                                       FontSize="11" 
+                                       Foreground="White" 
+                                       Opacity="0.7"
+                                       Margin="10,0,0,10"
+                                       Visibility="{Binding TextVisibility}"/>
 
                             <!-- Menu Items -->
                             <Button Style="{StaticResource ModernSidebarButton}"
-                                Command="{Binding NavigateToHomePageCommand}"
-                                ToolTip="Trang chủ">
+                                    Command="{Binding NavigateToHomePageCommand}"
+                                    ToolTip="Trang chủ">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="Home" Width="22" 
-                                                       Height="22" Margin="0,0,12,0" />
+                                                           Height="22" Margin="0,0,12,0" />
                                     <TextBlock Text="Trang chủ" 
-                                           VerticalAlignment="Center"
-                                           Visibility="{Binding TextVisibility}"/>
+                                               VerticalAlignment="Center"
+                                               Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
 
                             <Button Style="{StaticResource ModernSidebarButton}"       
-                                Command="{Binding NavigateToFlightTicketBookingCommand}"
-                                ToolTip="Đặt vé">
+                                    Command="{Binding NavigateToFlightTicketBookingCommand}"
+                                    ToolTip="Đặt vé">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="AirplaneTakeoff" Width="22" 
-                                                       Height="22" Margin="0,0,12,0"/>
+                                                           Height="22" Margin="0,0,12,0"/>
                                     <TextBlock Text="Đặt vé" 
-                                           VerticalAlignment="Center"
-                                           Visibility="{Binding TextVisibility}"/>
+                                               VerticalAlignment="Center"
+                                               Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
 
                             <Button Style="{StaticResource ModernSidebarButton}"              
-                                Command="{Binding NavigateToTicketManagementCommand}"
-                                ToolTip="Quản lý đặt vé">
+                                    Command="{Binding NavigateToTicketManagementCommand}"
+                                    ToolTip="Quản lý đặt vé">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="Ticket" Width="22" 
-                                                       Height="22" Margin="0,0,12,0"/>
+                                                           Height="22" Margin="0,0,12,0"/>
                                     <TextBlock Text="Quản lý đặt vé" 
-                                           VerticalAlignment="Center"
-                                           Visibility="{Binding TextVisibility}"/>
+                                               VerticalAlignment="Center"
+                                               Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
 
                             <Button Style="{StaticResource ModernSidebarButton}"              
-                                Command="{Binding NavigateToCustomerManagementCommand}"
-                                ToolTip="Quản lý khách hàng">
+                                    Command="{Binding NavigateToCustomerManagementCommand}"
+                                    ToolTip="Quản lý khách hàng">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="AccountGroup" Width="22" 
-                                                       Height="22" Margin="0,0,12,0"/>
+                                                           Height="22" Margin="0,0,12,0"/>
                                     <TextBlock Text="Quản lý khách hàng" 
-                                           VerticalAlignment="Center"
-                                           Visibility="{Binding TextVisibility}"/>
+                                               VerticalAlignment="Center"
+                                               Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
 
                             <Button Style="{StaticResource ModernSidebarButton}"
-                                Command="{Binding NavigateToStaffProfileCommand}"
-                                ToolTip="Thông tin cá nhân">
+                                    Command="{Binding NavigateToStaffProfileCommand}"
+                                    ToolTip="Thông tin cá nhân">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="AccountEdit" Width="22" 
-                                                       Height="22" Margin="0,0,12,0" />
+                                                           Height="22" Margin="0,0,12,0" />
                                     <TextBlock Text="Thông tin cá nhân" 
-                                           VerticalAlignment="Center"
-                                           Visibility="{Binding TextVisibility}"/>
+                                               VerticalAlignment="Center"
+                                               Visibility="{Binding TextVisibility}"/>
                                 </StackPanel>
                             </Button>
 
                             <!-- Divider -->
                             <Separator Background="White" 
-                                   Opacity="0.3" 
-                                   Margin="0,20,0,15"
-                                   Visibility="{Binding TextVisibility}"/>
+                                       Opacity="0.3" 
+                                       Margin="0,20,0,15"
+                                       Visibility="{Binding TextVisibility}"/>
                         </StackPanel>
                     </DockPanel>
                 </Border>
             </Grid>
 
-            <Grid Grid.Column="1">
-                <ContentControl x:Name="MainContent" Grid.Row="1" 
-                            Content="{Binding CurrentViewModel}"/>
+            <Grid Grid.Column="1" Grid.Row="1">
+                <ContentControl x:Name="MainContent" Content="{Binding CurrentViewModel}"/>
+                <wpf:WebView2 x:Name="WebView"
+                              Visibility="{Binding IsWebViewVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <notification:NotificationControl Grid.ZIndex="100" 
+                                                 DataContext="{Binding NotificationViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
             </Grid>
         </Grid>
-        <wpf:WebView2 x:Name="WebView"
-                      Visibility="{Binding IsWebViewVisible, Converter={StaticResource BoolToVisibilityConverter}}" Grid.Row="1"/>
     </Grid>
 </Window>

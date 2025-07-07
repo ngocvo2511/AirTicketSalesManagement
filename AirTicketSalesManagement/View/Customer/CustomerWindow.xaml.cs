@@ -19,6 +19,7 @@ using VNPAY.NET.Models;
 using VNPAY.NET;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Web.WebView2.Core;
+using AirTicketSalesManagement.ViewModel;
 
 namespace AirTicketSalesManagement.View.Customer
 {
@@ -27,6 +28,13 @@ namespace AirTicketSalesManagement.View.Customer
     /// </summary>
     public partial class CustomerWindow : Window
     {
+        private readonly NotificationViewModel notification = new();
+
+        public NotificationViewModel NotificationViewModel
+        {
+            get => notification;
+        }
+
         public CustomerWindow()
         {
             InitializeComponent();
@@ -41,7 +49,6 @@ namespace AirTicketSalesManagement.View.Customer
                 WebView.NavigationStarting += WebView_NavigationStarting;
 
                 WebView.Source = new Uri(m.Value);
-
             });
         }
 
@@ -52,7 +59,7 @@ namespace AirTicketSalesManagement.View.Customer
                 var query = new Uri(e.Uri).Query;
                 e.Cancel = true;
 
-                await Dispatcher.InvokeAsync(() =>
+                await Dispatcher.InvokeAsync(async () =>
                 {
                     var viewModel = DataContext as CustomerViewModel;
 
@@ -62,19 +69,25 @@ namespace AirTicketSalesManagement.View.Customer
                         if (result.IsSuccess)
                         {
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
-                            MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                            await notification.ShowNotificationAsync(
+                                "Thanh toán thành công!",
+                                NotificationType.Information);
                             WeakReferenceMessenger.Default.Send(new PaymentSuccessMessage());
                         }
                         else
                         {
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
-                            MessageBox.Show("Thanh toán thất bại: " + result.ToString(), "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                            await notification.ShowNotificationAsync(
+                                "Thanh toán thất bại: " + result.ToString(),
+                                NotificationType.Error);
                         }
                     }
                     catch (Exception ex)
                     {
                         if (viewModel != null) viewModel.IsWebViewVisible = false;
-                        MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await notification.ShowNotificationAsync(
+                            "Đã xảy ra lỗi: " + ex.Message,
+                            NotificationType.Error);
                     }
                 });
             }
@@ -114,6 +127,5 @@ namespace AirTicketSalesManagement.View.Customer
             // Xử lý kết quả
             return vnpay.GetPaymentResult(queryCollection);
         }
-
     }
 }

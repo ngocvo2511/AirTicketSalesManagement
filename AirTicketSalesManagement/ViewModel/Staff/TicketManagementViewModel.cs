@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {
@@ -39,6 +40,8 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private ObservableCollection<string> hangHangKhongList = new();
         [ObservableProperty]
         private ObservableCollection<string> sanBayList = new();
+        [ObservableProperty]
+        private NotificationViewModel notification = new();
 
         public ObservableCollection<string> DiemDiList =>
             new(SanBayList.Where(s => s != NoiDenFilter));
@@ -59,7 +62,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private ObservableCollection<QuanLiDatVe>? historyBooking = new();
         [ObservableProperty]
         private bool isEmpty;
-        //private ObservableCollection<string>
+
         public TicketManagementViewModel() { }
         public TicketManagementViewModel(BaseViewModel parent)
         {
@@ -75,38 +78,38 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 {
                     var quiDinh = await context.Quydinhs.FirstOrDefaultAsync();
                     var query = from datve in context.Datves
-                                 join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
-                                 join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
-                                 join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
-                                 join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
-                                 join khachhang in context.Khachhangs on datve.MaKh equals khachhang.MaKh into khGroup
-                                 from kh in khGroup.DefaultIfEmpty()
-                                 join taikhoanKH in context.Taikhoans on kh.MaKh equals taikhoanKH.MaKh into tkKhGroup
-                                 from tkKh in tkKhGroup.DefaultIfEmpty()
-                                 join nhanvien in context.Nhanviens on datve.MaNv equals nhanvien.MaNv into nvGroup
-                                 from nv in nvGroup.DefaultIfEmpty()
-                                 join taikhoanNV in context.Taikhoans on nv.MaNv equals taikhoanNV.MaNv into tkNvGroup
-                                 from tkNv in tkNvGroup.DefaultIfEmpty()
-                                 select new QuanLiDatVe
-                                 {
-                                     MaVe = datve.MaDv,
-                                     MaDiemDi = chuyenbay.Sbdi,
-                                     MaDiemDen = chuyenbay.Sbden,
-                                     DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
-                                     DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
-                                     HangHangKhong = chuyenbay.HangHangKhong,
-                                     GioDi = lichbay.GioDi,
-                                     GioDen = lichbay.GioDen,
-                                     LoaiMayBay = lichbay.LoaiMb,
-                                     HoTenNguoiDat = kh != null ? kh.HoTenKh : (nv != null ? nv.HoTenNv : "Không rõ"),
-                                     EmailNguoiDat = tkKh != null ? tkKh.Email : (tkNv != null ? tkNv.Email : ""),
-                                     NgayDat = datve.ThoiGianDv,
-                                     TrangThai = datve.TtdatVe,
-                                     SoLuongKhach = datve.Ctdvs.Count,
-                                     QdDatVe = (quiDinh != null) ? quiDinh.TgdatVeChamNhat : null,
-                                     QdHuyVe = (quiDinh != null) ? quiDinh.TghuyDatVe : null
-                                 };
-                    var result = await query.OrderByDescending(x=>x.NgayDat).ToListAsync();
+                                join lichbay in context.Lichbays on datve.MaLb equals lichbay.MaLb
+                                join chuyenbay in context.Chuyenbays on lichbay.SoHieuCb equals chuyenbay.SoHieuCb
+                                join sbDi in context.Sanbays on chuyenbay.Sbdi equals sbDi.MaSb
+                                join sbDen in context.Sanbays on chuyenbay.Sbden equals sbDen.MaSb
+                                join khachhang in context.Khachhangs on datve.MaKh equals khachhang.MaKh into khGroup
+                                from kh in khGroup.DefaultIfEmpty()
+                                join taikhoanKH in context.Taikhoans on kh.MaKh equals taikhoanKH.MaKh into tkKhGroup
+                                from tkKh in tkKhGroup.DefaultIfEmpty()
+                                join nhanvien in context.Nhanviens on datve.MaNv equals nhanvien.MaNv into nvGroup
+                                from nv in nvGroup.DefaultIfEmpty()
+                                join taikhoanNV in context.Taikhoans on nv.MaNv equals taikhoanNV.MaNv into tkNvGroup
+                                from tkNv in tkNvGroup.DefaultIfEmpty()
+                                select new QuanLiDatVe
+                                {
+                                    MaVe = datve.MaDv,
+                                    MaDiemDi = chuyenbay.Sbdi,
+                                    MaDiemDen = chuyenbay.Sbden,
+                                    DiemDi = sbDi.ThanhPho + " (" + sbDi.MaSb + "), " + sbDi.QuocGia,
+                                    DiemDen = sbDen.ThanhPho + " (" + sbDen.MaSb + "), " + sbDen.QuocGia,
+                                    HangHangKhong = chuyenbay.HangHangKhong,
+                                    GioDi = lichbay.GioDi,
+                                    GioDen = lichbay.GioDen,
+                                    LoaiMayBay = lichbay.LoaiMb,
+                                    HoTenNguoiDat = kh != null ? kh.HoTenKh : (nv != null ? nv.HoTenNv : "Không rõ"),
+                                    EmailNguoiDat = tkKh != null ? tkKh.Email : (tkNv != null ? tkNv.Email : ""),
+                                    NgayDat = datve.ThoiGianDv,
+                                    TrangThai = datve.TtdatVe,
+                                    SoLuongKhach = datve.Ctdvs.Count,
+                                    QdDatVe = (quiDinh != null) ? quiDinh.TgdatVeChamNhat : null,
+                                    QdHuyVe = (quiDinh != null) ? quiDinh.TghuyDatVe : null
+                                };
+                    var result = await query.OrderByDescending(x => x.NgayDat).ToListAsync();
                     rootHistoryBooking = new ObservableCollection<QuanLiDatVe>(result);
                     HistoryBooking = new ObservableCollection<QuanLiDatVe>(result);
                     IsEmpty = HistoryBooking.Count == 0;
@@ -135,7 +138,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             }
             catch (Exception e)
             {
-                throw new Exception("Lỗi kết nối cơ sở dữ liệu",e);
+                throw new Exception("Lỗi kết nối cơ sở dữ liệu", e);
             }
         }
 
@@ -149,8 +152,8 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                     int tgHuy = quiDinh?.TghuyDatVe ?? 0;
                     var expiredDatVes = context.Datves
                         .Where(dv => (dv.TtdatVe == "Chưa thanh toán (Online)" || dv.TtdatVe == "Giữ chỗ") &&
-                                     (dv.ThoiGianDv < DateTime.Now.AddMinutes(-20) || (dv.MaLbNavigation!=null && dv.MaLbNavigation.GioDi!=null && DateTime.Now > dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy))))
-                        .ToList();                    
+                                     (dv.ThoiGianDv < DateTime.Now.AddMinutes(-20) || (dv.MaLbNavigation != null && dv.MaLbNavigation.GioDi != null && DateTime.Now > dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy))))
+                        .ToList();
                     foreach (var datVe in expiredDatVes)
                     {
                         var chiTiets = context.Ctdvs.Where(ct => ct.MaDv == datVe.MaDv).ToList();
@@ -171,22 +174,21 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         context.Ctdvs.RemoveRange(chiTiets);
                         context.Datves.Remove(datVe);
                     }
-                    var datVeTienMat = context.Datves.Where(dv => dv.TtdatVe == "Chưa thanh toán (Tiền mặt)" 
-                        && dv.MaLbNavigation!=null && dv.MaLbNavigation.GioDi != null
+                    var datVeTienMat = context.Datves.Where(dv => dv.TtdatVe == "Chưa thanh toán (Tiền mặt)"
+                        && dv.MaLbNavigation != null && dv.MaLbNavigation.GioDi != null
                         && DateTime.Now > dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy))
                         .ToList();
                     foreach (var ve in datVeTienMat)
                     {
                         ve.TtdatVe = "Đã hủy";
                     }
-                    context.SaveChanges();                                       
+                    context.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
 
             }
-            
         }
 
         [RelayCommand]
@@ -196,7 +198,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             {
                 staffViewModel.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent);
             }
-            else if(parent is AdminViewModel adminViewModel)
+            else if (parent is AdminViewModel adminViewModel)
             {
                 adminViewModel.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent);
             }
@@ -242,15 +244,23 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             if (ve == null) return;
             if (ve.CanCancel == false)
             {
-                MessageBox.Show("Không thể hủy vé này do đã quá thời hạn hủy.");
+                await notification.ShowNotificationAsync(
+                    "Không thể hủy vé này do đã quá thời hạn hủy.",
+                    NotificationType.Warning);
                 return;
             }
             if (ve.TrangThai == "Đã hủy")
             {
-                MessageBox.Show("Vé đã được hủy trước đó.");
+                await notification.ShowNotificationAsync(
+                    "Vé đã được hủy trước đó.",
+                    NotificationType.Warning);
                 return;
             }
-            if (MessageBox.Show("Bạn có chắc chắn muốn hủy vé này không?", "Xác nhận hủy vé", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            bool confirm = await notification.ShowNotificationAsync(
+                "Bạn có chắc chắn muốn hủy vé này không?",
+                NotificationType.Information,
+                true);
+            if (confirm)
             {
                 try
                 {
@@ -263,18 +273,24 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                             await context.SaveChangesAsync();
                             ve.TrangThai = "Đã hủy";
                             OnPropertyChanged(nameof(HistoryBooking));
-                            MessageBox.Show("Hủy vé thành công.");
+                            await notification.ShowNotificationAsync(
+                                "Hủy vé thành công.",
+                                NotificationType.Information);
                             await LoadData();
                         }
                         else
                         {
-                            MessageBox.Show("Không tìm thấy vé để hủy.");
+                            await notification.ShowNotificationAsync(
+                                "Không tìm thấy vé để hủy.",
+                                NotificationType.Error);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi hủy vé: {ex.Message}");
+                    await notification.ShowNotificationAsync(
+                        $"Lỗi khi hủy vé: {ex.Message}",
+                        NotificationType.Error);
                 }
             }
         }
@@ -285,15 +301,23 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             if (ve == null) return;
             if (ve.CanConfirm == false)
             {
-                MessageBox.Show("Không thể xác nhận thanh toán vé này do đã quá thời hạn đặt vé.");
+                await notification.ShowNotificationAsync(
+                    "Không thể xác nhận thanh toán vé này do đã quá thời hạn đặt vé.",
+                    NotificationType.Warning);
                 return;
             }
-            if (ve.TrangThai != "Chưa thanh toán (tiền mặt)")
+            if (ve.TrangThai != "Chưa thanh toán (Tiền mặt)")
             {
-                MessageBox.Show("Không thể xác nhận thanh toán.");
+                await notification.ShowNotificationAsync(
+                    "Không thể xác nhận thanh toán.",
+                    NotificationType.Warning);
                 return;
             }
-            if (MessageBox.Show("Bạn có chắc chắn muốn xác nhận thanh toán vé này không?", "Xác nhận thanh toán", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            bool confirm = await notification.ShowNotificationAsync(
+                "Bạn có chắc chắn muốn xác nhận thanh toán vé này không?",
+                NotificationType.Information,
+                true);
+            if (confirm)
             {
                 try
                 {
@@ -306,18 +330,24 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                             await context.SaveChangesAsync();
                             ve.TrangThai = "Đã thanh toán";
                             OnPropertyChanged(nameof(HistoryBooking));
-                            MessageBox.Show("Xác nhận thanh toán thành công.");
+                            await notification.ShowNotificationAsync(
+                                "Xác nhận thanh toán thành công.",
+                                NotificationType.Information);
                             await LoadData();
                         }
                         else
                         {
-                            MessageBox.Show("Không tìm thấy vé để xác nhận thanh toán.");
+                            await notification.ShowNotificationAsync(
+                                "Không tìm thấy vé để xác nhận thanh toán.",
+                                NotificationType.Error);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi xác nhận thanh toán: {ex.Message}");
+                    await notification.ShowNotificationAsync(
+                        $"Lỗi khi xác nhận thanh toán: {ex.Message}",
+                        NotificationType.Error);
                 }
             }
         }
@@ -354,4 +384,3 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         }
     }
 }
-
