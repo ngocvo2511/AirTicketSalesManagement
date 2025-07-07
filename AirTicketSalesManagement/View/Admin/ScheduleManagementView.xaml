@@ -834,19 +834,19 @@ RowStyle="{StaticResource DataGridRowStyle}"
                 <Border Background="#DCFCE7" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="8" Height="8" Fill="#16A34A" Margin="0,0,6,0"/>
-                        <TextBlock Text="Chờ cất cánh" FontSize="12" FontWeight="Medium" Foreground="#16A34A"/>
+                        <TextBlock Text="Hoàn thành" FontSize="12" FontWeight="Medium" Foreground="#16A34A"/>
                     </StackPanel>
                 </Border>
                 <Border Background="#FEF3C7" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Width="8" Height="8" Fill="#D97706" Margin="0,0,6,0"/>
-                        <TextBlock Text="Đã cất cánh" FontSize="12" FontWeight="Medium" Foreground="#D97706"/>
+                        <TextBlock Text="Chờ cất cánh" FontSize="12" FontWeight="Medium" Foreground="#D97706"/>
                     </StackPanel>
                 </Border>
-                <Border Background="#FEE2E2" CornerRadius="8" Padding="12,6">
+                <Border Background="#DBEAFE" CornerRadius="8" Padding="12,6">
                     <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="8" Height="8" Fill="#DC2626" Margin="0,0,6,0"/>
-                        <TextBlock Text="Hoàn thành" FontSize="12" FontWeight="Medium" Foreground="#DC2626"/>
+                        <Ellipse Width="8" Height="8" Fill="#2563EB" Margin="0,0,6,0"/>
+                        <TextBlock Text="Đã cất cánh" FontSize="12" FontWeight="Medium" Foreground="#2563EB"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
