@@ -27,7 +27,7 @@
             </Grid.RowDefinitions>
 
             <!-- Tiêu đề -->
-            <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="15 0 15 20">
+                <Border Grid.Row="0" Background="#6366F1" CornerRadius="10" Padding="20" Margin="15 0 15 20">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -101,15 +101,15 @@
                                         <TextBlock Text="{Binding PassengerTypeText}" 
                                                    FontSize="17" 
                                                    FontWeight="SemiBold" 
-                                                   Foreground="#388FF4"/>
+                                                   Foreground="#6366F1"/>
                                         <TextBlock Text=" #" 
                                                    FontSize="17" 
                                                    FontWeight="SemiBold" 
-                                                   Foreground="#388FF4"/>
+                                                   Foreground="#6366F1"/>
                                         <TextBlock Text="{Binding Index}" 
                                                    FontSize="17" 
                                                    FontWeight="SemiBold" 
-                                                   Foreground="#388FF4"/>
+                                                   Foreground="#6366F1"/>
                                     </StackPanel>
 
                                     <TextBlock Grid.Column="1" 
@@ -280,7 +280,7 @@
                                Text="Thông tin liên hệ" 
                                FontSize="17" 
                                FontWeight="SemiBold" 
-                               Foreground="#388FF4"
+                               Foreground="#6366F1"
                                Margin="0,0,0,15"/>
 
                     <!-- Form thông tin liên hệ -->
@@ -320,7 +320,7 @@
                 <Button Grid.Column="0"
                         Content="QUAY LẠI"
                         Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Foreground="#388FF4"
+                        Foreground="#6366F1"
                         Height="50"
                         Width="150"
                         FontSize="14"
@@ -332,7 +332,7 @@
                 <Button Grid.Column="1"
                         Content="TIẾP TỤC"
                         Style="{StaticResource MaterialDesignRaisedButton}"
-                        Background="#388FF4"
+                        Background="#6366F1"
                         Foreground="White"
                         Height="50"
                         Width="150"

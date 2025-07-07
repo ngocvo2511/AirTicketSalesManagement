@@ -31,7 +31,7 @@
                 <Button Content="Xác nhận vé"
                         Command="{Binding ConfirmSelectionCommand}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
-                        Background="#388FF4" Foreground="White"
+                        Background="#6366F1" Foreground="White"
                         Width="150" Height="36" Margin="0,10,0,0"/>
             </StackPanel>
         </Border>

@@ -127,7 +127,7 @@
 
                             <materialDesign:PackIcon Kind="FlightTakeoff" 
                                          Grid.Column="0"
-                                         Foreground="#388FF4"
+                                         Foreground="#6366F1"
                                          Width="30" Height="30" 
                                          VerticalAlignment="Bottom" 
                                          Margin="0,0,15,5"/>
@@ -152,7 +152,7 @@
 
                             <materialDesign:PackIcon Kind="FlightLand" 
                                          Grid.Column="0"
-                                         Foreground="#388FF4"
+                                         Foreground="#6366F1"
                                          Width="30" Height="30" 
                                          VerticalAlignment="Bottom" 
                                          Margin="0,0,15,5"/>
@@ -178,7 +178,7 @@
 
                             <materialDesign:PackIcon Kind="CalendarMonth" 
                                          Grid.Column="0"
-                                         Foreground="#388FF4"
+                                         Foreground="#6366F1"
                                          Width="30" Height="30" 
                                          VerticalAlignment="Bottom" 
                                          Margin="0,0,15,5"/>
@@ -203,7 +203,7 @@
 
                             <materialDesign:PackIcon Kind="AccountGroup" 
                                          Grid.Column="0"
-                                         Foreground="#388FF4"
+                                         Foreground="#6366F1"
                                          Width="30" Height="30" 
                                          VerticalAlignment="Bottom" 
                                          Margin="0,0,15,5"/>
@@ -235,7 +235,7 @@
                         <!-- Hàng 3: Button tìm kiếm (căn giữa, span 2 cột) -->
                         <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
                     Style="{StaticResource MaterialDesignRaisedButton}"
-                    Background="#388FF4"
+                    Background="#6366F1"
                     BorderBrush="Transparent"
                     Foreground="White"
                     Height="55"
@@ -247,7 +247,7 @@
                     Command="{Binding SearchFlightCommand}"
                     Margin="520,10,0,0">
                             <Button.Effect>
-                                <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.3" Color="#388FF4"/>
+                                <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.3" Color="#6366F1"/>
                             </Button.Effect>
                         </Button>
                     </Grid>
@@ -326,7 +326,7 @@
                                     BorderThickness="1"
                                     Background="Transparent"
                                     Command="{Binding IncreaseAdultCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#388FF4" Width="20" Height="20"/>
+                                            <materialDesign:PackIcon Kind="Plus" Foreground="#6366F1" Width="20" Height="20"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -381,7 +381,7 @@
                                     BorderThickness="1"
                                     Background="Transparent"
                                     Command="{Binding IncreaseChildCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#388FF4" Width="20" Height="20"/>
+                                            <materialDesign:PackIcon Kind="Plus" Foreground="#6366F1" Width="20" Height="20"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -436,7 +436,7 @@
                                     BorderThickness="1"
                                     Background="Transparent"
                                     Command="{Binding IncreaseInfantCommand}">
-                                            <materialDesign:PackIcon Kind="Plus" Foreground="#388FF4" Width="20" Height="20"/>
+                                            <materialDesign:PackIcon Kind="Plus" Foreground="#6366F1" Width="20" Height="20"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -444,7 +444,7 @@
                                 <!-- Nút Áp dụng -->
                                 <Button Content="ÁP DỤNG" 
                             Style="{StaticResource MaterialDesignRaisedButton}"
-                            Background="#388FF4"
+                            Background="#6366F1"
                             Foreground="White"
                             FontSize="15"
                             FontWeight="SemiBold"
@@ -454,7 +454,7 @@
                             materialDesign:ButtonAssist.CornerRadius="8"
                             Command="{Binding ApplyPassengerSelectionCommand}">
                                     <Button.Effect>
-                                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3" Color="#388FF4"/>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3" Color="#6366F1"/>
                                     </Button.Effect>
                                 </Button>
                             </StackPanel>
@@ -583,7 +583,7 @@
                                             Command="{Binding DataContext.ToggleTicketClassesCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                             CommandParameter="{Binding}"
                                             Style="{StaticResource MaterialDesignFlatButton}"
-                                            Foreground="#388FF4"
+                                            Foreground="#6366F1"
                                             FontWeight="Medium"
                                             HorizontalAlignment="Center"/>  
 
