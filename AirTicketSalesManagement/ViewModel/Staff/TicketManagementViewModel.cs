@@ -144,7 +144,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                     int tgHuy = quiDinh?.TghuyDatVe ?? 0;
                     var expiredDatVes = context.Datves
                         .Where(dv => (dv.TtdatVe == "Chưa thanh toán (Online)" || dv.TtdatVe == "Giữ chỗ") &&
-                                     (dv.ThoiGianDv < DateTime.Now.AddMinutes(-20) || (dv.MaLbNavigation != null && dv.MaLbNavigation.GioDi != null && DateTime.Now > dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy))))
+                                     (dv.ThoiGianDv < DateTime.Now.AddMinutes(-20) || (dv.MaLbNavigation != null && dv.MaLbNavigation.GioDi.HasValue && DateTime.Now.Date >= dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy).Date)))
                         .ToList();
                     foreach (var datVe in expiredDatVes)
                     {
@@ -167,8 +167,8 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         context.Datves.Remove(datVe);
                     }
                     var datVeTienMat = context.Datves.Where(dv => dv.TtdatVe == "Chưa thanh toán (Tiền mặt)"
-                        && dv.MaLbNavigation != null && dv.MaLbNavigation.GioDi != null
-                        && DateTime.Now > dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy))
+                        && dv.MaLbNavigation != null && dv.MaLbNavigation.GioDi.HasValue
+                        && DateTime.Now.Date >= dv.MaLbNavigation.GioDi.Value.AddDays(-tgHuy).Date)
                         .ToList();
                     foreach (var ve in datVeTienMat)
                     {
