@@ -41,8 +41,7 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
         [ObservableProperty]
         private DateTime? editBirthDate;
 
-        [ObservableProperty]
-        private NotificationViewModel notification = new();
+        public NotificationViewModel Notification { get; } = new NotificationViewModel();
 
         public CustomerManagementViewModel()
         {
@@ -122,21 +121,21 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
         {
             if (string.IsNullOrWhiteSpace(EditName))
             {
-                await notification.ShowNotificationAsync(
+                await Notification.ShowNotificationAsync(
                     "Tên không được để trống",
                     NotificationType.Warning);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(EditPhone) && !IsValidPhone(EditPhone))
             {
-                await notification.ShowNotificationAsync(
+                await Notification.ShowNotificationAsync(
                     "Số điện thoại không hợp lệ!",
                     NotificationType.Warning);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(EditCccd) && (EditCccd.Length != 12 || !EditCccd.All(char.IsDigit)))
             {
-                await notification.ShowNotificationAsync(
+                await Notification.ShowNotificationAsync(
                     "Số căn cước công dân không hợp lệ!",
                     NotificationType.Warning);
                 return;
@@ -145,7 +144,7 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
             {
                 if (EditBirthDate.Value.Date >= DateTime.Today)
                 {
-                    await notification.ShowNotificationAsync(
+                    await Notification.ShowNotificationAsync(
                         "Ngày sinh không hợp lệ!",
                         NotificationType.Warning);
                     return;
@@ -158,7 +157,7 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
 
                 if (customer is null)
                 {
-                    await notification.ShowNotificationAsync(
+                    await Notification.ShowNotificationAsync(
                         "Không tìm thấy khách hàng trong cơ sở dữ liệu.",
                         NotificationType.Error);
                     return;
@@ -173,7 +172,7 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
 
                 await context.SaveChangesAsync();
 
-                await notification.ShowNotificationAsync(
+                await Notification.ShowNotificationAsync(
                     "Cập nhật khách hàng thành công!",
                     NotificationType.Information);
 
@@ -183,14 +182,14 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
             }
             catch (Exception ex)
             {
-                await notification.ShowNotificationAsync(
+                await Notification.ShowNotificationAsync(
                     "Lỗi khi lưu dữ liệu: " + ex.Message,
                     NotificationType.Error);
             }
         }
         private bool IsValidPhone(string phone)
         {
-            return System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{8,10}$");
+            return System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{9}$");
         }
     }
 }

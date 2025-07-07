@@ -110,7 +110,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     MinStopTime = regulation.TgdungMin ?? 10;
                     MaxStopTime = regulation.TgdungMax ?? 20;
                     BookingTime = regulation.TgdatVeChamNhat ?? 1;
-                    CancelTime = regulation.TghuyDatVe ?? 1;
+                    CancelTime = regulation.TghuyDatVe ?? 0;
                     TicketClassCount = regulation.SoHangVe ?? 2;
                 }
                 else
@@ -161,7 +161,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             IsEditingMaxAirports = true;
         }
         [RelayCommand]
-        public async void SaveMaxAirportsAsync()
+        public async void SaveMaxAirports()
         {
             if (!CanSave()) return;
             if (MaxAirports == EditMaxAirports)

@@ -745,9 +745,14 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        
+        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
+            DataContext="{Binding Notification}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Panel.ZIndex="1000"/>
         <!-- Header với Gradient -->
-        <Grid Grid.Row="0" Margin="15,15,15,15">
+        <Grid Grid.Row="0" Margin="15,15,15,0">
 
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -1059,6 +1064,8 @@
                 </Grid>
             </Grid>
         </ScrollViewer>
+
+
         <!-- ✅ EDIT PROFILE POPUP OVERLAY -->
         <Grid Grid.Row="1" x:Name="EditPopupOverlay" Style="{StaticResource EditPopupOverlay}">
             <Border Style="{StaticResource EditFormContainer}"
@@ -1325,16 +1332,11 @@
                                         <DropShadowEffect Color="#dc2626" Opacity="0.3" ShadowDepth="2" BlurRadius="8"/>
                                     </Button.Effect>
                                 </Button>
-                            </Grid>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
+                            </Grid>                            
+                        </StackPanel>                        
+                    </ScrollViewer>                    
+                </Grid>                
             </Border>
         </Grid>
-        <notification:NotificationControl x:Name="NotificationControl"
-                                DataContext="{Binding Notification}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Panel.ZIndex="1000"/> 
     </Grid>
 </UserControl>

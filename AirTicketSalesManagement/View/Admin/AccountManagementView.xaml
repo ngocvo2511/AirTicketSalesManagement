@@ -9,6 +9,7 @@
              xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:views="clr-namespace:AirTicketSalesManagement.View.Notification"
+             xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1200">
 
@@ -542,6 +543,13 @@
                 </Button>
             </StackPanel>
         </Grid>
+
+
+        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
+            DataContext="{Binding Notification}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Panel.ZIndex="1000"/>
 
         <!-- Add Account Popup -->
         <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" 

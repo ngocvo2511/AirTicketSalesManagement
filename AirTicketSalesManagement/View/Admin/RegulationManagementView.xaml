@@ -144,10 +144,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+
         <!-- Header Section -->
         <Grid Grid.Row="0" Margin="15,15,15,15">
-
-
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Icon:PackIconMaterial Kind="FileDocumentEdit" Width="32" Height="32" 
                                      Foreground="#6366F1" Margin="0,0,12,0"/>
@@ -155,11 +154,14 @@
             </StackPanel>
 
         </Grid>
-
+        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
+            DataContext="{Binding Notification}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Panel.ZIndex="1000"/>
         <!-- Content -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="30,20" Margin="15,0,15,0">
             <StackPanel>
-
                 <!-- Quy định Sân bay -->
                 <Border Style="{StaticResource CardStyle}">
                     <StackPanel>

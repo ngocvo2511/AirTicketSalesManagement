@@ -3,17 +3,9 @@ using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media.Media3D;
-using System.Xml.Linq;
 
 namespace AirTicketSalesManagement.ViewModel.Admin
 {
@@ -428,6 +420,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
                 using (var context = new AirTicketDbContext())
                 {
+                    // Kiểm tra trùng số hiệu chuyến bay
+                    bool isDuplicate = context.Chuyenbays.Any(cb => cb.SoHieuCb == AddSoHieuCB);
+                    if (isDuplicate)
+                    {
+                        await Notification.ShowNotificationAsync("Số hiệu chuyến bay đã tồn tại. Vui lòng nhập số hiệu khác.", NotificationType.Warning);
+                        return;
+                    }
+
                     // Tạo chuyến bay mới
                     var newFlight = new Chuyenbay
                     {
@@ -661,9 +661,30 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void EditIntermediateAirport()
+        public async Task EditIntermediateAirportAsync()
         {
+            try
+            {
+                // Tạo sân bay trung gian mới với STT tự động tăng
+                var sbtg = new SBTG()
+                {
+                    STT = DanhSachSBTG.Count + 1, // Tự động tăng STT
+                    MaSBTG = string.Empty, // Mã sân bay trung gian sẽ được nhập sau
+                    ThoiGianDung = 0, // Thời gian dừng mặc định là 0
+                    GhiChu = string.Empty, // Ghi chú mặc định là rỗng
+                    SbtgList = new ObservableCollection<string>(SBTGList),
+                    OnMaSBTGChangedCallback = CapNhatSBTGList
+                };
 
+                // Thêm vào collection
+                DanhSachSBTG.Add(sbtg);
+                CapNhatSBTGList();
+                System.Diagnostics.Debug.WriteLine($"Đã thêm sân bay trung gian thứ {sbtg.STT}");
+            }
+            catch (Exception ex)
+            {
+                await Notification.ShowNotificationAsync($"Lỗi khi thêm sân bay trung gian: {ex.Message}", NotificationType.Error);
+            }
         }
 
         [RelayCommand]

@@ -39,6 +39,30 @@ namespace AirTicketSalesManagement.ViewModel
         [ObservableProperty]
         private bool showYesNo;
 
+        private static readonly DropShadowEffect InfoEffect = new DropShadowEffect
+        {
+            Color = Colors.Black,
+            BlurRadius = 20,
+            ShadowDepth = 5,
+            Opacity = 0.4
+        };
+
+        private static readonly DropShadowEffect WarningEffect = new DropShadowEffect
+        {
+            Color = Colors.DarkOrange,
+            BlurRadius = 25,
+            ShadowDepth = 4,
+            Opacity = 0.5
+        };
+
+        private static readonly DropShadowEffect ErrorEffect = new DropShadowEffect
+        {
+            Color = Colors.Red,
+            BlurRadius = 30,
+            ShadowDepth = 6,
+            Opacity = 0.6
+        };
+
         private TaskCompletionSource<bool> _tcs;
 
         public NotificationViewModel(){}
@@ -82,13 +106,7 @@ namespace AirTicketSalesManagement.ViewModel
                     Background = Brushes.DodgerBlue;
                     BorderBrush = Brushes.White;
                     Foreground = Brushes.White;
-                    ShadowEffect = new DropShadowEffect
-                    {
-                        Color = Colors.Black,
-                        BlurRadius = 20,
-                        ShadowDepth = 5,
-                        Opacity = 0.4
-                    };
+                    //ShadowEffect = InfoEffect;
                     break;
 
                 case NotificationType.Warning:
@@ -96,13 +114,7 @@ namespace AirTicketSalesManagement.ViewModel
                     Background = Brushes.Orange;
                     BorderBrush = Brushes.White;
                     Foreground = Brushes.White;
-                    ShadowEffect = new DropShadowEffect
-                    {
-                        Color = Colors.DarkOrange,
-                        BlurRadius = 25,
-                        ShadowDepth = 4,
-                        Opacity = 0.5
-                    };
+                    //ShadowEffect = WarningEffect;
                     break;
 
                 case NotificationType.Error:
@@ -110,13 +122,7 @@ namespace AirTicketSalesManagement.ViewModel
                     Background = Brushes.Crimson;
                     BorderBrush = Brushes.White;
                     Foreground = Brushes.White;
-                    ShadowEffect = new DropShadowEffect
-                    {
-                        Color = Colors.Red,
-                        BlurRadius = 30,
-                        ShadowDepth = 6,
-                        Opacity = 0.6
-                    };
+                    //ShadowEffect = ErrorEffect;
                     break;
             }
 
