@@ -252,8 +252,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
         private bool IsValidPhone(string phone)
         {
-            // Ví dụ: bắt đầu bằng 0, từ 9–11 chữ số
-            return System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{8,10}$");
+            return System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{9}$");
         }
 
         [RelayCommand]

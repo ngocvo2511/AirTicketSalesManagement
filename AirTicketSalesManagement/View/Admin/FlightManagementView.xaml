@@ -364,7 +364,7 @@
                                   Height="52" FontSize="14">
                                     <ComboBoxItem Content="Tất cả" Tag="Tất cả"/>
                                     <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
-                                    <ComboBoxItem Content="VietJet Air" Tag="VietJet Air"/>
+                                    <ComboBoxItem Content="Vietjet Air" Tag="Vietjet Air"/>
                                     <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
                                     <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
                                 </ComboBox>
@@ -834,7 +834,7 @@
                                               Style="{StaticResource MaterialDesignOutlinedComboBox}"                                
                                               Height="52" FontSize="14">
                                         <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
-                                        <ComboBoxItem Content="Vietjet Air" Tag="VietJet Air"/>
+                                        <ComboBoxItem Content="Vietjet Air" Tag="Vietjet Air"/>
                                         <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
                                         <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
                                     </ComboBox>
@@ -1136,7 +1136,7 @@
                                       Style="{StaticResource MaterialDesignOutlinedComboBox}"                                
                                       Height="52" FontSize="14">
                                         <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
-                                        <ComboBoxItem Content="VietJet Air" Tag="VietJet Air"/>
+                                        <ComboBoxItem Content="Vietjet Air" Tag="Vietjet Air"/>
                                         <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
                                         <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
                                     </ComboBox>

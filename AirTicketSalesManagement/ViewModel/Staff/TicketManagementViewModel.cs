@@ -1,18 +1,10 @@
 ﻿using AirTicketSalesManagement.Data;
-using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Models.UIModels;
-using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.ViewModel.Admin;
-using AirTicketSalesManagement.ViewModel.Customer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 

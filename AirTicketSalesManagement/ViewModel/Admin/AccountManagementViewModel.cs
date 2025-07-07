@@ -192,6 +192,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     return;
                 }
 
+                if (!IsValidEmail(AddEmail))
+                {
+                    await Notification.ShowNotificationAsync("Email không hợp lệ!", NotificationType.Warning);
+                    return;
+                }
+
                 using (var context = new AirTicketDbContext())
                 {
                     // Check if email already exists
@@ -433,6 +439,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             if (!confirmed)
                 return;
 
+
+
             try
             {
                 using (var context = new AirTicketDbContext())
@@ -443,6 +451,12 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     if (account == null)
                     {
                         await Notification.ShowNotificationAsync("Không tìm thấy tài khoản trong cơ sở dữ liệu.", NotificationType.Error);
+                        return;
+                    }
+
+                    if (account.MaTk == UserSession.Current.AccountId)
+                    {
+                        await Notification.ShowNotificationAsync("Không thể xóa tài khoản của bạn.", NotificationType.Warning);
                         return;
                     }
 

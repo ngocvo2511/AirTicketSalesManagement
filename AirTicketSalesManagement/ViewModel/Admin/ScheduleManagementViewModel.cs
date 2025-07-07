@@ -5,12 +5,9 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using OfficeOpenXml;
 using LicenseContext = OfficeOpenXml.LicenseContext;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using AirTicketSalesManagement.Models.UIModels;
@@ -356,6 +353,23 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 DateTime ngayGioDi = AddNgayDi.Value.Date + gioDi;
                 DateTime ngayGioDen = AddNgayDen.Value.Date + gioDen;
 
+                if (ngayGioDen <= ngayGioDi)
+                {
+                    await Notification.ShowNotificationAsync("Thời gian đến phải sau thời gian đi.", NotificationType.Warning);
+                    return;
+                }
+
+                int sumTicket = 0;
+                foreach(var hv in TicketClassForScheduleList)
+                {
+                    sumTicket += int.Parse(hv.SLVeToiDa);
+                }
+                if(sumTicket != int.Parse(AddSLVeKT))
+                {
+                    await Notification.ShowNotificationAsync("Tổng số lượng vé của các hạng ghế phải bằng số lượng vé khai thác.", NotificationType.Warning);
+                    return;
+                }
+
                 using (var context = new AirTicketDbContext())
                 {
                     var newSchedule = new Lichbay
@@ -696,6 +710,29 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     return;
                 }
 
+
+                DateTime ngayGioDi = EditNgayDi.Value.Date + gioDi;
+                DateTime ngayGioDen = EditNgayDen.Value.Date + gioDen;
+
+                if (ngayGioDen <= ngayGioDi)
+                {
+                    await Notification.ShowNotificationAsync("Thời gian đến phải sau thời gian đi.", NotificationType.Warning);
+                    return;
+                }
+
+                int sumTicket = 0;
+                foreach (var hv in TicketClassForScheduleList)
+                {
+                    sumTicket += int.Parse(hv.SLVeToiDa);
+                }
+                if (sumTicket != int.Parse(AddSLVeKT))
+                {
+                    await Notification.ShowNotificationAsync("Tổng số lượng vé của các hạng ghế phải bằng số lượng vé khai thác.", NotificationType.Warning);
+                    return;
+                }
+
+
+
                 using (var context = new AirTicketDbContext())
                 {
                     var schedule = context.Lichbays
@@ -753,15 +790,68 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public void EditTicketClass()
+        public async Task EditTicketClassAsync()
         {
+            LoadHangVe();
+            try
+            {
+                // Tạo sân bay trung gian mới với STT tự động tăng
+                var hangVeTheoLichBay = new HangVeTheoLichBay()
+                {
+                    STT = TicketClassForScheduleList.Count + 1, // Tự động tăng STT
+                    TenHangVe = string.Empty, // Mã sân bay trung gian sẽ được nhập sau
+                    SLVeToiDa = string.Empty,
+                    SLVeConLai = string.Empty,
+                    HangVeList = new ObservableCollection<string>(TicketClassList),
+                    OnTenHangVeChangedCallback = UpdateTicketClassList
+                };
 
+                // Thêm vào collection
+                TicketClassForScheduleList.Add(hangVeTheoLichBay);
+                UpdateTicketClassList();
+                // Log hoặc thông báo thành công (tùy chọn)
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi
+                await Notification.ShowNotificationAsync($"Lỗi khi thêm sân bay trung gian: {ex.Message}", NotificationType.Error);
+            }
         }
 
         [RelayCommand]
-        public void RemoveEditTicketClass()
+        public async Task RemoveEditTicketClassAsync(HangVeTheoLichBay ticketClass)
         {
+            try
+            {
+                if (ticketClass == null)
+                {
+                    await Notification.ShowNotificationAsync("Không tìm thấy hạng ghế để xóa!", NotificationType.Warning);
+                    return;
+                }
 
+                // Hiển thị hộp thoại xác nhận
+                bool confirmed = await Notification.ShowNotificationAsync(
+                    $"Bạn có chắc chắn muốn xóa hạng ghế?",
+                    NotificationType.Warning,
+                    isConfirmation: true);
+
+                if (confirmed)
+                {
+                    // Lưu STT của sân bay bị xóa
+                    int removedSTT = ticketClass.STT;
+
+                    // Xóa khỏi collection
+                    TicketClassForScheduleList.Remove(ticketClass);
+
+                    // Cập nhật lại STT cho các sân bay sau sân bay bị xóa
+                    UpdateSTTAfterRemoval(removedSTT);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi
+                await Notification.ShowNotificationAsync($"Lỗi khi xóa sân bay trung gian: {ex.Message}", NotificationType.Error);
+            }
         }
 
         [ObservableProperty]
