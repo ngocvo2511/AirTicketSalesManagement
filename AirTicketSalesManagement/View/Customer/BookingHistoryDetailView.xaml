@@ -29,6 +29,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
+            DataContext="{Binding Notification}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Panel.ZIndex="1000"/>
 
         <Grid Grid.Row="0" Margin="15 15 15 0">
             <Grid.ColumnDefinitions>
@@ -302,10 +307,6 @@
                 </materialDesign:Card>
             </StackPanel>
         </ScrollViewer>
-        <notification:NotificationControl x:Name="NotificationControl"
-                        DataContext="{Binding Notification}"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Panel.ZIndex="1000"/>
+
     </Grid>
 </UserControl>

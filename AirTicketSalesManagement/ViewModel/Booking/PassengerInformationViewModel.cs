@@ -34,6 +34,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
         public ThongTinChuyenBayDuocChon ThongTinChuyenBayDuocChon { get; set; }
 
+        public NotificationViewModel Notification { get; } = new NotificationViewModel();
 
         public PassengerInformationViewModel()
         {
@@ -140,28 +141,54 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         }
 
         [RelayCommand]
-        private void Continue()
+        private async Task Continue()
         {
             // Validate all required fields are filled
             if (string.IsNullOrWhiteSpace(ContactEmail) || string.IsNullOrWhiteSpace(ContactPhone))
+            {
+                await Notification.ShowNotificationAsync("Vui lòng nhập đầy đủ thông tin", NotificationType.Warning);
                 return;
+            }
+
+            if (!IsValidEmail(ContactEmail))
+            {
+                await Notification.ShowNotificationAsync("Email không hợp lệ!", NotificationType.Warning);
+                return;
+            }
+
+            if (!IsValidPhone(ContactPhone))
+            {
+                await Notification.ShowNotificationAsync("Số điện thoại không hợp lệ!", NotificationType.Warning);
+                return;
+            }
+
             List<HanhKhach> passengerList = new List<HanhKhach>();
 
             foreach (var passenger in PassengerList)
             {
                 if (string.IsNullOrWhiteSpace(passenger.FullName) || passenger.Gender == null ||
                     passenger.DateOfBirth == null)
+                {
+                    await Notification.ShowNotificationAsync("Vui lòng nhập đầy đủ thông tin", NotificationType.Warning);
                     return;
+                }
 
                 // Additional validation for adults
-                if (passenger.PassengerType == PassengerType.Adult &&
-                    string.IsNullOrWhiteSpace(passenger.IdentityNumber))
+                if (passenger.PassengerType == PassengerType.Adult && string.IsNullOrWhiteSpace(passenger.IdentityNumber) || passenger.IdentityNumber.Length != 12 || !passenger.IdentityNumber.All(char.IsDigit))
+                {
+                    await Notification.ShowNotificationAsync("Số căn cước không hợp lệ!", NotificationType.Warning);
                     return;
+                }
+
+
 
                 // Additional validation for infants
                 if (passenger.PassengerType == PassengerType.Infant &&
                     passenger.AccompanyingAdult == null)
+                {
+                    await Notification.ShowNotificationAsync("Vui lòng nhập đầy đủ thông tin", NotificationType.Warning);
                     return;
+                }
                 passengerList.Add(new HanhKhach(passenger.FullName, passenger.DateOfBirth.Value, passenger.Gender, passenger.IdentityNumber, passenger.AccompanyingAdult?.FullName));
             }
 
@@ -174,6 +201,24 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             };
 
             NavigationService.NavigateTo<PaymentConfirmationViewModel>(thongTinHanhKhachVaChuyenBay);
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsValidPhone(string phone)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{9}$");
         }
     }
 

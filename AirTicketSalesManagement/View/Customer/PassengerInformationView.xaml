@@ -5,11 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
+             xmlns:converter="clr-namespace:AirTicketSalesManagement.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="980"
              >
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Grid>
+        <notification:NotificationControl x:Name="NotificationControl"
+            DataContext="{Binding Notification}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Panel.ZIndex="1000"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -20,11 +28,13 @@
 
             <!-- Tiêu đề -->
             <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="15 0 15 20">
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Thông tin hành khách" 
                                    FontSize="22" 
@@ -335,6 +345,8 @@
                     </Button.Effect>
                 </Button>
             </Grid>
+
         </Grid>
     </ScrollViewer>
+    </Grid>
 </UserControl>
