@@ -1321,9 +1321,10 @@
             </Border>
         </Grid>
         <notification:NotificationControl x:Name="NotificationControl"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
+                                          DataContext="{Binding Notification}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Grid.RowSpan="2"
+                                          Panel.ZIndex="1000"/>
     </Grid>
 </UserControl>

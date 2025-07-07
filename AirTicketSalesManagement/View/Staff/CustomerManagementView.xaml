@@ -463,14 +463,8 @@
                     </StackPanel>
                 </Button>
             </StackPanel>
-            
-        </Grid>
 
-        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
+        </Grid>
         <!-- Edit Customer Popup -->
         <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" 
               Visibility="{Binding IsEditPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -608,6 +602,10 @@
                 </Grid>
             </Border>
         </Grid>
-
+        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
+            DataContext="{Binding Notification}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Panel.ZIndex="1000"/>
     </Grid>
 </UserControl>
