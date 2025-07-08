@@ -220,7 +220,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         }
 
                         context.SaveChanges();
-                        //await Notification.ShowNotificationAsync("Cập nhật thông tin thành công!", NotificationType.Information);
+                        await Notification.ShowNotificationAsync("Cập nhật thông tin thành công!", NotificationType.Information);
                         LoadData();
                         IsEditPopupOpen = false; // Đóng popup sau khi lưu thành công
                     }

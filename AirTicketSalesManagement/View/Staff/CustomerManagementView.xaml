@@ -549,8 +549,7 @@
                                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                            Height="53" FontSize="14"
                                            materialDesign:HintAssist.Hint="Ngày sinh"
-                                           materialDesign:TextFieldAssist.HasClearButton="True"
-                                           behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
+                                           materialDesign:TextFieldAssist.HasClearButton="True"/>
                             </StackPanel>
 
                             <!-- Số điện thoại -->
