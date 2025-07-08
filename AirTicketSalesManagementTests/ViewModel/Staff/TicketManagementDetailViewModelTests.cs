@@ -4,7 +4,7 @@ using AirTicketSalesManagement.Models.UIModels;
 
 namespace AirTicketSalesManagementTests.ViewModel.Staff
 {
-    [TestClass]
+    [STATestClass]
     public class TicketManagementDetailViewModelTests
     {
         private StaffViewModel _mockParentViewModel;

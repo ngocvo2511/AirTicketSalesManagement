@@ -6,7 +6,7 @@ using AirTicketSalesManagement.ViewModel.CustomerManagement;
 
 namespace AirTicketSalesManagementTests.ViewModel.Admin
 {
-    [TestClass]
+    [STATestClass]
     public class AdminViewModelTests
     {
         private AdminViewModel _adminViewModel;
