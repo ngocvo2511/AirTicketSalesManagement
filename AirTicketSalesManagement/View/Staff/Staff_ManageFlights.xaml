@@ -56,7 +56,7 @@
                         Width="100"
                         Command="{Binding AddCommand}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
-                        Background="#388FF4"
+                        Background="#6366F1"
                         Foreground="White"/>
             </Grid>
         </Border>

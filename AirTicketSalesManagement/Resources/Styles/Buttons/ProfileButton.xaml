@@ -8,7 +8,7 @@
             <!-- Nút profile -->
             <ToggleButton x:Name="ProfileToggle"
                           Style="{StaticResource MaterialDesignFloatingActionButton}"
-                          Background="#388FF4"
+                          Background="#6366F1"
                           BorderBrush="Transparent"
                           ToolTip="Hồ sơ cá nhân"
                           IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
@@ -29,7 +29,7 @@
                         CornerRadius="8" 
                         Padding="10" 
                         Width="250" 
-                        BorderBrush="#388FF4" 
+                        BorderBrush="#6366F1" 
                         BorderThickness="1"
                         Effect="{DynamicResource MaterialDesignElevation3}">
                     <StackPanel HorizontalAlignment="Center">
