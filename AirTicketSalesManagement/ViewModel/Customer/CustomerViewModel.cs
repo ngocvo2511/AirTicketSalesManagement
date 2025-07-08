@@ -57,6 +57,10 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 {
                     CurrentViewModel = new HomePageViewModel();
                 }
+                else if (viewModelType == typeof(BookingHistoryViewModel))
+                {
+                    CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
+                }
             };
 
             NavigationService.NavigateBackAction = (previousViewModelType, previousParameter) =>

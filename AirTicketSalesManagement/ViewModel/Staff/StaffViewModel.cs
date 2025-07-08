@@ -66,6 +66,10 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 {
                     CurrentViewModel = new Staff.HomePageViewModel();
                 }
+                else if (viewModelType == typeof(TicketManagementViewModel))
+                {
+                    CurrentViewModel = new TicketManagementViewModel(this);
+                }
             };
 
             NavigationService.NavigateBackAction = (previousViewModelType, previousParameter) =>

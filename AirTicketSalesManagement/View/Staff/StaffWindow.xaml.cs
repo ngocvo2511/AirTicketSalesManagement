@@ -72,6 +72,15 @@ namespace AirTicketSalesManagement.View.Staff
                         
                         if (result.IsSuccess)
                         {
+                            if (WebView != null && WebView.CoreWebView2 != null)
+                            {
+                                // Xóa toàn bộ cookies (mọi domain)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.clearBrowserCookies", "{}");
+
+                                // Xóa toàn bộ dữ liệu website (local storage, cache, indexedDB, ... trên tất cả origin)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Storage.clearDataForOrigin",
+                                    "{\"origin\":\"*\",\"storageTypes\":\"all\"}");
+                            }
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
                             await notification.ShowNotificationAsync(
                                 "Thanh toán thành công!",
@@ -80,6 +89,15 @@ namespace AirTicketSalesManagement.View.Staff
                         }
                         else
                         {
+                            if (WebView != null && WebView.CoreWebView2 != null)
+                            {
+                                // Xóa toàn bộ cookies (mọi domain)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.clearBrowserCookies", "{}");
+
+                                // Xóa toàn bộ dữ liệu website (local storage, cache, indexedDB, ... trên tất cả origin)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Storage.clearDataForOrigin",
+                                    "{\"origin\":\"*\",\"storageTypes\":\"all\"}");
+                            }
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
                             await notification.ShowNotificationAsync(
                                 "Thanh toán thất bại: " + result.ToString(),
