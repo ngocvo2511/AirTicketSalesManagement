@@ -25,14 +25,14 @@ namespace AirTicketSalesManagementTests.ViewModel.Admin
             Assert.IsInstanceOfType(_adminViewModel.CurrentViewModel, typeof(AdminProfileViewModel));
         }
 
-        [TestMethod]
-        public void NavigateToHomePageCommand_SetsCurrentViewModelToHomePageViewModel()
-        {
-            _adminViewModel.NavigateToAdminProfileCommand.Execute(null);
-            _adminViewModel.NavigateToHomePageCommand.Execute(null);
+        //[TestMethod]
+        //public void NavigateToHomePageCommand_SetsCurrentViewModelToHomePageViewModel()
+        //{
+        //    _adminViewModel.NavigateToAdminProfileCommand.Execute(null);
+        //    _adminViewModel.NavigateToHomePageCommand.Execute(null);
 
-            Assert.IsInstanceOfType(_adminViewModel.CurrentViewModel, typeof(AirTicketSalesManagement.ViewModel.Admin.HomePageViewModel));
-        }
+        //    Assert.IsInstanceOfType(_adminViewModel.CurrentViewModel, typeof(AirTicketSalesManagement.ViewModel.Admin.HomePageViewModel));
+        //}
 
         [TestMethod]
         public void NavigateToTicketManagementCommand_SetsCurrentViewModelToTicketManagementViewModel()

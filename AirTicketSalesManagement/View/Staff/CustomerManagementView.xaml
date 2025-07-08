@@ -550,7 +550,7 @@
                                            Height="53" FontSize="14"
                                            materialDesign:HintAssist.Hint="Ngày sinh"
                                            materialDesign:TextFieldAssist.HasClearButton="True"
-                                           behaviors:DatePickerBehaviors.IsTextInputDisabled="False"/>
+                                           behaviors:DatePickerBehaviors.IsTextInputDisabled="false"/>
                             </StackPanel>
 
                             <!-- Số điện thoại -->

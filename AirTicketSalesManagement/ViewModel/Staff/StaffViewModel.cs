@@ -114,9 +114,14 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private void Logout()
         {
+            // Reset đầy đủ UserSession trước khi logout
+            UserSession.Current.AccountId = null;
             UserSession.Current.CustomerId = null;
-            UserSession.Current.CustomerName = null;
             UserSession.Current.StaffId = null;
+            UserSession.Current.CustomerName = null;
+            UserSession.Current.Email = null;
+            UserSession.Current.isStaff = false;
+            
             var currentWindow = Application.Current.MainWindow;
             var authWindow = new AuthWindow()
             {

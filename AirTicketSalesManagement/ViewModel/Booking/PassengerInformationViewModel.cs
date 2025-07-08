@@ -174,11 +174,11 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 }
 
                 // Additional validation for adults
-                if (passenger.PassengerType == PassengerType.Adult && string.IsNullOrWhiteSpace(passenger.IdentityNumber) || passenger.IdentityNumber.Length != 12 || !passenger.IdentityNumber.All(char.IsDigit))
-                {
-                    await Notification.ShowNotificationAsync("Số căn cước không hợp lệ!", NotificationType.Warning);
+                //if (passenger.PassengerType == PassengerType.Adult && string.IsNullOrWhiteSpace(passenger.IdentityNumber) || passenger.IdentityNumber.Length != 12 || !passenger.IdentityNumber.All(char.IsDigit))
+                //{
+                //    await Notification.ShowNotificationAsync("Số căn cước không hợp lệ!", NotificationType.Warning);
                     return;
-                }
+                //}
 
 
 

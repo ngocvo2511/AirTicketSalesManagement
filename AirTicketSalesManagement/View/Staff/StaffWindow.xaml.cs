@@ -58,6 +58,9 @@ namespace AirTicketSalesManagement.View.Staff
                 var query = new Uri(e.Uri).Query;
                 e.Cancel = true;
 
+                System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] VNPay callback received: {e.Uri}");
+                System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] Query string: {query}");
+
                 await Dispatcher.InvokeAsync(async () =>
                 {
                     var viewModel = DataContext as StaffViewModel;
@@ -65,6 +68,8 @@ namespace AirTicketSalesManagement.View.Staff
                     try
                     {
                         var result = HandlePaymentResult(query);
+                        System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] Payment result: {result.IsSuccess}, Message: {result.ToString()}");
+                        
                         if (result.IsSuccess)
                         {
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
@@ -83,6 +88,9 @@ namespace AirTicketSalesManagement.View.Staff
                     }
                     catch (Exception ex)
                     {
+                        System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] Exception: {ex.Message}");
+                        System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] Stack trace: {ex.StackTrace}");
+                        
                         if (viewModel != null) viewModel.IsWebViewVisible = false;
                         await notification.ShowNotificationAsync(
                             "Đã xảy ra lỗi: " + ex.Message,
