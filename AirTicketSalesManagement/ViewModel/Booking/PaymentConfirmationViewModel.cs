@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
+using Microsoft.Web.WebView2.Core;
 
 namespace AirTicketSalesManagement.ViewModel.Booking
 {
@@ -56,7 +57,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         public string flightSummary;
 
 
-        public NotificationViewModel Notification = new NotificationViewModel();
+        [ObservableProperty]
+        private NotificationViewModel notification = new();
 
         public PaymentConfirmationViewModel()
         {
@@ -245,7 +247,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                     "Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
                     NotificationType.Information);
 
-                NavigateToHomePage();
+                NavigateToHistory();
             }
             catch (Exception ex)
             {
@@ -255,12 +257,12 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             }
         }
 
-        private void NavigateToHomePage()
+        private void NavigateToHistory()
         {
             if (UserSession.Current.isStaff)
-                NavigationService.NavigateTo<Staff.HomePageViewModel>();
+                NavigationService.NavigateTo<Staff.TicketManagementViewModel>();
             else
-                NavigationService.NavigateTo<Customer.HomePageViewModel>();
+                NavigationService.NavigateTo<Customer.BookingHistoryViewModel>();
         }
 
         public void HandlePaymentSuccess()

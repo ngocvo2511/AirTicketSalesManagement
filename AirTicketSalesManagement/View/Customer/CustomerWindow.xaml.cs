@@ -1,25 +1,12 @@
-﻿using AirTicketSalesManagement.Models;
-using AirTicketSalesManagement.Services;
+﻿using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.ViewModel.Customer;
 using CommunityToolkit.Mvvm.Messaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using VNPAY.NET.Models;
 using VNPAY.NET;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Web.WebView2.Core;
 using AirTicketSalesManagement.ViewModel;
+using Microsoft.Web.WebView2.Wpf;
 
 namespace AirTicketSalesManagement.View.Customer
 {
@@ -70,9 +57,18 @@ namespace AirTicketSalesManagement.View.Customer
                     {
                         var result = HandlePaymentResult(query);
                         System.Diagnostics.Debug.WriteLine($"[WebView_NavigationStarting] Payment result: {result.IsSuccess}, Message: {result.ToString()}");
-                        
+
                         if (result.IsSuccess)
                         {
+                            if (WebView != null && WebView.CoreWebView2 != null)
+                            {
+                                // Xóa toàn bộ cookies (mọi domain)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.clearBrowserCookies", "{}");
+
+                                // Xóa toàn bộ dữ liệu website (local storage, cache, indexedDB, ... trên tất cả origin)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Storage.clearDataForOrigin",
+                                    "{\"origin\":\"*\",\"storageTypes\":\"all\"}");
+                            }
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
                             await notification.ShowNotificationAsync(
                                 "Thanh toán thành công!",
@@ -81,6 +77,15 @@ namespace AirTicketSalesManagement.View.Customer
                         }
                         else
                         {
+                            if (WebView != null && WebView.CoreWebView2 != null)
+                            {
+                                // Xóa toàn bộ cookies (mọi domain)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.clearBrowserCookies", "{}");
+
+                                // Xóa toàn bộ dữ liệu website (local storage, cache, indexedDB, ... trên tất cả origin)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Storage.clearDataForOrigin",
+                                    "{\"origin\":\"*\",\"storageTypes\":\"all\"}");
+                            }
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
                             await notification.ShowNotificationAsync(
                                 "Thanh toán thất bại: " + result.ToString(),
@@ -91,7 +96,7 @@ namespace AirTicketSalesManagement.View.Customer
                     {
                         System.Diagnostics.Debug.WriteLine($"[WebView_NavigationStarting] Exception: {ex.Message}");
                         System.Diagnostics.Debug.WriteLine($"[WebView_NavigationStarting] Stack trace: {ex.StackTrace}");
-                        
+
                         if (viewModel != null) viewModel.IsWebViewVisible = false;
                         await notification.ShowNotificationAsync(
                             "Đã xảy ra lỗi: " + ex.Message,
