@@ -119,7 +119,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         }
 
         [RelayCommand]
-        private void SelectTicketClass(ThongTinChuyenBayDuocChon selection)
+        private async Task SelectTicketClass(ThongTinChuyenBayDuocChon selection)
         {
             if (selection == null || selection.TicketClass == null || selection.Flight == null)
                 return;
@@ -148,6 +148,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 idDatVe = datVe.MaDv;
                 // Lưu lại datVe.MaDV vào session để sử dụng sau
             }
+            await Task.Delay(1000); // Giả lập thời gian xử lý
             // Tạo đối tượng chứa thông tin chuyến bay và hạng vé đã chọn
             var selectedFlightInfo = new ThongTinChuyenBayDuocChon
             {
@@ -186,9 +187,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private void IncreaseAdult()
         {
             // Tối đa 9 người lớn + trẻ em
-            if (adultCount + childCount < 9)
+            if (AdultCount + ChildCount < 9)
             {
-                adultCount++;
+                AdultCount++;
                 OnPropertyChanged(nameof(AdultCount));
                 OnPropertyChanged(nameof(PassengerSummary));
             }
@@ -199,16 +200,16 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private void DecreaseAdult()
         {
             // Tối thiểu 1 người lớn và không ít hơn số em bé
-            if (adultCount > 1)
+            if (AdultCount > 1)
             {
-                adultCount--;
+                AdultCount--;
                 OnPropertyChanged(nameof(AdultCount));
 
 
                 // Nếu số em bé vượt quá số người lớn, điều chỉnh số em bé
-                if (infantCount > adultCount)
+                if (InfantCount > AdultCount)
                 {
-                    infantCount = adultCount;
+                    InfantCount = AdultCount;
                     OnPropertyChanged(nameof(InfantCount));
 
                 }
@@ -222,9 +223,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private void IncreaseChild()
         {
             // Tối đa 9 hành khách người lớn + trẻ em
-            if (adultCount + childCount < 9)
+            if (AdultCount + ChildCount < 9)
             {
-                childCount++;
+                ChildCount++;
                 OnPropertyChanged(nameof(ChildCount));
                 OnPropertyChanged(nameof(PassengerSummary));
             }
@@ -235,9 +236,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private void DecreaseChild()
         {
             // Không được nhỏ hơn 0
-            if (childCount > 0)
+            if (ChildCount > 0)
             {
-                childCount--;
+                ChildCount--;
                 OnPropertyChanged(nameof(ChildCount));
                 OnPropertyChanged(nameof(PassengerSummary));
 
@@ -249,9 +250,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private void IncreaseInfant()
         {
             // Số em bé không được vượt quá số người lớn
-            if (infantCount < adultCount)
+            if (InfantCount < AdultCount)
             {
-                infantCount++;
+                InfantCount++;
                 OnPropertyChanged(nameof(InfantCount));
                 OnPropertyChanged(nameof(PassengerSummary));
             }
@@ -262,9 +263,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         private void DecreaseInfant()
         {
             // Không được nhỏ hơn 0
-            if (infantCount > 0)
+            if (InfantCount > 0)
             {
-                infantCount--;
+                InfantCount--;
                 OnPropertyChanged(nameof(InfantCount));
                 OnPropertyChanged(nameof(PassengerSummary));
             }
