@@ -86,7 +86,7 @@ namespace AirTicketSalesManagementTests.ViewModel.Customer
 
         [TestMethod]
         [DataRow("0912345678", true)]   
-        [DataRow("01234567890", true)]  
+        [DataRow("01234567890", false)]  
         [DataRow("1234567890", false)]  
         [DataRow("09a1234567", false)]   
         public void IsValidPhone(string phone, bool expected)

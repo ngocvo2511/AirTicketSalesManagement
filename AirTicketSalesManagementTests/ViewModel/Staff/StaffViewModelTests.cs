@@ -9,7 +9,7 @@ using AirTicketSalesManagement.ViewModel.CustomerManagement;
 
 namespace AirTicketSalesManagementTests.ViewModel.Staff
 {
-    [TestClass]
+    [STATestClass]
     public class StaffViewModelTests
     {
         private StaffViewModel _viewModel;
