@@ -169,8 +169,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
         private void SaveBookingWithPendingStatus(string paymentType)
         {
-            int idDatVe = thongTinChuyenBayDuocChon.Id;
-            
+            int idDatVe = thongTinChuyenBayDuocChon.Id;            
             Debug.WriteLine($"[SaveBookingWithPendingStatus] Saving booking with ID: {idDatVe}, PaymentType: {paymentType}");
             Debug.WriteLine($"[SaveBookingWithPendingStatus] UserSession - isStaff: {UserSession.Current.isStaff}, CustomerId: {UserSession.Current.CustomerId}, StaffId: {UserSession.Current.StaffId}");
 
@@ -206,6 +205,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
                 context.SaveChanges();
                 Debug.WriteLine($"[SaveBookingWithPendingStatus] Booking saved successfully with status: {datVe.TtdatVe}");
+                Debug.WriteLine($"[SaveBookingWithPendingStatus] ThoiGianDv = {datVe.ThoiGianDv}");
 
                 // Lưu hành khách
                 // Lấy đúng MaHV_LB từ DB
@@ -346,6 +346,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                         Debug.WriteLine("[HandlePaymentSuccess] No valid booking found in the last 20 minutes");
                     }
                 }
+                var searchWindow = DateTime.Now.AddMinutes(-20);
+                Debug.WriteLine($"[HandlePaymentSuccess] Searching from = {searchWindow}, now = {DateTime.Now}");
             }
             catch (Exception ex)
             {

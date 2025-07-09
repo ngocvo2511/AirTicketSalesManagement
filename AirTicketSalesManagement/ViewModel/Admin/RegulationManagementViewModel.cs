@@ -30,6 +30,10 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private int cancelTime;
         [ObservableProperty]
         private int ticketClassCount;
+        [ObservableProperty]
+        private int infantAge;
+        [ObservableProperty]
+        private int childAge;
 
         // Trạng thái chỉnh sửa từng trường
         [ObservableProperty]
@@ -48,6 +52,10 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private bool isEditingCancelTime;
         [ObservableProperty]
         private bool isEditingTicketClassCount;
+        [ObservableProperty]
+        private bool isEditingInfantAge;
+        [ObservableProperty]
+        private bool isEditingChildAge;
 
         // Trường nhập liệu khi chỉnh sửa
         [ObservableProperty]
@@ -82,6 +90,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [Range(0, int.MaxValue, ErrorMessage = "Giá trị phải ≥ 0")]
         [NotifyDataErrorInfo]
         private int editTicketClassCount;
+        [ObservableProperty]
+        [Range(0, int.MaxValue, ErrorMessage = "Giá trị phải ≥ 0")]
+        [NotifyDataErrorInfo]
+        private int editInfantAge;
+        [ObservableProperty]
+        [Range(0, int.MaxValue, ErrorMessage = "Giá trị phải ≥ 0")]
+        [NotifyDataErrorInfo]
+        private int editChildAge;
 
         // Notification
         public NotificationViewModel Notification { get; } = new NotificationViewModel();
@@ -112,13 +128,15 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     BookingTime = regulation.TgdatVeChamNhat ?? 1;
                     CancelTime = regulation.TghuyDatVe ?? 0;
                     TicketClassCount = regulation.SoHangVe ?? 2;
+                    InfantAge = regulation.TuoiToiDaSoSinh ?? 2;
+                    ChildAge = regulation.TuoiToiDaTreEm ?? 12;
                 }
                 else
                 {
                     // gán mặc định
                     MaxAirports = 10; MinFlightTime = 30; MaxStopover = 2;
                     MinStopTime = 10; MaxStopTime = 20; BookingTime = 1;
-                    CancelTime = 1; TicketClassCount = 2;
+                    CancelTime = 1; TicketClassCount = 2; InfantAge = 2; ChildAge = 12;
 
                     // thêm bản ghi mặc định
                     regulation = new Quydinh
@@ -130,7 +148,9 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         TgdungMax = MaxStopTime,
                         TgdatVeChamNhat = BookingTime,
                         TghuyDatVe = CancelTime,
-                        SoHangVe = TicketClassCount
+                        SoHangVe = TicketClassCount,
+                        TuoiToiDaSoSinh = InfantAge,
+                        TuoiToiDaTreEm = ChildAge
                     };
 
                     context.Quydinhs.Add(regulation);
@@ -545,6 +565,91 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private void CancelTicketClassCount()
         {
             IsEditingTicketClassCount = false;
+        }
+
+        [RelayCommand]
+        private void _EditInfantAge()
+        {
+            EditInfantAge = InfantAge;
+            IsEditingInfantAge = true;
+        }
+        [RelayCommand]
+        private async void SaveInfantAge()
+        {
+            if (!CanSave()) return;
+            if(InfantAge == EditInfantAge)
+            {
+                IsEditingInfantAge = false;
+                return;
+            }
+            try
+            {
+                await using var context = new AirTicketDbContext();
+                var regulation = await context.Quydinhs.FirstOrDefaultAsync();
+
+                if (regulation is null)
+                {
+                    regulation = new Quydinh { TuoiToiDaSoSinh = EditInfantAge };
+                    context.Quydinhs.Add(regulation);
+                }
+                else
+                {
+                    regulation.TuoiToiDaSoSinh = EditInfantAge;
+                }
+
+                await context.SaveChangesAsync();
+                InfantAge = EditInfantAge;
+                IsEditingInfantAge = false;
+            }
+            catch (Exception ex)
+            {
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
+                Debug.WriteLine(ex);
+            }
+        }
+        [RelayCommand]
+        private void CancelInfantAge()
+        {
+            IsEditingInfantAge = false;
+        }
+
+        [RelayCommand]
+        private void _EditChildAge()
+        {
+            EditChildAge = ChildAge;
+            IsEditingChildAge = true;
+        }
+        [RelayCommand]
+        private async void SaveChildAge()
+        {
+            if (!CanSave()) return;
+            if (ChildAge == EditChildAge)
+            {
+                IsEditingChildAge = false;
+                return;
+            }
+            try
+            {
+                await using var context = new AirTicketDbContext();
+                var regulation = await context.Quydinhs.FirstOrDefaultAsync();
+                if (regulation is null)
+                {
+                    regulation = new Quydinh { TuoiToiDaTreEm = EditChildAge };
+                    context.Quydinhs.Add(regulation);
+                }
+                else
+                {
+                    regulation.TuoiToiDaTreEm = EditChildAge;
+                }
+                await context.SaveChangesAsync();
+                ChildAge = EditChildAge;
+                IsEditingChildAge = false;
+            }
+            catch (Exception ex)
+            {
+                await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
+                Debug.WriteLine(ex);
+            }
         }
     }
 }

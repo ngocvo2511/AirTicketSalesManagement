@@ -633,23 +633,23 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="Độ tuổi tối đa sơ sinh" Style="{StaticResource LabelStyle}" VerticalAlignment="Center" MinWidth="180" />
+                                <TextBlock Grid.Column="0" Text="Tuổi của trẻ sơ sinh dưới" Style="{StaticResource LabelStyle}" VerticalAlignment="Center" MinWidth="180" />
 
                                 <!-- View mode -->
                                 <TextBlock Grid.Column="1" Style="{StaticResource ValueStyle}" VerticalAlignment="Center"
                        Visibility="{Binding IsEditingInfantAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                       Text="{Binding InfantMaxAge}" TextAlignment="Right"/>
+                       Text="{Binding InfantAge}" TextAlignment="Right"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                        Visibility="{Binding IsEditingInfantAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                       Text="năm"/>
+                       Text="tuổi"/>
 
                                 <!-- Edit mode -->
                                 <TextBox x:Name="InfantAgeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                     Text="{Binding EditInfantMaxAge, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
+                     Text="{Binding EditInfantAge, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
                      Visibility="{Binding IsEditingInfantAge, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                        Visibility="{Binding IsEditingInfantAge, Converter={StaticResource BoolToVisibilityConverter}}"
-                       Text="năm"/>
+                       Text="tuổi"/>
 
                                 <!-- Action Buttons -->
                                 <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
@@ -686,23 +686,23 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="Độ tuổi tối đa trẻ em" Style="{StaticResource LabelStyle}" VerticalAlignment="Center" MinWidth="180" />
+                                <TextBlock Grid.Column="0" Text="Tuổi của trẻ em dưới" Style="{StaticResource LabelStyle}" VerticalAlignment="Center" MinWidth="180" />
 
                                 <!-- View mode -->
                                 <TextBlock Grid.Column="1" Style="{StaticResource ValueStyle}" VerticalAlignment="Center"
                        Visibility="{Binding IsEditingChildAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                       Text="{Binding ChildMaxAge}" TextAlignment="Right"/>
+                       Text="{Binding ChildAge}" TextAlignment="Right"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                        Visibility="{Binding IsEditingChildAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
-                       Text="năm"/>
+                       Text="tuổi"/>
 
                                 <!-- Edit mode -->
                                 <TextBox x:Name="ChildAgeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
-                     Text="{Binding EditChildMaxAge, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
+                     Text="{Binding EditChildAge, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
                      Visibility="{Binding IsEditingChildAge, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
                        Visibility="{Binding IsEditingChildAge, Converter={StaticResource BoolToVisibilityConverter}}"
-                       Text="năm"/>
+                       Text="tuổi"/>
 
                                 <!-- Action Buttons -->
                                 <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
