@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using AirTicketSalesManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,12 +45,27 @@ public partial class AirTicketDbContext : DbContext
 
     public string GetConnectionString(string name = "DefaultConnection")
     {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        try
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-        var config = builder.Build();
-        return config.GetConnectionString(name);
+            var config = builder.Build();
+            var conn = config.GetConnectionString(name);
+
+            if (string.IsNullOrEmpty(conn))
+            {
+                MessageBox.Show("Không tìm thấy chuỗi kết nối.");
+            }
+
+            return conn;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Lỗi đọc appsettings.json: {ex.Message}");
+            return null;
+        }
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
