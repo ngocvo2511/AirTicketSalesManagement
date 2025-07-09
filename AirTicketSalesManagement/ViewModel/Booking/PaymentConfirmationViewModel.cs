@@ -145,6 +145,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 {
                     // Lưu thông tin đặt vé tạm thời với trạng thái "Chờ thanh toán"
                     SaveBookingWithPendingStatus("Online");
+                    await Task.Delay(1000); // Đợi một chút để đảm bảo lưu thành công
                     WeakReferenceMessenger.Default.Send(new PaymentRequestedMessage(paymentUrl));
                     Debug.WriteLine($"[ProcessVNPayPayment] Payment URL created successfully: {paymentUrl}");
                 }
@@ -206,7 +207,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
                 context.SaveChanges();
                 Debug.WriteLine($"[SaveBookingWithPendingStatus] Booking saved successfully with status: {datVe.TtdatVe}");
-
+                Debug.WriteLine($"[SaveBookingWithPendingStatus] ThoiGianDv = {datVe.ThoiGianDv}");
                 // Lưu hành khách
                 // Lấy đúng MaHV_LB từ DB
                 int maHV_LB = context.Hangvetheolichbays
@@ -234,6 +235,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
                 context.SaveChanges();
                 Debug.WriteLine($"[SaveBookingWithPendingStatus] Passengers saved successfully");
+
             }
         }
 
@@ -282,6 +284,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                         Debug.WriteLine("[HandlePaymentSuccess] UserSession.Current is null");
                         return;
                     }
+                    var searchWindow = DateTime.Now.AddMinutes(-20);
+                    Debug.WriteLine($"[HandlePaymentSuccess] Searching from = {searchWindow}, now = {DateTime.Now}");
 
                     Debug.WriteLine($"[HandlePaymentSuccess] UserSession - isStaff: {UserSession.Current.isStaff}, CustomerId: {UserSession.Current.CustomerId}, StaffId: {UserSession.Current.StaffId}");
 
