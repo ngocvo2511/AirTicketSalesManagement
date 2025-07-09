@@ -349,8 +349,6 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                         Debug.WriteLine("[HandlePaymentSuccess] No valid booking found in the last 20 minutes");
                     }
                 }
-                var searchWindow = DateTime.Now.AddMinutes(-20);
-                Debug.WriteLine($"[HandlePaymentSuccess] Searching from = {searchWindow}, now = {DateTime.Now}");
             }
             catch (Exception ex)
             {
