@@ -11,6 +11,7 @@ using System.IO;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using AirTicketSalesManagement.Models.UIModels;
+using System.Globalization;
 
 namespace AirTicketSalesManagement.ViewModel.Admin
 {
@@ -244,9 +245,9 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public async void ImportFromExcel()
+        public async Task ImportFromExcel()
         {
-            // Thiết lập giấy phép sử dụng phi thương mại cá nhân
+            // Thiết lập giấy phép sử dụng phi thương mại
             ExcelPackage.License.SetNonCommercialPersonal("Nguyen Huu Nghi");
 
             var openFileDialog = new OpenFileDialog
@@ -255,87 +256,207 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 Title = "Chọn file Excel lịch bay"
             };
 
-            if (openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() != true)
+                return;
+
+            try
             {
-                try
+                using var package = new ExcelPackage(new FileInfo(openFileDialog.FileName));
+                var worksheet = package.Workbook.Worksheets[0];
+                if (worksheet == null || worksheet.Dimension == null || worksheet.Dimension.Rows < 2)
                 {
-                    using var package = new ExcelPackage(new FileInfo(openFileDialog.FileName));
-                    var worksheet = package.Workbook.Worksheets[0];
-                    using var context = new AirTicketDbContext();
+                    await Notification.ShowNotificationAsync("File Excel không chứa dữ liệu hoặc thiếu dòng dữ liệu.", NotificationType.Error);
+                    return;
+                }
 
-                    // Định dạng ngày giờ mong đợi (có thể điều chỉnh theo file Excel)
-                    string[] dateFormats = { "dd/MM/yyyy HH:mm", "MM/dd/yyyy HH:mm", "yyyy-MM-dd HH:mm", "dd-MM-yyyy HH:mm" };
-                    var culture = System.Globalization.CultureInfo.InvariantCulture; // Hoặc "vi-VN" nếu dùng định dạng Việt Nam
-
-                    for (int row = 2; row <= worksheet.Dimension.Rows; row++)
+                // Kiểm tra tiêu đề cột
+                string[] expectedHeaders = { "SoHieuCB", "GioDi", "GioDen", "LoaiMB", "SLVeKT", "GiaVe", "TTLichBay", "TenHangVe", "SLVeToiDa", "SLVeConLai" };
+                for (int i = 0; i < expectedHeaders.Length; i++)
+                {
+                    if (worksheet.Cells[1, i + 1].Text?.Trim() != expectedHeaders[i])
                     {
-                        // Kiểm tra ô rỗng hoặc không hợp lệ
-                        string soHieuCB = worksheet.Cells[row, 1].Text?.Trim();
-                        string gioDiText = worksheet.Cells[row, 2].Text?.Trim();
-                        string gioDenText = worksheet.Cells[row, 3].Text?.Trim();
-                        string loaiMB = worksheet.Cells[row, 4].Text?.Trim();
-                        string slVeText = worksheet.Cells[row, 5].Text?.Trim();
-                        string giaVeText = worksheet.Cells[row, 6].Text?.Trim();
-                        string tinhTrang = worksheet.Cells[row, 7].Text?.Trim();
+                        await Notification.ShowNotificationAsync($"Tiêu đề cột {i + 1} không đúng. Yêu cầu: '{expectedHeaders[i]}'.", NotificationType.Error);
+                        return;
+                    }
+                }
 
-                        // Kiểm tra dữ liệu rỗng
-                        if (string.IsNullOrWhiteSpace(soHieuCB) || string.IsNullOrWhiteSpace(gioDiText) ||
-                            string.IsNullOrWhiteSpace(gioDenText) || string.IsNullOrWhiteSpace(loaiMB) ||
-                            string.IsNullOrWhiteSpace(slVeText) || string.IsNullOrWhiteSpace(giaVeText) ||
-                            string.IsNullOrWhiteSpace(tinhTrang))
-                        {
-                            await Notification.ShowNotificationAsync($"Dữ liệu không hợp lệ tại dòng {row}. Vui lòng kiểm tra lại.", NotificationType.Warning);
-                            continue;
-                        }
+                using var context = new AirTicketDbContext();
+                var culture = System.Globalization.CultureInfo.InvariantCulture;
 
-                        // Phân tích ngày giờ
-                        if (!DateTime.TryParseExact(gioDiText, dateFormats, culture, System.Globalization.DateTimeStyles.None, out DateTime gioDi))
-                        {
-                            await Notification.ShowNotificationAsync($"Lỗi định dạng giờ đi tại dòng {row}: {gioDiText}", NotificationType.Error);
-                            continue;
-                        }
+                // Dictionary để nhóm lịch bay và hạng vé
+                var scheduleGroups = new Dictionary<string, (Lichbay LichBay, List<(string TenHangVe, int SLVeToiDa, int SLVeConLai)> HangVes)>();
 
-                        if (!DateTime.TryParseExact(gioDenText, dateFormats, culture, System.Globalization.DateTimeStyles.None, out DateTime gioDen))
-                        {
-                            await Notification.ShowNotificationAsync($"Lỗi định dạng giờ đến tại dòng {row}: {gioDenText}", NotificationType.Error);
-                            continue;
-                        }
+                for (int row = 2; row <= worksheet.Dimension.Rows; row++)
+                {
+                    // Đọc dữ liệu từ file
+                    string soHieuCB = worksheet.Cells[row, 1].Text?.Trim();
+                    string gioDiText = worksheet.Cells[row, 2].Text?.Trim();
+                    string gioDenText = worksheet.Cells[row, 3].Text?.Trim();
+                    string loaiMB = worksheet.Cells[row, 4].Text?.Trim();
+                    string slVeKTText = worksheet.Cells[row, 5].Text?.Trim();
+                    string giaVeText = worksheet.Cells[row, 6].Text?.Trim();
+                    string ttLichBay = worksheet.Cells[row, 7].Text?.Trim();
+                    string tenHangVe = worksheet.Cells[row, 8].Text?.Trim();
+                    string slVeToiDaText = worksheet.Cells[row, 9].Text?.Trim();
+                    string slVeConLaiText = worksheet.Cells[row, 10].Text?.Trim();
 
-                        // Kiểm tra số lượng vé và giá vé
-                        if (!int.TryParse(slVeText, out int slVe))
-                        {
-                            await Notification.ShowNotificationAsync($"Lỗi số lượng vé tại dòng {row}: {slVeText}", NotificationType.Error);
-                            continue;
-                        }
+                    // Kiểm tra dữ liệu rỗng (trừ các cột liên quan đến hạng vé)
+                    if (string.IsNullOrWhiteSpace(soHieuCB) || string.IsNullOrWhiteSpace(gioDiText) ||
+                        string.IsNullOrWhiteSpace(gioDenText) || string.IsNullOrWhiteSpace(loaiMB) ||
+                        string.IsNullOrWhiteSpace(slVeKTText) || string.IsNullOrWhiteSpace(giaVeText) ||
+                        string.IsNullOrWhiteSpace(ttLichBay))
+                    {
+                        await Notification.ShowNotificationAsync($"Dữ liệu không hợp lệ tại dòng {row}. Vui lòng kiểm tra các ô trống.", NotificationType.Warning);
+                        continue;
+                    }
 
-                        if (!decimal.TryParse(giaVeText, out decimal giaVe))
-                        {
-                            await Notification.ShowNotificationAsync($"Lỗi giá vé tại dòng {row}: {giaVeText}", NotificationType.Error);
-                            continue;
-                        }
+                    // Kiểm tra số hiệu chuyến bay
+                    var chuyenBay = context.Chuyenbays.FirstOrDefault(cb => cb.SoHieuCb == soHieuCB);
+                    if (chuyenBay == null)
+                    {
+                        await Notification.ShowNotificationAsync($"Số hiệu chuyến bay '{soHieuCB}' tại dòng {row} không tồn tại.", NotificationType.Error);
+                        continue;
+                    }
 
-                        // Tạo đối tượng lịch bay
+                    // Kiểm tra định dạng ngày giờ
+                    if (!DateTime.TryParse(gioDiText, culture, DateTimeStyles.None, out DateTime gioDi) ||
+                        !DateTime.TryParse(gioDenText, culture, DateTimeStyles.None, out DateTime gioDen))
+                    {
+                        await Notification.ShowNotificationAsync($"Định dạng ngày giờ tại dòng {row} không hợp lệ. Yêu cầu: yyyy-MM-dd HH:mm.", NotificationType.Error);
+                        continue;
+                    }
+
+                    if (gioDen <= gioDi)
+                    {
+                        await Notification.ShowNotificationAsync($"Thời gian đến tại dòng {row} phải sau thời gian đi.", NotificationType.Warning);
+                        continue;
+                    }
+
+                    // Kiểm tra số lượng vé khai thác
+                    if (!int.TryParse(slVeKTText, out int slVeKT) || slVeKT <= 0)
+                    {
+                        await Notification.ShowNotificationAsync($"Số lượng vé khai thác tại dòng {row} không hợp lệ.", NotificationType.Error);
+                        continue;
+                    }
+
+                    // Kiểm tra giá vé
+                    if (!decimal.TryParse(giaVeText, NumberStyles.Any, culture, out decimal giaVe) || giaVe <= 0)
+                    {
+                        await Notification.ShowNotificationAsync($"Giá vé tại dòng {row} không hợp lệ.", NotificationType.Error);
+                        continue;
+                    }
+
+                    // Kiểm tra tình trạng lịch bay
+                    if (!new[] { "Chờ cất cánh", "Đã cất cánh", "Hoàn thành" }.Contains(ttLichBay))
+                    {
+                        await Notification.ShowNotificationAsync($"Tình trạng lịch bay tại dòng {row} không hợp lệ. Chỉ nhận: 'Chờ cất cánh', 'Đã cất cánh', 'Hoàn thành'.", NotificationType.Error);
+                        continue;
+                    }
+
+                    // Tạo khóa để nhóm lịch bay
+                    string scheduleKey = $"{soHieuCB}_{gioDi:yyyy-MM-dd HH:mm}";
+
+                    // Nếu lịch bay chưa tồn tại trong nhóm, tạo mới
+                    if (!scheduleGroups.ContainsKey(scheduleKey))
+                    {
                         var lichBay = new Lichbay
                         {
                             SoHieuCb = soHieuCB,
                             GioDi = gioDi,
                             GioDen = gioDen,
                             LoaiMb = loaiMB,
-                            SlveKt = slVe,
+                            SlveKt = slVeKT,
                             GiaVe = giaVe,
-                            TtlichBay = tinhTrang
+                            TtlichBay = ttLichBay
                         };
-                        context.Lichbays.Add(lichBay);
+                        scheduleGroups[scheduleKey] = (lichBay, new List<(string, int, int)>());
                     }
 
-                    context.SaveChanges();
-                    await Notification.ShowNotificationAsync("Nhập lịch bay từ Excel thành công!", NotificationType.Information);
-                    LoadFlightSchedule();
+                    // Xử lý hạng vé (nếu có)
+                    if (!string.IsNullOrWhiteSpace(tenHangVe))
+                    {
+                        var hangVe = context.Hangves.FirstOrDefault(h => h.TenHv == tenHangVe);
+                        if (hangVe == null)
+                        {
+                            await Notification.ShowNotificationAsync($"Hạng vé '{tenHangVe}' tại dòng {row} không tồn tại.", NotificationType.Error);
+                            continue;
+                        }
+
+                        if (!int.TryParse(slVeToiDaText, out int slVeToiDa) || slVeToiDa <= 0 ||
+                            !int.TryParse(slVeConLaiText, out int slVeConLai) || slVeConLai < 0 || slVeConLai > slVeToiDa)
+                        {
+                            await Notification.ShowNotificationAsync($"Số lượng vé hạng tại dòng {row} không hợp lệ.", NotificationType.Error);
+                            continue;
+                        }
+
+                        // Chỉ cho phép hạng vé Phổ thông hoặc Thương gia
+                        if (tenHangVe != "Phổ thông" && tenHangVe != "Thương gia")
+                        {
+                            await Notification.ShowNotificationAsync($"Hạng vé tại dòng {row} chỉ được là 'Phổ thông' hoặc 'Thương gia'.", NotificationType.Error);
+                            continue;
+                        }
+
+                        scheduleGroups[scheduleKey].HangVes.Add((tenHangVe, slVeToiDa, slVeConLai));
+                    }
                 }
-                catch (Exception ex)
+
+                // Lưu các lịch bay và hạng vé vào cơ sở dữ liệu
+                foreach (var group in scheduleGroups)
                 {
-                    await Notification.ShowNotificationAsync($"Lỗi khi đọc file Excel: {ex.Message}", NotificationType.Error);
+                    var lichBay = group.Value.LichBay;
+                    var hangVes = group.Value.HangVes;
+
+                    // Kiểm tra số lượng hạng vé
+                    if (hangVes.Any() && hangVes.Select(hv => hv.TenHangVe).Distinct().Count() > 2)
+                    {
+                        await Notification.ShowNotificationAsync($"Lịch bay {lichBay.SoHieuCb} lúc {lichBay.GioDi} có quá 2 hạng vé.", NotificationType.Error);
+                        continue;
+                    }
+
+                    // Kiểm tra tổng số vé tối đa của các hạng vé
+                    int sumTicket = hangVes.Sum(hv => hv.SLVeToiDa);
+                    if (sumTicket != lichBay.SlveKt)
+                    {
+                        await Notification.ShowNotificationAsync($"Tổng số vé tối đa của các hạng vé ({sumTicket}) không khớp với số lượng vé khai thác ({lichBay.SlveKt}) cho chuyến bay {lichBay.SoHieuCb} lúc {lichBay.GioDi}.", NotificationType.Error);
+                        continue;
+                    }
+
+                    // Kiểm tra trùng lịch bay
+                    if (context.Lichbays.Any(lb => lb.SoHieuCb == lichBay.SoHieuCb && lb.GioDi == lichBay.GioDi))
+                    {
+                        await Notification.ShowNotificationAsync($"Lịch bay {lichBay.SoHieuCb} lúc {lichBay.GioDi} đã tồn tại.", NotificationType.Error);
+                        continue;
+                    }
+
+                    // Lưu lịch bay
+                    context.Lichbays.Add(lichBay);
+                    context.SaveChanges();
+
+                    // Gán MaLb cho các hạng vé và lưu
+                    foreach (var hv in hangVes)
+                    {
+                        var hangVe = context.Hangves.FirstOrDefault(h => h.TenHv == hv.TenHangVe);
+                        if (hangVe != null)
+                        {
+                            var hangVeTheoLichBay = new Hangvetheolichbay
+                            {
+                                MaLb = lichBay.MaLb,
+                                MaHv = hangVe.MaHv,
+                                SlveToiDa = hv.SLVeToiDa,
+                                SlveConLai = hv.SLVeConLai
+                            };
+                            context.Hangvetheolichbays.Add(hangVeTheoLichBay);
+                        }
+                    }
+                    context.SaveChanges();
                 }
+
+                await Notification.ShowNotificationAsync("Nhập lịch bay từ Excel thành công!", NotificationType.Information);
+                LoadFlightSchedule();
+            }
+            catch (Exception ex)
+            {
+                await Notification.ShowNotificationAsync($"Lỗi khi đọc file Excel: {ex.Message}. Vui lòng kiểm tra định dạng file và thử lại.", NotificationType.Error);
             }
         }
 
