@@ -71,7 +71,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private ObservableCollection<UserSelectionModel> userList = new();
 
         // Notification
-        public NotificationViewModel Notification { get; } = new NotificationViewModel();
+        public NotificationViewModel Notification { get; set; } = new NotificationViewModel();
 
         public AccountManagementViewModel()
         {

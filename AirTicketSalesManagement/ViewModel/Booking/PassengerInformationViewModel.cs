@@ -34,7 +34,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
         public ThongTinChuyenBayDuocChon ThongTinChuyenBayDuocChon { get; set; }
 
-        public NotificationViewModel Notification { get; } = new NotificationViewModel();
+        public NotificationViewModel Notification { get; set; } = new NotificationViewModel();
 
         public PassengerInformationViewModel()
         {
