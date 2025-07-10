@@ -172,6 +172,17 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         .ToList();
                     foreach (var ve in datVeTienMat)
                     {
+                        var chitiet = context.Ctdvs.Where(ct => ct.MaDv == ve.MaDv).ToList();
+                        var maHvLb = chitiet.FirstOrDefault()?.MaHvLb;
+                        if (maHvLb != null)
+                        {
+                            var hangVe = context.Hangvetheolichbays
+                                .FirstOrDefault(h => h.MaHvLb == maHvLb);
+                            if (hangVe != null)
+                            {
+                                hangVe.SlveConLai += chitiet.Count;
+                            }
+                        }
                         ve.TtdatVe = "Đã hủy";
                     }
                     context.SaveChanges();
@@ -261,8 +272,19 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
                         if (booking != null)
                         {
+                            var chiTietVe = await context.Ctdvs.Where(ct => ct.MaDv == ve.MaVe).ToListAsync();
+                            var maHvLb = chiTietVe.FirstOrDefault()?.MaHvLb;
+                            if (maHvLb != null)
+                            {
+                                var hangVe = await context.Hangvetheolichbays
+                                    .FirstOrDefaultAsync(h => h.MaHvLb == maHvLb);
+                                if (hangVe != null)
+                                {
+                                    hangVe.SlveConLai += chiTietVe.Count;
+                                }
+                            }
                             booking.TtdatVe = "Đã hủy";
-                            await context.SaveChangesAsync();
+                            await context.SaveChangesAsync();                            
                             ve.TrangThai = "Đã hủy";
                             OnPropertyChanged(nameof(HistoryBooking));
                             await notification.ShowNotificationAsync(

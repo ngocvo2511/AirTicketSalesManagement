@@ -112,6 +112,19 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ChiTietVe.MaVe);
                         if (booking != null)
                         {
+                            var ctdvList = await context.Ctdvs
+                               .Where(ctdv => ctdv.MaDv == ChiTietVe.MaVe)
+                               .ToListAsync();
+                            var maHvLb = ctdvList.FirstOrDefault()?.MaHvLb;
+                            if (maHvLb != null)
+                            {
+                                var hangVe = await context.Hangvetheolichbays
+                                    .FirstOrDefaultAsync(h => h.MaHvLb == maHvLb);
+                                if (hangVe != null)
+                                {
+                                    hangVe.SlveConLai += ctdvList.Count;
+                                }
+                            }
                             booking.TtdatVe = "Đã hủy";
                             await context.SaveChangesAsync();
                             await notification.ShowNotificationAsync(
