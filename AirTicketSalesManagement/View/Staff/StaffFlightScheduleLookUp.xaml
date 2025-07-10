@@ -58,7 +58,7 @@
                         Width="100"
                         Command="{Binding SearchCommand}"
                         Style="{StaticResource MaterialDesignRaisedButton}"
-                        Background="#388FF4"
+                        Background="#6366F1"
                         Foreground="White"/>
             </Grid>
         </Border>

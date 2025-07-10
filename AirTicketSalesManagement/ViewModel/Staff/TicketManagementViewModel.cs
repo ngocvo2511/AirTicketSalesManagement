@@ -345,13 +345,13 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         }
 
         [RelayCommand]
-        private void ClearFilter()
+        public void ClearFilter()
         {
             NgayDatFilter = null;
-            NoiDiFilter = null;
-            NoiDenFilter = null;
+            NoiDiFilter = string.Empty;
+            NoiDenFilter = string.Empty;
             HangHangKhongFilter = null;
-            EmailFilter = null;
+            EmailFilter = string.Empty;
             BookingStatusFilter = "Tất cả";
             HistoryBooking = new ObservableCollection<QuanLiDatVe>(rootHistoryBooking);
             IsEmpty = HistoryBooking.Count == 0;

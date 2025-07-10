@@ -8,7 +8,13 @@
              mc:Ignorable="d" 
              xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
              d:DesignHeight="600" d:DesignWidth="980">
-
+    <Grid>
+        <notification:NotificationControl x:Name="NotificationControl"
+                                          DataContext="{Binding Notification}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Grid.RowSpan="2"
+                                          Panel.ZIndex="1000"/>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
@@ -18,13 +24,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
+
             <!-- Tiêu đề -->
-            <Border Grid.Row="0" Background="#388FF4" CornerRadius="10" Padding="20" Margin="15 0 15 20">
+            <Border Grid.Row="0" Background="#6366F1" CornerRadius="10" Padding="20" Margin="15 0 15 20">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -84,7 +86,7 @@
                                Text="Thông tin chuyến bay" 
                                FontSize="18" 
                                FontWeight="SemiBold" 
-                               Foreground="#388FF4"
+                               Foreground="#6366F1"
                                Margin="0,0,0,15"/>
 
                     <!-- Chi tiết chuyến bay -->
@@ -150,7 +152,7 @@
                                Text="Chi tiết hóa đơn" 
                                FontSize="18" 
                                FontWeight="SemiBold" 
-                               Foreground="#388FF4"
+                               Foreground="#6366F1"
                                Margin="0,0,0,15"/>
 
                     <!-- Danh sách chi tiết -->
@@ -254,7 +256,7 @@
                                Text="Phương thức thanh toán" 
                                FontSize="18" 
                                FontWeight="SemiBold" 
-                               Foreground="#388FF4"
+                               Foreground="#6366F1"
                                Margin="0,0,0,15"/>
 
                     <!-- Các lựa chọn thanh toán -->
@@ -332,7 +334,7 @@
                 <Button Grid.Column="0"
                         Content="QUAY LẠI"
                         Style="{StaticResource MaterialDesignOutlinedButton}"
-                        Foreground="#388FF4"
+                        Foreground="#6366F1"
                         Height="50"
                         Width="150"
                         FontSize="14"
@@ -344,7 +346,7 @@
                 <Button Grid.Column="1"
                         Content="THANH TOÁN"
                         Style="{StaticResource MaterialDesignRaisedButton}"
-                        Background="#388FF4"
+                        Background="#6366F1"
                         Foreground="White"
                         Height="50"
                         Width="150"
@@ -359,5 +361,8 @@
             </Grid>
 
         </Grid>
+        
     </ScrollViewer>
+
+    </Grid>
 </UserControl>

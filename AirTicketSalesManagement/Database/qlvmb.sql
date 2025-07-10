@@ -96,6 +96,8 @@ CREATE TABLE DATVE
 	TTDatVe NVARCHAR(30)
 )
 select * from DATVE
+select * from CTDV
+
 update CHUYENBAY set HangHangKhong = 'Vietjet Air' where SoGioBay=1.5
 
 CREATE TABLE CTDV
@@ -121,7 +123,9 @@ CREATE TABLE QUYDINH (
     TGDungMax INT,                 
     SoHangVe INT,
     TGDatVeChamNhat INT,
-	TGHuyDatVe INT
+	TGHuyDatVe INT,
+	TuoiToiDaSoSinh INT,
+    TuoiToiDaTreEm INT
 )
 
 CREATE TABLE TAIKHOAN(

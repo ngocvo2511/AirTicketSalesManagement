@@ -58,6 +58,9 @@ namespace AirTicketSalesManagement.View.Staff
                 var query = new Uri(e.Uri).Query;
                 e.Cancel = true;
 
+                System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] VNPay callback received: {e.Uri}");
+                System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] Query string: {query}");
+
                 await Dispatcher.InvokeAsync(async () =>
                 {
                     var viewModel = DataContext as StaffViewModel;
@@ -65,8 +68,19 @@ namespace AirTicketSalesManagement.View.Staff
                     try
                     {
                         var result = HandlePaymentResult(query);
+                        System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] Payment result: {result.IsSuccess}, Message: {result.ToString()}");
+                        
                         if (result.IsSuccess)
                         {
+                            if (WebView != null && WebView.CoreWebView2 != null)
+                            {
+                                // Xóa toàn bộ cookies (mọi domain)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.clearBrowserCookies", "{}");
+
+                                // Xóa toàn bộ dữ liệu website (local storage, cache, indexedDB, ... trên tất cả origin)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Storage.clearDataForOrigin",
+                                    "{\"origin\":\"*\",\"storageTypes\":\"all\"}");
+                            }
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
                             await notification.ShowNotificationAsync(
                                 "Thanh toán thành công!",
@@ -75,6 +89,15 @@ namespace AirTicketSalesManagement.View.Staff
                         }
                         else
                         {
+                            if (WebView != null && WebView.CoreWebView2 != null)
+                            {
+                                // Xóa toàn bộ cookies (mọi domain)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.clearBrowserCookies", "{}");
+
+                                // Xóa toàn bộ dữ liệu website (local storage, cache, indexedDB, ... trên tất cả origin)
+                                await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Storage.clearDataForOrigin",
+                                    "{\"origin\":\"*\",\"storageTypes\":\"all\"}");
+                            }
                             if (viewModel != null) viewModel.IsWebViewVisible = false;
                             await notification.ShowNotificationAsync(
                                 "Thanh toán thất bại: " + result.ToString(),
@@ -83,6 +106,9 @@ namespace AirTicketSalesManagement.View.Staff
                     }
                     catch (Exception ex)
                     {
+                        System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] Exception: {ex.Message}");
+                        System.Diagnostics.Debug.WriteLine($"[StaffWindow_WebView_NavigationStarting] Stack trace: {ex.StackTrace}");
+                        
                         if (viewModel != null) viewModel.IsWebViewVisible = false;
                         await notification.ShowNotificationAsync(
                             "Đã xảy ra lỗi: " + ex.Message,

@@ -618,6 +618,118 @@
                         </Border>
                     </StackPanel>
                 </Border>
+                <Border Style="{StaticResource CardStyle}">
+                    <!-- Quy định độ tuổi -->
+                    <StackPanel Margin="0,16,0,0">
+                        <TextBlock Text="👶 Quy định độ tuổi hành khách" Style="{StaticResource SectionHeaderStyle}" />
+
+                        <!-- Độ tuổi tối đa sơ sinh -->
+                        <Border Style="{StaticResource InfoRowStyle}" BorderThickness="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="Tuổi của trẻ sơ sinh dưới" Style="{StaticResource LabelStyle}" VerticalAlignment="Center" MinWidth="180" />
+
+                                <!-- View mode -->
+                                <TextBlock Grid.Column="1" Style="{StaticResource ValueStyle}" VerticalAlignment="Center"
+                       Visibility="{Binding IsEditingInfantAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                       Text="{Binding InfantAge}" TextAlignment="Right"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
+                       Visibility="{Binding IsEditingInfantAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                       Text="tuổi"/>
+
+                                <!-- Edit mode -->
+                                <TextBox x:Name="InfantAgeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                     Text="{Binding EditInfantAge, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
+                     Visibility="{Binding IsEditingInfantAge, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
+                       Visibility="{Binding IsEditingInfantAge, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Text="tuổi"/>
+
+                                <!-- Action Buttons -->
+                                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Button Style="{StaticResource IconButtonStyle}" 
+                        Command="{Binding _EditInfantAgeCommand}"
+                        Visibility="{Binding IsEditingInfantAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                        ToolTip="Chỉnh sửa">
+                                        <TextBlock Text="✏️" FontSize="12"/>
+                                    </Button>
+                                    <Button Style="{StaticResource SaveButtonStyle}" 
+                        Command="{Binding SaveInfantAgeCommand}"
+                        Visibility="{Binding IsEditingInfantAge, Converter={StaticResource BoolToVisibilityConverter}}"
+                        IsEnabled="{Binding ElementName=InfantAgeBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
+                        ToolTip="Lưu">
+                                        <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
+                                    </Button>
+                                    <Button Style="{StaticResource CancelButtonStyle}" 
+                        Command="{Binding CancelInfantAgeCommand}"
+                        Visibility="{Binding IsEditingInfantAge, Converter={StaticResource BoolToVisibilityConverter}}"
+                        ToolTip="Hủy">
+                                        <TextBlock Text="❌" FontSize="12" Foreground="#EF4444"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Độ tuổi tối đa trẻ em -->
+                        <Border Style="{StaticResource InfoRowStyle}" BorderThickness="0" Margin="0,8,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="Tuổi của trẻ em dưới" Style="{StaticResource LabelStyle}" VerticalAlignment="Center" MinWidth="180" />
+
+                                <!-- View mode -->
+                                <TextBlock Grid.Column="1" Style="{StaticResource ValueStyle}" VerticalAlignment="Center"
+                       Visibility="{Binding IsEditingChildAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                       Text="{Binding ChildAge}" TextAlignment="Right"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
+                       Visibility="{Binding IsEditingChildAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                       Text="tuổi"/>
+
+                                <!-- Edit mode -->
+                                <TextBox x:Name="ChildAgeBox" Grid.Column="1" Style="{StaticResource EditTextBoxStyle}" 
+                     Text="{Binding EditChildAge, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" Width="120"
+                     Visibility="{Binding IsEditingChildAge, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                <TextBlock Grid.Column="2" Style="{StaticResource ValueStyle}" VerticalAlignment="Center" Margin="5,0,0,0"
+                       Visibility="{Binding IsEditingChildAge, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Text="tuổi"/>
+
+                                <!-- Action Buttons -->
+                                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Button Style="{StaticResource IconButtonStyle}" 
+                        Command="{Binding _EditChildAgeCommand}"
+                        Visibility="{Binding IsEditingChildAge, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                        ToolTip="Chỉnh sửa">
+                                        <TextBlock Text="✏️" FontSize="12"/>
+                                    </Button>
+                                    <Button Style="{StaticResource SaveButtonStyle}" 
+                        Command="{Binding SaveChildAgeCommand}"
+                        Visibility="{Binding IsEditingChildAge, Converter={StaticResource BoolToVisibilityConverter}}"
+                        IsEnabled="{Binding ElementName=ChildAgeBox, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}"
+                        ToolTip="Lưu">
+                                        <TextBlock Text="✅" FontSize="12" Foreground="#10B981"/>
+                                    </Button>
+                                    <Button Style="{StaticResource CancelButtonStyle}" 
+                        Command="{Binding CancelChildAgeCommand}"
+                        Visibility="{Binding IsEditingChildAge, Converter={StaticResource BoolToVisibilityConverter}}"
+                        ToolTip="Hủy">
+                                        <TextBlock Text="❌" FontSize="12" Foreground="#EF4444"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
     

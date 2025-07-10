@@ -22,4 +22,8 @@ public partial class Quydinh
     public int? TgdatVeChamNhat { get; set; }
 
     public int? TghuyDatVe { get; set; }
+
+    public int? TuoiToiDaSoSinh { get; set; }
+
+    public int? TuoiToiDaTreEm { get; set; }
 }

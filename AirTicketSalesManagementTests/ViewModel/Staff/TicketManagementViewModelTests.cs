@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace AirTicketSalesManagementTests.ViewModel.Staff
 {
-    [TestClass]
+    [STATestClass]
     public class TicketManagementViewModelTests
     {
         private TicketManagementViewModel _viewModel;
@@ -28,7 +28,7 @@ namespace AirTicketSalesManagementTests.ViewModel.Staff
                 new QuanLiDatVe
                 {
                     MaVe = 2, DiemDi = "TP. Hồ Chí Minh (SGN), Vietnam", DiemDen = "Đà Nẵng (DAD), Vietnam",
-                    HangHangKhong = "Vietjet Air", NgayDat = new DateTime(2023, 10, 5), TrangThai = "Chờ thanh toán",
+                    HangHangKhong = "Vietjet Air", NgayDat = new DateTime(2023, 10, 5), TrangThai = "Chờ thanh toán (Online)",
                     EmailNguoiDat = "user2@example.com"
                 },
                 new QuanLiDatVe
@@ -54,7 +54,7 @@ namespace AirTicketSalesManagementTests.ViewModel.Staff
             _viewModel.NoiDiFilter = "Hà Nội (HAN), Vietnam";
             _viewModel.EmailFilter = "user1@example.com";
             _viewModel.HistoryBooking.Clear();
-            _viewModel.ClearFilterCommand.Execute(null);
+            _viewModel.ClearFilter();
 
             Assert.IsTrue(string.IsNullOrEmpty(_viewModel.NoiDiFilter));
             Assert.IsTrue(string.IsNullOrEmpty(_viewModel.EmailFilter));
