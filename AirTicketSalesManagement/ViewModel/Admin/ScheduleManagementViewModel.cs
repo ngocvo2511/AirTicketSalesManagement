@@ -246,6 +246,9 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [RelayCommand]
         public async void ImportFromExcel()
         {
+            // Thiết lập giấy phép sử dụng phi thương mại cá nhân
+            ExcelPackage.License.SetNonCommercialPersonal("Nguyen Huu Nghi");
+
             var openFileDialog = new OpenFileDialog
             {
                 Filter = "Excel Files|*.xlsx;*.xls",
@@ -256,21 +259,62 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 try
                 {
-                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                     using var package = new ExcelPackage(new FileInfo(openFileDialog.FileName));
                     var worksheet = package.Workbook.Worksheets[0];
                     using var context = new AirTicketDbContext();
 
+                    // Định dạng ngày giờ mong đợi (có thể điều chỉnh theo file Excel)
+                    string[] dateFormats = { "dd/MM/yyyy HH:mm", "MM/dd/yyyy HH:mm", "yyyy-MM-dd HH:mm", "dd-MM-yyyy HH:mm" };
+                    var culture = System.Globalization.CultureInfo.InvariantCulture; // Hoặc "vi-VN" nếu dùng định dạng Việt Nam
+
                     for (int row = 2; row <= worksheet.Dimension.Rows; row++)
                     {
-                        string soHieuCB = worksheet.Cells[row, 1].Text;
-                        DateTime gioDi = DateTime.Parse(worksheet.Cells[row, 2].Text);
-                        DateTime gioDen = DateTime.Parse(worksheet.Cells[row, 3].Text);
-                        string loaiMB = worksheet.Cells[row, 4].Text;
-                        int slVe = int.Parse(worksheet.Cells[row, 5].Text);
-                        decimal giaVe = decimal.Parse(worksheet.Cells[row, 6].Text);
-                        string tinhTrang = worksheet.Cells[row, 7].Text;
+                        // Kiểm tra ô rỗng hoặc không hợp lệ
+                        string soHieuCB = worksheet.Cells[row, 1].Text?.Trim();
+                        string gioDiText = worksheet.Cells[row, 2].Text?.Trim();
+                        string gioDenText = worksheet.Cells[row, 3].Text?.Trim();
+                        string loaiMB = worksheet.Cells[row, 4].Text?.Trim();
+                        string slVeText = worksheet.Cells[row, 5].Text?.Trim();
+                        string giaVeText = worksheet.Cells[row, 6].Text?.Trim();
+                        string tinhTrang = worksheet.Cells[row, 7].Text?.Trim();
 
+                        // Kiểm tra dữ liệu rỗng
+                        if (string.IsNullOrWhiteSpace(soHieuCB) || string.IsNullOrWhiteSpace(gioDiText) ||
+                            string.IsNullOrWhiteSpace(gioDenText) || string.IsNullOrWhiteSpace(loaiMB) ||
+                            string.IsNullOrWhiteSpace(slVeText) || string.IsNullOrWhiteSpace(giaVeText) ||
+                            string.IsNullOrWhiteSpace(tinhTrang))
+                        {
+                            await Notification.ShowNotificationAsync($"Dữ liệu không hợp lệ tại dòng {row}. Vui lòng kiểm tra lại.", NotificationType.Warning);
+                            continue;
+                        }
+
+                        // Phân tích ngày giờ
+                        if (!DateTime.TryParseExact(gioDiText, dateFormats, culture, System.Globalization.DateTimeStyles.None, out DateTime gioDi))
+                        {
+                            await Notification.ShowNotificationAsync($"Lỗi định dạng giờ đi tại dòng {row}: {gioDiText}", NotificationType.Error);
+                            continue;
+                        }
+
+                        if (!DateTime.TryParseExact(gioDenText, dateFormats, culture, System.Globalization.DateTimeStyles.None, out DateTime gioDen))
+                        {
+                            await Notification.ShowNotificationAsync($"Lỗi định dạng giờ đến tại dòng {row}: {gioDenText}", NotificationType.Error);
+                            continue;
+                        }
+
+                        // Kiểm tra số lượng vé và giá vé
+                        if (!int.TryParse(slVeText, out int slVe))
+                        {
+                            await Notification.ShowNotificationAsync($"Lỗi số lượng vé tại dòng {row}: {slVeText}", NotificationType.Error);
+                            continue;
+                        }
+
+                        if (!decimal.TryParse(giaVeText, out decimal giaVe))
+                        {
+                            await Notification.ShowNotificationAsync($"Lỗi giá vé tại dòng {row}: {giaVeText}", NotificationType.Error);
+                            continue;
+                        }
+
+                        // Tạo đối tượng lịch bay
                         var lichBay = new Lichbay
                         {
                             SoHieuCb = soHieuCB,
@@ -283,6 +327,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         };
                         context.Lichbays.Add(lichBay);
                     }
+
                     context.SaveChanges();
                     await Notification.ShowNotificationAsync("Nhập lịch bay từ Excel thành công!", NotificationType.Information);
                     LoadFlightSchedule();
@@ -293,6 +338,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
             }
         }
+
 
         [RelayCommand]
         public void AddSchedule()
