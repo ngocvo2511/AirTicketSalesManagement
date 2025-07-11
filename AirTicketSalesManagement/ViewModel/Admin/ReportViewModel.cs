@@ -299,6 +299,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             YearlyAxesX.Clear();
             YearlyAxesX.Add(new Axis
             {
+                Title = 
                 Labels = MonthsLabels,
                 Separator = new Separator { Step = 1 },
                 LabelsRotation = 0

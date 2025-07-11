@@ -1,4 +1,5 @@
 ﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Services.EmailServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -54,7 +55,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                 await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
                 return;
             }
-            _auth.CurrentViewModel = new ResetPasswordViewModel(new DummyPasswordResetService(), _auth, Email);
+            _auth.CurrentViewModel = new ResetPasswordViewModel(_auth, Email, new EmailService(), new OtpService(), new EmailTemplateService());
         }
 
         [RelayCommand]
