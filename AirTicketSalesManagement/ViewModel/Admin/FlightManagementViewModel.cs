@@ -135,7 +135,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         // Notification
-        public NotificationViewModel Notification { get; } = new NotificationViewModel();
+        public NotificationViewModel Notification { get; set; } = new NotificationViewModel();
 
         public void LoadSanBay()
         {

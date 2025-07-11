@@ -154,11 +154,7 @@
             </StackPanel>
 
         </Grid>
-        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
+
         <!-- Content -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="30,20" Margin="15,0,15,0">
             <StackPanel>
@@ -732,6 +728,12 @@
                 </Border>
             </StackPanel>
         </ScrollViewer>
-    
+        <Popup x:Name="NotificationPopup"
+           IsOpen="{Binding Notification.IsVisible}"
+           Placement="Center"
+           AllowsTransparency="True"
+           PopupAnimation="Fade">
+            <notification:NotificationControl DataContext="{Binding Notification}"/>
+        </Popup>
     </Grid>
 </UserControl>

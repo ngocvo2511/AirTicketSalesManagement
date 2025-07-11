@@ -97,7 +97,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         partial void OnDiemDenChanged(string value) => OnPropertyChanged(nameof(DiemDiList));
 
         // Notification
-        public NotificationViewModel Notification { get; } = new NotificationViewModel();
+        public NotificationViewModel Notification { get; set; } = new NotificationViewModel();
 
         public ScheduleManagementViewModel()
         {

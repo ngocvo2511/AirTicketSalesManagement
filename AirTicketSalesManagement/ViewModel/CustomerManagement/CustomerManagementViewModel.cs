@@ -41,7 +41,7 @@ namespace AirTicketSalesManagement.ViewModel.CustomerManagement
         [ObservableProperty]
         private DateTime? editBirthDate;
 
-        public NotificationViewModel Notification { get; } = new NotificationViewModel();
+        public NotificationViewModel Notification { get; set; } = new NotificationViewModel();
 
         public CustomerManagementViewModel()
         {
