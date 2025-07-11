@@ -145,7 +145,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 {
                     // Lưu thông tin đặt vé tạm thời với trạng thái "Chờ thanh toán"
                     SaveBookingWithPendingStatus("Online");
-                    await Task.Delay(1000); // Đợi một chút để đảm bảo lưu thành công
+                    await Task.Delay(500); // Đợi một chút để đảm bảo lưu thành công
                     WeakReferenceMessenger.Default.Send(new PaymentRequestedMessage(paymentUrl));
                     Debug.WriteLine($"[ProcessVNPayPayment] Payment URL created successfully: {paymentUrl}");
                 }
@@ -190,19 +190,6 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 datVe.TtdatVe = $"Chưa thanh toán ({paymentType})"; // chuyển trạng thái
                 datVe.ThoiGianDv = DateTime.Now; // cập nhật lại thời gian giữ chỗ
 
-                // Cập nhật MaKh hoặc MaNv dựa trên loại user
-                if (!UserSession.Current.isStaff)
-                {
-                    datVe.MaKh = UserSession.Current.CustomerId;
-                    datVe.MaNv = null;
-                    Debug.WriteLine($"[SaveBookingWithPendingStatus] Updated MaKh to: {datVe.MaKh}");
-                }
-                else
-                {
-                    datVe.MaNv = UserSession.Current.StaffId;
-                    datVe.MaKh = null;
-                    Debug.WriteLine($"[SaveBookingWithPendingStatus] Updated MaNv to: {datVe.MaNv}");
-                }
 
                 context.SaveChanges();
                 Debug.WriteLine($"[SaveBookingWithPendingStatus] Booking saved successfully with status: {datVe.TtdatVe}");
@@ -275,7 +262,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 
                 using (var context = new AirTicketDbContext())
                 {
-                    Datve datVe = null;
+                    Datve datVe;
 
                     // Kiểm tra UserSession có hợp lệ không
                     if (UserSession.Current == null)

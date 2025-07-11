@@ -137,10 +137,10 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var nhanVien = context.Nhanviens
+                    var khachhang = context.Khachhangs
                         .Include(nv => nv.Taikhoans)
-                        .FirstOrDefault(kh => kh.MaNv == UserSession.Current.StaffId);
-                    if (nhanVien != null)
+                        .FirstOrDefault(kh => kh.MaKh == UserSession.Current.CustomerId);
+                    if (khachhang != null)
                     {
                         // Họ tên: bắt buộc phải nhập
                         if (string.IsNullOrWhiteSpace(EditHoTen))
@@ -149,7 +149,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                             EditHoTen = HoTen;
                             return;
                         }
-                        nhanVien.HoTenNv = EditHoTen;
+                        khachhang.HoTenKh = EditHoTen;
 
                         // Email: nếu có nhập thì phải đúng định dạng
                         if (string.IsNullOrWhiteSpace(EditEmail))
@@ -167,7 +167,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         }
 
                         bool emailExists = context.Taikhoans
-                            .Any(tk => tk.Email == EditEmail && tk.MaNv != nhanVien.MaNv);
+                            .Any(tk => tk.Email == EditEmail && tk.MaKh != khachhang.MaKh);
 
                         if (emailExists)
                         {
@@ -176,7 +176,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                             return;
                         }
 
-                        nhanVien.Taikhoans.FirstOrDefault().Email = EditEmail;
+                        khachhang.Taikhoans.FirstOrDefault().Email = EditEmail;
 
                         // Số điện thoại: nếu có nhập thì kiểm tra định dạng
                         if (!string.IsNullOrWhiteSpace(EditSoDienThoai))
@@ -187,8 +187,13 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                                 EditSoDienThoai = SoDienThoai;
                                 return;
                             }
+                            khachhang.SoDt = EditSoDienThoai;
                         }
-                        nhanVien.SoDt = EditSoDienThoai;
+                        else
+                        {
+                            khachhang.SoDt = null;
+                        }
+
 
                         // Căn cước: nếu có nhập thì kiểm tra độ dài hợp lệ (ví dụ 9 hoặc 12 số)
                         if (!string.IsNullOrWhiteSpace(EditCanCuoc))
@@ -199,13 +204,18 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                                 EditCanCuoc = CanCuoc;
                                 return;
                             }
+                            khachhang.Cccd = EditCanCuoc;
                         }
-                        nhanVien.Cccd = EditCanCuoc;
+                        else
+                        {
+                            khachhang.Cccd = null;
+                        }
+
 
                         // Giới tính: nếu có nhập thì lưu
                         if (!string.IsNullOrWhiteSpace(EditGioiTinh))
                         {
-                            nhanVien.GioiTinh = EditGioiTinh;
+                            khachhang.GioiTinh = EditGioiTinh;
                         }
 
                         // Ngày sinh: nếu có nhập thì phải nhỏ hơn ngày hiện tại
@@ -217,11 +227,11 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                                 EditNgaySinh = NgaySinh;
                                 return;
                             }
-                            nhanVien.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);
+                            khachhang.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);
                         }
                         else
                         {
-                            nhanVien.NgaySinh = null;
+                            khachhang.NgaySinh = null;
                         }
 
                         context.SaveChanges();

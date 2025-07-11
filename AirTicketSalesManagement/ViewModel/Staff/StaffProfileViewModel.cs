@@ -128,93 +128,91 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         }
 
         [RelayCommand]
-        private async Task SaveProfile()
+        private async void SaveProfile()
         {
             try
             {
                 using (var context = new AirTicketDbContext())
                 {
-                    var nhanVien = context.Nhanviens
+                    var khachhang = context.Khachhangs
                         .Include(nv => nv.Taikhoans)
-                        .FirstOrDefault(kh => kh.MaNv == UserSession.Current.StaffId);
-                    if (nhanVien != null)
+                        .FirstOrDefault(kh => kh.MaKh == UserSession.Current.CustomerId);
+                    if (khachhang != null)
                     {
                         // Họ tên: bắt buộc phải nhập
                         if (string.IsNullOrWhiteSpace(EditHoTen))
                         {
-                            await notification.ShowNotificationAsync(
-                                "Họ tên không được để trống!",
-                                NotificationType.Warning);
+                            await Notification.ShowNotificationAsync("Họ tên không được để trống!", NotificationType.Warning);
                             EditHoTen = HoTen;
                             return;
                         }
-                        nhanVien.HoTenNv = EditHoTen;
+                        khachhang.HoTenKh = EditHoTen;
 
                         // Email: nếu có nhập thì phải đúng định dạng
                         if (string.IsNullOrWhiteSpace(EditEmail))
                         {
-                            await notification.ShowNotificationAsync(
-                                "Email không được để trống!",
-                                NotificationType.Warning);
+                            await Notification.ShowNotificationAsync("Email không được để trống!", NotificationType.Warning);
                             EditEmail = Email;
                             return;
                         }
 
                         if (!IsValidEmail(EditEmail))
                         {
-                            await notification.ShowNotificationAsync(
-                                "Email không hợp lệ!",
-                                NotificationType.Warning);
+                            await Notification.ShowNotificationAsync("Email không hợp lệ!", NotificationType.Warning);
                             EditEmail = Email;
                             return;
                         }
 
                         bool emailExists = context.Taikhoans
-                            .Any(tk => tk.Email == EditEmail && tk.MaNv != nhanVien.MaNv);
+                            .Any(tk => tk.Email == EditEmail && tk.MaKh != khachhang.MaKh);
 
                         if (emailExists)
                         {
-                            await notification.ShowNotificationAsync(
-                                "Email đã được sử dụng bởi tài khoản khác!",
-                                NotificationType.Warning);
+                            await Notification.ShowNotificationAsync("Email đã được sử dụng bởi tài khoản khác!", NotificationType.Warning);
                             EditEmail = Email;
                             return;
                         }
 
-                        nhanVien.Taikhoans.FirstOrDefault().Email = EditEmail;
+                        khachhang.Taikhoans.FirstOrDefault().Email = EditEmail;
 
                         // Số điện thoại: nếu có nhập thì kiểm tra định dạng
                         if (!string.IsNullOrWhiteSpace(EditSoDienThoai))
                         {
                             if (!IsValidPhone(EditSoDienThoai))
                             {
-                                await notification.ShowNotificationAsync(
-                                    "Số điện thoại không hợp lệ!",
-                                    NotificationType.Warning);
+                                await Notification.ShowNotificationAsync("Số điện thoại không hợp lệ!", NotificationType.Warning);
                                 EditSoDienThoai = SoDienThoai;
                                 return;
                             }
+                            khachhang.SoDt = EditSoDienThoai;
                         }
-                        nhanVien.SoDt = EditSoDienThoai;
+                        else
+                        {
+                            khachhang.SoDt = null;
+                        }
+
 
                         // Căn cước: nếu có nhập thì kiểm tra độ dài hợp lệ (ví dụ 9 hoặc 12 số)
                         if (!string.IsNullOrWhiteSpace(EditCanCuoc))
                         {
                             if (EditCanCuoc.Length != 12 || !EditCanCuoc.All(char.IsDigit))
                             {
-                                await notification.ShowNotificationAsync(
-                                    "Số căn cước không hợp lệ!",
-                                    NotificationType.Warning);
+                                await Notification.ShowNotificationAsync("Số căn cước không hợp lệ!", NotificationType.Warning);
                                 EditCanCuoc = CanCuoc;
                                 return;
                             }
+                            khachhang.Cccd = EditCanCuoc;
                         }
-                        nhanVien.Cccd = EditCanCuoc;
+                        else
+                        {
+                            khachhang.Cccd = null;
+                        }
+
 
                         // Giới tính: nếu có nhập thì lưu
                         if (!string.IsNullOrWhiteSpace(EditGioiTinh))
                         {
-                            nhanVien.GioiTinh = EditGioiTinh;
+                            khachhang.GioiTinh = EditGioiTinh;
                         }
 
                         // Ngày sinh: nếu có nhập thì phải nhỏ hơn ngày hiện tại
@@ -222,23 +220,19 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         {
                             if (EditNgaySinh.Value.Date >= DateTime.Today)
                             {
-                                await notification.ShowNotificationAsync(
-                                    "Ngày sinh không hợp lệ!",
-                                    NotificationType.Warning);
+                                await Notification.ShowNotificationAsync("Ngày sinh không hợp lệ!", NotificationType.Warning);
                                 EditNgaySinh = NgaySinh;
                                 return;
                             }
-                            nhanVien.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);
+                            khachhang.NgaySinh = DateOnly.FromDateTime(EditNgaySinh.Value);
                         }
                         else
                         {
-                            nhanVien.NgaySinh = null;
+                            khachhang.NgaySinh = null;
                         }
 
-                        await context.SaveChangesAsync();
-                        await notification.ShowNotificationAsync(
-                            "Cập nhật thông tin thành công!",
-                            NotificationType.Information);
+                        context.SaveChanges();
+                        await Notification.ShowNotificationAsync("Cập nhật thông tin thành công!", NotificationType.Information);
                         LoadData();
                         IsEditPopupOpen = false; // Đóng popup sau khi lưu thành công
                     }
@@ -246,9 +240,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
             }
             catch (Exception ex)
             {
-                await notification.ShowNotificationAsync(
-                    $"Đã xảy ra lỗi: {ex.Message}",
-                    NotificationType.Error);
+                await Notification.ShowNotificationAsync($"Đã xảy ra lỗi: {ex.Message}", NotificationType.Error);
             }
         }
 

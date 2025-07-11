@@ -148,7 +148,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 idDatVe = datVe.MaDv;
                 // Lưu lại datVe.MaDV vào session để sử dụng sau
             }
-            await Task.Delay(1000); // Giả lập thời gian xử lý
+            await Task.Delay(500); // Giả lập thời gian xử lý
             // Tạo đối tượng chứa thông tin chuyến bay và hạng vé đã chọn
             var selectedFlightInfo = new ThongTinChuyenBayDuocChon
             {
