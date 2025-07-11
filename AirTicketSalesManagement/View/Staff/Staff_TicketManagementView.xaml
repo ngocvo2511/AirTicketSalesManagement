@@ -534,11 +534,12 @@ Foreground="#64748B"/>
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
-        <notification:NotificationControl x:Name="NotificationControl"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            Grid.RowSpan="4"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
+        <Popup x:Name="NotificationPopup"
+           IsOpen="{Binding Notification.IsVisible}"
+           Placement="Center"
+           AllowsTransparency="True"
+           PopupAnimation="Fade">
+            <notification:NotificationControl DataContext="{Binding Notification}"/>
+        </Popup>
     </Grid>
 </UserControl>
