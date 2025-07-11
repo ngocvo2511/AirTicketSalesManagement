@@ -236,7 +236,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
             try
             {
-                SaveBookingWithPendingStatusAsync("Tiền mặt");
+                SaveBookingWithPendingStatus("Tiền mặt");
                 await Notification.ShowNotificationAsync(
                     "Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
                     NotificationType.Information);
