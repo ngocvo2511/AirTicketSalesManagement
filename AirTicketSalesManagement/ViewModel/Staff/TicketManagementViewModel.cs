@@ -1,5 +1,8 @@
 ﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Interface;
 using AirTicketSalesManagement.Models.UIModels;
+using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.Services.EmailServices;
 using AirTicketSalesManagement.ViewModel.Admin;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,6 +15,8 @@ namespace AirTicketSalesManagement.ViewModel.Staff
 {
     public partial class TicketManagementViewModel : BaseViewModel
     {
+        private readonly IEmailService _emailService;
+        private readonly EmailTemplateService _templateService;
         private readonly BaseViewModel parent;
         private ObservableCollection<QuanLiDatVe> rootHistoryBooking = new();
         [ObservableProperty]
@@ -56,8 +61,10 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private bool isEmpty;
 
         public TicketManagementViewModel() { }
-        public TicketManagementViewModel(BaseViewModel parent)
+        public TicketManagementViewModel(BaseViewModel parent, IEmailService emailService, EmailTemplateService templateService)
         {
+            _emailService = emailService;
+            _templateService = templateService;
             this.parent = parent;
             _ = LoadData();
             ClearExpiredHolds();
@@ -199,11 +206,11 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         {
             if (parent is StaffViewModel staffViewModel)
             {
-                staffViewModel.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent);
+                staffViewModel.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent, _emailService, _templateService);
             }
             else if (parent is AdminViewModel adminViewModel)
             {
-                adminViewModel.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent);
+                adminViewModel.CurrentViewModel = new TicketManagementDetailViewModel(chiTietVe, parent, _emailService, _templateService);
             }
         }
         [RelayCommand]
@@ -272,6 +279,9 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                         var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
                         if (booking != null)
                         {
+                            bool isPaid = booking.TtdatVe == "Đã thanh toán";
+                            string soHieuCb = booking.MaLbNavigation?.SoHieuCb ?? "";
+                            DateTime gioDi = booking.MaLbNavigation?.GioDi ?? DateTime.Now;
                             var chiTietVe = await context.Ctdvs.Where(ct => ct.MaDv == ve.MaVe).ToListAsync();
                             var maHvLb = chiTietVe.FirstOrDefault()?.MaHvLb;
                             if (maHvLb != null)
@@ -290,6 +300,14 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                             await notification.ShowNotificationAsync(
                                 "Hủy vé thành công.",
                                 NotificationType.Information);
+                            if (isPaid)
+                            {
+                                var emailBody = _templateService.BuildBookingCancel(soHieuCb, gioDi, DateTime.Now);
+                                await _emailService.SendEmailAsync(
+                                    booking.Email ?? UserSession.Current.Email,
+                                    $"Huỷ vé chuyến bay {soHieuCb}",
+                                    emailBody);
+                            }
                             await LoadData();
                         }
                         else
@@ -337,9 +355,12 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 {
                     using (var context = new AirTicketDbContext())
                     {
-                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
+                        var booking = await context.Datves.Include(b => b.MaLbNavigation).FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
                         if (booking != null)
                         {
+                            string soHieuCb = booking.MaLbNavigation?.SoHieuCb ?? "";
+                            DateTime gioDi = booking.MaLbNavigation?.GioDi ?? DateTime.Now;
+                            decimal price = booking.TongTienTt ?? 0;
                             booking.TtdatVe = "Đã thanh toán";
                             await context.SaveChangesAsync();
                             ve.TrangThai = "Đã thanh toán";
@@ -347,6 +368,11 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                             await notification.ShowNotificationAsync(
                                 "Xác nhận thanh toán thành công.",
                                 NotificationType.Information);
+                            var emailBody = _templateService.BuildBookingSuccess(soHieuCb, gioDi, DateTime.Now, price);
+                            await _emailService.SendEmailAsync(
+                                booking.Email ?? UserSession.Current.Email,
+                                $"Thanh toán vé chuyến bay {soHieuCb}",
+                                emailBody);
                             await LoadData();
                         }
                         else

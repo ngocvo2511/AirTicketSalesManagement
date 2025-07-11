@@ -1,6 +1,8 @@
 ﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Interface;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.Services.EmailServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 {
     public partial class BookingHistoryViewModel : BaseViewModel
     {
+        private readonly IEmailService _emailService;
+        private readonly EmailTemplateService _templateService;
         private readonly CustomerViewModel parent;
         private ObservableCollection<KQLichSuDatVe> rootHistoryBooking;
         [ObservableProperty]
@@ -63,9 +67,11 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         private NotificationViewModel notification = new();
 
         public BookingHistoryViewModel() { }
-        public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent)
+        public BookingHistoryViewModel(int? idCustomer, CustomerViewModel parent, IEmailService emailService, EmailTemplateService templateService)
         {
             this.parent = parent;
+            this._emailService = emailService;
+            this._templateService = templateService;
             _ = LoadData(UserSession.Current.CustomerId);
             ClearExpiredHolds();
         }
@@ -117,7 +123,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                     {
                         "Tất cả",
                         "Đã thanh toán",
-                        "Chờ thanh toán",
+                        "Chưa thanh toán (Tiền mặt)",
+                        "Chưa thanh toán (Online)",
                         "Đã hủy"
                     };
                     BookingStatusFilter = "Tất cả";
@@ -192,7 +199,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void ShowDetailHistory(KQLichSuDatVe lichSuDatVe)
         {
-            parent.CurrentViewModel = new BookingHistoryDetailViewModel(lichSuDatVe, parent);
+            parent.CurrentViewModel = new BookingHistoryDetailViewModel(lichSuDatVe, parent, _emailService, _templateService);
         }
         [RelayCommand]
         private void SearchHistory()
@@ -255,9 +262,12 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 {
                     using (var context = new AirTicketDbContext())
                     {
-                        var booking = await context.Datves.FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
+                        var booking = await context.Datves.Include(b => b.MaLbNavigation).FirstOrDefaultAsync(b => b.MaDv == ve.MaVe);
                         if (booking != null)
                         {
+                            bool isPaid = booking.TtdatVe == "Đã thanh toán";
+                            string soHieuCb = booking.MaLbNavigation?.SoHieuCb ?? "";
+                            DateTime gioDi = booking.MaLbNavigation?.GioDi ?? DateTime.Now;
                             var chiTietVe = await context.Ctdvs.Where(ct => ct.MaDv == ve.MaVe).ToListAsync();
                             var maHvLb = chiTietVe.FirstOrDefault()?.MaHvLb;
                             if (maHvLb != null)
@@ -276,6 +286,14 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                             await notification.ShowNotificationAsync(
                                 "Hủy vé thành công.",
                                 NotificationType.Information);
+                            if (isPaid)
+                            {
+                                var emailBody = _templateService.BuildBookingCancel(soHieuCb, gioDi, DateTime.Now);
+                                await _emailService.SendEmailAsync(
+                                    booking.Email ?? UserSession.Current.Email,
+                                    $"Huỷ vé chuyến bay {soHieuCb}",
+                                    emailBody);
+                            }
                             await LoadData(UserSession.Current.CustomerId);
                         }
                         else

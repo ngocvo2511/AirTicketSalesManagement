@@ -9,11 +9,16 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using Microsoft.Web.WebView2.Core;
+using AirTicketSalesManagement.Interface;
+using AirTicketSalesManagement.Services.EmailServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace AirTicketSalesManagement.ViewModel.Booking
 {
     public partial class PaymentConfirmationViewModel : BaseViewModel
     {
+        private readonly IEmailService _emailService;
+        private readonly EmailTemplateService _templateService;
         private readonly VnpayPayment vnpayPayment;
 
         [ObservableProperty]
@@ -64,8 +69,10 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
         }
 
-        public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay)
+        public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay, IEmailService emailService, EmailTemplateService emailTemplateService)
         {
+            _emailService = emailService;
+            _templateService = emailTemplateService;
             ThongTinHanhKhachVaChuyenBay = thongTinHanhKhachVaChuyenBay;
             thongTinChuyenBayDuocChon = thongTinHanhKhachVaChuyenBay.FlightInfo;
             FlightCode = $"{thongTinChuyenBayDuocChon.Flight.MaSBDi} - {thongTinChuyenBayDuocChon.Flight.MaSBDen} ({thongTinChuyenBayDuocChon.Flight.HangHangKhong})";
@@ -144,7 +151,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 if (!string.IsNullOrEmpty(paymentUrl))
                 {
                     // Lưu thông tin đặt vé tạm thời với trạng thái "Chờ thanh toán"
-                    SaveBookingWithPendingStatus("Online");
+                    SaveBookingWithPendingStatusAsync("Online");
                     await Task.Delay(1000); // Đợi một chút để đảm bảo lưu thành công
                     WeakReferenceMessenger.Default.Send(new PaymentRequestedMessage(paymentUrl));
                     Debug.WriteLine($"[ProcessVNPayPayment] Payment URL created successfully: {paymentUrl}");
@@ -168,7 +175,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         }
 
 
-        private void SaveBookingWithPendingStatus(string paymentType)
+        private async Task SaveBookingWithPendingStatusAsync(string paymentType)
         {
             int idDatVe = thongTinChuyenBayDuocChon.Id;            
             Debug.WriteLine($"[SaveBookingWithPendingStatus] Saving booking with ID: {idDatVe}, PaymentType: {paymentType}");
@@ -233,8 +240,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 }
 
                 context.SaveChanges();
-                Debug.WriteLine($"[SaveBookingWithPendingStatus] Passengers saved successfully");
-
+                Debug.WriteLine($"[SaveBookingWithPendingStatus] Passengers saved successfully");               
             }
         }
 
@@ -243,11 +249,32 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
             try
             {
-                SaveBookingWithPendingStatus("Tiền mặt");
+                SaveBookingWithPendingStatusAsync("Tiền mặt");
                 await Notification.ShowNotificationAsync(
                     "Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
                     NotificationType.Information);
-
+                try
+                {
+                    using(var context = new AirTicketDbContext())
+                    {
+                        var datVe = context.Datves.Include(b=>b.MaLbNavigation).FirstOrDefault(dv => dv.MaDv == thongTinChuyenBayDuocChon.Id);
+                        if (datVe != null)
+                        {
+                            string soHieucb = datVe.MaLbNavigation?.SoHieuCb ?? "";
+                            DateTime departureTime = datVe.MaLbNavigation?.GioDi ?? DateTime.Now;
+                            var emailContent = _templateService.BuildBookingCash(
+                                soHieucb,
+                                departureTime,
+                                DateTime.Now,
+                                TotalPrice);
+                            await _emailService.SendEmailAsync(datVe.Email ?? UserSession.Current.Email,"Đặt vé thành công",emailContent);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[ProcessCashPayment] Error sending email: {ex.Message}");
+                }
                 NavigateToHistory();
             }
             catch (Exception ex)
@@ -300,7 +327,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                         int customerId = UserSession.Current.CustomerId.Value;
                         PaymentDebugHelper.LogRecentBookings(customerId: customerId);
                         
-                        datVe = context.Datves
+                        datVe = context.Datves.Include(dv => dv.MaLbNavigation)
                             .Where(dv => dv.MaKh == customerId &&
                                          dv.ThoiGianDv >= DateTime.Now.AddMinutes(-20))
                             .OrderByDescending(dv => dv.ThoiGianDv)
@@ -320,7 +347,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                         int employeeId = UserSession.Current.StaffId.Value;
                         PaymentDebugHelper.LogRecentBookings(staffId: employeeId);
                         
-                        datVe = context.Datves
+                        datVe = context.Datves.Include(dv => dv.MaLbNavigation)
                             .Where(dv => dv.MaNv == employeeId &&
                                          dv.ThoiGianDv >= DateTime.Now.AddMinutes(-20))
                             .OrderByDescending(dv => dv.ThoiGianDv)
@@ -338,6 +365,13 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                             datVe.TtdatVe = "Đã thanh toán";
                             context.SaveChanges();
                             Debug.WriteLine($"[HandlePaymentSuccess] Successfully updated booking {datVe.MaDv} to 'Đã thanh toán'");
+                            string soHieuCb = datVe.MaLbNavigation?.SoHieuCb ?? "";
+                            var emailContent = _templateService.BuildBookingSuccess(
+                                soHieuCb,
+                                datVe.MaLbNavigation?.GioDi ?? DateTime.Now,
+                                DateTime.Now,
+                                datVe.TongTienTt ?? 0);
+                            _emailService.SendEmailAsync(datVe.Email ?? UserSession.Current.Email, $"Thanh toán vé chuyến bay {soHieuCb}", emailContent);
                         }
                         else
                         {

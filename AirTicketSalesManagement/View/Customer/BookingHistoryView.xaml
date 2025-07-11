@@ -484,10 +484,10 @@
                                                             <DataTrigger Binding="{Binding TrangThai}" Value="Đã thanh toán">
                                                                 <Setter Property="Foreground" Value="#059669"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chờ thanh toán (Tiền mặt)">
+                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chưa thanh toán (Tiền mặt)">
                                                                 <Setter Property="Foreground" Value="#2563EB"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chờ thanh toán (Online)">
+                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chưa thanh toán (Online)">
                                                                 <Setter Property="Foreground" Value="#2563EB"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
