@@ -51,17 +51,6 @@ namespace AirTicketSalesManagement.ViewModel.Login
             StartCountdown();
             this._auth = _auth;
             this.Email = Email;
-            //_resetService.RequestResetAsync(Email).ContinueWith(t =>
-            //{
-            //    if (t.IsFaulted)
-            //    {
-            //        _=_toast.ShowToastAsync("Không thể gửi mã xác nhận. Vui lòng thử lại sau.", Brushes.OrangeRed);
-            //    }
-            //    else
-            //    {
-            //        _=_toast.ShowToastAsync("Mã xác nhận đã được gửi đến email của bạn.", Brushes.Green);
-            //    }
-            //});
             string otp = _otpService.GenerateOtp(Email);
             var emailContent = _emailTemplateService.BuildForgotPasswordOtp(otp);
             _emailService.SendEmailAsync(Email, "Yêu cầu đặt lại mật khẩu", emailContent).ContinueWith(t =>
