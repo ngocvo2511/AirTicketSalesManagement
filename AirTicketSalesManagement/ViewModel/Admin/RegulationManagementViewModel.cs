@@ -100,7 +100,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private int editChildAge;
 
         // Notification
-        public NotificationViewModel Notification { get; } = new NotificationViewModel();
+        public NotificationViewModel Notification { get; set; } = new NotificationViewModel();
 
         public RegulationManagementViewModel()
         {
@@ -577,7 +577,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private async void SaveInfantAge()
         {
             if (!CanSave()) return;
-            if(InfantAge == EditInfantAge)
+            if (InfantAge == EditInfantAge)
             {
                 IsEditingInfantAge = false;
                 return;
@@ -594,6 +594,15 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
                 else
                 {
+                    int currentChildAge = regulation.TuoiToiDaTreEm ?? 12;
+                    if (EditInfantAge >= currentChildAge)
+                    {
+                        await Notification.ShowNotificationAsync(
+                            "Tuổi tối đa của trẻ sơ sinh phải nhỏ hơn tuổi tối đa của trẻ em.\n" +
+                            $"Hiện tại, tuổi tối đa của trẻ em là {currentChildAge}.",
+                            NotificationType.Warning);
+                        return;
+                    }
                     regulation.TuoiToiDaSoSinh = EditInfantAge;
                 }
 
@@ -639,6 +648,15 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 }
                 else
                 {
+                    int currentInfantAge = regulation.TuoiToiDaSoSinh ?? 2;
+                    if (EditChildAge <= currentInfantAge)
+                    {
+                        await Notification.ShowNotificationAsync(
+                            "Tuổi tối đa của trẻ em phải lớn hơn tuổi tối đa của trẻ sơ sinh.\n" +
+                            $"Hiện tại, tuổi tối đa của trẻ sơ sinh là {currentInfantAge}.",
+                            NotificationType.Warning);
+                        return;
+                    }
                     regulation.TuoiToiDaTreEm = EditChildAge;
                 }
                 await context.SaveChangesAsync();
@@ -650,6 +668,11 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 await Notification.ShowNotificationAsync("Không lưu được quy định.\n" + ex.Message, NotificationType.Error);
                 Debug.WriteLine(ex);
             }
+        }
+        [RelayCommand]
+        private void CancelChildAge()
+        {
+            IsEditingChildAge = false;
         }
     }
 }

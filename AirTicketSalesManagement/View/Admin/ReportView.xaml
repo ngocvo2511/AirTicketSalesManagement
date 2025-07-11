@@ -258,18 +258,19 @@
                            Margin="12,8,12,8"
                            Visibility="{Binding IsYearlyReport,
                            Converter={StaticResource BoolToVisibilityConverter}}"/>
-                        <lvc:CartesianChart Grid.Row="1" Width="{Binding MonthlyChartWidth}"
-                                Series="{Binding YearlySeries}"
-                                AxisX="{Binding YearlyAxesX}"
-                                Height="230"
-                                LegendLocation="Right"            
-                                Visibility="{Binding IsYearlyReport,
-                                 Converter={StaticResource BoolToVisibilityConverter}}">
-                            <lvc:CartesianChart.AxisY>
-                                <lvc:Axis LabelFormatter="{Binding VndFormatter}" 
-                                          MinValue="0"/>
-                            </lvc:CartesianChart.AxisY>
-                        </lvc:CartesianChart>
+                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto"
+                           VerticalScrollBarVisibility="Disabled">
+                            <lvc:CartesianChart Width="{Binding MonthlyChartWidth}"
+                        Series="{Binding YearlySeries}"
+                        AxisX="{Binding YearlyAxesX}"
+                        Height="230"
+                        LegendLocation="Right"
+                        Visibility="{Binding IsYearlyReport, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis LabelFormatter="{Binding VndFormatter}" MinValue="0"/>
+                                </lvc:CartesianChart.AxisY>
+                            </lvc:CartesianChart>
+                        </ScrollViewer>
                     </Grid>
 
 
@@ -500,11 +501,13 @@
                     </Border>
                 </Grid>
             </Grid>
-            <notification:NotificationControl x:Name="NotificationControl"
-                DataContext="{Binding Notification}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Panel.ZIndex="1000"/>
+            <Popup x:Name="NotificationPopup"
+               IsOpen="{Binding Notification.IsVisible}"
+               Placement="Center"
+               AllowsTransparency="True"
+               PopupAnimation="Fade">
+                <notification:NotificationControl DataContext="{Binding Notification}"/>
+            </Popup>
         </Grid>
     </ScrollViewer>
 </UserControl>

@@ -62,7 +62,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private string passwordErrorMessage;
 
         // Notification
-        public NotificationViewModel Notification { get; } = new NotificationViewModel();
+        public NotificationViewModel Notification { get; set; } = new NotificationViewModel();
 
         public AdminProfileViewModel()
         {

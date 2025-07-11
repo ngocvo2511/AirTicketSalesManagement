@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AirTicketSalesManagement.Services.EmailServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
 
         public void NavigateToRegister()
         {
-            CurrentViewModel = new RegisterViewModel(this);
+            CurrentViewModel = new RegisterViewModel(this, new EmailService(), new OtpService(), new EmailTemplateService());
         }
 
         public void NavigateToLogin()

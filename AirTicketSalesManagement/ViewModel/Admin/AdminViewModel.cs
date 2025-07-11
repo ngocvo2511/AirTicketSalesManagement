@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Windows.Media.Animation;
 using System.Windows;
 using AirTicketSalesManagement.ViewModel.CustomerManagement;
+using AirTicketSalesManagement.Services.EmailServices;
 
 namespace AirTicketSalesManagement.ViewModel.Admin
 {
@@ -44,7 +45,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [RelayCommand]
         private void NavigateToTicketManagement()
         {
-            CurrentViewModel = new TicketManagementViewModel(this);
+            CurrentViewModel = new TicketManagementViewModel(this, new EmailService(), new EmailTemplateService());
         }
 
         [RelayCommand]

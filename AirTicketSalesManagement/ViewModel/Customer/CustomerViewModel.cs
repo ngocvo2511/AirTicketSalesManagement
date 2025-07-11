@@ -1,5 +1,6 @@
 ﻿using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.Services.EmailServices;
 using AirTicketSalesManagement.View.Login;
 using AirTicketSalesManagement.ViewModel.Booking;
 using AirTicketSalesManagement.ViewModel.Login;
@@ -51,7 +52,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 }
                 else if (viewModelType == typeof(PaymentConfirmationViewModel))
                 {
-                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinHanhKhachVaChuyenBay)parameter);
+                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinHanhKhachVaChuyenBay)parameter, new EmailService(), new EmailTemplateService());
                 }
                 else if (viewModelType == typeof(HomePageViewModel))
                 {
@@ -59,7 +60,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 }
                 else if (viewModelType == typeof(BookingHistoryViewModel))
                 {
-                    CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
+                    CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this, new EmailService(), new EmailTemplateService());
                 }
             };
 
@@ -82,7 +83,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 {
                     paymentConfirmationViewModel.HandlePaymentSuccess();
                 }
-                CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
+                CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this, new EmailService(), new EmailTemplateService());
             });
         }
 
@@ -102,7 +103,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void NavigateToBookingHistory()
         {
-            CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this);
+            CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this, new EmailService(), new EmailTemplateService());
         }
 
         [RelayCommand]

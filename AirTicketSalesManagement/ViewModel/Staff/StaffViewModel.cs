@@ -15,6 +15,7 @@ using AirTicketSalesManagement.Models;
 using CommunityToolkit.Mvvm.Messaging;
 using AirTicketSalesManagement.ViewModel.Customer;
 using AirTicketSalesManagement.ViewModel.CustomerManagement;
+using AirTicketSalesManagement.Services.EmailServices;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {
@@ -49,7 +50,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 {
                     paymentConfirmationViewModel.HandlePaymentSuccess();
                 }
-                CurrentViewModel = new TicketManagementViewModel(this);
+                CurrentViewModel = new TicketManagementViewModel(this, new EmailService(), new EmailTemplateService());
             });
 
             NavigationService.NavigateToAction = (viewModelType, parameter) =>
@@ -60,7 +61,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 }
                 else if (viewModelType == typeof(PaymentConfirmationViewModel))
                 {
-                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinHanhKhachVaChuyenBay)parameter);
+                    CurrentViewModel = new PaymentConfirmationViewModel((ThongTinHanhKhachVaChuyenBay)parameter, new EmailService(), new EmailTemplateService());
                 }
                 else if (viewModelType == typeof(HomePageViewModel))
                 {
@@ -68,7 +69,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                 }
                 else if (viewModelType == typeof(TicketManagementViewModel))
                 {
-                    CurrentViewModel = new TicketManagementViewModel(this);
+                    CurrentViewModel = new TicketManagementViewModel(this, new EmailService(), new EmailTemplateService());
                 }
             };
 
@@ -106,7 +107,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private void NavigateToTicketManagement()
         {
-            CurrentViewModel = new TicketManagementViewModel(this);
+            CurrentViewModel = new TicketManagementViewModel(this, new EmailService(), new EmailTemplateService());
         }
 
         [RelayCommand]

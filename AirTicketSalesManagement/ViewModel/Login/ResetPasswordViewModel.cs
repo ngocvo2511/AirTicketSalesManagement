@@ -1,5 +1,6 @@
 ﻿using AirTicketSalesManagement.Data;
 using AirTicketSalesManagement.Interface;
+using AirTicketSalesManagement.Services.EmailServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections;
@@ -11,8 +12,10 @@ namespace AirTicketSalesManagement.ViewModel.Login
 {
     public partial class ResetPasswordViewModel : BaseViewModel, INotifyDataErrorInfo
     {
+        private readonly IEmailService _emailService;
+        private readonly IOtpService _otpService;
+        private readonly EmailTemplateService _emailTemplateService;
         private AuthViewModel _auth;
-        private readonly IPasswordResetService _resetService;
         private readonly Dictionary<string, List<string>> _errors = new();
         private ToastViewModel _toast = new ToastViewModel();
         [ObservableProperty]
@@ -40,21 +43,25 @@ namespace AirTicketSalesManagement.ViewModel.Login
         private DispatcherTimer? _timer;
         private TimeSpan _timeLeft;
 
-        public ResetPasswordViewModel(IPasswordResetService resetService, AuthViewModel _auth, string Email)
+        public ResetPasswordViewModel(AuthViewModel _auth, string Email, IEmailService emailService, IOtpService otpService, EmailTemplateService emailTemplateService)
         {
-            _resetService = resetService;
+            _emailService = emailService;
+            _otpService = otpService;
+            _emailTemplateService = emailTemplateService;
             StartCountdown();
             this._auth = _auth;
             this.Email = Email;
-            _resetService.RequestResetAsync(Email).ContinueWith(t =>
+            string otp = _otpService.GenerateOtp(Email);
+            var emailContent = _emailTemplateService.BuildForgotPasswordOtp(otp);
+            _emailService.SendEmailAsync(Email, "Yêu cầu đặt lại mật khẩu", emailContent).ContinueWith(t =>
             {
                 if (t.IsFaulted)
                 {
-                    _=_toast.ShowToastAsync("Không thể gửi mã xác nhận. Vui lòng thử lại sau.", Brushes.OrangeRed);
+                    _ = _toast.ShowToastAsync("Không thể gửi mã xác nhận. Vui lòng thử lại sau.", Brushes.OrangeRed);
                 }
                 else
                 {
-                    _=_toast.ShowToastAsync("Mã xác nhận đã được gửi đến email của bạn.", Brushes.Green);
+                    _ = _toast.ShowToastAsync("Mã xác nhận đã được gửi đến email của bạn.", Brushes.Green);
                 }
             });
         }
@@ -81,7 +88,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                 return;
             }
 
-            bool isValid = await _resetService.VerifyResetCodeAsync(Email, Code);
+            bool isValid = _otpService.VerifyOtp(Email,Code);
             if (isValid)
             {
                 IsCodeValid = true;
@@ -96,13 +103,15 @@ namespace AirTicketSalesManagement.ViewModel.Login
         [RelayCommand]
         private async Task ResendCodeAsync()
         {
-            await _resetService.RequestResetAsync(Email!);
+            string otp = _otpService.GenerateOtp(Email);
+            var emailContent = _emailTemplateService.BuildForgotPasswordOtp(otp);
+            await _emailService.SendEmailAsync(Email, "Yêu cầu đặt lại mật khẩu", emailContent);
             ResetCountdown();
         }
 
         private void StartCountdown()
         {
-            _timeLeft = TimeSpan.FromMinutes(5);
+            _timeLeft = TimeSpan.FromMinutes(3);
             IsCodeExpired = false;
             CanResendCode = false;
             UpdateTimeLeftText();

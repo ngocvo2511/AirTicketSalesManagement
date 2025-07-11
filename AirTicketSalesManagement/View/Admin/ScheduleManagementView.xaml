@@ -899,11 +899,6 @@ RowStyle="{StaticResource DataGridRowStyle}"
             </StackPanel>
         </Grid>
 
-        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
 
         <!-- Popup Thêm Lịch Bay -->
         <Grid Background="#80000000" Grid.Row="0" Grid.RowSpan="4" Visibility="{Binding IsAddSchedulePopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -1631,6 +1626,12 @@ LostFocus="TimeTextBox_LostFocus"
                 </Grid>
             </Border>
         </Grid>
-
+        <Popup x:Name="NotificationPopup"
+           IsOpen="{Binding Notification.IsVisible}"
+           Placement="Center"
+           AllowsTransparency="True"
+           PopupAnimation="Fade">
+            <notification:NotificationControl DataContext="{Binding Notification}"/>
+        </Popup>
     </Grid>
 </UserControl>

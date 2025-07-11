@@ -14,25 +14,38 @@ using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Media;
 using System.Diagnostics;
+using AirTicketSalesManagement.Interface;
+using AirTicketSalesManagement.Services.EmailServices;
+using System.Windows.Threading;
 
 namespace AirTicketSalesManagement.ViewModel.Login
 {
     public partial class RegisterViewModel : BaseViewModel, INotifyDataErrorInfo
     {
+        private readonly IEmailService _emailService;
+        private readonly IOtpService _otpService;
+        private readonly EmailTemplateService _emailTemplateService;
         private readonly AuthViewModel _auth;
         private readonly Dictionary<string, List<string>> _errors = new();
         public ToastViewModel Toast { get; } = new ToastViewModel();
         private bool isFailed;
-
         [ObservableProperty]
         private string email;
-
         [ObservableProperty]
         private string password;
         [ObservableProperty]
         private string confirmPassword;
         [ObservableProperty]
         private string name;
+        [ObservableProperty]
+        private bool isOtpStep = false;
+        [ObservableProperty]
+        private string otpCode;
+        [ObservableProperty]
+        private string? timeLeftText;
+
+        private DispatcherTimer? _timer;
+        private TimeSpan _timeLeft;
 
         #region Error
         public async Task Validate()
@@ -51,7 +64,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                 AddError(nameof(Name), "Email vượt quá giới hạn cho phép");
             else if (!Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 AddError(nameof(Email), "Email không hợp lệ.");
-            
+
             if (string.IsNullOrWhiteSpace(Password))
                 AddError(nameof(Password), "Mật khẩu không được để trống.");
             else if (Password.Length > 100)
@@ -77,7 +90,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
             {
                 await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
             }
-            
+
         }
         public bool HasErrors => _errors.Any();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -112,7 +125,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
         #endregion
 
         #region add account
-       
+
         public async Task AddCustomer()
         {
             if (isFailed)
@@ -148,7 +161,7 @@ namespace AirTicketSalesManagement.ViewModel.Login
                 await Toast.ShowToastAsync("Không thể kết nối đến cơ sở dữ liệu", Brushes.OrangeRed);
                 return;
             }
-           
+
         }
         #endregion
         public RegisterViewModel()
@@ -156,9 +169,12 @@ namespace AirTicketSalesManagement.ViewModel.Login
             // Default constructor
         }
 
-        public RegisterViewModel(AuthViewModel auth)
+        public RegisterViewModel(AuthViewModel auth, IEmailService emailService, IOtpService otpService, EmailTemplateService emailTemplateService)
         {
             _auth = auth;
+            _emailService = emailService;
+            _otpService = otpService;
+            _emailTemplateService = emailTemplateService;
         }
 
         [RelayCommand]
@@ -166,14 +182,103 @@ namespace AirTicketSalesManagement.ViewModel.Login
         {
             await Validate();
             if (HasErrors) return;
-            await AddCustomer();
-            if (!isFailed) 
+            IsOtpStep = true;
+            string otp = _otpService.GenerateOtp(Email);
+            var emailContent = _emailTemplateService.BuildRegisterOtp(otp);
+            try
             {
-                await Toast.ShowToastAsync("Đăng kí tài khoản thành công");
+                StartCountdown();
+                await _emailService.SendEmailAsync(Email, "Yêu cầu đăng kí tài khoản", emailContent);
+                await Toast.ShowToastAsync("Mã xác nhận đã được gửi đến email của bạn.", Brushes.Green);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await Toast.ShowToastAsync("Không thể gửi mã xác nhận. Vui lòng thử lại sau.", Brushes.OrangeRed);
+                return;
             }
         }
 
         [RelayCommand]
         private void ShowLogin() => _auth.NavigateToLogin();
+
+        [RelayCommand]
+        private async Task ConfirmOtp()
+        {
+            if (string.IsNullOrWhiteSpace(OtpCode))
+            {
+                AddError(nameof(OtpCode), "Mã OTP không được để trống.");
+                return;
+            }
+            if (_otpService.VerifyOtp(Email, OtpCode))
+            {
+                await AddCustomer();
+                if (isFailed) return;
+                ResetFields();
+                await Toast.ShowToastAsync("Đăng kí thành công. Vui lòng đăng nhập.", Brushes.Green);
+            }
+            else
+            {
+                AddError(nameof(OtpCode), "Mã OTP không hợp lệ hoặc đã hết hạn.");
+            }
+        }
+        [RelayCommand]
+        private async Task ResendOtp()
+        {
+            string otp = _otpService.GenerateOtp(Email);
+            var emailContent = _emailTemplateService.BuildRegisterOtp(otp);
+            try
+            {
+                await _emailService.SendEmailAsync(Email, "Yêu cầu đặt lại mật khẩu", emailContent);
+                await Toast.ShowToastAsync("Mã xác nhận đã được gửi đến email của bạn.", Brushes.Green);
+                ResetCountdown();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                await Toast.ShowToastAsync("Không thể gửi mã xác nhận. Vui lòng thử lại sau.", Brushes.OrangeRed);
+            }
+        }
+        private void StartCountdown()
+        {
+            _timeLeft = TimeSpan.FromMinutes(3);
+            UpdateTimeLeftText();
+
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            _timer.Tick += (_, _) =>
+            {
+                _timeLeft = _timeLeft.Subtract(TimeSpan.FromSeconds(1));
+                UpdateTimeLeftText();
+
+                if (_timeLeft <= TimeSpan.Zero)
+                {
+                    _timer?.Stop();
+                    TimeLeftText = "Mã xác nhận đã hết hạn.";
+                }
+            };
+            _timer.Start();
+        }
+
+        private void ResetCountdown()
+        {
+            _timer?.Stop();
+            StartCountdown();
+        }
+
+        private void UpdateTimeLeftText()
+        {
+            TimeLeftText = $"Mã hết hạn sau: {_timeLeft.Minutes:D2}:{_timeLeft.Seconds:D2}";
+        }
+        private void ResetFields()
+        {
+            Email = string.Empty;
+            Password = string.Empty;
+            ConfirmPassword = string.Empty;
+            Name = string.Empty;
+            OtpCode = string.Empty;
+            IsOtpStep = false;
+            TimeLeftText = string.Empty;
+            _timer?.Stop();
+        }
     }
 }

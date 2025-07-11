@@ -32,11 +32,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <notification:NotificationControl x:Name="NotificationControl" Grid.Row="0" Grid.RowSpan="4"
-            DataContext="{Binding Notification}"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Panel.ZIndex="1000"/>
+        
 
         <!-- Header -->
         <Grid Grid.Row="0" Margin="15 15 15 15">
@@ -484,10 +480,10 @@
                                                             <DataTrigger Binding="{Binding TrangThai}" Value="Đã thanh toán">
                                                                 <Setter Property="Foreground" Value="#059669"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chờ thanh toán (Tiền mặt)">
+                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chưa thanh toán (Tiền mặt)">
                                                                 <Setter Property="Foreground" Value="#2563EB"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chờ thanh toán (Online)">
+                                                            <DataTrigger Binding="{Binding TrangThai}" Value="Chưa thanh toán (Online)">
                                                                 <Setter Property="Foreground" Value="#2563EB"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
@@ -503,6 +499,13 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
-        </ScrollViewer> 
+        </ScrollViewer>
+        <Popup x:Name="NotificationPopup"
+           IsOpen="{Binding Notification.IsVisible}"
+           Placement="Center"
+           AllowsTransparency="True"
+           PopupAnimation="Fade">
+            <notification:NotificationControl DataContext="{Binding Notification}"/>
+        </Popup>
     </Grid>
 </UserControl>

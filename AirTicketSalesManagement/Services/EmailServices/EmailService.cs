@@ -1,22 +1,21 @@
-﻿using AirTicketSalesManagement.Interface;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using System.Windows;
-using System.Diagnostics;
+using AirTicketSalesManagement.Interface;
 
-namespace AirTicketSalesManagement.ViewModel.Login
+namespace AirTicketSalesManagement.Services.EmailServices
 {
-    public class DummyPasswordResetService : IPasswordResetService
+    public class EmailService : IEmailService
     {
-        private Dictionary<string, string> _codeStorage = new();
         private readonly SmtpSettings _smtp;
-        public DummyPasswordResetService()
+
+        public EmailService()
         {
             var configuration = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -24,14 +23,10 @@ namespace AirTicketSalesManagement.ViewModel.Login
             .Build();
             _smtp = configuration.GetSection("Smtp").Get<SmtpSettings>() ?? throw new InvalidOperationException("SMTP settings not found in configuration.");
         }
-
-        public async Task RequestResetAsync(string email)
+        public async Task SendEmailAsync(string to, string subject, string body)
         {
-            string code = GenerateCode();
-            _codeStorage[email] = code;
-
             var fromAddress = new MailAddress(_smtp.User, "Air Ticket Support");
-            var toAddress = new MailAddress(email);
+            var toAddress = new MailAddress(to);
             using var smtp = new SmtpClient
             {
                 Host = _smtp.Host,
@@ -39,13 +34,14 @@ namespace AirTicketSalesManagement.ViewModel.Login
                 EnableSsl = _smtp.EnableSsl,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(_smtp.User, _smtp.Password)
+                Credentials = new NetworkCredential(_smtp.User, _smtp.Password),
+                
             };
-
             using var msg = new MailMessage(fromAddress, toAddress)
             {
-                Subject = "Mã xác nhận đặt lại mật khẩu",
-                Body = $"Mã xác nhận của bạn là: {code}"
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
             };
 
             try
@@ -65,24 +61,5 @@ namespace AirTicketSalesManagement.ViewModel.Login
                 return;
             }
         }
-
-        public Task<bool> VerifyResetCodeAsync(string email, string code)
-        {
-            return Task.FromResult(_codeStorage.TryGetValue(email, out var storedCode) && storedCode == code);
-        }
-
-        public Task<bool> ResetPasswordAsync(string email, string newPassword)
-        {
-            // Cập nhật mật khẩu trong CSDL ở đây
-            Console.WriteLine($"[DEV] Cập nhật mật khẩu mới cho {email}: {newPassword}");
-            return Task.FromResult(true);
-        }
-
-        private string GenerateCode()
-        {
-            Random rnd = new();
-            return rnd.Next(100000, 999999).ToString();
-        }
     }
-
 }
