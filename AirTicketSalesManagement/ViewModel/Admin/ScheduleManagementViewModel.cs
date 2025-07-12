@@ -417,6 +417,13 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 using (var context = new AirTicketDbContext())
                 {
+                    TimeSpan thoiGianBayToiThieu = TimeSpan.Zero;
+                    var quyDinh = context.Quydinhs.FirstOrDefault();
+                    if (quyDinh != null)
+                    {
+                        thoiGianBayToiThieu = TimeSpan.FromMinutes(quyDinh.ThoiGianBayToiThieu.Value);
+                    }
+
                     int soLichBayTao = 0;
 
                     for (var ngay = AddTuNgay.Value.Date; ngay <= AddDenNgay.Value.Date; ngay = ngay.AddDays(1))
@@ -433,6 +440,13 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                             return;
                         }
 
+                        if (thoiGianBay < thoiGianDung + thoiGianBayToiThieu)
+                        {
+                            await Notification.ShowNotificationAsync(
+                                $"Thời gian bay tối thiểu là {thoiGianBayToiThieu}",
+                                NotificationType.Warning);
+                            return;
+                        }
                         var ngayGioDi = ngay + gioDi;
                         var ngayGioDen = ngayGioDi + thoiGianBay;
 
