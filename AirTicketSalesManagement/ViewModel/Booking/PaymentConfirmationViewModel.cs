@@ -150,6 +150,24 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         [RelayCommand]
         private async Task ProcessPayment()
         {
+            using (var context = new AirTicketDbContext())
+            {
+                var datVe = await context.Datves
+                            .Include(b => b.MaLbNavigation)
+                            .FirstOrDefaultAsync(dv => dv.MaDv == thongTinChuyenBayDuocChon.Id);
+                if(datVe != null && datVe.MaLbNavigation != null && datVe.MaLbNavigation.GioDi != null)
+                {
+                    var quiDinh = context.Quydinhs.FirstOrDefault();
+                    int tgDatVe = quiDinh?.TgdatVeChamNhat ?? 1;
+                    if (DateTime.Now > datVe.MaLbNavigation.GioDi.Value.AddDays(tgDatVe))
+                    {
+                        await Notification.ShowNotificationAsync(
+                            "Thời gian đặt vé đã hết hạn. Vui lòng chọn chuyến bay khác.",
+                            NotificationType.Error);
+                        NavigationService.NavigateTo<Booking.FlightScheduleSearchViewModel>();
+                    }
+                }                   
+            }
             if (IsVNPaySelected)
             {
                 await ProcessVNPayPayment();
@@ -263,32 +281,38 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             try
             {
                 SaveBookingWithPendingStatus("Tiền mặt");
+
                 await Notification.ShowNotificationAsync(
                     "Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
                     NotificationType.Information);
-                try
+                await Task.Delay(100);
+                NavigateToHistory();
+                _ = Task.Run(async () =>
                 {
-                    using(var context = new AirTicketDbContext())
+                    try
                     {
-                        var datVe = context.Datves.Include(b=>b.MaLbNavigation).FirstOrDefault(dv => dv.MaDv == thongTinChuyenBayDuocChon.Id);
+                        using var context = new AirTicketDbContext();
+                        var datVe = await context.Datves
+                            .Include(b => b.MaLbNavigation)
+                            .FirstOrDefaultAsync(dv => dv.MaDv == thongTinChuyenBayDuocChon.Id);
+
                         if (datVe != null)
                         {
                             string soHieucb = datVe.MaLbNavigation?.SoHieuCb ?? "";
                             DateTime departureTime = datVe.MaLbNavigation?.GioDi ?? DateTime.Now;
                             var emailContent = _templateService.BuildBookingCash(
-                                soHieucb,
-                                departureTime,
-                                DateTime.Now,
-                                TotalPrice);
-                            await _emailService.SendEmailAsync(datVe.Email ?? UserSession.Current.Email,"Đặt vé thành công",emailContent);
+                                soHieucb, departureTime, DateTime.Now, TotalPrice);
+
+                            await _emailService.SendEmailAsync(
+                                datVe.Email ?? UserSession.Current.Email,
+                                "Đặt vé thành công", emailContent);
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[ProcessCashPayment] Error sending email: {ex.Message}");
-                }
-                NavigateToHistory();
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[ProcessCashPayment] Error sending email: {ex.Message}");
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -297,6 +321,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                     NotificationType.Error);
             }
         }
+
 
         private void NavigateToHistory()
         {
