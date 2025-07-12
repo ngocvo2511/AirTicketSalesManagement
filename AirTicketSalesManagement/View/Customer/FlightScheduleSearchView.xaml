@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:AirTicketSalesManagement.View.Customer"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="980"
             >
@@ -184,6 +185,7 @@
                                          Margin="0,0,15,5"/>
 
                             <DatePicker Grid.Column="1"
+                            DisplayDateStart="{Binding MinBookingDate}"            
                             Height="45"
                                 Width="320"
                                 HorizontalAlignment="Left"

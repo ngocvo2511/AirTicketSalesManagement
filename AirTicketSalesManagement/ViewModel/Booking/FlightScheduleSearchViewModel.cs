@@ -49,6 +49,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         [ObservableProperty]
         private ObservableCollection<string> sanBayList = new();
 
+        [ObservableProperty]
+        private DateTime minBookingDate;
+
 
         // Danh sách dùng để binding cho điểm đi (lọc bỏ điểm đến)
         public ObservableCollection<string> DiemDiList =>
@@ -78,9 +81,11 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                             .OrderBy(display => display)
                             .ToList();
                 SanBayList = new ObservableCollection<string>(danhSach);
+                var quiDinh = context.Quydinhs.FirstOrDefault();
+                int tgDatVe = quiDinh?.TgdatVeChamNhat ?? 1;
+                MinBookingDate = DateTime.Now.AddDays(tgDatVe);
             }
         }
-
 
 
         // Hành khách properties
@@ -297,6 +302,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
             using (var context = new AirTicketDbContext())
             {
+                var quiDinh = context.Quydinhs.FirstOrDefault();
+                int tgDatVe = quiDinh?.TgdatVeChamNhat ?? 1;
                 // Truy vấn danh sách chuyến bay
                 var flights = context.Lichbays
                     .Include(lb => lb.SoHieuCbNavigation) // Bao gồm thông tin chuyến bay
@@ -306,7 +313,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                     .Where(lb =>
                         lb.SoHieuCbNavigation.SbdiNavigation.MaSb == ExtractMaSB(DiemDi) &&
                         lb.SoHieuCbNavigation.SbdenNavigation.MaSb == ExtractMaSB(DiemDen) &&
-                        lb.GioDi.Value.Date == NgayDi.Value.Date)
+                        lb.GioDi.Value.Date == NgayDi.Value.Date && DateTime.Now<=lb.GioDi.Value.AddDays(tgDatVe))
                     .ToList();
 
                 foreach (var flight in flights)

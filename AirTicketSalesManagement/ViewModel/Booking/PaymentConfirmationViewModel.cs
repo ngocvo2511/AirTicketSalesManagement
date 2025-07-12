@@ -150,6 +150,24 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         [RelayCommand]
         private async Task ProcessPayment()
         {
+            using (var context = new AirTicketDbContext())
+            {
+                var datVe = await context.Datves
+                            .Include(b => b.MaLbNavigation)
+                            .FirstOrDefaultAsync(dv => dv.MaDv == thongTinChuyenBayDuocChon.Id);
+                if(datVe != null && datVe.MaLbNavigation != null && datVe.MaLbNavigation.GioDi != null)
+                {
+                    var quiDinh = context.Quydinhs.FirstOrDefault();
+                    int tgDatVe = quiDinh?.TgdatVeChamNhat ?? 1;
+                    if (DateTime.Now > datVe.MaLbNavigation.GioDi.Value.AddDays(tgDatVe))
+                    {
+                        await Notification.ShowNotificationAsync(
+                            "Thời gian đặt vé đã hết hạn. Vui lòng chọn chuyến bay khác.",
+                            NotificationType.Error);
+                        NavigationService.NavigateTo<Booking.FlightScheduleSearchViewModel>();
+                    }
+                }                   
+            }
             if (IsVNPaySelected)
             {
                 await ProcessVNPayPayment();
