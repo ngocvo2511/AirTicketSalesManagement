@@ -9,7 +9,7 @@
              xmlns:converter="clr-namespace:AirTicketSalesManagement.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="980"
-             >
+             x:Name="RootControl">
 
     <Grid>
         
@@ -150,7 +150,9 @@
                                                     FontSize="16"
                                                     materialDesign:HintAssist.Hint="Ngày sinh"
                                                     Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                                                    SelectedDate="{Binding DateOfBirth}"/>
+                                                    SelectedDate="{Binding DateOfBirth}"
+                                                    DisplayDateStart="{Binding DataContext.NgayBatDauNguoiLon, ElementName=RootControl}"  
+                                                    DisplayDateEnd="{Binding DataContext.NgayKetThucNguoiLon, ElementName=RootControl}"/>
 
                                         <!-- CCCD/Hộ chiếu -->
                                         <TextBox Grid.Column="1" Grid.Row="1"
@@ -195,7 +197,9 @@
                                                     FontSize="16"
                                                     materialDesign:HintAssist.Hint="Ngày sinh"
                                                     Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                                                    SelectedDate="{Binding DateOfBirth}"/>
+                                                    SelectedDate="{Binding DateOfBirth}"
+                                                    DisplayDateStart="{Binding DataContext.NgayBatDauTreEm, ElementName=RootControl}"  
+                                                    DisplayDateEnd="{Binding DataContext.NgayKetThucTreEm, ElementName=RootControl}"/>
                                     </Grid>
 
                                     <!-- Template cho Em bé -->
@@ -232,7 +236,9 @@
                                                     FontSize="16"
                                                     materialDesign:HintAssist.Hint="Ngày sinh"
                                                     Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                                                    SelectedDate="{Binding DateOfBirth}"/>
+                                                    SelectedDate="{Binding DateOfBirth}"
+                                                    DisplayDateStart="{Binding DataContext.NgayBatDauEmBe, ElementName=RootControl}"  
+                                                    DisplayDateEnd="{Binding DataContext.NgayKetThucEmBe, ElementName=RootControl}"/>
 
                                         <!-- Bay cùng -->
                                         <Grid Grid.Column="1" Grid.Row="1" Margin="10,0,0,15">

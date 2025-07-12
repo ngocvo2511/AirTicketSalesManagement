@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using AirTicketSalesManagement.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Globalization;
+using AirTicketSalesManagement.Data;
 
 namespace AirTicketSalesManagement.ViewModel.Booking
 {
@@ -31,6 +32,18 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         public DateTime thoiGian;
         [ObservableProperty]
         public string flightSummary;
+        [ObservableProperty]
+        public DateTime ngayBatDauNguoiLon;
+        [ObservableProperty]
+        public DateTime ngayKetThucNguoiLon;
+        [ObservableProperty]
+        public DateTime ngayBatDauTreEm;
+        [ObservableProperty]
+        public DateTime ngayKetThucTreEm;
+        [ObservableProperty]
+        public DateTime ngayBatDauEmBe;
+        [ObservableProperty]
+        public DateTime ngayKetThucEmBe;
 
         public ThongTinChuyenBayDuocChon ThongTinChuyenBayDuocChon { get; set; }
 
@@ -55,6 +68,24 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             FlightSummary = $"{DiemDi} đến {DiemDen} - {ThoiGian.ToString("dddd, dd 'tháng' MM, yyyy", new CultureInfo("vi-VN"))}";
             // Khởi tạo danh sách hành khách dựa trên số lượng người lớn, trẻ em, em bé
             InitializePassengerList(selectedFlightInfo.Flight.NumberAdults, selectedFlightInfo.Flight.NumberChildren, selectedFlightInfo.Flight.NumberInfants); // Thay bằng dữ liệu thực tế nếu cần
+
+            using (var context = new AirTicketDbContext())
+            {
+                var quyDinh = context.Quydinhs.FirstOrDefault();
+                if (quyDinh != null)
+                {
+                    var today = DateTime.Today;
+                    
+                    NgayBatDauEmBe = today.AddYears(-quyDinh.TuoiToiDaSoSinh.Value); // Ví dụ: sơ sinh <= 2 tuổi → từ hôm nay lùi 2 năm
+                    NgayKetThucTreEm = NgayBatDauEmBe.AddDays(-1);               // Trẻ em bắt đầu từ sau em bé
+
+                    NgayBatDauTreEm = today.AddYears(-quyDinh.TuoiToiDaTreEm.Value); // Ví dụ: trẻ em <= 12 tuổi → lùi 12 năm
+                    NgayKetThucNguoiLon = NgayBatDauTreEm.AddDays(-1);           // Người lớn từ sau trẻ em
+
+                    NgayBatDauNguoiLon = today.AddYears(-100);                 // Giới hạn tối đa 100 tuổi
+                    NgayKetThucEmBe = today;                                     // Sơ sinh: từ hiện tại trở về trước
+                }
+            }
         }
 
         public PassengerInformationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay) : this(thongTinHanhKhachVaChuyenBay.FlightInfo)
