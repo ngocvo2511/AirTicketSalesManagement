@@ -39,13 +39,11 @@ namespace AirTicketSalesManagementTests.ViewModel.Admin
         public void AddFlight()
         {
             _viewModel.AddSoHieuCB = "heheflight";
-            _viewModel.AddThoiGianBay = "2.0";
             _viewModel.DanhSachSBTG = new ObservableCollection<SBTG> { new SBTG() };
             _viewModel.AddFlightCommand.Execute(null);
 
             Assert.IsTrue(_viewModel.IsAddPopupOpen);
             Assert.IsTrue(string.IsNullOrEmpty(_viewModel.AddSoHieuCB));
-            Assert.IsTrue(string.IsNullOrEmpty(_viewModel.AddThoiGianBay));
             Assert.IsNotNull(_viewModel.DanhSachSBTG);
             Assert.AreEqual(0, _viewModel.DanhSachSBTG.Count, "DanhSachSBTG should be cleared");
         }

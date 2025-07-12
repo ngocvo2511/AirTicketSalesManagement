@@ -63,8 +63,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty]
         private string addHangHangKhong;
         [ObservableProperty]
-        private string addThoiGianBay;
-        [ObservableProperty]
         private string addTTKhaiThac;
         [ObservableProperty]
         private ObservableCollection<SBTG> danhSachSBTG;
@@ -104,8 +102,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private string editSoHieuCB;
         [ObservableProperty]
         private string editHangHangKhong;
-        [ObservableProperty]
-        private string editThoiGianBay;
         [ObservableProperty]
         private string editTTKhaiThac;
         [ObservableProperty]
@@ -273,7 +269,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             AddSoHieuCB = string.Empty;
             AddHangHangKhong = string.Empty;
             AddTTKhaiThac = string.Empty;
-            AddThoiGianBay = string.Empty;
             DanhSachSBTG = new ObservableCollection<SBTG>();
         }
 
@@ -413,7 +408,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 if (string.IsNullOrWhiteSpace(AddDiemDi) || string.IsNullOrWhiteSpace(AddDiemDen) ||
                     string.IsNullOrWhiteSpace(AddSoHieuCB) || string.IsNullOrWhiteSpace(AddHangHangKhong) ||
-                    string.IsNullOrWhiteSpace(AddTTKhaiThac) || string.IsNullOrWhiteSpace(AddThoiGianBay))
+                    string.IsNullOrWhiteSpace(AddTTKhaiThac))
                 {
                     await Notification.ShowNotificationAsync("Vui lòng điền đầy đủ thông tin chuyến bay.", NotificationType.Warning);
                     return;
@@ -436,7 +431,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         SbdenNavigation = context.Sanbays.FirstOrDefault(sb => sb.MaSb == ExtractMaSB(AddDiemDen)),
                         HangHangKhong = AddHangHangKhong,
                         TtkhaiThac = AddTTKhaiThac,
-                        SoGioBay = float.Parse(AddThoiGianBay)
                     };
 
                     context.Chuyenbays.Add(newFlight);
@@ -494,7 +488,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             EditHangHangKhong = SelectedFlight?.HangHangKhong ?? string.Empty;
             EditSoHieuCB = SelectedFlight?.SoHieuCb ?? string.Empty;
             EditTTKhaiThac = SelectedFlight?.TtkhaiThac ?? string.Empty;
-            EditThoiGianBay = SelectedFlight?.SoGioBay.ToString() ?? string.Empty;
             foreach (var sbtg in SelectedFlight?.Sanbaytrunggians ?? Enumerable.Empty<Sanbaytrunggian>())
             {
                 DanhSachSBTG.Add(new SBTG
@@ -586,7 +579,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 if (string.IsNullOrWhiteSpace(EditDiemDi) || string.IsNullOrWhiteSpace(EditDiemDen) ||
                     string.IsNullOrWhiteSpace(EditSoHieuCB) || string.IsNullOrWhiteSpace(EditHangHangKhong) ||
-                    string.IsNullOrWhiteSpace(EditTTKhaiThac) || string.IsNullOrWhiteSpace(EditThoiGianBay))
+                    string.IsNullOrWhiteSpace(EditTTKhaiThac))
                 {
                     await Notification.ShowNotificationAsync("Vui lòng điền đầy đủ thông tin chuyến bay.", NotificationType.Warning);
                     return;
@@ -619,7 +612,6 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     existingFlight.Sbden = existingFlight.SbdenNavigation?.MaSb;
                     existingFlight.HangHangKhong = EditHangHangKhong;
                     existingFlight.TtkhaiThac = EditTTKhaiThac;
-                    existingFlight.SoGioBay = double.Parse(EditThoiGianBay);
 
                     // Xóa sân bay trung gian cũ
                     context.Sanbaytrunggians.RemoveRange(existingFlight.Sanbaytrunggians);

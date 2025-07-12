@@ -69,6 +69,32 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
         }
 
+        public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay)
+        {
+            ThongTinHanhKhachVaChuyenBay = thongTinHanhKhachVaChuyenBay;
+            thongTinChuyenBayDuocChon = thongTinHanhKhachVaChuyenBay.FlightInfo;
+            FlightCode = $"{thongTinChuyenBayDuocChon.Flight.MaSBDi} - {thongTinChuyenBayDuocChon.Flight.MaSBDen} ({thongTinChuyenBayDuocChon.Flight.HangHangKhong})";
+            SelectedTicketClass = thongTinChuyenBayDuocChon.TicketClass;
+            Flight = thongTinChuyenBayDuocChon.Flight;
+            AdultSummary = $"{Flight.NumberAdults} Người lớn";
+            ChildSummary = $"{Flight.NumberChildren} Trẻ em";
+            InfantSummary = $"{Flight.NumberInfants} Em bé";
+            HasChildren = Flight.NumberChildren > 0;
+            HasInfants = Flight.NumberInfants > 0;
+            AdultTotalPrice = Flight.NumberAdults * SelectedTicketClass.GiaVe;
+            ChildTotalPrice = Flight.NumberChildren * SelectedTicketClass.GiaVe;
+            InfantTotalPrice = Flight.NumberInfants * SelectedTicketClass.GiaVe;
+            TaxAndFees = 0;
+            TotalPrice = (Flight.NumberAdults + Flight.NumberChildren + Flight.NumberInfants) * SelectedTicketClass.GiaVe + TaxAndFees;
+            vnpayPayment = new VnpayPayment();
+            LogoUrl = GetAirlineLogo(Flight.HangHangKhong);
+
+            DiemDi = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.DiemDi;
+            DiemDen = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.DiemDen;
+            thoiGian = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NgayDi;
+            FlightSummary = $"{DiemDi} đến {DiemDen} - {ThoiGian.ToString("dddd, dd 'tháng' MM, yyyy", new CultureInfo("vi-VN"))}";
+        }
+
         public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay, IEmailService emailService, EmailTemplateService emailTemplateService)
         {
             _emailService = emailService;
@@ -151,8 +177,8 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 if (!string.IsNullOrEmpty(paymentUrl))
                 {
                     // Lưu thông tin đặt vé tạm thời với trạng thái "Chờ thanh toán"
-                    SaveBookingWithPendingStatusAsync("Online");
-                    await Task.Delay(1000); // Đợi một chút để đảm bảo lưu thành công
+                    SaveBookingWithPendingStatus("Online");
+                    await Task.Delay(500); // Đợi một chút để đảm bảo lưu thành công
                     WeakReferenceMessenger.Default.Send(new PaymentRequestedMessage(paymentUrl));
                     Debug.WriteLine($"[ProcessVNPayPayment] Payment URL created successfully: {paymentUrl}");
                 }
@@ -175,7 +201,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         }
 
 
-        private async Task SaveBookingWithPendingStatusAsync(string paymentType)
+        private void SaveBookingWithPendingStatus(string paymentType)
         {
             int idDatVe = thongTinChuyenBayDuocChon.Id;            
             Debug.WriteLine($"[SaveBookingWithPendingStatus] Saving booking with ID: {idDatVe}, PaymentType: {paymentType}");
@@ -197,19 +223,6 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 datVe.TtdatVe = $"Chưa thanh toán ({paymentType})"; // chuyển trạng thái
                 datVe.ThoiGianDv = DateTime.Now; // cập nhật lại thời gian giữ chỗ
 
-                // Cập nhật MaKh hoặc MaNv dựa trên loại user
-                if (!UserSession.Current.isStaff)
-                {
-                    datVe.MaKh = UserSession.Current.CustomerId;
-                    datVe.MaNv = null;
-                    Debug.WriteLine($"[SaveBookingWithPendingStatus] Updated MaKh to: {datVe.MaKh}");
-                }
-                else
-                {
-                    datVe.MaNv = UserSession.Current.StaffId;
-                    datVe.MaKh = null;
-                    Debug.WriteLine($"[SaveBookingWithPendingStatus] Updated MaNv to: {datVe.MaNv}");
-                }
 
                 context.SaveChanges();
                 Debug.WriteLine($"[SaveBookingWithPendingStatus] Booking saved successfully with status: {datVe.TtdatVe}");
@@ -249,7 +262,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
             try
             {
-                SaveBookingWithPendingStatusAsync("Tiền mặt");
+                SaveBookingWithPendingStatus("Tiền mặt");
                 await Notification.ShowNotificationAsync(
                     "Đặt vé thành công! Vui lòng thanh toán tiền mặt tại quầy.",
                     NotificationType.Information);
@@ -302,7 +315,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 
                 using (var context = new AirTicketDbContext())
                 {
-                    Datve datVe = null;
+                    Datve datVe;
 
                     // Kiểm tra UserSession có hợp lệ không
                     if (UserSession.Current == null)

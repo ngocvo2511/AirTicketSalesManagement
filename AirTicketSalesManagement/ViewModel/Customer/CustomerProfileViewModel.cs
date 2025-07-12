@@ -182,8 +182,13 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                 EditSoDienThoai = SoDienThoai;
                                 return;
                             }
+                            khachhang.SoDt = EditSoDienThoai;
                         }
-                        khachhang.SoDt = EditSoDienThoai;
+                        else
+                        {
+                            khachhang.SoDt = null;
+                        }
+                        
 
                         // Căn cước: nếu có nhập thì kiểm tra độ dài hợp lệ (ví dụ 9 hoặc 12 số)
                         if (!string.IsNullOrWhiteSpace(EditCanCuoc))
@@ -194,8 +199,13 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                 EditCanCuoc = CanCuoc;
                                 return;
                             }
+                            khachhang.Cccd = EditCanCuoc;
                         }
-                        khachhang.Cccd = EditCanCuoc;
+                        else
+                        {
+                            khachhang.Cccd = null;
+                        }
+                        
 
                         // Giới tính: nếu có nhập thì lưu
                         if (!string.IsNullOrWhiteSpace(EditGioiTinh))

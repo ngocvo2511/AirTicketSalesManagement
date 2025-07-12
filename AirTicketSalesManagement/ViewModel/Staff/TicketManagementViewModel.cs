@@ -61,6 +61,11 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private bool isEmpty;
 
         public TicketManagementViewModel() { }
+        public TicketManagementViewModel(BaseViewModel parent)
+        {
+            this.parent = parent;
+        }
+
         public TicketManagementViewModel(BaseViewModel parent, IEmailService emailService, EmailTemplateService templateService)
         {
             _emailService = emailService;
@@ -294,7 +299,7 @@ namespace AirTicketSalesManagement.ViewModel.Staff
                                 }
                             }
                             booking.TtdatVe = "Đã hủy";
-                            await context.SaveChangesAsync();                            
+                            await context.SaveChangesAsync();
                             ve.TrangThai = "Đã hủy";
                             OnPropertyChanged(nameof(HistoryBooking));
                             await notification.ShowNotificationAsync(
