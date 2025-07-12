@@ -52,6 +52,13 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         [ObservableProperty]
         private DateTime minBookingDate;
 
+        [ObservableProperty]
+        private int tuoiToiDaSoSinh = 2;
+        [ObservableProperty]
+        private int tuoiToiDaTreEm = 12;
+
+        public string DoTuoiTreEmText { get; set; }
+
 
         // Danh sách dùng để binding cho điểm đi (lọc bỏ điểm đến)
         public ObservableCollection<string> DiemDiList =>
@@ -75,6 +82,10 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
             using (var context = new AirTicketDbContext()) // Hoặc dùng SqlConnection nếu ADO.NET
             {
+                var quyDinh = context.Quydinhs.FirstOrDefault();
+                TuoiToiDaSoSinh = quyDinh.TuoiToiDaSoSinh ?? 2;
+                TuoiToiDaTreEm = quyDinh.TuoiToiDaTreEm ?? 12;
+                DoTuoiTreEmText = $"Từ {TuoiToiDaSoSinh} đến {TuoiToiDaTreEm} tuổi";
                 var danhSach = context.Sanbays
                             .AsEnumerable() // chuyển sang LINQ to Objects
                             .Select(sb => $"{sb.ThanhPho} ({sb.MaSb}), {sb.QuocGia}")
@@ -313,7 +324,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                     .Where(lb =>
                         lb.SoHieuCbNavigation.SbdiNavigation.MaSb == ExtractMaSB(DiemDi) &&
                         lb.SoHieuCbNavigation.SbdenNavigation.MaSb == ExtractMaSB(DiemDen) &&
-                        lb.GioDi.Value.Date == NgayDi.Value.Date && DateTime.Now<=lb.GioDi.Value.AddDays(tgDatVe))
+                        lb.GioDi.Value.Date == NgayDi.Value.Date && DateTime.Now <= lb.GioDi.Value.AddDays(-tgDatVe))
                     .ToList();
 
                 foreach (var flight in flights)

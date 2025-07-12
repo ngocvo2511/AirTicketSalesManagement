@@ -22,4 +22,7 @@ public partial class Chuyenbay
     public virtual Sanbay? SbdenNavigation { get; set; }
 
     public virtual Sanbay? SbdiNavigation { get; set; }
+
+    public int SoSBTG => Sanbaytrunggians?.Count ?? 0;
+
 }

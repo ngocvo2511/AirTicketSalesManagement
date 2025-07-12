@@ -287,6 +287,21 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [RelayCommand]
         public async void AddIntermediateAirport()
         {
+            using (var context = new AirTicketDbContext())
+            {
+                int soSBTG = 0;
+                var quyDinh = context.Quydinhs.FirstOrDefault();
+
+                if (quyDinh != null)
+                {
+                    soSBTG = quyDinh.SoSanBayTgtoiDa.Value;
+                }
+                if (DanhSachSBTG.Count >= soSBTG)
+                {
+                    await Notification.ShowNotificationAsync($"Số sân bay trung gian tối đa là: {soSBTG}", NotificationType.Warning);
+                    return;
+                }
+            }
             try
             {
                 // Tạo sân bay trung gian mới với STT tự động tăng
@@ -421,6 +436,33 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     {
                         await Notification.ShowNotificationAsync("Số hiệu chuyến bay đã tồn tại. Vui lòng nhập số hiệu khác.", NotificationType.Warning);
                         return;
+                    }
+
+                    int thoiGianDungMin = 0;
+                    int thoiGianDungMax = int.MaxValue;
+                    var quyDinh = context.Quydinhs.FirstOrDefault();
+
+                    if (quyDinh != null)
+                    {
+                        thoiGianDungMin = quyDinh.TgdungMin.Value;
+                        thoiGianDungMax = quyDinh.TgdungMax.Value;
+                    }
+
+                    foreach (var sbtg in DanhSachSBTG)
+                    {
+                        if (!string.IsNullOrWhiteSpace(sbtg.MaSBTG))
+                        {
+                            if (thoiGianDungMin > sbtg.ThoiGianDung)
+                            {
+                                await Notification.ShowNotificationAsync($"Thời gian dừng tối thiểu là: {thoiGianDungMin} phút", NotificationType.Warning);
+                                return;
+                            }
+                            else if (thoiGianDungMax < sbtg.ThoiGianDung)
+                            {
+                                await Notification.ShowNotificationAsync($"Thời gian dừng tối đa là: {thoiGianDungMax} phút", NotificationType.Warning);
+                                return;
+                            }
+                        }
                     }
 
                     // Tạo chuyến bay mới
@@ -655,6 +697,21 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [RelayCommand]
         public async Task EditIntermediateAirportAsync()
         {
+            using (var context = new AirTicketDbContext())
+            {
+                int soSBTG = 0;
+                var quyDinh = context.Quydinhs.FirstOrDefault();
+
+                if (quyDinh != null)
+                {
+                    soSBTG = quyDinh.SoSanBayTgtoiDa.Value;
+                }
+                if (DanhSachSBTG.Count >= soSBTG)
+                {
+                    await Notification.ShowNotificationAsync($"Số sân bay trung gian tối đa là: {soSBTG}", NotificationType.Warning);
+                    return;
+                }
+            }
             try
             {
                 // Tạo sân bay trung gian mới với STT tự động tăng

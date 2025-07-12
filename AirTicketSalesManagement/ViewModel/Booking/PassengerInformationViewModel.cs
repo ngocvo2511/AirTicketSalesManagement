@@ -75,7 +75,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 if (quyDinh != null)
                 {
                     var today = DateTime.Today;
-                    
+
                     NgayBatDauEmBe = today.AddYears(-quyDinh.TuoiToiDaSoSinh.Value); // Ví dụ: sơ sinh <= 2 tuổi → từ hôm nay lùi 2 năm
                     NgayKetThucTreEm = NgayBatDauEmBe.AddDays(-1);               // Trẻ em bắt đầu từ sau em bé
 
@@ -290,11 +290,19 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
             get
             {
+                int tuoiToiDaSoSinh = 2;
+                int tuoiToiDaTreEm = 12;
+                using (var context = new AirTicketDbContext()) // Hoặc dùng SqlConnection nếu ADO.NET
+                {
+                    var quyDinh = context.Quydinhs.FirstOrDefault();
+                    tuoiToiDaSoSinh = quyDinh.TuoiToiDaSoSinh ?? 2;
+                    tuoiToiDaTreEm = quyDinh.TuoiToiDaTreEm ?? 12;
+                }
                 return PassengerType switch
                 {
-                    PassengerType.Adult => "Từ 12 tuổi trở lên",
-                    PassengerType.Child => "Từ 2-12 tuổi",
-                    PassengerType.Infant => "Dưới 2 tuổi",
+                    PassengerType.Adult => $"Từ {tuoiToiDaTreEm} tuổi trở lên",
+                    PassengerType.Child => $"Từ {tuoiToiDaSoSinh}-{tuoiToiDaTreEm} tuổi",
+                    PassengerType.Infant => $"Dưới {tuoiToiDaSoSinh} tuổi",
                     _ => string.Empty
                 };
             }

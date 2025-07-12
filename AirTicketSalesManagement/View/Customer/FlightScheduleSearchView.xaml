@@ -295,7 +295,7 @@
                                    FontWeight="Medium"
                                    Foreground="#2C3E50"/>
                                     <TextBlock Grid.Column="0" Grid.Row="1" 
-                                   Text="Từ 12 tuổi trở lên" 
+                                    Text="{Binding TuoiToiDaTreEm, StringFormat='Từ {0} tuổi trở lên'}"
                                    Foreground="#7F8C8D"
                                    FontSize="13"
                                    Margin="0,2,0,0"/>
@@ -350,7 +350,7 @@
                                    FontWeight="Medium"
                                    Foreground="#2C3E50"/>
                                     <TextBlock Grid.Column="0" Grid.Row="1" 
-                                   Text="Từ 2 đến 12 tuổi" 
+                                   Text="{Binding DoTuoiTreEmText}" 
                                    Foreground="#7F8C8D"
                                    FontSize="13"
                                    Margin="0,2,0,0"/>
@@ -405,7 +405,7 @@
                                    FontWeight="Medium"
                                    Foreground="#2C3E50"/>
                                     <TextBlock Grid.Column="0" Grid.Row="1" 
-                                   Text="Dưới 2 tuổi" 
+                                    Text="{Binding TuoiToiDaSoSinh, StringFormat='Dưới {0} tuổi'}"
                                    Foreground="#7F8C8D"
                                    FontSize="13"
                                    Margin="0,2,0,0"/>

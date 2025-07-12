@@ -548,9 +548,9 @@
                         </DataGridTextColumn>
 
                         <!-- Flight Duration Column -->
-                        <DataGridTextColumn Header="Thời gian bay" 
-                                          Binding="{Binding SoGioBay, StringFormat={}{0:F1}h}" 
-                                          Width="111" MinWidth="111">
+                        <DataGridTextColumn Header="Số SBTG" 
+                                          Binding="{Binding SoSBTG}" 
+                                          Width="80" MinWidth="80">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -563,7 +563,7 @@
                         </DataGridTextColumn>
 
                         <!-- Status Column -->
-                        <DataGridTemplateColumn Header="Trạng thái" Width="106" MinWidth="106">
+                        <DataGridTemplateColumn Header="Trạng thái" Width="116" MinWidth="116">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border CornerRadius="16" Padding="12,6" HorizontalAlignment="Center">

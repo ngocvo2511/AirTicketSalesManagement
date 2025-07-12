@@ -424,29 +424,31 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         thoiGianBayToiThieu = TimeSpan.FromMinutes(quyDinh.ThoiGianBayToiThieu.Value);
                     }
 
+                    var tongThoiGianDung = context.Sanbaytrunggians
+                        .Where(tg => tg.SoHieuCb == AddSoHieuCB)
+                        .Sum(tg => (int?)tg.ThoiGianDung) ?? 0;
+                    var thoiGianDung = TimeSpan.FromMinutes(tongThoiGianDung);
+
+                    if (thoiGianBay <= thoiGianDung)
+                    {
+                        await Notification.ShowNotificationAsync(
+                            $"Thời gian bay ({thoiGianBay}) phải lớn hơn tổng thời gian dừng tại các sân bay trung gian ({thoiGianDung}).",
+                            NotificationType.Warning);
+                        return;
+                    }
+
+                    if (thoiGianBay < thoiGianDung + thoiGianBayToiThieu)
+                    {
+                        await Notification.ShowNotificationAsync(
+                            $"Thời gian bay tối thiểu là {thoiGianBayToiThieu}",
+                            NotificationType.Warning);
+                        return;
+                    }
+
                     int soLichBayTao = 0;
 
                     for (var ngay = AddTuNgay.Value.Date; ngay <= AddDenNgay.Value.Date; ngay = ngay.AddDays(1))
                     {
-                        var tongThoiGianDung = context.Sanbaytrunggians
-                            .Where(tg => tg.SoHieuCb == AddSoHieuCB)
-                            .Sum(tg => (int?)tg.ThoiGianDung) ?? 0;
-                        var thoiGianDung = TimeSpan.FromMinutes(tongThoiGianDung);
-                        if (thoiGianBay <= thoiGianDung)
-                        {
-                            await Notification.ShowNotificationAsync(
-                                $"Thời gian bay ({thoiGianBay}) phải lớn hơn tổng thời gian dừng tại các sân bay trung gian ({thoiGianDung}).",
-                                NotificationType.Warning);
-                            return;
-                        }
-
-                        if (thoiGianBay < thoiGianDung + thoiGianBayToiThieu)
-                        {
-                            await Notification.ShowNotificationAsync(
-                                $"Thời gian bay tối thiểu là {thoiGianBayToiThieu}",
-                                NotificationType.Warning);
-                            return;
-                        }
                         var ngayGioDi = ngay + gioDi;
                         var ngayGioDen = ngayGioDi + thoiGianBay;
 
@@ -516,6 +518,22 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [RelayCommand]
         public async void AddTicketClass()
         {
+
+            using (var context = new AirTicketDbContext())
+            {
+                int soHangVe = 0;
+                var quyDinh = context.Quydinhs.FirstOrDefault();
+
+                if (quyDinh != null)
+                {
+                    soHangVe = quyDinh.SoHangVe.Value;
+                }
+                if (TicketClassForScheduleList.Count >= soHangVe)
+                {
+                    await Notification.ShowNotificationAsync($"Số hạng vé tối đa là: {soHangVe}", NotificationType.Warning);
+                    return;
+                }
+            }
             LoadHangVe();
             try
             {
@@ -833,6 +851,34 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                         return;
                     }
 
+                    TimeSpan thoiGianBayToiThieu = TimeSpan.Zero;
+                    var quyDinh = context.Quydinhs.FirstOrDefault();
+                    if (quyDinh != null)
+                    {
+                        thoiGianBayToiThieu = TimeSpan.FromMinutes(quyDinh.ThoiGianBayToiThieu.Value);
+                    }
+
+                    var tongThoiGianDung = context.Sanbaytrunggians
+                            .Where(tg => tg.SoHieuCb == EditSoHieuCB)
+                            .Sum(tg => (int?)tg.ThoiGianDung) ?? 0;
+                    var thoiGianDung = TimeSpan.FromMinutes(tongThoiGianDung);
+                    var thoiGianBay = ngayGioDen - ngayGioDi;
+                    if (thoiGianBay <= thoiGianDung)
+                    {
+                        await Notification.ShowNotificationAsync(
+                            $"Thời gian bay ({thoiGianBay}) phải lớn hơn tổng thời gian dừng tại các sân bay trung gian ({thoiGianDung}).",
+                            NotificationType.Warning);
+                        return;
+                    }
+
+                    if (thoiGianBay < thoiGianDung + thoiGianBayToiThieu)
+                    {
+                        await Notification.ShowNotificationAsync(
+                            $"Thời gian bay tối thiểu là {thoiGianBayToiThieu}",
+                            NotificationType.Warning);
+                        return;
+                    }
+
                     // Cập nhật thông tin lịch bay
                     schedule.GioDi = EditNgayDi.Value.Date + TimeSpan.Parse(EditGioDi);
                     schedule.GioDen = EditNgayDen.Value.Date + TimeSpan.Parse(EditGioDen);
@@ -878,8 +924,24 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         }
 
         [RelayCommand]
-        public async Task EditTicketClassAsync()
+        public async Task EditTicketClass()
         {
+            using (var context = new AirTicketDbContext())
+            {
+                int soHangVe = 0;
+                var quyDinh = context.Quydinhs.FirstOrDefault();
+
+                if (quyDinh != null)
+                {
+                    soHangVe = quyDinh.SoHangVe.Value;
+                }
+                if (TicketClassForScheduleList.Count >= soHangVe)
+                {
+                    await Notification.ShowNotificationAsync($"Số hạng vé tối đa là: {soHangVe}", NotificationType.Warning);
+                    return;
+                }
+            }
+
             LoadHangVe();
             try
             {
