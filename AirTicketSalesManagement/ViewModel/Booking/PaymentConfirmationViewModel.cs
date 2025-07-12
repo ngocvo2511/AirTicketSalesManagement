@@ -69,6 +69,32 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         {
         }
 
+        public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay)
+        {
+            ThongTinHanhKhachVaChuyenBay = thongTinHanhKhachVaChuyenBay;
+            thongTinChuyenBayDuocChon = thongTinHanhKhachVaChuyenBay.FlightInfo;
+            FlightCode = $"{thongTinChuyenBayDuocChon.Flight.MaSBDi} - {thongTinChuyenBayDuocChon.Flight.MaSBDen} ({thongTinChuyenBayDuocChon.Flight.HangHangKhong})";
+            SelectedTicketClass = thongTinChuyenBayDuocChon.TicketClass;
+            Flight = thongTinChuyenBayDuocChon.Flight;
+            AdultSummary = $"{Flight.NumberAdults} Người lớn";
+            ChildSummary = $"{Flight.NumberChildren} Trẻ em";
+            InfantSummary = $"{Flight.NumberInfants} Em bé";
+            HasChildren = Flight.NumberChildren > 0;
+            HasInfants = Flight.NumberInfants > 0;
+            AdultTotalPrice = Flight.NumberAdults * SelectedTicketClass.GiaVe;
+            ChildTotalPrice = Flight.NumberChildren * SelectedTicketClass.GiaVe;
+            InfantTotalPrice = Flight.NumberInfants * SelectedTicketClass.GiaVe;
+            TaxAndFees = 0;
+            TotalPrice = (Flight.NumberAdults + Flight.NumberChildren + Flight.NumberInfants) * SelectedTicketClass.GiaVe + TaxAndFees;
+            vnpayPayment = new VnpayPayment();
+            LogoUrl = GetAirlineLogo(Flight.HangHangKhong);
+
+            DiemDi = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.DiemDi;
+            DiemDen = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.DiemDen;
+            thoiGian = thongTinHanhKhachVaChuyenBay.FlightInfo.Flight.NgayDi;
+            FlightSummary = $"{DiemDi} đến {DiemDen} - {ThoiGian.ToString("dddd, dd 'tháng' MM, yyyy", new CultureInfo("vi-VN"))}";
+        }
+
         public PaymentConfirmationViewModel(ThongTinHanhKhachVaChuyenBay thongTinHanhKhachVaChuyenBay, IEmailService emailService, EmailTemplateService emailTemplateService)
         {
             _emailService = emailService;

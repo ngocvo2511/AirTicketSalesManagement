@@ -658,7 +658,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                     <!-- Header -->
                                     <TextBlock Grid.Row="0" Text="Chi tiết lịch bay" 
                               FontSize="16" FontWeight="SemiBold" 
-                              Foreground="#1F2937" Margin="0,0,0,10"/>
+                              Foreground="#1F2937"/>
 
                                     <!-- Flight Details -->
                                     <Grid Grid.Row="2">
@@ -671,71 +671,71 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                         <!-- Left Column -->
                                         <StackPanel Grid.Column="0">
                                             <TextBlock Text="Thông tin chuyến bay" FontWeight="SemiBold" 
-                                      Foreground="#374151" Margin="0,0,0,8"/>
+                                      Foreground="#374151" Margin="0,0,0,8" FontSize="14"/>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Mã lịch bay:" FontWeight="Medium" 
+                                                <TextBlock Text="Mã lịch bay:" FontWeight="Medium" FontSize="13"
                                           Foreground="#6B7280" Width="100"/>
-                                                <TextBlock Text="{Binding MaLb}" Foreground="#374151"/>
+                                                <TextBlock Text="{Binding MaLb}" Foreground="#374151" FontSize="13"/>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Số hiệu CB:" FontWeight="Medium" 
+                                                <TextBlock Text="Số hiệu CB:" FontWeight="Medium" FontSize="13"
                                           Foreground="#6B7280" Width="100"/>
-                                                <TextBlock Text="{Binding SoHieuCb}" Foreground="#374151" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding SoHieuCb}" Foreground="#374151" FontWeight="SemiBold" FontSize="13"/>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Loại máy bay:" FontWeight="Medium" 
+                                                <TextBlock Text="Loại máy bay:" FontWeight="Medium" FontSize="13"
                                           Foreground="#6B7280" Width="100"/>
-                                                <TextBlock Text="{Binding LoaiMb}" Foreground="#374151"/>
+                                                <TextBlock Text="{Binding LoaiMb}" Foreground="#374151" FontSize="13"/>
                                             </StackPanel>
                                         </StackPanel>
 
                                         <!-- Middle Column -->
                                         <StackPanel Grid.Column="1">
-                                            <TextBlock Text="Thời gian bay" FontWeight="SemiBold" 
+                                            <TextBlock Text="Thời gian bay" FontWeight="SemiBold" FontSize="14" 
                                       Foreground="#374151" Margin="0,0,0,8"/>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Giờ đi:" FontWeight="Medium" 
+                                                <TextBlock Text="Giờ đi:" FontWeight="Medium" FontSize="13"
                                           Foreground="#6B7280" Width="100"/>
-                                                <TextBlock Text="{Binding GioDi, StringFormat=dd/MM/yyyy HH:mm}" 
+                                                <TextBlock Text="{Binding GioDi, StringFormat=dd/MM/yyyy HH:mm}" FontSize="13"
                                           Foreground="#059669" FontWeight="SemiBold"/>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Giờ đến:" FontWeight="Medium" 
+                                                <TextBlock Text="Giờ đến:" FontWeight="Medium" FontSize="13"
                                           Foreground="#6B7280" Width="100"/>
-                                                <TextBlock Text="{Binding GioDen, StringFormat=dd/MM/yyyy HH:mm}" 
+                                                <TextBlock Text="{Binding GioDen, StringFormat=dd/MM/yyyy HH:mm}" FontSize="13"
                                           Foreground="#DC2626" FontWeight="SemiBold"/>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Trạng thái:" FontWeight="Medium" 
+                                                <TextBlock Text="Trạng thái:" FontWeight="Medium" FontSize="13"
                                           Foreground="#6B7280" Width="100"/>
                                                 <Border CornerRadius="12" Padding="8,4" Background="#DCFCE7">
-                                                    <TextBlock Text="{Binding TtlichBay}" FontSize="10" 
-                                              FontWeight="SemiBold" Foreground="#16A34A"/>
+                                                    <TextBlock Text="{Binding TtlichBay}" FontSize="13" 
+                                              FontWeight="SemiBold" Foreground="#16A34A" />
                                                 </Border>
                                             </StackPanel>
                                         </StackPanel>
 
                                         <!-- Right Column -->
                                         <StackPanel Grid.Column="2">
-                                            <TextBlock Text="Thông tin vé" FontWeight="SemiBold" 
+                                            <TextBlock Text="Thông tin vé" FontWeight="SemiBold" FontSize="14"
                                       Foreground="#374151" Margin="0,0,0,8"/>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Số lượng vé:" FontWeight="Medium" 
+                                                <TextBlock Text="Số lượng vé:" FontWeight="Medium" FontSize="13"
                                           Foreground="#6B7280" Width="100"/>
-                                                <TextBlock Text="{Binding SlveKt}" Foreground="#374151" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding SlveKt}" Foreground="#374151" FontWeight="SemiBold" FontSize="13"/>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,4">
-                                                <TextBlock Text="Giá vé cơ bản:" FontWeight="Medium" 
+                                                <TextBlock Text="Giá vé cơ bản:" FontWeight="Medium" FontSize="13"
                                           Foreground="#6B7280" Width="100"/>
-                                                <TextBlock Text="{Binding GiaVe, StringFormat=N0}" 
+                                                <TextBlock Text="{Binding GiaVe, StringFormat=N0}" FontSize="13"
                                           Foreground="#059669" FontWeight="SemiBold"/>
                                                 <TextBlock Text=" VNĐ" Foreground="#059669" FontWeight="SemiBold"/>
                                             </StackPanel>
@@ -744,8 +744,8 @@ RowStyle="{StaticResource DataGridRowStyle}"
 
                                     <!-- Ticket Types Section -->
                                     <StackPanel Grid.Row="4">
-                                        <TextBlock Text="Các loại vé" FontWeight="SemiBold" 
-                                  Foreground="#374151" Margin="0,10,0,8"/>
+                                        <TextBlock Text="Các loại vé" FontWeight="SemiBold" FontSize="14"
+                                  Foreground="#374151" Margin="0,0,0,8"/>
 
                                         <ItemsControl ItemsSource="{Binding Hangvetheolichbays}">
                                             <ItemsControl.ItemsPanel>
@@ -759,20 +759,20 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                            BorderBrush="#E5E7EB" BorderThickness="1" 
                                            Margin="0,0,10,8" Padding="12">
                                                         <StackPanel>
-                                                            <TextBlock Text="{Binding MaHvNavigation.TenHv}" 
+                                                            <TextBlock Text="{Binding MaHvNavigation.TenHv}" FontSize="13"
                                                       FontWeight="SemiBold" Foreground="#1F2937"/>
                                                             <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                                                <TextBlock Text="Hệ số giá: " FontSize="11" Foreground="#6B7280"/>
+                                                                <TextBlock Text="Hệ số giá: " FontSize="13" Foreground="#6B7280"/>
                                                                 <TextBlock Text="{Binding MaHvNavigation.HeSoGia, StringFormat=x{0:F2}}" 
-                                                          FontSize="11" Foreground="#059669" FontWeight="SemiBold"/>
+                                                          FontSize="13" Foreground="#059669" FontWeight="SemiBold"/>
                                                             </StackPanel>
                                                             <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                                                                <TextBlock Text="Còn lại: " FontSize="11" Foreground="#6B7280"/>
+                                                                <TextBlock Text="Còn lại: " FontSize="13" Foreground="#6B7280"/>
                                                                 <TextBlock Text="{Binding SlveConLai}" 
-                                                          FontSize="11" Foreground="#DC2626" FontWeight="SemiBold"/>
-                                                                <TextBlock Text="/" FontSize="11" Foreground="#6B7280"/>
+                                                          FontSize="13" Foreground="#DC2626" FontWeight="SemiBold"/>
+                                                                <TextBlock Text="/" FontSize="13" Foreground="#6B7280"/>
                                                                 <TextBlock Text="{Binding SlveToiDa}" 
-                                                          FontSize="11" Foreground="#6B7280"/>
+                                                          FontSize="13" Foreground="#6B7280"/>
                                                             </StackPanel>
                                                         </StackPanel>
                                                     </Border>
@@ -961,7 +961,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                             <TextBlock Text="Chọn chuyến bay" 
                          Style="{StaticResource SectionHeaderStyle}"/>
 
-                            <Grid Margin="0,0,0,24">
+                            <Grid Margin="0,0,0,16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -989,7 +989,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                             <TextBlock Text="Thông tin lịch bay" 
                          Style="{StaticResource SectionHeaderStyle}"/>
 
-                            <Grid Margin="0,0,0,24">
+                            <Grid Margin="0,0,0,16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -1005,11 +1005,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,16">
                                     <TextBlock Text="Giờ khởi hành" 
                                  Style="{StaticResource LabelStyle}"/>
-                                    <DatePicker x:Name="dpDepartureDate"
-                                       SelectedDate="{Binding AddNgayDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                       Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                                       materialDesign:HintAssist.Hint="Chọn ngày đi"
-                                       Height="52" FontSize="14" Margin="0,0,0,8"/>
+
                                     <StackPanel>
                                         <TextBox x:Name="txtDepartureTime"
          Text="{Binding AddGioDi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -1027,34 +1023,42 @@ RowStyle="{StaticResource DataGridRowStyle}"
            FontSize="12"
            Visibility="Collapsed"/>
                                     </StackPanel>
+                                    <TextBlock Text="Khoảng thời gian áp dụng" 
+                                 Style="{StaticResource LabelStyle}" Margin="0,16,0,0"/>
+                                    <DatePicker
+                                       SelectedDate="{Binding AddTuNgay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                       materialDesign:HintAssist.Hint="Từ ngày"
+                                       Height="52" FontSize="14" Margin="0,8,0,0"/>
                                 </StackPanel>
 
                                 <!-- Arrival Time -->
                                 <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,16">
-                                    <TextBlock Text="Giờ đến" 
+                                    <TextBlock Text="Thời gian bay" 
                                  Style="{StaticResource LabelStyle}"/>
-                                    <DatePicker x:Name="dpArrivalDate"
-                                       SelectedDate="{Binding AddNgayDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                       Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                                       materialDesign:HintAssist.Hint="Chọn ngày đến"
-                                       Height="52" FontSize="14" Margin="0,0,0,8"/>
+                                    
                                     <StackPanel>
-                                        <TextBox x:Name="txtArrivalTime"
-Text="{Binding AddGioDen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-Style="{StaticResource MaterialDesignOutlinedTextBox}"
-materialDesign:HintAssist.Hint="VD: 08:30, 14:45"
-Height="52" FontSize="14"
-PreviewTextInput="TimeTextBox_PreviewTextInput"
-PreviewKeyDown="TimeTextBox_PreviewKeyDown"
-TextChanged="TimeTextBox_TextChanged"
-LostFocus="TimeTextBox_LostFocus"
+                                        <TextBox x:Name="txtFlightTime"
+                                                 Text="{Binding AddThoiGianBay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                 materialDesign:HintAssist.Hint="VD: 08:30, 14:45"
+                                                 Height="52" FontSize="14"
+                                                 PreviewTextInput="TimeTextBox_PreviewTextInput"
+                                                 PreviewKeyDown="TimeTextBox_PreviewKeyDown"
+                                                 TextChanged="TimeTextBox_TextChanged"
+                                                 LostFocus="TimeTextBox_LostFocus"
                                                  Tag="{Binding ElementName=lblArrivalTimeError}"/>
                                         <Label x:Name="lblArrivalTimeError" 
-  Content=""
-  Foreground="Red"
-  FontSize="12"
-  Visibility="Collapsed"/>
+                                                 Content=""
+                                                 Foreground="Red"
+                                                 FontSize="12"
+                                                 Visibility="Collapsed"/>  
                                     </StackPanel>
+                                    <DatePicker 
+                                       SelectedDate="{Binding AddDenNgay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                       materialDesign:HintAssist.Hint="Đến ngày"
+                                       Height="52" FontSize="14" Margin="0,42,0,0"/>
                                 </StackPanel>
 
                                 <!-- Aircraft Type -->
@@ -1158,7 +1162,6 @@ LostFocus="TimeTextBox_LostFocus"
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
@@ -1185,7 +1188,7 @@ LostFocus="TimeTextBox_LostFocus"
                                                     
 
                                                     <StackPanel Grid.Column="2" Margin="0,0,12,0">
-                                                        <TextBlock Text="Số ghế tối đa" 
+                                                        <TextBlock Text="Số lượng vé" 
                                                      FontSize="12" 
                                                      Foreground="#6B7280" 
                                                      Margin="0,0,0,4"/>
@@ -1194,15 +1197,7 @@ LostFocus="TimeTextBox_LostFocus"
                                                    materialDesign:HintAssist.Hint="VD: 20, 50"/>
                                                     </StackPanel>
 
-                                                    <StackPanel Grid.Column="3" Margin="0,0,12,0">
-                                                        <TextBlock Text="Số ghế còn lại" 
-                                                     FontSize="12" 
-                                                     Foreground="#6B7280" 
-                                                     Margin="0,0,0,4"/>
-                                                        <TextBox Text="{Binding SLVeConLai}" 
-                                                   Height="36" FontSize="13"
-                                                   materialDesign:HintAssist.Hint="VD: 20, 50"/>
-                                                    </StackPanel>
+
 
                                                     <Button Grid.Column="4" 
                                                 Style="{StaticResource MaterialDesignIconButton}"
@@ -1325,7 +1320,7 @@ LostFocus="TimeTextBox_LostFocus"
                             <TextBlock Text="Chọn chuyến bay" 
                          Style="{StaticResource SectionHeaderStyle}"/>
 
-                            <Grid Margin="0,0,0,24">
+                            <Grid Margin="0,0,0,16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -1353,7 +1348,7 @@ LostFocus="TimeTextBox_LostFocus"
                             <TextBlock Text="Thông tin lịch bay" 
                          Style="{StaticResource SectionHeaderStyle}"/>
 
-                            <Grid Margin="0,0,0,24">
+                            <Grid Margin="0,0,0,16">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -1522,7 +1517,6 @@ LostFocus="TimeTextBox_LostFocus"
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
@@ -1548,21 +1542,11 @@ LostFocus="TimeTextBox_LostFocus"
 
 
                                                     <StackPanel Grid.Column="2" Margin="0,0,12,0">
-                                                        <TextBlock Text="Số ghế tối đa" 
+                                                        <TextBlock Text="Số lượng vé" 
                                                      FontSize="12" 
                                                      Foreground="#6B7280" 
                                                      Margin="0,0,0,4"/>
                                                         <TextBox Text="{Binding SLVeToiDa}" 
-                                                   Height="36" FontSize="13"
-                                                   materialDesign:HintAssist.Hint="VD: 20, 50"/>
-                                                    </StackPanel>
-
-                                                    <StackPanel Grid.Column="3" Margin="0,0,12,0">
-                                                        <TextBlock Text="Số ghế còn lại" 
-                                                     FontSize="12" 
-                                                     Foreground="#6B7280" 
-                                                     Margin="0,0,0,4"/>
-                                                        <TextBox Text="{Binding SLVeConLai}" 
                                                    Height="36" FontSize="13"
                                                    materialDesign:HintAssist.Hint="VD: 20, 50"/>
                                                     </StackPanel>

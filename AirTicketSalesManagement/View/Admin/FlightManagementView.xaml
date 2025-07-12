@@ -809,7 +809,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- Flight Number -->
-                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,16">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  Margin="0,0,0,16">
                                     <TextBlock Text="Số hiệu chuyến bay" 
                                          Style="{StaticResource LabelStyle}"/>
                                     <TextBox x:Name="txtFlightNumber"
@@ -819,21 +819,7 @@
                                        materialDesign:HintAssist.Hint="VN123, VJ456..."/>
                                 </StackPanel>
 
-                                <!-- Airline -->
-                                <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,16">
-                                    <TextBlock Text="Hãng hàng không" 
-                                         Style="{StaticResource LabelStyle}"/>
-                                    <ComboBox x:Name="cbAirline"
-                                              Text="{Binding AddHangHangKhong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"               
-                                              materialDesign:HintAssist.Hint="Chọn hãng hàng không"                              
-                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"                                
-                                              Height="52" FontSize="14">
-                                        <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
-                                        <ComboBoxItem Content="Vietjet Air" Tag="Vietjet Air"/>
-                                        <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
-                                        <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
-                                    </ComboBox>
-                                </StackPanel>
+
 
                                 <!-- Departure Airport -->
                                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,16">
@@ -859,17 +845,22 @@
                                               Height="52" FontSize="14"/>
                                 </StackPanel>
 
-                                <!-- Flight Duration -->
+                                <!-- Airline -->
                                 <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,16">
-                                    <TextBlock Text="Thời gian bay (giờ)" 
+                                    <TextBlock Text="Hãng hàng không" 
                                          Style="{StaticResource LabelStyle}"/>
-                                    <TextBox x:Name="txtFlightDuration"
-                                       Text="{Binding AddThoiGianBay}"
-                                       Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                             FontSize="14" Height="52"
-                                       materialDesign:HintAssist.Hint="VD: 1.5, 2.0"/>
+                                    <ComboBox x:Name="cbAirline"
+                                              Text="{Binding AddHangHangKhong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"               
+                                              materialDesign:HintAssist.Hint="Chọn hãng hàng không"                              
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}"                                
+                                              Height="52" FontSize="14">
+                                        <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
+                                        <ComboBoxItem Content="Vietjet Air" Tag="Vietjet Air"/>
+                                        <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
+                                        <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
+                                    </ComboBox>
                                 </StackPanel>
-
+                                
                                 <!-- Status -->
                                 <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,16">
                                     <TextBlock Text="Trạng thái khai thác" 
@@ -1110,7 +1101,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- Flight Number -->
-                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,16">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,16">
                                     <TextBlock Text="Số hiệu chuyến bay" 
                                  Style="{StaticResource LabelStyle}"/>
                                     <TextBox x:Name="txtEditFlightNumber"
@@ -1121,21 +1112,6 @@
                                materialDesign:HintAssist.Hint="VN123, VJ456..."/>
                                 </StackPanel>
 
-                                <!-- Airline -->
-                                <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,16">
-                                    <TextBlock Text="Hãng hàng không" 
-                                 Style="{StaticResource LabelStyle}"/>
-                                    <ComboBox x:Name="cbEditAirline"
-                                      Text="{Binding EditHangHangKhong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"               
-                                      materialDesign:HintAssist.Hint="Chọn hãng hàng không"                              
-                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"                                
-                                      Height="52" FontSize="14">
-                                        <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
-                                        <ComboBoxItem Content="Vietjet Air" Tag="Vietjet Air"/>
-                                        <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
-                                        <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
-                                    </ComboBox>
-                                </StackPanel>
 
                                 <!-- Departure Airport -->
                                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,16">
@@ -1161,15 +1137,20 @@
                                       Height="52" FontSize="14"/>
                                 </StackPanel>
 
-                                <!-- Flight Duration -->
+                                <!-- Airline -->
                                 <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,16">
-                                    <TextBlock Text="Thời gian bay (giờ)" 
-                                 Style="{StaticResource LabelStyle}"/>
-                                    <TextBox x:Name="txtEditFlightDuration"
-                               Text="{Binding EditThoiGianBay}"
-                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                     FontSize="14" Height="52"
-                               materialDesign:HintAssist.Hint="VD: 1.5, 2.0"/>
+                                    <TextBlock Text="Hãng hàng không" 
+  Style="{StaticResource LabelStyle}"/>
+                                    <ComboBox x:Name="cbEditAirline"
+       Text="{Binding EditHangHangKhong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"               
+       materialDesign:HintAssist.Hint="Chọn hãng hàng không"                              
+       Style="{StaticResource MaterialDesignOutlinedComboBox}"                                
+       Height="52" FontSize="14">
+                                        <ComboBoxItem Content="Vietnam Airlines" Tag="Vietnam Airlines"/>
+                                        <ComboBoxItem Content="Vietjet Air" Tag="Vietjet Air"/>
+                                        <ComboBoxItem Content="Bamboo Airways" Tag="Bamboo Airways"/>
+                                        <ComboBoxItem Content="Vietravel Airlines" Tag="Vietravel Airlines"/>
+                                    </ComboBox>
                                 </StackPanel>
 
                                 <!-- Status -->

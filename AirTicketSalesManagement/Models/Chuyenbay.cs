@@ -13,8 +13,6 @@ public partial class Chuyenbay
 
     public string? HangHangKhong { get; set; }
 
-    public double? SoGioBay { get; set; }
-
     public string? TtkhaiThac { get; set; }
 
     public virtual ICollection<Lichbay> Lichbays { get; set; } = new List<Lichbay>();

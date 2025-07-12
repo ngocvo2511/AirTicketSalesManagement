@@ -37,6 +37,14 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         private NotificationViewModel notification = new();
 
         public TicketManagementDetailViewModel() { }
+
+        public TicketManagementDetailViewModel(QuanLiDatVe chiTietVe, BaseViewModel parent)
+        {
+            this.ChiTietVe = chiTietVe;
+            this.parent = parent;
+            LoadData();
+        }
+
         public TicketManagementDetailViewModel(QuanLiDatVe chiTietVe, BaseViewModel parent, IEmailService emailService, EmailTemplateService templateService)
         {
             _emailService = emailService;

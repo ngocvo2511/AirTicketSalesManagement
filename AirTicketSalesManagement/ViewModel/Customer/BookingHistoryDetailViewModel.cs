@@ -37,6 +37,14 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             notification = new NotificationViewModel();
         }
 
+        public BookingHistoryDetailViewModel(KQLichSuDatVe lichSuDatVe, CustomerViewModel parent)
+        {
+            notification = new NotificationViewModel();
+            this.LichSuDatVe = lichSuDatVe;
+            this.parent = parent;
+            LoadData();
+        }
+
         public BookingHistoryDetailViewModel(KQLichSuDatVe lichSuDatVe, CustomerViewModel parent, IEmailService emailService, EmailTemplateService templateService)
         {
             notification = new NotificationViewModel();

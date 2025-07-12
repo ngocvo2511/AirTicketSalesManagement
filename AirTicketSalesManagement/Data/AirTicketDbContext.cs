@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows;
 using AirTicketSalesManagement.Models;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +76,7 @@ public partial class AirTicketDbContext : DbContext
     {
         modelBuilder.Entity<Chuyenbay>(entity =>
         {
-            entity.HasKey(e => e.SoHieuCb).HasName("PK__CHUYENBA__FB4E27FB61189837");
+            entity.HasKey(e => e.SoHieuCb).HasName("PK__CHUYENBA__FB4E27FB3018DA55");
 
             entity.ToTable("CHUYENBAY");
 
@@ -111,7 +110,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Ctdv>(entity =>
         {
-            entity.HasKey(e => e.MaCtdv).HasName("PK__CTDV__1E4E40E6AB632E09");
+            entity.HasKey(e => e.MaCtdv).HasName("PK__CTDV__1E4E40E6ACE4C34D");
 
             entity.ToTable("CTDV");
 
@@ -143,7 +142,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Datve>(entity =>
         {
-            entity.HasKey(e => e.MaDv).HasName("PK__DATVE__27258657DB4E68B5");
+            entity.HasKey(e => e.MaDv).HasName("PK__DATVE__27258657DF3F09E6");
 
             entity.ToTable("DATVE");
 
@@ -185,7 +184,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Hangve>(entity =>
         {
-            entity.HasKey(e => e.MaHv).HasName("PK__HANGVE__2725A6D21B1F6F99");
+            entity.HasKey(e => e.MaHv).HasName("PK__HANGVE__2725A6D2E8ED5E97");
 
             entity.ToTable("HANGVE");
 
@@ -197,7 +196,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Hangvetheolichbay>(entity =>
         {
-            entity.HasKey(e => e.MaHvLb).HasName("PK__HANGVETH__1853D482890994ED");
+            entity.HasKey(e => e.MaHvLb).HasName("PK__HANGVETH__1853D482C3F10A5D");
 
             entity.ToTable("HANGVETHEOLICHBAY");
 
@@ -218,7 +217,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Khachhang>(entity =>
         {
-            entity.HasKey(e => e.MaKh).HasName("PK__KHACHHAN__2725CF1E96A6589D");
+            entity.HasKey(e => e.MaKh).HasName("PK__KHACHHAN__2725CF1E232C6FE6");
 
             entity.ToTable("KHACHHANG");
 
@@ -241,7 +240,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Lichbay>(entity =>
         {
-            entity.HasKey(e => e.MaLb).HasName("PK__LICHBAY__2725C761440C3794");
+            entity.HasKey(e => e.MaLb).HasName("PK__LICHBAY__2725C761215B55AE");
 
             entity.ToTable("LICHBAY");
 
@@ -268,7 +267,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Nhanvien>(entity =>
         {
-            entity.HasKey(e => e.MaNv).HasName("PK__NHANVIEN__2725D70A8A5D21A0");
+            entity.HasKey(e => e.MaNv).HasName("PK__NHANVIEN__2725D70AB18E030C");
 
             entity.ToTable("NHANVIEN");
 
@@ -291,7 +290,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Quydinh>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__QUYDINH__3214EC27DB96B719");
+            entity.HasKey(e => e.Id).HasName("PK__QUYDINH__3214EC279D88D6C2");
 
             entity.ToTable("QUYDINH");
 
@@ -301,13 +300,11 @@ public partial class AirTicketDbContext : DbContext
             entity.Property(e => e.TgdungMax).HasColumnName("TGDungMax");
             entity.Property(e => e.TgdungMin).HasColumnName("TGDungMin");
             entity.Property(e => e.TghuyDatVe).HasColumnName("TGHuyDatVe");
-            entity.Property(e => e.TuoiToiDaSoSinh).HasColumnName("TuoiToiDaSoSinh");
-            entity.Property(e => e.TuoiToiDaTreEm).HasColumnName("TuoiToiDaTreEm");
         });
 
         modelBuilder.Entity<Sanbay>(entity =>
         {
-            entity.HasKey(e => e.MaSb).HasName("PK__SANBAY__2725080E986CBE4F");
+            entity.HasKey(e => e.MaSb).HasName("PK__SANBAY__2725080E4088113D");
 
             entity.ToTable("SANBAY");
 
@@ -325,7 +322,7 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Sanbaytrunggian>(entity =>
         {
-            entity.HasKey(e => new { e.Stt, e.SoHieuCb }).HasName("PK__SANBAYTR__65AA54EFED1205D1");
+            entity.HasKey(e => new { e.Stt, e.SoHieuCb }).HasName("PK__SANBAYTR__65AA54EFED46EA5C");
 
             entity.ToTable("SANBAYTRUNGGIAN");
 
@@ -353,11 +350,11 @@ public partial class AirTicketDbContext : DbContext
 
         modelBuilder.Entity<Taikhoan>(entity =>
         {
-            entity.HasKey(e => e.MaTk).HasName("PK__TAIKHOAN__27250070FBD01FEA");
+            entity.HasKey(e => e.MaTk).HasName("PK__TAIKHOAN__272500706F4EBA33");
 
             entity.ToTable("TAIKHOAN");
 
-            entity.HasIndex(e => e.Email, "UQ__TAIKHOAN__A9D10534CAAAFF1D").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__TAIKHOAN__A9D105344257395A").IsUnique();
 
             entity.Property(e => e.MaTk).HasColumnName("MaTK");
             entity.Property(e => e.Email)

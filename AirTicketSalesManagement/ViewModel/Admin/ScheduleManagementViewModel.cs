@@ -42,14 +42,14 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         [ObservableProperty]
         private string addSoHieuCB;
         [ObservableProperty]
-        private DateTime? addNgayDi;
+        private DateTime? addTuNgay;
         [ObservableProperty]
-        private DateTime? addNgayDen;
+        private DateTime? addDenNgay;
         [ObservableProperty]
         private string addGioDi = "";
 
         [ObservableProperty]
-        private string addGioDen = "";
+        private string addThoiGianBay = "";
         [ObservableProperty]
         private string addLoaiMB;
         [ObservableProperty]
@@ -351,10 +351,10 @@ namespace AirTicketSalesManagement.ViewModel.Admin
         private void ResetAddField()
         {
             AddSoHieuCB = string.Empty;
-            AddNgayDi = null;
-            AddNgayDen = null;
+            AddTuNgay = null;
+            AddDenNgay = null;
             AddGioDi = string.Empty;
-            AddGioDen = string.Empty;
+            AddThoiGianBay = string.Empty;
             AddLoaiMB = string.Empty;
             AddSLVeKT = string.Empty;
             AddGiaVe = string.Empty;
@@ -380,8 +380,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             try
             {
                 // Kiểm tra dữ liệu đầu vào
-                if (string.IsNullOrWhiteSpace(AddSoHieuCB) || AddNgayDi == null || AddNgayDen == null ||
-                    string.IsNullOrWhiteSpace(AddGioDi) || string.IsNullOrWhiteSpace(AddGioDen) ||
+                if (string.IsNullOrWhiteSpace(AddSoHieuCB) || AddTuNgay == null || AddDenNgay == null ||
+                    string.IsNullOrWhiteSpace(AddGioDi) || string.IsNullOrWhiteSpace(AddThoiGianBay) ||
                     string.IsNullOrWhiteSpace(AddLoaiMB) || string.IsNullOrWhiteSpace(AddSLVeKT) ||
                     string.IsNullOrWhiteSpace(AddGiaVe) || string.IsNullOrWhiteSpace(AddTTLichBay))
                 {
@@ -389,28 +389,27 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                     return;
                 }
 
-                // Ghép giờ đi và ngày đi thành DateTime
-                if (!TimeSpan.TryParse(AddGioDi, out TimeSpan gioDi) || !TimeSpan.TryParse(AddGioDen, out TimeSpan gioDen))
+                if (!TimeSpan.TryParse(AddGioDi, out TimeSpan gioDi) || !TimeSpan.TryParse(AddThoiGianBay, out TimeSpan thoiGianBay))
                 {
                     await Notification.ShowNotificationAsync("Định dạng giờ không hợp lệ. Vui lòng nhập theo định dạng HH:mm.", NotificationType.Error);
                     return;
                 }
 
-                DateTime ngayGioDi = AddNgayDi.Value.Date + gioDi;
-                DateTime ngayGioDen = AddNgayDen.Value.Date + gioDen;
 
-                if (ngayGioDen <= ngayGioDi)
+
+                if (AddDenNgay < AddTuNgay)
                 {
-                    await Notification.ShowNotificationAsync("Thời gian đến phải sau thời gian đi.", NotificationType.Warning);
+                    await Notification.ShowNotificationAsync("Ngày kết thúc không được nhỏ hơn ngày bắt đầu.", NotificationType.Warning);
                     return;
                 }
 
                 int sumTicket = 0;
-                foreach(var hv in TicketClassForScheduleList)
+                foreach (var hv in TicketClassForScheduleList)
                 {
                     sumTicket += int.Parse(hv.SLVeToiDa);
                 }
-                if(sumTicket != int.Parse(AddSLVeKT))
+
+                if (sumTicket != int.Parse(AddSLVeKT))
                 {
                     await Notification.ShowNotificationAsync("Tổng số lượng vé của các hạng ghế phải bằng số lượng vé khai thác.", NotificationType.Warning);
                     return;
@@ -418,51 +417,80 @@ namespace AirTicketSalesManagement.ViewModel.Admin
 
                 using (var context = new AirTicketDbContext())
                 {
-                    var newSchedule = new Lichbay
+                    int soLichBayTao = 0;
+
+                    for (var ngay = AddTuNgay.Value.Date; ngay <= AddDenNgay.Value.Date; ngay = ngay.AddDays(1))
                     {
-                        SoHieuCb = AddSoHieuCB,
-                        GioDi = ngayGioDi,
-                        GioDen = ngayGioDen,
-                        LoaiMb = AddLoaiMB,
-                        SlveKt = int.Parse(AddSLVeKT),
-                        GiaVe = decimal.Parse(AddGiaVe),
-                        TtlichBay = AddTTLichBay
-                    };
-
-                    context.Lichbays.Add(newSchedule);
-                    context.SaveChanges();
-
-                    // Lấy MaLB sau khi lưu
-                    int maLichBay = newSchedule.MaLb;
-
-                    // Thêm các loại vé theo lịch bay
-                    foreach (var hv in TicketClassForScheduleList)
-                    {
-                        if (string.IsNullOrWhiteSpace(hv.TenHangVe)) continue;
-
-                        var maHV = context.Hangves
-                            .FirstOrDefault(h => h.TenHv == hv.TenHangVe)?.MaHv;
-
-                        if (maHV != null)
+                        var tongThoiGianDung = context.Sanbaytrunggians
+                            .Where(tg => tg.SoHieuCb == AddSoHieuCB)
+                            .Sum(tg => (int?)tg.ThoiGianDung) ?? 0;
+                        var thoiGianDung = TimeSpan.FromMinutes(tongThoiGianDung);
+                        if (thoiGianBay <= thoiGianDung)
                         {
-                            var hvLb = new Hangvetheolichbay
-                            {
-                                MaLb = maLichBay,
-                                MaHv = maHV,
-                                SlveToiDa = int.Parse(hv.SLVeToiDa),
-                                SlveConLai = int.Parse(hv.SLVeConLai)
-                            };
-                            context.Hangvetheolichbays.Add(hvLb);
+                            await Notification.ShowNotificationAsync(
+                                $"Thời gian bay ({thoiGianBay}) phải lớn hơn tổng thời gian dừng tại các sân bay trung gian ({thoiGianDung}).",
+                                NotificationType.Warning);
+                            return;
                         }
+
+                        var ngayGioDi = ngay + gioDi;
+                        var ngayGioDen = ngayGioDi + thoiGianBay;
+
+                        if (ngayGioDen <= ngayGioDi)
+                        {
+                            continue; // Bỏ qua lịch bay sai
+                        }
+
+                        var newSchedule = new Lichbay
+                        {
+                            SoHieuCb = AddSoHieuCB,
+                            GioDi = ngayGioDi,
+                            GioDen = ngayGioDen,
+                            LoaiMb = AddLoaiMB,
+                            SlveKt = int.Parse(AddSLVeKT),
+                            GiaVe = decimal.Parse(AddGiaVe),
+                            TtlichBay = AddTTLichBay
+                        };
+
+                        context.Lichbays.Add(newSchedule);
+                        context.SaveChanges(); // Để lấy được MaLb
+
+                        int maLichBay = newSchedule.MaLb;
+
+                        foreach (var hv in TicketClassForScheduleList)
+                        {
+                            if (string.IsNullOrWhiteSpace(hv.TenHangVe)) continue;
+
+                            var maHV = context.Hangves
+                                .FirstOrDefault(h => h.TenHv == hv.TenHangVe)?.MaHv;
+
+                            if (maHV != null)
+                            {
+                                var hvLb = new Hangvetheolichbay
+                                {
+                                    MaLb = maLichBay,
+                                    MaHv = maHV,
+                                    SlveToiDa = int.Parse(hv.SLVeToiDa),
+                                    SlveConLai = int.Parse(hv.SLVeToiDa)
+                                };
+                                context.Hangvetheolichbays.Add(hvLb);
+                            }
+                        }
+
+                        context.SaveChanges();
+                        soLichBayTao++;
                     }
 
-                    context.SaveChanges();
-
-                    await Notification.ShowNotificationAsync("Lịch bay đã được thêm thành công!", NotificationType.Information);
-
-                    // Đóng popup, reset dữ liệu, refresh lại danh sách
-                    IsAddSchedulePopupOpen = false;
-                    LoadFlightSchedule();
+                    if (soLichBayTao > 0)
+                    {
+                        await Notification.ShowNotificationAsync($"Đã thêm {soLichBayTao} lịch bay thành công!", NotificationType.Information);
+                        IsAddSchedulePopupOpen = false;
+                        LoadFlightSchedule();
+                    }
+                    else
+                    {
+                        await Notification.ShowNotificationAsync("Không có lịch bay nào được thêm do dữ liệu không hợp lệ.", NotificationType.Warning);
+                    }
                 }
             }
             catch (Exception ex)
@@ -771,7 +799,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
                 {
                     sumTicket += int.Parse(hv.SLVeToiDa);
                 }
-                if (sumTicket != int.Parse(AddSLVeKT))
+                if (sumTicket != int.Parse(EditSLVeKT))
                 {
                     await Notification.ShowNotificationAsync("Tổng số lượng vé của các hạng ghế phải bằng số lượng vé khai thác.", NotificationType.Warning);
                     return;
