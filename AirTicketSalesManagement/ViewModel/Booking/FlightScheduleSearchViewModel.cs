@@ -37,11 +37,6 @@ namespace AirTicketSalesManagement.ViewModel.Booking
         [ObservableProperty]
         private DateTime? ngayDi;
 
-        [ObservableProperty]
-        private DateTime? ngayVe;
-
-        [ObservableProperty]
-        private bool isRoundTrip;
 
         [ObservableProperty]
         private Visibility resultVisibility = Visibility.Collapsed;

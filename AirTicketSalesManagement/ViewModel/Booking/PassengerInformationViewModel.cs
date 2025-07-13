@@ -204,6 +204,12 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                     return;
                 }
 
+                if (!IsValidPassengerDateOfBirth(passenger))
+                {
+                    await Notification.ShowNotificationAsync($"Ngày sinh của hành khách {passenger.FullName} không hợp lệ với độ tuổi loại {passenger.PassengerTypeText}.", NotificationType.Warning);
+                    return;
+                }
+
                 // Additional validation for adults
                 if (passenger.PassengerType == PassengerType.Adult)
                 {
@@ -217,8 +223,6 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                         await Notification.ShowNotificationAsync("Số căn cước không hợp lệ!", NotificationType.Warning);
                         return;
                     }
-
-
                 }
 
 
@@ -242,6 +246,22 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             };
 
             NavigationService.NavigateTo<PaymentConfirmationViewModel>(thongTinHanhKhachVaChuyenBay);
+        }
+
+        public bool IsValidPassengerDateOfBirth(PassengerInfoModel passenger)
+        {
+            if (passenger.DateOfBirth == null)
+                return false;
+
+            var dob = passenger.DateOfBirth.Value.Date;
+
+            return passenger.PassengerType switch
+            {
+                PassengerType.Adult => dob >= NgayBatDauNguoiLon && dob <= NgayKetThucNguoiLon,
+                PassengerType.Child => dob >= NgayBatDauTreEm && dob <= NgayKetThucTreEm,
+                PassengerType.Infant => dob >= NgayBatDauEmBe && dob <= NgayKetThucEmBe,
+                _ => false
+            };
         }
 
         private bool IsValidEmail(string email)

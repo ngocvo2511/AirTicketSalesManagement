@@ -10,7 +10,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="980"
-            >
+                         xmlns:behaviors="clr-namespace:AirTicketSalesManagement.Behaviors">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -193,7 +193,9 @@
                             VerticalAlignment="Center"
                             materialDesign:HintAssist.Hint="Ngày đi"
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
-                            SelectedDate="{Binding NgayDi, Mode=TwoWay}"/>
+                            SelectedDate="{Binding NgayDi, Mode=TwoWay}"
+                            behaviors:DatePickerBehaviors.IsTextInputDisabled="True"/>
+                            
                         </Grid>
 
                         <Grid Grid.Column="0" Grid.Row="1" Margin="0,0,15,15">
