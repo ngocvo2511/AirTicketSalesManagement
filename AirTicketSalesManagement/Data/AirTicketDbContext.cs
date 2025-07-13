@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using AirTicketSalesManagement.Models;
 using Microsoft.EntityFrameworkCore;
@@ -46,16 +47,40 @@ public partial class AirTicketDbContext : DbContext
     {
         try
         {
+            string documentsPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "AirTicketSettings"
+            );
+
+            string docAppsettingsPath = Path.Combine(documentsPath, "appsettings.json");
+            string exeFolderAppsettingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
+
+            string appsettingsPath = null;
+
+            if (File.Exists(docAppsettingsPath))
+            {
+                appsettingsPath = docAppsettingsPath;
+            }
+            else if (File.Exists(exeFolderAppsettingsPath))
+            {
+                appsettingsPath = exeFolderAppsettingsPath;
+            }
+            else
+            {
+                MessageBox.Show("Không tìm thấy file appsettings.json ở Documents hoặc cùng thư mục với file exe.");
+                return null;
+            }
+
             var builder = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                .SetBasePath(Path.GetDirectoryName(appsettingsPath))
+                .AddJsonFile(Path.GetFileName(appsettingsPath), optional: false, reloadOnChange: true);
 
             var config = builder.Build();
             var conn = config.GetConnectionString(name);
 
             if (string.IsNullOrEmpty(conn))
             {
-                MessageBox.Show("Không tìm thấy chuỗi kết nối.");
+                MessageBox.Show("Không tìm thấy chuỗi kết nối trong appsettings.json.");
             }
 
             return conn;
@@ -66,6 +91,7 @@ public partial class AirTicketDbContext : DbContext
             return null;
         }
     }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

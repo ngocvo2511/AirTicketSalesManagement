@@ -293,11 +293,12 @@
                             <StackPanel Grid.Column="0" Margin="0,0,12,0">
                                 <TextBlock Text="Số hiệu chuyến bay" FontWeight="Medium" 
                          Foreground="#374151" Margin="0,0,0,6"/>
-                                <TextBox x:Name="txtSearchFlightNumber" 
-                         Text="{Binding SoHieuCB, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="VN123, VJ456..."
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                         Height="52" FontSize="14"/>
+                                <ComboBox          
+                                    ItemsSource="{Binding FlightNumberList}"           
+                                    Text="{Binding SoHieuCB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"        
+                                    Style="{StaticResource MaterialDesignOutlinedComboBox}"        
+                                    materialDesign:HintAssist.Hint="Chọn chuyến bay"         
+                                    Height="52" FontSize="14"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Margin="6,0,6,0">

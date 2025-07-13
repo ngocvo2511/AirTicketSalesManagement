@@ -106,6 +106,7 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             {
                 LoadSanBay();
                 LoadFlightSchedule();
+                LoadSoHieuCB();
             }
         }
 
@@ -213,6 +214,8 @@ namespace AirTicketSalesManagement.ViewModel.Admin
             var query = context.Lichbays.Include(lb => lb.SoHieuCbNavigation)
                 .ThenInclude(cb => cb.SbdiNavigation)
                 .Include(lb => lb.SoHieuCbNavigation).ThenInclude(cb => cb.SbdenNavigation)
+                .Include(lb => lb.Hangvetheolichbays)
+                    .ThenInclude(hv => hv.MaHvNavigation)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(DiemDi))
