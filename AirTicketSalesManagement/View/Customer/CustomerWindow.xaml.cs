@@ -7,6 +7,7 @@ using VNPAY.NET;
 using Microsoft.Web.WebView2.Core;
 using AirTicketSalesManagement.ViewModel;
 using Microsoft.Web.WebView2.Wpf;
+using AirTicketSalesManagement.Messages;
 
 namespace AirTicketSalesManagement.View.Customer
 {
@@ -36,6 +37,20 @@ namespace AirTicketSalesManagement.View.Customer
                 WebView.NavigationStarting += WebView_NavigationStarting;
 
                 WebView.Source = new Uri(m.Value);
+            });
+
+            // Lắng nghe message để clear cache và ẩn WebView
+            WeakReferenceMessenger.Default.Register<WebViewClearCacheMessage>(this, async (r, m) =>
+            {
+                if (WebView != null && WebView.CoreWebView2 != null)
+                {
+                    // Xóa toàn bộ cookies (mọi domain)
+                    await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Network.clearBrowserCookies", "{}");
+
+                    // Xóa toàn bộ dữ liệu website (local storage, cache, indexedDB, ... trên tất cả origin)
+                    await WebView.CoreWebView2.CallDevToolsProtocolMethodAsync("Storage.clearDataForOrigin",
+                        "{\"origin\":\"*\",\"storageTypes\":\"all\"}");
+                }
             });
         }
 

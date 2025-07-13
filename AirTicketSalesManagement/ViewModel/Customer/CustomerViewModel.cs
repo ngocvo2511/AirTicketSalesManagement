@@ -8,13 +8,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
+using AirTicketSalesManagement.Messages;
 
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
@@ -102,24 +98,32 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         private void NavigateToCustomerProfile()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new CustomerProfileViewModel();
         }
 
         [RelayCommand]
         private void NavigateToHomePage()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new HomePageViewModel();
         }
 
         [RelayCommand]
         private void NavigateToBookingHistory()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this, new EmailService(), new EmailTemplateService());
         }
 
         [RelayCommand]
         private void NavigateToFlightTicketBooking()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new FlightScheduleSearchViewModel();
         }
 

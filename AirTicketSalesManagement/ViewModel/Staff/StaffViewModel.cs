@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using AirTicketSalesManagement.ViewModel.Customer;
 using AirTicketSalesManagement.ViewModel.CustomerManagement;
 using AirTicketSalesManagement.Services.EmailServices;
+using AirTicketSalesManagement.Messages;
 
 namespace AirTicketSalesManagement.ViewModel.Staff
 {
@@ -89,30 +90,40 @@ namespace AirTicketSalesManagement.ViewModel.Staff
         [RelayCommand]
         private void NavigateToStaffProfile()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new StaffProfileViewModel();
         }
 
         [RelayCommand]
         private void NavigateToHomePage()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new HomePageViewModel();
         }
 
         [RelayCommand]
         private void NavigateToFlightTicketBooking()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new FlightScheduleSearchViewModel();
         }
 
         [RelayCommand]
         private void NavigateToTicketManagement()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new TicketManagementViewModel(this, new EmailService(), new EmailTemplateService());
         }
 
         [RelayCommand]
         private void NavigateToCustomerManagement()
         {
+            WeakReferenceMessenger.Default.Send(new WebViewClearCacheMessage());
+            IsWebViewVisible = false;
             CurrentViewModel = new CustomerManagementViewModel();
         }
 
