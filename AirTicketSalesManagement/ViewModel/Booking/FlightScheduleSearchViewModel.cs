@@ -336,6 +336,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             SearchedChildCount = ChildCount;
             SearchedInfantCount = InfantCount;
             FlightResults.Clear();
+            HasSearched = true; // Đánh dấu đã tìm kiếm
 
             // Kiểm tra điều kiện đầu vào
             if (string.IsNullOrWhiteSpace(DiemDi) || string.IsNullOrWhiteSpace(DiemDen) || NgayDi == null)
@@ -404,7 +405,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             }
 
             // Hiển thị kết quả
-            ResultVisibility = FlightResults.Any() ? Visibility.Visible : Visibility.Collapsed;
+            ResultVisibility = Visibility.Visible; // Luôn hiển thị kết quả sau khi tìm kiếm
         }
 
         private string ExtractMaSB(string displayString)
@@ -531,6 +532,9 @@ namespace AirTicketSalesManagement.ViewModel.Booking
 
         [ObservableProperty]
         private double searchContentHeight = double.NaN;
+
+        [ObservableProperty]
+        private bool hasSearched = false;
 
         [RelayCommand]
         private void ToggleSearch()
