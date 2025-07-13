@@ -80,6 +80,7 @@
                         <DatePicker Width="190"
                                     materialDesign:HintAssist.Hint="Ngày khởi hành"
                                     DisplayDateStart="{Binding MinBookingDate}"
+                                    SelectedDate="{Binding NgayDi, Mode=TwoWay}"
                                     FontSize="15"
                                     Height="45"
                                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
@@ -91,16 +92,17 @@
                                   FontSize="15"
                                   Width="190"
                                   Height="45"
-                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" >
-                            <ComboBoxItem>1</ComboBoxItem>
-                            <ComboBoxItem>2</ComboBoxItem>
-                            <ComboBoxItem>3</ComboBoxItem>
-                            <ComboBoxItem>4</ComboBoxItem>
-                            <ComboBoxItem>5</ComboBoxItem>
-                            <ComboBoxItem>6</ComboBoxItem>
-                            <ComboBoxItem>7</ComboBoxItem>
-                            <ComboBoxItem>8</ComboBoxItem>
-                            <ComboBoxItem>9</ComboBoxItem>
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Text="{Binding SoLuongGhe, Mode=TwoWay}">
+                            <ComboBoxItem Content="1" Tag="1"/>
+                            <ComboBoxItem Content="2" Tag="2"/>
+                            <ComboBoxItem Content="3" Tag="3"/>
+                            <ComboBoxItem Content="4" Tag="4"/>
+                            <ComboBoxItem Content="5" Tag="5"/>
+                            <ComboBoxItem Content="6" Tag="6"/>
+                            <ComboBoxItem Content="7" Tag="7"/>
+                            <ComboBoxItem Content="8" Tag="8"/>
+                            <ComboBoxItem Content="9" Tag="9"/>
                         </ComboBox>
                     </StackPanel>
 
@@ -114,7 +116,7 @@
                             Width="200"
                             HorizontalAlignment="Left"
                             Style="{StaticResource MaterialDesignRaisedButton}" 
-                            Command="{Binding SearchFlight}"/>
+                            Command="{Binding SearchFlightCommand}"/>
                 </StackPanel>
             </Grid>
         </Grid>

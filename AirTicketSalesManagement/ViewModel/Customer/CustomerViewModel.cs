@@ -62,6 +62,17 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 {
                     CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this, new EmailService(), new EmailTemplateService());
                 }
+                else if (viewModelType == typeof(FlightScheduleSearchViewModel))
+                {
+                    if (parameter is SearchFlightParameters searchParams)
+                    {
+                        CurrentViewModel = new FlightScheduleSearchViewModel(searchParams);
+                    }
+                    else
+                    {
+                        CurrentViewModel = new FlightScheduleSearchViewModel();
+                    }
+                }
             };
 
             NavigationService.NavigateBackAction = (previousViewModelType, previousParameter) =>

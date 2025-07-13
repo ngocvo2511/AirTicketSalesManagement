@@ -1,4 +1,7 @@
 ﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Models;
+using AirTicketSalesManagement.Services;
+using AirTicketSalesManagement.ViewModel.Booking;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
@@ -23,6 +26,9 @@ namespace AirTicketSalesManagement.ViewModel.Customer
 
         [ObservableProperty]
         private DateTime? ngayDi;
+
+        [ObservableProperty]
+        private int soLuongGhe = 1;
 
         [ObservableProperty]
         private ObservableCollection<string> sanBayList = new();
@@ -75,7 +81,31 @@ namespace AirTicketSalesManagement.ViewModel.Customer
         [RelayCommand]
         public void SearchFlight()
         {
+            // Kiểm tra điều kiện đầu vào
+            if (string.IsNullOrWhiteSpace(DiemDi) || string.IsNullOrWhiteSpace(DiemDen) || NgayDi == null)
+            {
+                // Hiển thị thông báo lỗi nếu cần
+                return;
+            }
 
+            // Kiểm tra ngày đi không được nhỏ hơn ngày hiện tại
+            if (NgayDi.Value.Date < DateTime.Now.Date)
+            {
+                // Hiển thị thông báo lỗi nếu cần
+                return;
+            }
+
+            // Tạo đối tượng chứa thông tin tìm kiếm
+            var searchParams = new SearchFlightParameters
+            {
+                DiemDi = DiemDi,
+                DiemDen = DiemDen,
+                NgayDi = NgayDi,
+                SoLuongGhe = SoLuongGhe
+            };
+
+            // Chuyển sang FlightScheduleSearchView với thông tin đã nhập
+            NavigationService.NavigateTo<FlightScheduleSearchViewModel>(searchParams);
         }
 
     }

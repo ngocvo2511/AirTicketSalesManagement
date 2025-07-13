@@ -28,6 +28,41 @@ namespace AirTicketSalesManagement.ViewModel.Booking
             }
         }
 
+        // Constructor overload để nhận thông tin tìm kiếm từ HomePage
+        public FlightScheduleSearchViewModel(SearchFlightParameters searchParams)
+        {
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            {
+                LoadSanBay();
+                
+                // Điền thông tin từ HomePage
+                if (searchParams != null)
+                {
+                    DiemDi = searchParams.DiemDi;
+                    DiemDen = searchParams.DiemDen;
+                    NgayDi = searchParams.NgayDi;
+                    AdultCount = searchParams.SoLuongGhe;
+                    
+                    // Đảm bảo các property đã được cập nhật trước khi gọi SearchFlight
+                    OnPropertyChanged(nameof(DiemDi));
+                    OnPropertyChanged(nameof(DiemDen));
+                    OnPropertyChanged(nameof(NgayDi));
+                    OnPropertyChanged(nameof(AdultCount));
+                    OnPropertyChanged(nameof(PassengerSummary));
+                    
+                    // Tự động gọi SearchFlight sau khi điền thông tin
+                    // Sử dụng Task.Delay để đảm bảo UI đã được cập nhật
+                    Task.Delay(100).ContinueWith(_ =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            SearchFlight();
+                        });
+                    });
+                }
+            }
+        }
+
         [ObservableProperty]
         private string diemDi;
 
