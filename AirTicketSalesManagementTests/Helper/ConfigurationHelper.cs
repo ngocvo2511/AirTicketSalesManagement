@@ -29,7 +29,7 @@ namespace AirTicketSalesManagementTests.Helpers
 
             var testConfig = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.test.json", optional: false)
+                .AddJsonFile("appsettingstest.json", optional: false)
                 .Build();
 
             _configRootField.SetValue(null, testConfig);

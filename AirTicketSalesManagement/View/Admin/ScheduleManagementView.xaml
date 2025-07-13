@@ -8,6 +8,7 @@
              xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:notification="clr-namespace:AirTicketSalesManagement.View.Notification"
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1200">
 
@@ -1030,6 +1031,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                        SelectedDate="{Binding AddTuNgay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                        materialDesign:HintAssist.Hint="Từ ngày"
+                                        DisplayDateStart="{x:Static sys:DateTime.Today}"
                                        Height="52" FontSize="14" Margin="0,8,0,0"/>
                                 </StackPanel>
 
@@ -1059,6 +1061,7 @@ RowStyle="{StaticResource DataGridRowStyle}"
                                        SelectedDate="{Binding AddDenNgay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                        materialDesign:HintAssist.Hint="Đến ngày"
+                                        DisplayDateStart="{x:Static sys:DateTime.Today}"
                                        Height="52" FontSize="14" Margin="0,42,0,0"/>
                                 </StackPanel>
 
