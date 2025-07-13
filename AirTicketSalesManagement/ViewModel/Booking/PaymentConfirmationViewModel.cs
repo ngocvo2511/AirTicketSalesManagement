@@ -159,7 +159,7 @@ namespace AirTicketSalesManagement.ViewModel.Booking
                 {
                     var quiDinh = context.Quydinhs.FirstOrDefault();
                     int tgDatVe = quiDinh?.TgdatVeChamNhat ?? 1;
-                    if (DateTime.Now > datVe.MaLbNavigation.GioDi.Value.AddDays(tgDatVe))
+                    if (DateTime.Now > datVe.MaLbNavigation.GioDi.Value.AddDays(-tgDatVe))
                     {
                         await Notification.ShowNotificationAsync(
                             "Thời gian đặt vé đã hết hạn. Vui lòng chọn chuyến bay khác.",
