@@ -17,7 +17,7 @@ namespace AirTicketSalesManagement.Services
         public string Email { get; set; }
         public bool isStaff { get; set; } = false;
         // các thuộc tính khác
-
+        public int idVe { get; set; }
         public static UserSession Current { get; } = new UserSession();
     }
 }

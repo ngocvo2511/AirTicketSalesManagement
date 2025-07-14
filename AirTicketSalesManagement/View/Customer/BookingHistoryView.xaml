@@ -440,6 +440,21 @@
                                             </Button>
 
                                             <Button Style="{StaticResource MaterialDesignFlatButton}"
+Visibility="{Binding CanProcess, 
+          Converter={StaticResource BoolToVisibilityConverter}}"
+Command="{Binding DataContext.ProcessPaymentCommand,
+        RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+CommandParameter="{Binding}"
+Background="AliceBlue"
+Foreground="Green"
+materialDesign:ButtonAssist.CornerRadius="8">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Payment" Margin="0,0,8,0"/>
+                                                    <TextBlock Text="Thanh toán"/>
+                                                </StackPanel>
+                                            </Button>
+
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
                                 Visibility="{Binding CanCancel, 
                                           Converter={StaticResource BoolToVisibilityConverter}}"
                                 Command="{Binding DataContext.CancelTicketCommand,

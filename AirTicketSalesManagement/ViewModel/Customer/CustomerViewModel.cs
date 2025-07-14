@@ -89,8 +89,12 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                 if (CurrentViewModel is PaymentConfirmationViewModel paymentConfirmationViewModel)
                 {
                     paymentConfirmationViewModel.HandlePaymentSuccess();
+                    CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this, new EmailService(), new EmailTemplateService());
                 }
-                CurrentViewModel = new BookingHistoryViewModel(IdCustomer, this, new EmailService(), new EmailTemplateService());
+                else if (CurrentViewModel is BookingHistoryViewModel bookingHistoryViewModel)
+                {
+                    bookingHistoryViewModel.HandlePaymentSuccess();
+                }
             });
         }
 

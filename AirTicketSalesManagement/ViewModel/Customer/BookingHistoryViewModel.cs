@@ -1,23 +1,15 @@
 ﻿using AirTicketSalesManagement.Data;
+using AirTicketSalesManagement.Helper;
 using AirTicketSalesManagement.Interface;
 using AirTicketSalesManagement.Models;
 using AirTicketSalesManagement.Services;
 using AirTicketSalesManagement.Services.EmailServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace AirTicketSalesManagement.ViewModel.Customer
 {
@@ -25,6 +17,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
     {
         private readonly IEmailService _emailService;
         private readonly EmailTemplateService _templateService;
+        private readonly VnpayPayment vnpayPayment;
+
         private readonly CustomerViewModel parent;
         private ObservableCollection<KQLichSuDatVe> rootHistoryBooking;
         [ObservableProperty]
@@ -72,6 +66,7 @@ namespace AirTicketSalesManagement.ViewModel.Customer
             this.parent = parent;
             this._emailService = emailService;
             this._templateService = templateService;
+            vnpayPayment = new VnpayPayment();
             _ = LoadData(UserSession.Current.CustomerId);
             ClearExpiredHolds();
         }
@@ -102,7 +97,8 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                                      NgayDat = datve.ThoiGianDv,
                                      TrangThai = datve.TtdatVe,
                                      SoLuongKhach = datve.Ctdvs.Count,
-                                     QdHuyVe = (HuyVe != null) ? HuyVe.TghuyDatVe : null
+                                     QdHuyVe = (HuyVe != null) ? HuyVe.TghuyDatVe : null,
+                                     TongTienTT = datve.TongTienTt.Value
                                  });
                     var result = await query.OrderByDescending(x => x.NgayDat).ToListAsync();
                     rootHistoryBooking = new ObservableCollection<KQLichSuDatVe>(result);
@@ -310,6 +306,93 @@ namespace AirTicketSalesManagement.ViewModel.Customer
                         $"Lỗi khi hủy vé: {ex.Message}",
                         NotificationType.Error);
                 }
+            }
+        }
+
+        [RelayCommand]
+        public async Task ProcessPayment(KQLichSuDatVe ve)
+        {
+            try
+            {
+                // Debug thông tin user session
+                PaymentDebugHelper.LogUserSession();
+                PaymentDebugHelper.ValidateUserSessionForPayment();
+                UserSession.Current.idVe = ve.MaVe.Value;
+                string orderInfo = $"Thanhtoanvemaybay{ve.MaVe}";
+
+                // Tạo URL thanh toán VNPay
+                string paymentUrl = vnpayPayment.CreatePaymentUrl((double)ve.TongTienTT, orderInfo, ve.MaVe.Value);
+
+                if (!string.IsNullOrEmpty(paymentUrl))
+                {
+                    // Lưu thông tin đặt vé tạm thời với trạng thái "Chờ thanh toán"
+                    WeakReferenceMessenger.Default.Send(new PaymentRequestedMessage(paymentUrl));
+                    Debug.WriteLine($"[ProcessVNPayPayment] Payment URL created successfully: {paymentUrl}");
+                }
+                else
+                {
+                    Debug.WriteLine("[ProcessVNPayPayment] Failed to create payment URL");
+                    await Notification.ShowNotificationAsync(
+                        "Không thể tạo URL thanh toán VNPay",
+                        NotificationType.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ProcessVNPayPayment] Error: {ex.Message}");
+                Debug.WriteLine($"[ProcessVNPayPayment] Stack trace: {ex.StackTrace}");
+                await Notification.ShowNotificationAsync(
+                    $"Lỗi xử lý thanh toán VNPay: {ex.Message}",
+                    NotificationType.Error);
+            }
+        }
+
+        public void HandlePaymentSuccess()
+        {
+            try
+            {
+                PaymentDebugHelper.LogUserSession();
+                PaymentDebugHelper.ValidateUserSessionForPayment();
+
+                using (var context = new AirTicketDbContext())
+                {
+                    Datve datVe;
+                    datVe = context.Datves.Include(dv => dv.MaLbNavigation)
+                            .Where(dv => dv.MaDv == UserSession.Current.idVe)
+                            .OrderByDescending(dv => dv.ThoiGianDv)
+                            .FirstOrDefault();
+                    
+                    if (datVe != null)
+                    {
+                        if (datVe.TtdatVe == "Chưa thanh toán (Online)")
+                        {
+                            datVe.TtdatVe = "Đã thanh toán";
+                            context.SaveChanges();
+                            Debug.WriteLine($"[HandlePaymentSuccess] Successfully updated booking {datVe.MaDv} to 'Đã thanh toán'");
+                            string soHieuCb = datVe.MaLbNavigation?.SoHieuCb ?? "";
+                            var emailContent = _templateService.BuildBookingSuccess(
+                                soHieuCb,
+                                datVe.MaLbNavigation?.GioDi ?? DateTime.Now,
+                                DateTime.Now,
+                                datVe.TongTienTt ?? 0);
+                            _emailService.SendEmailAsync(datVe.Email ?? UserSession.Current.Email, $"Thanh toán vé chuyến bay {soHieuCb}", emailContent);
+                            _ = LoadData(UserSession.Current.CustomerId);
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"[HandlePaymentSuccess] Booking {datVe.MaDv} status is not 'Chưa thanh toán (Online)'. Current status: {datVe.TtdatVe}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("[HandlePaymentSuccess] No valid booking found in the last 20 minutes");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[HandlePaymentSuccess] Lỗi cập nhật thanh toán: {ex.Message}");
+                Debug.WriteLine($"[HandlePaymentSuccess] Stack trace: {ex.StackTrace}");
             }
         }
 
