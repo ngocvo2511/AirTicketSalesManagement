@@ -2,6 +2,7 @@
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 
@@ -79,7 +80,7 @@ public static class ExcelExporter
 
         var styles = CreateStyles(workbook);
         var dateStyle = workbook.CreateCellStyle();
-        dateStyle.DataFormat = workbook.CreateDataFormat().GetFormat("dd/MM/yyyy");
+        dateStyle.DataFormat = workbook.CreateDataFormat().GetFormat("dd/MM/yyyy HH:mm");
 
         // Title
         var titleRow = sheet.CreateRow(0);
@@ -119,12 +120,13 @@ public static class ExcelExporter
 
             row.CreateCell(0).SetCellValue(item.FlightNumber);
             row.CreateCell(1).SetCellValue(item.Airline);
+            Debug.WriteLine(item.DepartureTime.ToString(CultureInfo.InvariantCulture));
             row.CreateCell(2).SetCellValue(item.DepartureTime);
             row.CreateCell(3).SetCellValue(item.TicketsSold);
             row.CreateCell(4).SetCellValue((double)item.Revenue);
             row.CreateCell(5).SetCellValue((double)item.RevenueRate);
 
-            row.CreateCell(2).CellStyle = dateStyle;
+            row.GetCell(2).CellStyle = dateStyle;
             row.GetCell(3).CellStyle = styles.Number;
             row.GetCell(4).CellStyle = styles.Money;
             row.GetCell(5).CellStyle = styles.Percent;
